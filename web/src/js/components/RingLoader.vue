@@ -6,6 +6,6 @@ const loading = inject('loading');
 
 <template>
 	<div v-if="loading" class="loader-overlay">
-		<div class="ring-loader" />
+		<div class="ring-loader loading" />
 	</div>
 </template>

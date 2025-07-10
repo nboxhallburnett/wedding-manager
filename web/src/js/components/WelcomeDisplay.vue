@@ -16,7 +16,7 @@ const groom = CONFIG.groom_short;
 const emit = defineEmits([ 'finished' ]);
 
 // Emit the finished event after the animations finish
-setTimeout(() => emit('finished'), 10000);
+setTimeout(() => emit('finished'), 8000);
 // Or if the escape key is pressed
 const escapeListener = $evt => {
 	if ($evt.code === 'Escape') {
@@ -54,8 +54,14 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	100% {opacity: 1;}
 }
 @keyframes fade-out {
-	0% {opacity: 1;}
-	100% {opacity: 0;}
+	0% {
+		opacity: 1;
+		background-color: var(--bs-secondary);
+	}
+	100% {
+		opacity: 0;
+		background-color: var(--bs-primary);
+	}
 }
 
 #welcome-overlay {
@@ -65,9 +71,9 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	top: 0;
 	height: 100%;
 	width: 100%;
-	background-color: var(--bs-secondary);
 	overflow: auto;
-	animation-delay: 8s;
+	user-select: none;
+	animation-delay: 6s;
 	animation-duration: 2s;
 	animation-fill-mode: both;
 	animation-name: fade-out;
@@ -88,26 +94,26 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 }
 #welcome-date {
 	position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100%;
-    min-width: 100%;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100%;
+	min-width: 100%;
 	font-size: calc(2rem + 4vmin);
 
 	animation-delay: 2s;
 }
 #welcome-names {
 	position: absolute;
-    min-width: 100%;
-    bottom: 0;
-    margin-bottom: 25vh;
-    font-size: calc(2rem + 4vmin);
-    display: flex;
+	min-width: 100%;
+	bottom: 0;
+	margin-bottom: 25vh;
+	font-size: calc(2rem + 4vmin);
+	display: flex;
 	flex-wrap: wrap;
-    line-height: 1;
-    justify-content: center;
+	line-height: 1;
+	justify-content: center;
 
 	animation-delay: 4s;
 

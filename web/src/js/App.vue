@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { RouterView } from 'vue-router';
 
 import RingLoader from 'components/RingLoader.vue';
-import SiteNav from 'components/SiteNav.vue';
+import SiteHeader from 'components/SiteHeader.vue';
+import SiteFooter from 'components/SiteFooter.vue';
 import WelcomeDisplay from 'components/WelcomeDisplay.vue';
 import WelcomeBanner from 'components/WelcomeBanner.vue';
 
@@ -20,7 +21,8 @@ function welcomeCleanup() {
 
 	<header class="mb-3">
 		<div class="wrapper">
-			<site-nav />
+			<site-header />
+
 			<welcome-banner />
 		</div>
 	</header>
@@ -30,4 +32,6 @@ function welcomeCleanup() {
 			<RouterView />
 		</div>
 	</div>
+
+	<site-footer />
 </template>

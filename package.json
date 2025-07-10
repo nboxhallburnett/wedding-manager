@@ -1,0 +1,57 @@
+{
+  "name": "wedding-manager",
+  "version": "1.0.0",
+  "description": "Wedding RSVP & guest management service",
+  "main": "src/index.mjs",
+  "scripts": {
+    "build": "rm -rf web/public/js/*; rm -rf web/public/css/*; set -a; . .env && NODE_ENV=production npx webpack-cli build --config web/webpack.config.js",
+    "build-hot": "set -a; . .env && npx webpack serve --config web/webpack.config.js --progress",
+    "start": "set -a; . .env && DEBUG=wedding-planner:* node src/index.mjs",
+    "lint": "eslint ./",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nboxhallburnett/wedding-manager.git"
+  },
+  "author": "Nathan Boxhall-Burnett <nathan@nbb.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nboxhallburnett/wedding-manager/issues"
+  },
+  "homepage": "https://github.com/nboxhallburnett/wedding-manager#readme",
+  "dependencies": {
+    "compression": "1.8.0",
+    "cookie-parser": "1.4.7",
+    "debug": "4.4.1",
+    "ejs": "3.1.10",
+    "express": "5.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.30.1",
+    "@popperjs/core": "2.11.8",
+    "@stylistic/stylelint-config": "^2.0.0",
+    "@stylistic/stylelint-plugin": "^3.1.3",
+    "autoprefixer": "10.4.21",
+    "bootstrap": "5.3.7",
+    "css-loader": "7.1.2",
+    "eslint": "9.30.1",
+    "eslint-plugin-vue": "10.3.0",
+    "globals": "16.3.0",
+    "mini-css-extract-plugin": "2.9.2",
+    "postcss-loader": "8.1.1",
+    "purgecss-webpack-plugin": "^7.0.2",
+    "sass": "1.89.2",
+    "sass-loader": "16.0.5",
+    "style-loader": "4.0.0",
+    "stylelint": "16.21.1",
+    "stylelint-config-recommended-vue": "1.6.1",
+    "stylelint-config-standard-scss": "15.0.1",
+    "vue": "3.5.17",
+    "vue-loader": "17.4.2",
+    "vue-router": "4.5.1",
+    "webpack": "5.99.9",
+    "webpack-cli": "6.0.1",
+    "webpack-dev-server": "5.2.2"
+  }
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%- config.bride_short %> & <%- config.groom_short %> | Wedding</title>
+		<link rel="icon" href="/img/ring.svg" />
+		<meta http-equiv="Cache-Control" content="no-cache, max-age=0, must-revalidate">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<% if (!config.hot) { %>
+			<link rel="stylesheet" href="/css/index.css">
+		<% } %>
+	</head>
+	<body>
+		<noscript>JavaScript is required to access this site.</noscript>
+		<section id="app" />
+		<script src="<%= config.hot ? `//${config.host}:8468/js/index.js` : `//${config.host}${config.server.external_port !== 443 ? ':' + config.server.external_port : ''}/js/index.js` %>"></script>
+	</body>
+</html>

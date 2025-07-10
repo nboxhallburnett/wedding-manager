@@ -1,0 +1,28 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	height: auto;
+	min-height: 100%;
+}
+
+body {
+	background-image: url('/img/steve-ratcliffe-films-hensol-castle.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.title-text {
+	font-family: 'Apple Chancery', serif;
+
+	// -webkit-text-stroke: 1px black;
+	//  color: $body-color;
+	//  text-shadow:
+	//      2px 2px 0 var(--bs-primary),
+	//    -1px -1px 0 var(--bs-primary),
+	//     1px -1px 0 var(--bs-primary),
+	//     -1px 1px 0 var(--bs-primary),
+	//      1px 1px 0 var(--bs-primary);
+}

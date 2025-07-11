@@ -1,15 +1,19 @@
 import path from 'node:path';
 import { STATUS_CODES } from 'node:http';
 
-import Debug from 'debug';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
+
+import RequestContext from './lib/request-context.js';
+import Logger from './lib/logger.js';
+import API from './api/index.js';
 
 import pkg from '../package.json' with { type: 'json' };
 import config from '../conf/index.js';
 
-const debug = Debug('wedding-planner:index');
+const debug = Logger('index');
 
 debug(`Wedding Planner v${pkg.version} Starting up...`);
 
@@ -56,6 +60,9 @@ app.use(function (req, res, next) {
 	next();
 });
 
+// Wire up request context middleware
+app.use(RequestContext.middleware);
+
 // Request logging middleware
 app.use(function (req, res, next) {
 	req._startTime = Date.now();
@@ -68,26 +75,53 @@ app.use(function (req, res, next) {
 		res.end(chunk, encoding);
 
 		const url = req.originalUrl || req.url;
-		const ip = req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || req.ip;
 
-		debug('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, ip, responseTime);
+		debug('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, _getIp(req), responseTime);
 	};
 
 	next();
 });
 
 // Serve static assets
-app.use(express.static(path.resolve(import.meta.dirname, '../web', 'public'), {
+app.use(express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
 	maxAge,
 	setHeaders: res => {
-		res.setHeader('Expires', new Date(Date.now() + maxAge).toUTCString());
 		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.setHeader('Expires', new Date(Date.now() + maxAge).toUTCString());
 		res.setHeader('X-Content-Type-Options', 'nosniff');
 	}
 }));
 
 // Add cookie parsing
 app.use(cookieParser());
+
+// API-wide middlewares
+app.use('/api', ...[
+	// Wires up rate limiter for API paths. Rate limit API requests to 10 per minute
+	rateLimit({
+		windowMs: 60000,
+		limit: 10,
+		// skipSuccessfulRequests: true,
+		skip: (_req, _res) => {
+			// TODO: skip if RSVP identifier in session
+			return false;
+		},
+		handler: function (req, res) {
+			res.status(429);
+			res.json({ success: false, description: STATUS_CODES[429] });
+		},
+		keyGenerator: req => {
+			// TODO: use RSVP identifier once wired up
+			return _getIp(req);
+		}
+	}),
+	// Wires up request body parsing
+	express.urlencoded({ extended: true }),
+	express.json({ limit: '1mb' })
+]);
+
+// Wire up the API
+await API.init(app);
 
 // Serve the UI
 app.get('*splat', function (_req, res) {
@@ -104,3 +138,13 @@ process.on('SIGTERM', () => {
 	debug('SIGTERM signal received, closing HTTP server');
 	server.close(() => debug('HTTP server closed'));
 });
+
+/**
+ * Returns the IP address the request originated from
+ *
+ * @param {import('express').Request} req Express request
+ * @returns {String} IP address of the requester
+ */
+function _getIp(req) {
+	return req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || req.ip;
+}

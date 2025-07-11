@@ -16,7 +16,7 @@ const groom = CONFIG.groom_short;
 const emit = defineEmits([ 'finished' ]);
 
 // Emit the finished event after the animations finish
-setTimeout(() => emit('finished'), 8000);
+setTimeout(() => emit('finished'), 8500);
 // Or if the escape key is pressed
 const escapeListener = $evt => {
 	if ($evt.code === 'Escape') {
@@ -73,7 +73,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	width: 100%;
 	overflow: auto;
 	user-select: none;
-	animation-delay: 6s;
+	animation-delay: 6.5s;
 	animation-duration: 2s;
 	animation-fill-mode: both;
 	animation-name: fade-out;
@@ -91,6 +91,8 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	margin-top: 25vh;
 	line-height: 1;
 	font-size: calc(2rem + 7vmin);
+
+	animation-delay: 0.5s;
 }
 #welcome-date {
 	position: absolute;
@@ -102,7 +104,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	min-width: 100%;
 	font-size: calc(2rem + 4vmin);
 
-	animation-delay: 2s;
+	animation-delay: 2.5s;
 }
 #welcome-names {
 	position: absolute;
@@ -115,7 +117,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	line-height: 1;
 	justify-content: center;
 
-	animation-delay: 4s;
+	animation-delay: 4.5s;
 
 	.font-script {
 		font-size: calc(3rem + 8vmin);

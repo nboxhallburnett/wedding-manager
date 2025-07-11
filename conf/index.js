@@ -19,6 +19,11 @@ const config = {
 			db: process.env.SERVER_DB_DB,
 			username: process.env.SERVER_DB_USERNAME,
 			password: process.env.SERVER_DB_PASSWORD
+		},
+
+		session: {
+			name: process.env.SERVER_SESSION_NAME,
+			secret: process.env.SERVER_SESSION_SECRET
 		}
 	},
 	client: {
@@ -56,6 +61,9 @@ module.exports = Object.freeze(config);
  * @property {String} server.db.db Name of the db where the application data is stored
  * @property {String} server.db.username Username of a user in the database with read/write access to the application data
  * @property {String} server.db.password Password to authenticate the database user
+ * @property {Object} server.session Configuration for the session store and cookie
+ * @property {String} server.session.name Name of the session cookie
+ * @property {String} server.session.secret Secret used to sign the session
  * @property {Object} client Configuration for the front-end client.
  * @property {FooterItem[]} client.footer Data to include in the UI footer.
  */

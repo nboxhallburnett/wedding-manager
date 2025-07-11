@@ -2,7 +2,7 @@ const { STATUS_CODES } = require('http');
 const { join } = require('path');
 const { readdir } = require('fs').promises;
 
-const debug = require('../lib/logger')('api');
+const log = require('../lib/logger')('api');
 
 module.exports = {
 	init
@@ -40,18 +40,18 @@ async function init(app) {
 
 						} catch (err) {
 							// If any errors were thrown checking auth or performing the action, return a server error
-							debug('Error performing request: %o', err);
+							log('Error performing request: %o', err);
 							res.status(500);
 							res.json({ success: false, description: STATUS_CODES[500] });
 						}
 					});
 
-					debug('Registered API: %s %s', method.toUpperCase(), path);
+					log('Registered API: %s %s', method.toUpperCase(), path);
 				} else {
-					debug('Ignoring file: %s', file);
+					log('Ignoring file: %s', file);
 				}
 			} catch (err) {
-				debug('Error loading API %s: %o', file, err);
+				log('Error loading API %s: %o', file, err);
 				process.exit(1);
 			}
 		}

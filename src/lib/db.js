@@ -1,7 +1,7 @@
 const MongoDB = require('mongodb');
 
 const config = require('../../conf');
-const debug = require('./logger')('db');
+const log = require('./logger')('db');
 
 // Instance the mongo client
 const url = `mongodb://${config.server.db.username}:${config.server.db.password}@${config.server.db.host}/${config.server.db.db}`;
@@ -14,7 +14,7 @@ module.exports = MongoClient.db();
  */
 module.exports.connect = async () => {
 	await MongoClient.connect();
-	debug('Database connected');
+	log('Database connected');
 };
 
 /**
@@ -22,5 +22,10 @@ module.exports.connect = async () => {
  */
 module.exports.close = async () => {
 	await MongoClient.close();
-	debug('Database connection closed');
+	log('Database connection closed');
 };
+
+/**
+ * Expose the base MongoClient instance for things that require it, such as `connect-mongo`.
+ */
+module.exports.MongoClient = MongoClient;

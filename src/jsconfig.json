@@ -1,0 +1,6 @@
+{
+	"include": [ "api", "conf", "lib", "views/*", "server.ts" ],
+	"compilerOptions": {
+		"module": "commonJS"
+	}
+}

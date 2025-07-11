@@ -1,9 +1,12 @@
 import path from 'node:path';
 import { STATUS_CODES } from 'node:http';
 
-import compression from 'compression';
-import cookieParser from 'cookie-parser';
-import express from 'express';
+import MongoStore from 'connect-mongo';
+import Session from 'express-session';
+import Compression from 'compression';
+import CookieParser from 'cookie-parser';
+import Express from 'express';
+import { nanoid } from 'nanoid';
 import { rateLimit } from 'express-rate-limit';
 
 import RequestContext from './lib/request-context.js';
@@ -14,11 +17,11 @@ import DB from './lib/db.js';
 import pkg from '../package.json' with { type: 'json' };
 import config from '../conf/index.js';
 
-const debug = Logger('index');
+const log = Logger('index');
 
-debug(`Wedding Planner v${pkg.version} Starting up...`);
+log(`Wedding Manager v${pkg.version} Starting up...`);
 
-const app = express();
+const app = Express();
 const startTime = (new Date()).toISOString();
 const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in seconds
 
@@ -41,7 +44,7 @@ app.locals = {
 };
 
 // Add gzip compression for responses
-app.use(compression());
+app.use(Compression());
 
 // Basic status endpoint to be used as a healthcheck
 app.get('/status', function (_req, res) {
@@ -55,7 +58,7 @@ app.get('/status', function (_req, res) {
 // If one is configured, error if a request is made from an invalid or unknown host
 app.use(function (req, res, next) {
 	if (req.hostname !== config.host) {
-		debug(`Request against unsupported host, responding with error. Request: ${req.method} ${req.protocol}://${req.hostname + req.originalUrl}`);
+		log(`Request against unsupported host, responding with error. Request: ${req.method} ${req.protocol}://${req.hostname + req.originalUrl}`);
 		return res.status(400).json({
 			success: false,
 			description: STATUS_CODES[400]
@@ -80,14 +83,14 @@ app.use(function (req, res, next) {
 
 		const url = req.originalUrl || req.url;
 
-		debug('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, _getIp(req), responseTime);
+		log('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, _getIp(req), responseTime);
 	};
 
 	next();
 });
 
 // Serve static assets
-app.use(express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
+app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
 	maxAge,
 	setHeaders: res => {
 		res.setHeader('Access-Control-Allow-Origin', '*');
@@ -97,31 +100,53 @@ app.use(express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'),
 }));
 
 // Add cookie parsing
-app.use(cookieParser());
+app.use(CookieParser());
+
+// Add session middleware
+app.use(Session({
+	genid: () => nanoid(),
+	key: config.server.session.name,
+	name: config.server.session.name,
+	proxy: true,
+	resave: false,
+	saveUninitialized: false,
+	secret: config.server.session.secret,
+	unset: 'destroy',
+	cookie: {
+		proxy: true
+		// TODO: secure: true
+	},
+	store: MongoStore.create({
+		client: DB.MongoClient,
+		stringify: false,
+		touchAfter: 24 * 60 * 60 // 24 hours in seconds
+	})
+}));
 
 // API-wide middlewares
 app.use('/api', ...[
-	// Wires up rate limiter for API paths. Rate limit API requests to 10 per minute
+	// Wires up rate limiter for API paths
 	rateLimit({
-		windowMs: 60000,
 		limit: 10,
-		// skipSuccessfulRequests: true,
-		skip: (_req, _res) => {
-			// TODO: skip if RSVP identifier in session
-			return false;
-		},
-		handler: function (req, res) {
+		windowMs: 60 * 1000, // One minute
+		handler: function (_req, res) {
 			res.status(429);
 			res.json({ success: false, description: STATUS_CODES[429] });
 		},
 		keyGenerator: req => {
-			// TODO: use RSVP identifier once wired up
+			// Use the rsvp id if there is a valid session
+			if (req.session?.rsvpId) {
+				return req.session.rsvpId;
+			}
+			// Otherwise use the requesting IP
 			return _getIp(req);
-		}
+		},
+		// Skip rate limiting if there is a valid session
+		skip: req => Boolean(req.session?.rsvpId)
 	}),
 	// Wires up request body parsing
-	express.urlencoded({ extended: true }),
-	express.json({ limit: '1mb' })
+	Express.urlencoded({ extended: true }),
+	Express.json({ limit: '1mb' })
 ]);
 
 // Wire up the API
@@ -137,15 +162,15 @@ await dbConnection;
 
 // And finally start listening on the configured port
 const server = app.listen(config.server.port, function () {
-	debug('Listening on port %d', config.server.port);
+	log('Listening on port %d', config.server.port);
 });
 
 // Listen for SIGTERM events to gracefully close the server
 process.on('SIGTERM', async() => {
-	debug('SIGTERM signal received, shutting down server');
+	log('SIGTERM signal received, shutting down server');
 	await new Promise(resolve => {
 		server.close(() => {
-			debug('HTTP server closed');
+			log('HTTP server closed');
 			resolve();
 		});
 	});

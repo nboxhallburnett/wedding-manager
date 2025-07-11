@@ -12,7 +12,14 @@ const config = {
 
 	server: {
 		port: process.env.SERVER_PORT,
-		external_port: process.env.SERVER_EXTERNALPORT || 443
+		external_port: process.env.SERVER_EXTERNALPORT || 443,
+
+		db: {
+			host: process.env.SERVER_DB_HOST,
+			db: process.env.SERVER_DB_DB,
+			username: process.env.SERVER_DB_USERNAME,
+			password: process.env.SERVER_DB_PASSWORD
+		}
 	},
 	client: {
 		footer: []
@@ -44,6 +51,11 @@ module.exports = Object.freeze(config);
  * @property {Object} server Configuration for the running server.
  * @property {Number} server.port Port the server is listening on.
  * @property {Number} server.external_port Port the server is accessible on. Used when running behind a reverse proxy. Defaults to `443`
+ * @property {Object} server.db Configuration for the connected database
+ * @property {String} server.db.host Host of the database to connect to
+ * @property {String} server.db.db Name of the db where the application data is stored
+ * @property {String} server.db.username Username of a user in the database with read/write access to the application data
+ * @property {String} server.db.password Password to authenticate the database user
  * @property {Object} client Configuration for the front-end client.
  * @property {FooterItem[]} client.footer Data to include in the UI footer.
  */

@@ -9,6 +9,7 @@ import { rateLimit } from 'express-rate-limit';
 import RequestContext from './lib/request-context.js';
 import Logger from './lib/logger.js';
 import API from './api/index.js';
+import DB from './lib/db.js';
 
 import pkg from '../package.json' with { type: 'json' };
 import config from '../conf/index.js';
@@ -20,6 +21,9 @@ debug(`Wedding Planner v${pkg.version} Starting up...`);
 const app = express();
 const startTime = (new Date()).toISOString();
 const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in seconds
+
+// Trigger the database connection before wiring up the server
+const dbConnection = DB.connect();
 
 // Disable x-powered-by header to reduce fingerprinting
 app.disable('x-powered-by');
@@ -128,15 +132,25 @@ app.get('*splat', function (_req, res) {
 	return res.render('index');
 });
 
+// Ensure the database has connected before the server starts listening
+await dbConnection;
+
 // And finally start listening on the configured port
 const server = app.listen(config.server.port, function () {
 	debug('Listening on port %d', config.server.port);
 });
 
 // Listen for SIGTERM events to gracefully close the server
-process.on('SIGTERM', () => {
-	debug('SIGTERM signal received, closing HTTP server');
-	server.close(() => debug('HTTP server closed'));
+process.on('SIGTERM', async() => {
+	debug('SIGTERM signal received, shutting down server');
+	await new Promise(resolve => {
+		server.close(() => {
+			debug('HTTP server closed');
+			resolve();
+		});
+	});
+	// Wait for the http server to stop accepting new connections before closing the db connection
+	await DB.close();
 });
 
 /**

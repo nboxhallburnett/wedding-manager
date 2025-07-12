@@ -29,10 +29,11 @@ async function init(app) {
 					app[method](path, async (req, res) => {
 						try {
 							// If the API has auth defined, ensure that is satisfied before calling the action
-							if (typeof api.auth === 'function' && !(await api.auth(req, res))) {
-								// If it is not satisfied, return a 401
-								res.status(401);
-								return res.json({ success: false, description: STATUS_CODES[401] });
+							const authResult = typeof api.auth !== 'function' || await api.auth(req, res);
+							if (authResult === false || typeof authResult === 'number') {
+								// If it is not satisfied, return the code returned from the check or 401
+								res.status(authResult || 401);
+								return res.json({ success: false, description: STATUS_CODES[authResult || 401] });
 							}
 
 							// If any auth requirements are met, trigger the action

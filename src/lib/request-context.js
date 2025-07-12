@@ -18,7 +18,7 @@ module.exports = {
  * @param {import('express').NextFunction} next Express next callback
  */
 function middleware(req, res, next) {
-	const store = {};
+	const store = req.ctx = {};
 	req.id = nanoid();
 
 	// Override req.on to maintain to context.

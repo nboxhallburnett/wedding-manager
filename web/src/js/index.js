@@ -6,17 +6,32 @@ import 'bootstrap';
 
 import { createApp, ref } from 'vue';
 
+import API from 'lib/api';
 import App from './App.vue';
 import router from './router';
+
+// Trigger the rsvp fetch before we start to wire up the application
+const rsvpFetch = API('rsvp');
 
 // Create base app
 const app = createApp(App);
 
-const loading = ref(false);
+const rsvp = ref(null);
+app.provide('rsvp', rsvp);
+
+// Default the loading indicator while we're performing the initial rsvp lookup
+const loading = ref(true);
 app.provide('loading', loading);
-app.provide('setLoading', value => loading.value = value);
 
 app.use(router);
 
 // Render the app on the app container
 app.mount('#app');
+
+// Ensure the rsvp fetch resolves before we hide the initial loader
+const rsvpResult = await rsvpFetch;
+if (rsvpResult.result.data) {
+	rsvp.value = rsvpResult.result.data;
+}
+// Mark the loading status as false regardless of whether we found a session or not
+loading.value = false;

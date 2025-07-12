@@ -1,9 +1,25 @@
 <script setup>
+import API from 'lib/api';
+import { inject } from 'vue';
 import { RouterLink } from 'vue-router';
+
+const rsvp = inject('rsvp');
+const loading = inject('loading');
+
 const navItems = [
 	{ text: 'Home', to: { name: 'home' } },
 	{ text: 'About', to: { name: 'about' } }
 ];
+
+async function logout() {
+	loading.value = true;
+	const response = await API('session', { method: 'DELETE' });
+	if (response.status === 204) {
+		window.location = '/';
+	} else {
+		// TODO: Handle logout errors
+	}
+}
 </script>
 
 <template>
@@ -20,7 +36,7 @@ const navItems = [
 			<span class="navbar-toggler-icon" />
 		</button>
 		<div id="navbarHeader" class="collapse navbar-collapse">
-			<div class="navbar-nav">
+			<div class="navbar-nav w-100">
 				<div class="ring-loader d-none d-sm-block" />
 				<router-link
 					v-for="item in navItems"
@@ -31,6 +47,10 @@ const navItems = [
 				>
 					{{ item.text }}
 				</router-link>
+
+				<button v-if="rsvp" class=" ms-auto nav-item nav-link" @click="logout">
+					Sign out
+				</button>
 			</div>
 		</div>
 	</nav>

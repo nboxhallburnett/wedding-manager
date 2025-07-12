@@ -1,14 +1,16 @@
 const glob = require('glob');
 const path = require('path');
 
-const { DefinePlugin } = require('webpack');
-const { VueLoaderPlugin } = require('vue-loader');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const { DefinePlugin } = require('webpack');
 const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 const pkg = require('../package.json');
 const config = require('../conf');
-const port = 8468;
+
+const devServerPort = 8468;
 
 module.exports = function ({ WEBPACK_SERVE }) {
 	const conf = {
@@ -50,11 +52,9 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			]
 		},
 		output: {
-			publicPath: WEBPACK_SERVE
-				? `//${config.host}:${port}/`
-				: `//${config.host}${config.server.external_port !== 443 ? ':' + config.server.external_port : ''}/`,
+			publicPath: `//${config.host}${config.server.external_port !== 443 ? ':' + config.server.external_port : ''}/`,
 			path: path.resolve(__dirname, 'public'),
-			filename: 'js/[name].js'
+			filename: 'js/[name].[contenthash].js'
 		},
 		plugins: [
 			new VueLoaderPlugin(),
@@ -73,14 +73,22 @@ module.exports = function ({ WEBPACK_SERVE }) {
 		}
 	};
 
+	// If we're running using the dev server, overload conf as necessary
 	if (WEBPACK_SERVE) {
+		// Switch to dev build with sourcemap
 		conf.mode = 'development';
 		conf.devtool = 'eval-source-map';
+
+		// Switch the public path to the dev server and remove content hashing from the output filename
+		conf.output.publicPath = `//${config.host}:${devServerPort}/`;
+		conf.output.filename = 'js/[name].js';
+
+		// Establish the dev server
 		conf.devServer = {
 			allowedHosts: 'all',
 			compress: true,
 			hot: true,
-			port,
+			port: devServerPort,
 			host: config.host.split(':')[0],
 			headers: {
 				'Access-Control-Allow-Origin': '*',
@@ -91,14 +99,19 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			]
 		};
 	} else {
+		// If we're doing a production build...
 		conf.plugins.push(
+			// extract CSS to their own files
 			new miniCssExtractPlugin({
-				filename: 'css/[name].css'
+				filename: 'css/[name].[contenthash].css'
 			}),
+			// Purge unused CSS
 			new PurgeCSSPlugin({
 				paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, { nodir: true }),
 				safelist: { greedy: [ /data-v-.*/ ], standard: [ 'body', 'html' ] }
-			})
+			}),
+			// And generate a manifest file for the index handler to reference hashed assets
+			new WebpackManifestPlugin()
 		);
 	}
 

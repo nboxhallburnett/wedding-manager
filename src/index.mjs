@@ -14,6 +14,8 @@ import Logger from './lib/logger.js';
 import API from './api/index.js';
 import DB from './lib/db.js';
 
+import IndexRoute from './routes/index.js';
+
 import pkg from '../package.json' with { type: 'json' };
 import config from '../conf/index.js';
 
@@ -71,23 +73,7 @@ app.use(function (req, res, next) {
 app.use(RequestContext.middleware);
 
 // Request logging middleware
-app.use(function (req, res, next) {
-	req._startTime = Date.now();
-
-	const end = res.end;
-	res.end = function (chunk, encoding) {
-		const responseTime = Date.now() - req._startTime;
-
-		res.end = end;
-		res.end(chunk, encoding);
-
-		const url = req.originalUrl || req.url;
-
-		log('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, _getIp(req), responseTime);
-	};
-
-	next();
-});
+app.use(Logger.middleware);
 
 // Serve static assets
 app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
@@ -139,7 +125,7 @@ app.use('/api', ...[
 				return req.session.rsvpId;
 			}
 			// Otherwise use the requesting IP
-			return _getIp(req);
+			return req._ip;
 		},
 		// Skip rate limiting if there is a valid session
 		skip: req => Boolean(req.session?.rsvpId)
@@ -153,16 +139,14 @@ app.use('/api', ...[
 await API.init(app);
 
 // Serve the UI
-app.get('*splat', function (_req, res) {
-	return res.render('index');
-});
+app.get('*splat', IndexRoute.handle);
 
 // Ensure the database has connected before the server starts listening
 await dbConnection;
 
-// And finally start listening on the configured port
-const server = app.listen(config.server.port, function () {
-	log('Listening on port %d', config.server.port);
+// And finally start listening on the configured port on the unspecified IPv4 address
+const server = app.listen(config.server.port, '0.0.0.0', function () {
+	log('Server listening on :%d. Accessible at http://%s:%d', config.server.port, config.host, config.server.external_port);
 });
 
 // Listen for SIGTERM events to gracefully close the server
@@ -177,13 +161,3 @@ process.on('SIGTERM', async() => {
 	// Wait for the http server to stop accepting new connections before closing the db connection
 	await DB.close();
 });
-
-/**
- * Returns the IP address the request originated from
- *
- * @param {import('express').Request} req Express request
- * @returns {String} IP address of the requester
- */
-function _getIp(req) {
-	return req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || req.ip;
-}

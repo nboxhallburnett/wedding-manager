@@ -2,6 +2,7 @@ web/public/css/**
 web/public/font/**
 web/public/img/**
 web/public/js/**
+web/public/manifest.json
 !web/public/img/ring.svg
 
 **/.DS_Store

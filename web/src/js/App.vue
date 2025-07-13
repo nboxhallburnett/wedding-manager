@@ -19,11 +19,13 @@ function welcomeCleanup() {
 	<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
 	<ring-loader />
 
-	<header class="mb-3">
+	<header class="mb-5">
 		<div class="wrapper">
 			<site-header />
 
-			<welcome-banner />
+			<div class="text-center">
+				<welcome-banner />
+			</div>
 		</div>
 	</header>
 

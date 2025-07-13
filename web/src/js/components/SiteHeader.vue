@@ -58,7 +58,7 @@ async function logout() {
 					{{ item.text }}
 				</router-link>
 
-				<button v-if="rsvp" class=" ms-auto nav-item nav-link" @click="logout">
+				<button v-if="rsvp" class="ms-sm-auto text-start nav-item nav-link" @click="logout">
 					Sign out
 				</button>
 			</div>

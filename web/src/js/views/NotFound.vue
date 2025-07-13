@@ -1,5 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router';
+import { inject } from 'vue';
+
+const rsvp = inject('rsvp');
 </script>
 
 <template>
@@ -10,7 +13,7 @@ import { RouterLink } from 'vue-router';
 		<p class="card-text">
 			You seem to be lost.
 		</p>
-		<RouterLink class="btn btn-primary w-100" :to="{ name: 'home' }">
+		<RouterLink class="btn btn-primary w-100" :to="rsvp?.id ? { name: 'Home' } : { name: 'Login' }">
 			Home
 		</RouterLink>
 	</div>

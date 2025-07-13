@@ -19,20 +19,18 @@ const app = createApp(App);
 // Define globally provided refs
 const rsvp = ref(null);
 app.provide('rsvp', rsvp);
-// Default the loading indicator while we're performing the initial rsvp lookup
-const loading = ref(true);
+const loading = ref(false);
 app.provide('loading', loading);
 
+// Ensure the rsvp fetch resolves before we mount the application
+const rsvpResult = await rsvpFetch;
+if (rsvpResult.result.data) {
+	rsvp.value = rsvpResult.result.data;
+}
+
+// Wire up the router after we've fetched the rsvp to ensure routes have
+// accurate session context before router guards are processed
 app.use(Router);
 
 // Render the app on the app container
 app.mount('#app');
-
-// Ensure the rsvp fetch resolves before we hide the initial loader
-const rsvpResult = await rsvpFetch;
-if (rsvpResult.result.data) {
-	rsvp.value = rsvpResult.result.data;
-	Router.replace({ name: 'Home' });
-}
-// Mark the loading status as false regardless of whether we found a session or not
-loading.value = false;

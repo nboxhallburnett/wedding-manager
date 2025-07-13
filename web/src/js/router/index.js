@@ -28,11 +28,28 @@ const router = createRouter({
 			component: () => import('../views/AboutView.vue')
 		},
 		{
+			path: '/admin',
+			name: 'Admin Overview',
+			component: () => import('../views/AdminOverview.vue'),
+			meta: {
+				admin: true
+			}
+		},
+		{
 			path: '/:pathMatch(.*)+',
 			name: '404',
 			component: () => import('../views/NotFound.vue')
 		}
 	]
+});
+
+router.beforeEach((to, from, next) => {
+	const rsvp = inject('rsvp');
+	if (to.meta?.admin && !rsvp.value?.admin) {
+		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
+	}
+
+	next();
 });
 
 export default router;

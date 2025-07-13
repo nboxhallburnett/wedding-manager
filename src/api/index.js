@@ -15,6 +15,15 @@ module.exports = {
  * @returns {Promise<void>}
  */
 async function init(app) {
+	app.use('/api/*splat', (req, res, next) => {
+		// Add cache control headers to API responses
+		res.set({
+			'cache-control': 'no-store, no-cache, must-revalidate',
+			expires: 0
+		});
+		next();
+	});
+
 	for (const file of await readdir(__dirname, { recursive: true })) {
 		if (file.endsWith('.js') && !file.endsWith('index.js')) {
 			try {

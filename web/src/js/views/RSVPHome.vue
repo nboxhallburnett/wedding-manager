@@ -13,7 +13,7 @@ const rsvp = inject('rsvp');
 			Manage your RSVP
 		</h5>
 		<p class="card-text">
-			{{ rsvp || '' }}
+			{{ JSON.stringify(rsvp, null, 2) }}
 		</p>
 	</div>
 </template>

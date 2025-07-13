@@ -6,12 +6,20 @@ import { RouterLink } from 'vue-router';
 const rsvp = inject('rsvp');
 const loading = inject('loading');
 
-const navItems = computed(() => [
-	rsvp.value?.id
-		? { text: 'Home', to: { name: 'Home' } }
-		: { text: 'Home', to: { name: 'Login' } },
-	{ text: 'About', to: { name: 'About' } }
-]);
+const navItems = computed(() => {
+	const items = [
+		rsvp.value?.id
+			? { text: 'Home', to: { name: 'Home' } }
+			: { text: 'Home', to: { name: 'Login' } },
+		{ text: 'About', to: { name: 'About' } }
+	];
+
+	if (rsvp.value?.admin) {
+		items.push({ text: 'Admin', to: { name: 'Admin Overview' } });
+	}
+
+	return items;
+});
 
 async function logout() {
 	loading.value = true;

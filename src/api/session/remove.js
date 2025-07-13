@@ -1,5 +1,3 @@
-// const { promisify } = require('util');
-
 /** @type {API} */
 module.exports = {
 	method: 'delete',
@@ -11,7 +9,6 @@ module.exports = {
 			req.session.destroy(err => err ? reject(err) : resolve());
 		});
 		// No need to return any data on successful logout
-		res.status(204);
-		return res.send();
+		return res.status(204).send();
 	}
 };

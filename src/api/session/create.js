@@ -1,12 +1,12 @@
-const db = require('../../lib/db');
+const rsvpDb = require('../../lib/db/rsvps');
 const { isPrivateIp } = require('../../lib/admin');
 
 /** @type {API} */
 module.exports = {
 	method: 'post',
-	path: 'rsvp',
+	path: 'session',
 	auth: async req => {
-		const rsvp = await db.collection('rsvps').findOne({ id: req.body.rsvpId });
+		const rsvp = await rsvpDb.findOne({ id: req.body.rsvpId });
 		if (rsvp) {
 			// If the RSVP record includes elevated rights and the request originated from an external network, fail auth
 			if (rsvp.admin && !isPrivateIp(req._ip)) {

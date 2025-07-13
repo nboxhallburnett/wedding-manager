@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { RouterView } from 'vue-router';
+
+const rsvp = inject('rsvp');
 
 import RingLoader from 'components/RingLoader.vue';
 import SiteHeader from 'components/SiteHeader.vue';
@@ -16,7 +18,7 @@ function welcomeCleanup() {
 </script>
 
 <template>
-	<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
+	<welcome-display v-if="!rsvp && showWelcome" @finished="welcomeCleanup" />
 	<ring-loader />
 
 	<header class="mb-5">

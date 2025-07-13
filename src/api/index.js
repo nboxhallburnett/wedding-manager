@@ -47,12 +47,22 @@ async function init(app) {
 
 							// If any auth requirements are met, trigger the action
 							await api.action(req, res);
-
 						} catch (err) {
-							// If any errors were thrown checking auth or performing the action, return a server error
-							log('Error performing request: %o', err);
-							res.status(500);
-							res.json({ success: false, description: STATUS_CODES[500] });
+							// Log any errors thrown during the request
+							if (res.statusCode === 200) {
+								log('Error performing request: %o', err);
+								res.status(500);
+							} else {
+								// If a status code was already set, it was a handled error so we can just log the
+								// message for our own records. No need to include the full stack.
+								log('Error performing request: %s', String(err));
+							}
+							res.json({
+								success: false,
+								description: res.statusCode === 500
+									? STATUS_CODES[500]
+									: String(err)
+							});
 						}
 					});
 

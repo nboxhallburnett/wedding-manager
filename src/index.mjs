@@ -12,7 +12,7 @@ import { rateLimit } from 'express-rate-limit';
 import RequestContext from './lib/request-context.js';
 import Logger from './lib/logger.js';
 import API from './api/index.js';
-import DB from './lib/db.js';
+import DB from './lib/db/index.js';
 
 import IndexRoute from './routes/index.js';
 

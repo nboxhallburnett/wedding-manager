@@ -10,8 +10,8 @@ import API from 'lib/api';
 import App from 'App.vue';
 import Router from 'router';
 
-// Trigger the rsvp fetch before we start to wire up the application
-const rsvpFetch = API('rsvp');
+// Trigger the session fetch before we start to wire up the application
+const sessionFetch = API('session');
 
 // Create base app
 const app = createApp(App);
@@ -23,7 +23,7 @@ const loading = ref(false);
 app.provide('loading', loading);
 
 // Ensure the rsvp fetch resolves before we mount the application
-const rsvpResult = await rsvpFetch;
+const rsvpResult = await sessionFetch;
 if (rsvpResult.result.data) {
 	rsvp.value = rsvpResult.result.data;
 }

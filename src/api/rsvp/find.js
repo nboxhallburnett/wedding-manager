@@ -1,14 +1,15 @@
-const db = require('../../lib/db');
+const rsvpDb = require('../../lib/db/rsvps');
 
 /** @type {API} */
 module.exports = {
-	path: 'rsvp/query',
+	path: 'rsvp',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
 		return Boolean(req.session.admin);
 	},
 	action: async (req, res) => {
-		const rsvpsCursor = await db.collection('rsvps').find();
+		// TODO: Support supplying sanitized query to db lookup
+		const rsvpsCursor = await rsvpDb.find();
 		const rsvps = await rsvpsCursor.toArray();
 		return res.json({ success: true, data: rsvps });
 	}

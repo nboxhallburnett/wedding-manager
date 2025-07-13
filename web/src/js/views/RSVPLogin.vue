@@ -10,7 +10,7 @@ const rsvpId = defineModel({ type: String });
 
 async function onSubmit() {
 	loading.value = true;
-	const response = await API('rsvp', {
+	const response = await API('session', {
 		method: 'POST',
 		body: { rsvpId }
 	});

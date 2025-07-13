@@ -1,7 +1,7 @@
 const MongoDB = require('mongodb');
 
-const config = require('../../conf');
-const log = require('./logger')('db');
+const config = require('../../../conf');
+const log = require('../logger')('db');
 
 // Instance the mongo client
 const url = `mongodb://${config.server.db.username}:${config.server.db.password}@${config.server.db.host}/${config.server.db.db}`;

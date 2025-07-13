@@ -7,7 +7,7 @@ const rsvps = ref([]);
 const loading = inject('loading');
 loading.value = true;
 
-API('rsvp/query').then(({ result }) => {
+API('rsvp').then(({ result }) => {
 	rsvps.value = result.data;
 	loading.value = false;
 }).catch(() => loading.value = false);

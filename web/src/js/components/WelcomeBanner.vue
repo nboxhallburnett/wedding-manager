@@ -5,7 +5,7 @@ const groom = CONFIG.groom_short;
 
 <template>
 	<div id="welcome-banner" class="text-center d-inline-flex h1 mb-3">
-		<h1 v-if="$router.currentRoute.value.name !== '404'" id="site-title" class="mb-3 px-5 pt-4">
+		<h1 v-if="$router.currentRoute.value.name !== '404'" id="site-title" class="mb-3 pt-4">
 			<span class="font-script">Welcome</span> to the wedding of
 			<br>
 			{{ groom }}<span class="font-script px-1">&</span>{{ bride }}
@@ -18,6 +18,8 @@ const groom = CONFIG.groom_short;
 	$artificial-margin: 250px;
 	$banner-border-radius: 45%;
 
+	padding-left: 3.5rem;
+	padding-right: 3.5rem;
 	border-bottom-left-radius: $banner-border-radius;
 	border-bottom-right-radius: $banner-border-radius;
 	box-shadow: 0 0 33px 42px var(--bs-secondary);

@@ -32,7 +32,7 @@ function welcomeCleanup() {
 	</header>
 
 	<div class="container d-flex justify-content-center">
-		<div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 col-12 card">
+		<div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 col-12 card shadow">
 			<RouterView />
 		</div>
 	</div>

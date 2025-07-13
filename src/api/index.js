@@ -57,4 +57,10 @@ async function init(app) {
 			}
 		}
 	}
+
+	// Return 404 for any other requests against the api path
+	app.use('/api/*splat', (req, res) => {
+		res.status(404);
+		res.json({ success: false, description: STATUS_CODES[404] });
+	});
 }

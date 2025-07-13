@@ -1,15 +1,17 @@
 <script setup>
 import API from 'lib/api';
-import { inject } from 'vue';
+import { computed, inject } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const rsvp = inject('rsvp');
 const loading = inject('loading');
 
-const navItems = [
-	{ text: 'Home', to: { name: 'home' } },
-	{ text: 'About', to: { name: 'about' } }
-];
+const navItems = computed(() => [
+	rsvp.value?.id
+		? { text: 'Home', to: { name: 'Home' } }
+		: { text: 'Home', to: { name: 'Login' } },
+	{ text: 'About', to: { name: 'About' } }
+]);
 
 async function logout() {
 	loading.value = true;

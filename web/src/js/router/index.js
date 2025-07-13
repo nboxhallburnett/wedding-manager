@@ -1,3 +1,4 @@
+import { inject } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -5,12 +6,25 @@ const router = createRouter({
 	routes: [
 		{
 			path: '/',
-			name: 'home',
-			component: () => import('../views/HomeView.vue')
+			name: 'Login',
+			component: () => import('../views/RSVPLogin.vue'),
+			beforeEnter: (to, from, next) => {
+				// If the user has already signed in, redirect them to the home page instead
+				const rsvp = inject('rsvp');
+				if (rsvp.value) {
+					next({ name: 'Home' });
+				}
+				next();
+			}
+		},
+		{
+			path: '/',
+			name: 'Home',
+			component: () => import('../views/RSVPHome.vue')
 		},
 		{
 			path: '/about',
-			name: 'about',
+			name: 'About',
 			component: () => import('../views/AboutView.vue')
 		},
 		{

@@ -99,8 +99,8 @@ app.use(Session({
 	secret: config.server.session.secret,
 	unset: 'destroy',
 	cookie: {
-		proxy: true
-		// TODO: secure: true
+		proxy: true,
+		secure: config.server.external_port === 443
 	},
 	store: MongoStore.create({
 		client: DB.MongoClient,

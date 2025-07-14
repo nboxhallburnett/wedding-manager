@@ -1,0 +1,9 @@
+.icon-caret {
+	box-sizing: content-box;
+	width: 1em;
+	height: 0.6em;
+	color: var(--bs-btn-close-color);
+	background: transparent escape-svg($accordion-button-icon) center / 1em auto no-repeat;
+	border: 0;
+	border-radius: 0.375rem;
+}

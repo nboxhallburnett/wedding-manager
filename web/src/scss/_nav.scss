@@ -14,8 +14,13 @@
 				-8px 0 0 0 $primary;
 		}
 
-		&:not(.active):hover {
+		&:not(.active):hover,
+		&:not(.active):focus {
 			box-shadow: -2px 0 0 0 rgba($primary, 0.3);
+		}
+
+		&:not(.active):focus {
+			background-color: rgba($color: $gray-400, $alpha: 0.4);
 		}
 	}
 
@@ -24,8 +29,13 @@
 			box-shadow: 0 3px 0 -1px $primary;
 		}
 
-		&:not(.active):hover {
+		&:not(.active):hover,
+		&:not(.active):focus {
 			box-shadow: 0 3px 0 -1px rgba($primary, 0.3);
+		}
+
+		&:not(.active):focus {
+			background-color: rgba($color: $gray-400, $alpha: 0.4);
 		}
 	}
 }

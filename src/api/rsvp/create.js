@@ -19,6 +19,7 @@ module.exports = {
 		/** @type {RSVP} */
 		const rsvp = {
 			id: nanoid(),
+			created: new Date(),
 			guests: req.body.guests?.map(guest => ({
 				// TODO: Expand with additional fields when they've been defined
 				name: String(guest.name || ''),

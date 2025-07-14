@@ -4,8 +4,10 @@ export default API;
 
 /**
  * Performs a request against the application API
+ *
  * @param {String} path path relative to the the API. e.g. `'session'`
  * @param {RequestInit} opts
+ * @returns {{ status: 204, result: false }|{ status: Number, result: Object }}
  */
 async function API (path, opts = {}) {
 	// Ensure all requests are made with credentials

@@ -31,9 +31,19 @@ const router = createRouter({
 			path: '/admin',
 			name: 'Admin Overview',
 			component: () => import('../views/AdminOverview.vue'),
-			meta: {
-				admin: true
-			}
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/rsvp/new',
+			name: 'Admin Create RSVP',
+			component: () => import('../views/AdminCreateRSVP.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/rsvp/list',
+			name: 'Admin List RSVPs',
+			component: () => import('../views/AdminListRSVPs.vue'),
+			meta: { admin: true }
 		},
 		{
 			path: '/:pathMatch(.*)+',

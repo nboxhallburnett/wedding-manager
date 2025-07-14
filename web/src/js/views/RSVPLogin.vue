@@ -1,8 +1,9 @@
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { inject } from 'vue';
 import Router from 'router';
 
 import API from 'lib/api';
+import FormInput from 'components/form/FormInput.vue';
 
 const rsvp = inject('rsvp');
 const loading = inject('loading');
@@ -20,10 +21,6 @@ async function onSubmit() {
 	Router.replace({ name: 'Home' });
 	loading.value = false;
 }
-
-// Attempt to focus the rsvp input when the page is mounted
-const rsvpInput = ref(null);
-onMounted(() => rsvpInput.value?.focus());
 </script>
 
 <template>
@@ -34,16 +31,14 @@ onMounted(() => rsvpInput.value?.focus());
 		<p class="card-text">
 			Enter the RSVP code included on your invitation below.
 		</p>
-		<input
-			id="rsvpId"
-			ref="rsvpInput"
+		<form-input
 			v-model="rsvpId"
 			name="rsvpId"
-			class="form-control mb-3"
-			type="text"
+			class="mb-3"
 			aria-label="RSVP code entry"
 			placeholder="Enter your RSVP code"
-		>
+			focus
+		/>
 		<button :disabled="!rsvpId" class="btn btn-primary w-100" type="submit">
 			Submit
 		</button>

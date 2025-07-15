@@ -1,14 +1,21 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, provide, ref } from 'vue';
 import { RouterView } from 'vue-router';
 
 const rsvp = inject('rsvp');
 
 import RingLoader from 'components/RingLoader.vue';
-import SiteHeader from 'components/SiteHeader.vue';
 import SiteFooter from 'components/SiteFooter.vue';
-import WelcomeDisplay from 'components/WelcomeDisplay.vue';
+import SiteHeader from 'components/SiteHeader.vue';
+import ToastContainer from 'components/ToastContainer.vue';
 import WelcomeBanner from 'components/WelcomeBanner.vue';
+import WelcomeDisplay from 'components/WelcomeDisplay.vue';
+
+const toastContainerComponent = ref(null);
+provide('addToast', addToast);
+function addToast(toast) {
+	toastContainerComponent.value.addToast(toast);
+}
 
 // We only want the welcome display to be on the DOM until it's finished as it's an overlay
 let showWelcome = ref(true);
@@ -18,6 +25,7 @@ function welcomeCleanup() {
 </script>
 
 <template>
+	<toast-container ref="toastContainerComponent" />
 	<welcome-display v-if="!rsvp && showWelcome" @finished="welcomeCleanup" />
 	<ring-loader />
 

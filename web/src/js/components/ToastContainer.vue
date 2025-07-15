@@ -1,0 +1,61 @@
+<script setup>
+import { ref, nextTick } from 'vue';
+import { nanoid } from 'nanoid';
+import { Toast } from 'bootstrap';
+
+// const toasts = inject('toasts');
+const toasts = ref([]);
+const $toasts = ref({});
+
+defineExpose({ addToast });
+function addToast(toast, options = { animation: true, autohide: true }) {
+	console.log(toast);
+	toast.id = nanoid();
+	toast.created = Date.now();
+	toasts.value.push(toast);
+	nextTick(() => {
+		const $toast = $toasts.value[toast.id];
+		console.log($toast);
+		const bsToast = new Toast($toast, options);
+		bsToast.show();
+		$toast.addEventListener('hidden.bs.toast', () => {
+			toasts.value.splice(toasts.value.findIndex(t => t.id === toast.id), 1);
+		});
+	});
+}
+
+</script>
+
+<template>
+	<div aria-live="polite" aria-atomic="true" class="position-relative">
+		<div class="toast-container position-absolute end-0 p-3">
+			<div
+				v-for="toast in toasts"
+				:key="toast.id"
+				:ref="$el => $toasts[toast.id] = $el"
+				class="toast"
+				role="alert"
+				aria-live="assertive"
+				aria-atomic="true"
+			>
+				<div class="toast-header">
+					<strong class="me-auto" v-text="toast.title" />
+					<!-- <small class="text-muted">just now</small> -->
+					<button
+						type="button"
+						class="btn-close"
+						data-bs-dismiss="toast"
+						aria-label="Close"
+					/>
+				</div>
+				<div class="toast-body" v-text="toast.body" />
+			</div>
+		</div>
+	</div>
+</template>
+
+<style lang="scss" scoped>
+.toast-container {
+	top: 55px;
+}
+</style>

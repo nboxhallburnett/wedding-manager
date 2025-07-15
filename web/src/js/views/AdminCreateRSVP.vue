@@ -5,6 +5,7 @@ import Router from 'router';
 import FormInput from 'components/form/FormInput.vue';
 import API from 'lib/api';
 
+const addToast = inject('addToast');
 const loading = inject('loading');
 const guests = ref([ { name: '', status: 0 } ]);
 
@@ -17,13 +18,20 @@ function addGuest() {
 
 function removeItem(idx) {
   	guests.value.splice(idx, 1);
-};
+}
 
 async function onSubmit(another) {
 	loading.value = true;
 	await API('rsvp', {
 		method: 'POST',
 		body: { guests }
+	});
+	const guestMsg = guests.value[0].name
+		? `${guests.value[0].name}${guests.value.length > 1 ? ` & ${guests.value.length - 1} other guest${guests.value.length > 2 ? 's' : ''}` : ''}`
+		: `${guests.value.length} guest${guests.value.length > 1 ? 's' : ''}`;
+	addToast({
+		title: 'RSVP Created',
+		body: `RSVP for ${guestMsg} successfully created.`
 	});
 	loading.value = false;
 	if (another === true) {

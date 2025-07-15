@@ -5,6 +5,7 @@ import API from 'lib/api';
 
 const rsvps = ref([]);
 const loading = inject('loading');
+const addToast = inject('addToast');
 
 loading.value = true;
 API('rsvp').then(({ result }) => {
@@ -12,10 +13,17 @@ API('rsvp').then(({ result }) => {
 	loading.value = false;
 }).catch(() => loading.value = false);
 
-async function deleteRsvp(rsvpId) {
+async function deleteRsvp(rsvp) {
 	loading.value = true;
-	await API(`rsvp/${rsvpId}`, { method: 'delete' });
+	await API(`rsvp/${rsvp.id}`, { method: 'delete' });
 	rsvps.value = await API('rsvp').then(({ result }) => result.data);
+	const guestMsg = rsvp.guests[0].name
+		? `${rsvp.guests[0].name}${rsvp.guests.length > 1 ? ` & ${rsvp.guests.length - 1} other guest${rsvp.guests.length > 2 ? 's' : ''}` : ''}`
+		: `${rsvp.guests.length} guest${rsvp.guests.length > 1 ? 's' : ''}`;
+	addToast({
+		title: 'RSVP Removed',
+		body: `RSVP for ${guestMsg} (${rsvp.id}) successfully removed.`
+	});
 	loading.value = false;
 }
 </script>
@@ -79,7 +87,7 @@ async function deleteRsvp(rsvpId) {
 									</li>
 									<li><hr class="dropdown-divider"></li>
 									<li>
-										<button class="dropdown-item text-danger" type="button" @click="deleteRsvp(item.id)">
+										<button class="dropdown-item text-danger" type="button" @click="deleteRsvp(item)">
 											Delete
 										</button>
 									</li>

@@ -1,5 +1,6 @@
 <script setup>
 import { inject, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 import API from 'lib/api';
 
@@ -49,7 +50,7 @@ async function deleteRsvp(rsvp) {
 							Name
 						</th>
 						<th scope="col">
-							# Invitations
+							Guests
 						</th>
 						<th scope="col">
 							Status
@@ -62,7 +63,11 @@ async function deleteRsvp(rsvp) {
 				<tbody>
 					<template v-for="item in rsvps" :key="item.id">
 						<tr v-if="item.guests?.length">
-							<th scope="row" class="font-monospace" v-text="item.id" />
+							<th scope="row" class="font-monospace">
+								<router-link :to="{ name: 'Admin Edit RSVP', params: { rsvpId: item.id } }">
+									{{ item.id }}
+								</router-link>
+							</th>
 							<td v-text="item.guests[0].name" />
 							<td v-text="item.guests.length" />
 							<td v-text="'TODO:'" />
@@ -81,9 +86,9 @@ async function deleteRsvp(rsvp) {
 										</button>
 									</li>
 									<li>
-										<button class="dropdown-item" type="button">
+										<router-link class="dropdown-item" :to="{ name: 'Admin Edit RSVP', params: { rsvpId: item.id } }">
 											Edit
-										</button>
+										</router-link>
 									</li>
 									<li><hr class="dropdown-divider"></li>
 									<li>

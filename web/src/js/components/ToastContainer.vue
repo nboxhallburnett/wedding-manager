@@ -9,13 +9,11 @@ const $toasts = ref({});
 
 defineExpose({ addToast });
 function addToast(toast, options = { animation: true, autohide: true }) {
-	console.log(toast);
 	toast.id = nanoid();
 	toast.created = Date.now();
 	toasts.value.push(toast);
 	nextTick(() => {
 		const $toast = $toasts.value[toast.id];
-		console.log($toast);
 		const bsToast = new Toast($toast, options);
 		bsToast.show();
 		$toast.addEventListener('hidden.bs.toast', () => {

@@ -39,8 +39,8 @@ function welcomeCleanup() {
 		</div>
 	</header>
 
-	<div class="container d-flex justify-content-center">
-		<div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 col-12 card shadow">
+	<div class="container d-flex justify-content-center mb-5">
+		<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
 			<RouterView />
 		</div>
 	</div>

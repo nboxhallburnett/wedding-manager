@@ -72,7 +72,9 @@ async function onSubmit(another) {
 				data-bs-toggle="dropdown"
 				aria-expanded="false"
 				data-bs-reference="parent"
-			/>
+			>
+				<span class="d-none">Dropdown</span>
+			</button>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="save-add-more">
 				<li>
 					<button class="dropdown-item" @click.prevent="onSubmit(true)">

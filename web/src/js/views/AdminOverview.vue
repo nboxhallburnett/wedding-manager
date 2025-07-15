@@ -1,17 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-
-import API from 'lib/api';
-
-const rsvps = ref([]);
-const loading = inject('loading');
-loading.value = true;
-
-API('rsvp').then(({ result }) => {
-	rsvps.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
 </script>
 
 <template>

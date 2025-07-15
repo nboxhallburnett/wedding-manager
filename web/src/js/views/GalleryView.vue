@@ -38,7 +38,12 @@ function fullscreenImage(evt) {
 					/>
 				</div>
 				<div class="carousel-inner">
-					<div v-for="(src, idx) in gallerySources" :key="idx" class="carousel-item" :class="{ active: idx === 0 }">
+					<div
+						v-for="(src, idx) in gallerySources"
+						:key="idx"
+						class="carousel-item"
+						:class="{ active: idx === 0 }"
+					>
 						<img
 							:src="`/img/gallery/${src}`"
 							class="d-block w-100 img-fluid"
@@ -97,6 +102,12 @@ function fullscreenImage(evt) {
 </template>
 
 <style lang="scss" scoped>
+.carousel-item img {
+	max-height: 400px;
+	object-fit: cover;
+	cursor: zoom-in;
+}
+
 #modalImage {
 	max-width: 100%;
 	max-height: 100%;

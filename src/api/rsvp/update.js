@@ -21,25 +21,11 @@ module.exports = {
 				throw new Error('Guest count cannot be modified');
 			}
 
+			const guests = [];
+
 			for (const [ idx, guest ] of req.body.guests.entries()) {
 				// Set initial "updated" record to the existing value
-				const updatedGuest = existingRSVP.guests[idx];
-
-				if (Object.prototype.hasOwnProperty.call(guest, 'status')) {
-					// Verify the status wasn't reset back to Pending (0)
-					if (updatedGuest.status > 0 && guest.status === 0) {
-						res.status(400);
-						throw new Error(`"guests[${idx}].status" contained an invalid value: Cannot reset status to Pending (0).`);
-					}
-					// Verify the status contained a valid value
-					if (guest.status < 0 || guest.status > 3 || typeof guest.status !== 'number') {
-						res.status(400);
-						throw new Error(`"guests[${idx}].status" contained an invalid value: Unknown status value: "${guest.status}"`);
-					}
-
-					// Update the verified updated status value
-					updatedGuest.status = guest.status;
-				}
+				const updatedGuest = {};
 
 				if (Object.prototype.hasOwnProperty.call(guest, 'name')) {
 					// Verify the status contained a valid value
@@ -52,8 +38,34 @@ module.exports = {
 					updatedGuest.name = guest.name;
 				}
 
-				update.$set[`guests.${idx}`] = updatedGuest;
+				if (Object.prototype.hasOwnProperty.call(guest, 'status')) {
+					// Verify the status wasn't reset back to Pending (0)
+					if (guest.status === 0 && !req.session.admin) {
+						res.status(400);
+						throw new Error(`"guests[${idx}].status" contained an invalid value: Cannot set status to Pending (0).`);
+					}
+					// Verify the status contained a valid value
+					if (guest.status < 0 || guest.status > 3 || typeof guest.status !== 'number') {
+						res.status(400);
+						throw new Error(`"guests[${idx}].status" contained an invalid value: Unknown status value: "${guest.status}"`);
+					}
+
+					// Update the verified updated status value
+					updatedGuest.status = guest.status;
+				}
+
+				guests.push(updatedGuest);
 			}
+
+			// If the set of posted guests is valid, mark it as an update candidate
+			if (guests.length) {
+				update.$set.guests = guests;
+			}
+		}
+
+		// Perform the update if there is anything to modify
+		if (Object.keys(update.$set).length) {
+			await rsvpDb.updateOne({ id: req.params.rsvpId }, update);
 		}
 
 		// No need to return any data on successful update

@@ -9,8 +9,13 @@ const rsvp = inject('rsvp');
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title">
-			Manage your RSVP
+		<h5 class="card-title d-flex justify-content-between">
+			<span>
+				Invitation
+			</span>
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Edit RSVP' }">
+				Update RSVP
+			</router-link>
 		</h5>
 		<p class="card-text">
 			{{ JSON.stringify(rsvp, null, 2) }}

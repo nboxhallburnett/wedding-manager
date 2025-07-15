@@ -23,6 +23,12 @@ const router = createRouter({
 			component: () => import('../views/RSVPHome.vue')
 		},
 		{
+			path: '/edit',
+			name: 'Edit RSVP',
+			component: () => import('../views/EditRSVP.vue'),
+			meta: { session: true }
+		},
+		{
 			path: '/about',
 			name: 'About',
 			component: () => import('../views/AboutView.vue')
@@ -43,6 +49,12 @@ const router = createRouter({
 			path: '/admin/rsvp/new',
 			name: 'Admin Create RSVP',
 			component: () => import('../views/AdminCreateRSVP.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/rsvp/:rsvpId',
+			name: 'Admin Edit RSVP',
+			component: () => import('../views/EditRSVP.vue'),
 			meta: { admin: true }
 		},
 		{

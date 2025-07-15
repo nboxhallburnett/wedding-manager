@@ -14,6 +14,10 @@ const navItems = computed(() => {
 		{ text: 'About', to: { name: 'About' } }
 	];
 
+	if (GALLERY_IMAGES.length && rsvp.value?.id) {
+		items.push({ text: 'Gallery', to: { name: 'Gallery' } });
+	}
+
 	if (rsvp.value?.admin) {
 		items.push({ text: 'Admin', to: { name: 'Admin Overview' } });
 	}

@@ -28,6 +28,12 @@ const router = createRouter({
 			component: () => import('../views/AboutView.vue')
 		},
 		{
+			path: '/gallery',
+			name: 'Gallery',
+			component: () => import('../views/GalleryView.vue'),
+			meta: { session: true }
+		},
+		{
 			path: '/admin',
 			name: 'Admin Overview',
 			component: () => import('../views/AdminOverview.vue'),
@@ -55,6 +61,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 	const rsvp = inject('rsvp');
+	if (to.meta?.session && !rsvp.value?.id) {
+		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
+	}
 	if (to.meta?.admin && !rsvp.value?.admin) {
 		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
 	}

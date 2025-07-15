@@ -28,7 +28,7 @@ const date = dateFormatter.format(CONFIG.date);
 
 <style lang="scss" scoped>
 #footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
 

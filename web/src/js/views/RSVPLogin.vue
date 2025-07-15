@@ -17,8 +17,8 @@ async function onSubmit() {
 	});
 	if (response.status === 200) {
 		rsvp.value = response.result.data;
+		Router.replace({ name: 'Home' });
 	}
-	Router.replace({ name: 'Home' });
 	loading.value = false;
 }
 </script>

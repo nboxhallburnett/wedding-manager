@@ -10,7 +10,8 @@ export default defineConfig([
 	{ files: [ 'web/src/**/*.{js,vue}' ], languageOptions: { globals: {
 		...globals.browser,
 		'CONFIG': 'readonly',
-		'SOURCE': 'readonly'
+		'SOURCE': 'readonly',
+		'GALLERY_IMAGES': 'readonly'
 	} } },
 	pluginVue.configs['flat/recommended'],
 	{ rules: {

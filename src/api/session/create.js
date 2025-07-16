@@ -6,7 +6,7 @@ module.exports = {
 	method: 'post',
 	path: 'session',
 	auth: async req => {
-		const invitation = await invitationDb.findOne({ id: req.body.invitationId });
+		const invitation = await invitationDb.findOne({ id: req.body.invitationId }, { projection: { _id: 0 } });
 		if (invitation) {
 			// If the Invitation record includes elevated rights and the request originated from an external network, fail auth
 			if (invitation.admin && !isPrivateIp(req._ip)) {
@@ -24,7 +24,8 @@ module.exports = {
 		return Boolean(req.session.invitationId);
 	},
 	action: async (req, res) => {
-		req.ctx.log('Session created for "%s". Invitation ID: %s', req.ctx.invitation.guests?.[0]?.name, req.ctx.invitation.id);
+		req.ctx.log('Session created for "%s". Invitation ID: %s', req.ctx.invitation.guests?.[0]?.name || req.ctx.invitation.id, req.ctx.invitation.id);
+		invitationDb.updateOne({ id: req.ctx.invitation.id }, { $inc: { login_count: 1 } });
 		return res.json({ success: true, data: req.ctx?.invitation });
 	}
 };

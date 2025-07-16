@@ -13,7 +13,7 @@ module.exports = {
 		const invitation = await invitationDb.findOne({ id: req.params.invitationId });
 		if (!invitation) {
 			res.status(400);
-			throw new Error('invitationId contanied an invalid value');
+			throw new Error('"invitationId" contained an invalid value');
 		}
 
 		req.ctx.log('Removing invitation for "%s" with %d total guests. Invitation ID: %s', invitation.guests[0].name, invitation.guests.length, invitation.id);

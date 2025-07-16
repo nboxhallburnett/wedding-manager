@@ -9,7 +9,7 @@ module.exports = {
 	},
 	action: async (req, res) => {
 		// TODO: Support supplying sanitized query to db lookup
-		const invitationsCursor = await invitationDb.find();
+		const invitationsCursor = await invitationDb.find({}, { projection: { _id: 0 } });
 		const invitations = await invitationsCursor.toArray();
 		return res.json({ success: true, data: invitations });
 	}

@@ -39,7 +39,7 @@ function welcomeCleanup() {
 		</div>
 	</header>
 
-	<div class="container d-flex justify-content-center mb-5">
+	<div id="view-container" class="container d-flex justify-content-center">
 		<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
 			<RouterView />
 		</div>
@@ -47,3 +47,9 @@ function welcomeCleanup() {
 
 	<site-footer />
 </template>
+
+<style lang="scss" scoped>
+#view-container {
+	margin-bottom: 5rem;
+}
+</style>

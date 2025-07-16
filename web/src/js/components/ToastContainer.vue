@@ -51,9 +51,3 @@ function addToast(toast, options = { animation: true, autohide: true }) {
 		</div>
 	</div>
 </template>
-
-<style lang="scss" scoped>
-.toast-container {
-	top: 55px;
-}
-</style>

@@ -58,6 +58,19 @@ module.exports = {
 			}
 		}
 
+		// Validate provided message
+		if (req.body.message) {
+			if (typeof req.body.message !== 'string') {
+				res.status(400);
+				throw new Error('"message" contained an invalid value: Message must be a string');
+			}
+			if (req.body.message.length > 1024) {
+				res.status(400);
+				throw new Error('"message" contained an invalid value: Message values must be 1024 characters or less');
+			}
+			update.$set.message = req.body.message;
+		}
+
 		// Validate song changes
 		if (req.body.songs) {
 			const songs = [];
@@ -91,6 +104,9 @@ module.exports = {
 
 		// Perform the update if there is anything to modify
 		if (Object.keys(update.$set).length) {
+			// Set a new updated date
+			update.$set.updated = new Date();
+
 			req.ctx.log('Updating invitation for "%s". Invitation ID: %s', existingInvitation.guests[0].name, existingInvitation.id);
 			await invitationDb.updateOne({ id: req.params.invitationId }, update);
 		}

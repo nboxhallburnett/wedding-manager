@@ -20,18 +20,21 @@ module.exports = {
 		const invitation = {
 			id: nanoid(),
 			created: new Date(),
+			updated: new Date(),
+			login_count: 0,
 			guests: req.body.guests?.map(guest => ({
 				// TODO: Expand with additional fields when they've been defined
 				name: String(guest.name || ''),
 				status: 0
 			})),
+			message: '',
 			songs: []
 		};
 
 		// Ensure at least one guest is defined for the Invitation
 		if (!invitation.guests?.length) {
 			res.status(400);
-			throw new Error('At least one guest is required for an Invitation');
+			throw new Error('"guests" contained an invalid value: At least one guest is required for an Invitation');
 		}
 
 		req.ctx.log('Creating invitation for "%s" with %d total guests. Invitation ID: %s', invitation.guests[0].name, invitation.guests.length, invitation.id);

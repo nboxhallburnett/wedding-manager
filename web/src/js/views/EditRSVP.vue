@@ -2,9 +2,10 @@
 import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
+import FormArray from 'components/form/FormArray.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
-import FormArray from 'components/form/FormArray.vue';
+import FormTextarea from 'components/form/FormTextarea.vue';
 import API from 'lib/api';
 
 const session = inject('invitation');
@@ -113,6 +114,12 @@ async function onSubmit() {
 			Add +1
 		</button>
 		<hr>
+		<form-textarea
+			v-model="invitation.message"
+			name="message"
+			label="Message"
+			placeholder="Leave us a message!"
+		/>
 		<form-array
 			ref="songList"
 			v-model="invitation.songs"

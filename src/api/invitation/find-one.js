@@ -10,7 +10,7 @@ module.exports = {
 		return Boolean(req.params.invitationId === req.session.invitationId || req.session.admin);
 	},
 	action: async (req, res) => {
-		const invitation = await invitationDb.findOne({ id: req.params.invitationId });
+		const invitation = await invitationDb.findOne({ id: req.params.invitationId }, { projection: { _id: 0 } });
 		if (!invitation) {
 			res.status(404);
 			throw STATUS_CODES[404];

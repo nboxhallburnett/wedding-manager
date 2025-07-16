@@ -58,6 +58,37 @@ module.exports = {
 			}
 		}
 
+		// Validate song changes
+		if (req.body.songs) {
+			const songs = [];
+
+			for (const [ idx, song ] of req.body.songs.entries()) {
+				// Filter out any empty items
+				if (!song) {
+					continue;
+				}
+				// Ensure they are strings
+				if (typeof song !== 'string') {
+					res.status(400);
+					throw new Error(`"songs[${idx}]" contained an invalid value: Songs must be strings`);
+				}
+				// And ensure each item isn't too long
+				if (song.length > 100) {
+					res.status(400);
+					throw new Error(`"songs[${idx}]" contained an invalid value: Song values must be 100 characters or less`);
+				}
+
+				songs.push(song);
+			}
+
+			if (songs.length > 5) {
+				res.status(400);
+				throw new Error('"songs" contained an invalid value: Only five song recommendations allowed per invitation');
+			}
+
+			update.$set.songs = songs;
+		}
+
 		// Perform the update if there is anything to modify
 		if (Object.keys(update.$set).length) {
 			req.ctx.log('Updating invitation for "%s". Invitation ID: %s', existingInvitation.guests[0].name, existingInvitation.id);

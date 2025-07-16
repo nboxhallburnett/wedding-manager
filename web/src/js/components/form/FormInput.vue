@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const model = defineModel({ type: String });
+import FormItem from './FormItem.vue';
 
+const model = defineModel({ type: String });
 const props = defineProps({
 	label: { type: String, default: '' },
 	name: { type: String, required: true },
@@ -19,27 +20,17 @@ if (props.focus) {
 </script>
 
 <template>
-	<div class="row mb-3">
-		<label
-			v-if="label"
-			:for="name"
-			class="col-sm-3 col-form-label"
-			v-text="label"
-		/>
-		<div :class="label ? 'col-sm-9' : 'col-12'">
-			<div class="input-group">
-				<input
-					:id="props.name"
-					v-bind="$attrs"
-					ref="input"
-					v-model="model"
-					:name="props.name"
-					class="form-control"
-					type="text"
-					:placeholder="placeholder"
-				>
-				<slot name="after" />
-			</div>
-		</div>
-	</div>
+	<form-item :label :name>
+		<input
+			:id="props.name"
+			v-bind="$attrs"
+			ref="input"
+			v-model="model"
+			:name="props.name"
+			class="form-control"
+			type="text"
+			:placeholder="placeholder"
+		>
+		<slot name="after" />
+	</form-item>
 </template>

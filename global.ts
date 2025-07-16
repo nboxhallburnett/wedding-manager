@@ -10,5 +10,7 @@ type Invitation = {
 		name: String,
 		/** Attendance confirmation of the guest. 0: Pending | 1: Confirmed | 2: Tentative | 3: Declined */
 		status: 0|1|2|3,
-	}[]
+	}[],
+	/** Songs the invitation recipients suggested for the reception */
+	songs: String[]
 }

@@ -1,6 +1,7 @@
 <script setup>
-const model = defineModel({ type: String });
+import FormItem from './FormItem.vue';
 
+const model = defineModel({ type: String });
 const props = defineProps({
 	label: { type: String, default: '' },
 	value: { type: String, default: '' },
@@ -9,25 +10,15 @@ const props = defineProps({
 </script>
 
 <template>
-	<div class="row mb-3">
-		<label
-			v-if="label"
-			:for="name"
-			class="col-sm-3 col-form-label"
-			v-text="label"
+	<form-item :label :name>
+		<span
+			:id="props.name"
+			v-bind="$attrs"
+			ref="input"
+			:name="props.name"
+			class="form-control-plaintext"
+			v-text="value || model"
 		/>
-		<div :class="label ? 'col-sm-9' : 'col-12'">
-			<div class="input-group">
-				<span
-					:id="props.name"
-					v-bind="$attrs"
-					ref="input"
-					:name="props.name"
-					class="form-control-plaintext"
-					v-text="value || model"
-				/>
-				<slot name="after" />
-			</div>
-		</div>
-	</div>
+		<slot name="after" />
+	</form-item>
 </template>

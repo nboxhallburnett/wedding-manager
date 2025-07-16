@@ -24,7 +24,8 @@ module.exports = {
 				// TODO: Expand with additional fields when they've been defined
 				name: String(guest.name || ''),
 				status: 0
-			}))
+			})),
+			songs: []
 		};
 
 		// Ensure at least one guest is defined for the Invitation

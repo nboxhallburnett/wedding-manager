@@ -1,36 +1,47 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
+import FormArray from 'components/form/FormArray.vue';
 import API from 'lib/api';
 
 const session = inject('invitation');
 const addToast = inject('addToast');
 const loading = inject('loading');
 const invitation = ref({});
+const songList = useTemplateRef('songList');
 
+// Define available attendance status'
 const statusOptions = [
 	{ text: 'Attending', value: 1 },
 	{ text: 'Tentative', value: 2 },
 	{ text: 'Not Attending', value: 3 }
 ];
-
 if (session.value.admin) {
 	statusOptions.unshift({ text: 'Pending', value: 0 });
 }
 
+// Define var to track whether the component is used for the admin edit vs the user edit
 const adminEdit = Router.currentRoute.value.name === 'Admin Edit Invitation';
 
+// If this is the admin edit, fetch the invitation from the API
 if (adminEdit) {
 	loading.value = true;
 	API(`invitation/${Router.currentRoute.value.params.invitationId}`).then(({ result }) => {
 		invitation.value = result.data;
+		if (!invitation.value.songs?.length) {
+			invitation.value.songs = [ '' ];
+		}
 		loading.value = false;
 	}).catch(() => loading.value = false);
 } else {
+	// Otherwise, we can use the session
 	invitation.value = session.value;
+	if (!invitation.value.songs?.length) {
+		invitation.value.songs = [ '' ];
+	}
 }
 
 function addGuest() {
@@ -39,9 +50,15 @@ function addGuest() {
 		status: 0
 	});
 }
+function removeGuest(idx) {
+	invitation.value.guests.splice(idx, 1);
+}
 
-function removeItem(idx) {
-  	invitation.value.guests.splice(idx, 1);
+function addSong() {
+	invitation.value.songs.push('');
+	nextTick(() => {
+		songList.value?.$items?.[invitation.value.songs.length - 1]?.focus();
+	});
 }
 
 async function onSubmit() {
@@ -73,7 +90,7 @@ async function onSubmit() {
 			<hr>
 			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
 				<template v-if="idx && session.admin" #after>
-					<button type="button" class="btn btn-danger" @click="removeItem(idx)">
+					<button type="button" class="btn btn-danger" @click="removeGuest(idx)">
 						Remove
 					</button>
 				</template>
@@ -87,16 +104,35 @@ async function onSubmit() {
 				:name="`guest-${idx}-status`"
 			/>
 		</div>
-		<hr>
 		<button
 			v-if="session.admin"
-			class="btn btn-primary mb-3"
+			class="btn btn-primary"
 			type="button"
 			@click="addGuest"
 		>
 			Add +1
 		</button>
-		<button class="btn btn-primary w-100" type="submit">
+		<hr>
+		<form-array
+			ref="songList"
+			v-model="invitation.songs"
+			name="song-suggestions"
+			label="Song Suggestions"
+			placeholder="Rick Astley - Never Gonna Give You Up"
+		>
+			<template #after>
+				<button
+					class="btn btn-primary"
+					:class="{ disabled: invitation.songs?.length === 5 }"
+					:disabled="invitation.songs?.length === 5"
+					type="button"
+					@click="addSong"
+				>
+					Add Suggestion
+				</button>
+			</template>
+		</form-array>
+		<button class="btn btn-primary w-100 mt-3" type="submit">
 			Submit
 		</button>
 	</form>

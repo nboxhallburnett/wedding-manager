@@ -12,7 +12,7 @@ const router = createRouter({
 				// If the user has already signed in, redirect them to the home page instead
 				const invitation = inject('invitation');
 				if (invitation.value) {
-					next({ name: 'Home' });
+					return next({ name: 'Home' });
 				}
 				next();
 			}

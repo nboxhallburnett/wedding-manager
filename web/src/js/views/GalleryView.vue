@@ -24,7 +24,7 @@ function fullscreenImage(evt) {
 			Gallery
 		</h5>
 		<div class="card-text">
-			<div id="gallery-carousel" class="carousel slide" data-bs-ride="carousel">
+			<div id="gallery-carousel" class="carousel slide img-thumbnail" data-bs-ride="carousel">
 				<div class="carousel-indicators">
 					<button
 						v-for="(_src, idx) in gallerySources"

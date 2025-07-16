@@ -17,7 +17,10 @@ async function onSubmit() {
 	});
 	if (response.status === 200) {
 		invitation.value = response.result.data;
-		Router.replace({ name: 'Home' });
+		Router.replace(invitation.value.admin
+			? { name: 'Admin Overview' }
+			: { name: 'Home' }
+		);
 	}
 	loading.value = false;
 }

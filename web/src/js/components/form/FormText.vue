@@ -1,21 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-
 const model = defineModel({ type: String });
 
 const props = defineProps({
 	label: { type: String, default: '' },
-	name: { type: String, required: true },
-	placeholder: { type: String, default: '' },
-	focus: { type: Boolean, default: false }
+	value: { type: String, default: '' },
+	name: { type: String, required: true }
 });
-
-// Attempt to focus the input when the page is mounted if requested
-const input = ref(null);
-if (props.focus) {
-	onMounted(() => input.value?.focus());
-}
-
 </script>
 
 <template>
@@ -28,16 +18,14 @@ if (props.focus) {
 		/>
 		<div :class="label ? 'col-sm-9' : 'col-12'">
 			<div class="input-group">
-				<input
+				<span
 					:id="props.name"
 					v-bind="$attrs"
 					ref="input"
-					v-model="model"
 					:name="props.name"
-					class="form-control"
-					type="text"
-					:placeholder="placeholder"
-				>
+					class="form-control-plaintext"
+					v-text="value || model"
+				/>
 				<slot name="after" />
 			</div>
 		</div>

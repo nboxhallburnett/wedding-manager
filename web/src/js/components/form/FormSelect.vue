@@ -23,15 +23,14 @@ const props = defineProps({
 </script>
 
 <template>
-	<div class="row mb-2">
-		<div class="col-md-3 align-content-center">
-			<label
-				v-if="label"
-				:for="name"
-				v-text="label"
-			/>
-		</div>
-		<div class="col-md-9 align-content-center">
+	<div class="row mb-3">
+		<label
+			v-if="label"
+			:for="name"
+			class="col-sm-3 col-form-label"
+			v-text="label"
+		/>
+		<div class="col-sm-9">
 			<div class="input-group">
 				<select
 					:id="props.name"

@@ -1,10 +1,10 @@
 <script setup>
 import { inject } from 'vue';
+import FormText from 'components/form/FormText.vue';
 
-// import API from 'lib/api';
+const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
 
 const invitation = inject('invitation');
-// const loading = inject('loading');
 </script>
 
 <template>
@@ -17,8 +17,17 @@ const invitation = inject('invitation');
 				Update RSVP
 			</router-link>
 		</h5>
-		<p class="card-text">
-			{{ JSON.stringify(invitation, null, 2) }}
-		</p>
+		<div class="card-text">
+			<div v-for="(guest, idx) in (invitation.guests || [])" :key="idx" class="mb-3">
+				<hr>
+				<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
+				<form-text
+					:value="statusOptions[guest.status]"
+					label="Status"
+					:options="statusOptions"
+					:name="`guest-${idx}-status`"
+				/>
+			</div>
+		</div>
 	</div>
 </template>

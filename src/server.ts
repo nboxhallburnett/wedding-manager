@@ -1,13 +1,15 @@
-type WeddingManagerRequest<P, B, Q> = import('express').Request<P, {}, B, Q> & {
+type WeddingManagerRequest<P={}, B={}, Q=import('qs').ParsedQs> = import('express').Request<P, {}, B, Q> & {
 	session: import('express-session').Session & {
-		/** Authorized RSVP identifier */
-		rsvpId?: RSVP['id'],
+		/** Authorized Invitation identifier */
+		invitationId?: Invitation['id'],
 		/** Whether the session is for an admin */
 		admin?: Boolean
 	},
 	/** Data contextual to the request */
 	ctx: {
-		rsvp?: RSVP
+		invitation?: Invitation,
+		/** Logger instance contextual to the request */
+		log: import('debug').Debugger
 	}
 }
 
@@ -22,7 +24,7 @@ type API<P={}, B={}, Q=import('qs').ParsedQs> = {
 	action: (req: WeddingManagerRequest<P, B, Q>, res: import('express').Response) => Promise<any>
 }
 
-type RSVPPath = {
-	/** ID of the RSVP of which the request is in context */
-	rsvpId: RSVP['id']
+type InvitationPath = {
+	/** ID of the Invitation of which the request is in context */
+	invitationId: Invitation['id']
 }

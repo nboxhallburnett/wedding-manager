@@ -11,10 +11,10 @@ import { RouterLink } from 'vue-router';
 			<button class="btn btn-primary w-100 mb-2">
 				View Stats
 			</button>
-			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List RSVPs' }">
+			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List Invitations' }">
 				List Invitations
 			</router-link>
-			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin Create RSVP' }">
+			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin Create Invitation' }">
 				New Invitation
 			</router-link>
 		</div>

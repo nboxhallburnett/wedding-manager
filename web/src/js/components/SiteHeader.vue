@@ -3,22 +3,22 @@ import API from 'lib/api';
 import { computed, inject } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const rsvp = inject('rsvp');
+const invitation = inject('invitation');
 const loading = inject('loading');
 
 const navItems = computed(() => {
 	const items = [
-		rsvp.value?.id
+		invitation.value?.id
 			? { text: 'Home', to: { name: 'Home' } }
 			: { text: 'Home', to: { name: 'Login' } },
 		{ text: 'About', to: { name: 'About' } }
 	];
 
-	if (GALLERY_IMAGES.length && rsvp.value?.id) {
+	if (GALLERY_IMAGES.length && invitation.value?.id) {
 		items.push({ text: 'Gallery', to: { name: 'Gallery' } });
 	}
 
-	if (rsvp.value?.admin) {
+	if (invitation.value?.admin) {
 		items.push({ text: 'Admin', to: { name: 'Admin Overview' } });
 	}
 
@@ -37,19 +37,19 @@ async function logout() {
 </script>
 
 <template>
-	<nav class="navbar navbar-expand-sm navbar-light bg-light shadow px-3">
+	<nav id="header" class="navbar navbar-expand-sm navbar-light bg-light shadow px-3 w-100 position-fixed top-0">
 		<button
 			class="navbar-toggler"
 			type="button"
 			data-bs-toggle="collapse"
-			data-bs-target="#navbarHeader"
-			aria-controls="navbarHeader"
+			data-bs-target="#navbar-header"
+			aria-controls="navbar-header"
 			aria-expanded="false"
 			aria-label="Toggle navigation"
 		>
 			<span class="navbar-toggler-icon" />
 		</button>
-		<div id="navbarHeader" class="collapse navbar-collapse">
+		<div id="navbar-header" class="collapse navbar-collapse">
 			<div class="navbar-nav w-100">
 				<div class="ring-loader d-none d-sm-block" />
 				<router-link
@@ -62,7 +62,7 @@ async function logout() {
 					{{ item.text }}
 				</router-link>
 
-				<button v-if="rsvp" class="ms-sm-auto text-start nav-item nav-link" @click="logout">
+				<button v-if="invitation" class="ms-sm-auto text-start nav-item nav-link" @click="logout">
 					Sign out
 				</button>
 			</div>

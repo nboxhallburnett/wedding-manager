@@ -12,6 +12,8 @@ body {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center top;
+	background-attachment: fixed;
+	padding-top: $header-height;
 }
 
 .title-text {

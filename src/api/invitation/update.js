@@ -1,22 +1,22 @@
-const rsvpDb = require('../../lib/db/rsvps');
+const invitationDb = require('../../lib/db/invitations');
 
-/** @type {API<RSVPPath, RSVP>} */
+/** @type {API<InvitationPath, Invitation>} */
 module.exports = {
 	method: 'put',
-	path: 'rsvp/:rsvpId',
+	path: 'invitation/:invitationId',
 	auth: async req => {
-		// An RSVP record can only be modified by itself or by an admin
-		return Boolean(req.params.rsvpId === req.session.rsvpId || req.session.admin);
+		// An Invitation record can only be modified by itself or by an admin
+		return Boolean(req.params.invitationId === req.session.invitationId || req.session.admin);
 	},
 	action: async (req, res) => {
-		const existingRSVP = await rsvpDb.findOne({ id: req.params.rsvpId });
+		const existingInvitation = await invitationDb.findOne({ id: req.params.invitationId });
 
 		const update = { $set: {} };
 
 		// Validate guest changes
 		if (Array.isArray(req.body.guests)) {
 			// Ensure non-admin users aren't attempting to modify the guest counts
-			if (!req.session.admin && req.body.guests.length !== existingRSVP.guests.length) {
+			if (!req.session.admin && req.body.guests.length !== existingInvitation.guests.length) {
 				res.status(400);
 				throw new Error('Guest count cannot be modified');
 			}
@@ -39,11 +39,6 @@ module.exports = {
 				}
 
 				if (Object.prototype.hasOwnProperty.call(guest, 'status')) {
-					// Verify the status wasn't reset back to Pending (0)
-					if (guest.status === 0 && !req.session.admin) {
-						res.status(400);
-						throw new Error(`"guests[${idx}].status" contained an invalid value: Cannot set status to Pending (0).`);
-					}
 					// Verify the status contained a valid value
 					if (guest.status < 0 || guest.status > 3 || typeof guest.status !== 'number') {
 						res.status(400);
@@ -65,7 +60,8 @@ module.exports = {
 
 		// Perform the update if there is anything to modify
 		if (Object.keys(update.$set).length) {
-			await rsvpDb.updateOne({ id: req.params.rsvpId }, update);
+			req.ctx.log('Updating invitation for "%s". Invitation ID: %s', existingInvitation.guests[0].name, existingInvitation.id);
+			await invitationDb.updateOne({ id: req.params.invitationId }, update);
 		}
 
 		// No need to return any data on successful update

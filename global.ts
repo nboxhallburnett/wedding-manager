@@ -1,10 +1,10 @@
-/** RSVP record */
-type RSVP = {
-	/** RSVP Identifier */
+/** Invitation record */
+type Invitation = {
+	/** Invitation Identifier */
 	id: String,
-	/** Whether the RSVP holder has elevated access to the system */
+	/** Whether the Invitation holder has elevated access to the system */
 	admin?: Boolean,
-	/** Guests the RSVP relates to */
+	/** Guests the Invitation relates to */
 	guests: {
 		/** Name of the guest */
 		name: String,

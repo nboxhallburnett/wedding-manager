@@ -1,5 +1,19 @@
+#header {
+	z-index: 2;
+
+	@include media-breakpoint-up(sm) {
+		height: $header-height;
+	}
+}
+
 .navbar-toggler {
 	z-index: 2;
+}
+
+.navbar-nav {
+	@include media-breakpoint-down(sm) {
+		padding-top: 0.5rem;
+	}
 }
 
 .nav-item {

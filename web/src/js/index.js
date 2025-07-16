@@ -17,18 +17,18 @@ const sessionFetch = API('session');
 const app = createApp(App);
 
 // Define globally provided refs
-const rsvp = ref(null);
-app.provide('rsvp', rsvp);
+const invitation = ref(null);
+app.provide('invitation', invitation);
 const loading = ref(false);
 app.provide('loading', loading);
 
-// Ensure the rsvp fetch resolves before we mount the application
-const rsvpResult = await sessionFetch;
-if (rsvpResult.result.data) {
-	rsvp.value = rsvpResult.result.data;
+// Ensure the invitation fetch resolves before we mount the application
+const invitationResult = await sessionFetch;
+if (invitationResult.result.data) {
+	invitation.value = invitationResult.result.data;
 }
 
-// Wire up the router after we've fetched the rsvp to ensure routes have
+// Wire up the router after we've fetched the invitation to ensure routes have
 // accurate session context before router guards are processed
 app.use(Router);
 

@@ -120,15 +120,15 @@ app.use('/api', ...[
 			res.json({ success: false, description: STATUS_CODES[429] });
 		},
 		keyGenerator: req => {
-			// Use the rsvp id if there is a valid session
-			if (req.session?.rsvpId) {
-				return req.session.rsvpId;
+			// Use the invitation id if there is a valid session
+			if (req.session?.invitationId) {
+				return req.session.invitationId;
 			}
 			// Otherwise use the requesting IP
 			return req._ip;
 		},
 		// Skip rate limiting if there is a valid session
-		skip: req => Boolean(req.session?.rsvpId)
+		skip: req => Boolean(req.session?.invitationId)
 	}),
 	// Wires up request body parsing
 	Express.urlencoded({ extended: true }),

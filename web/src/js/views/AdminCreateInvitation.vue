@@ -22,7 +22,7 @@ function removeItem(idx) {
 
 async function onSubmit(another) {
 	loading.value = true;
-	await API('rsvp', {
+	await API('invitation', {
 		method: 'POST',
 		body: { guests }
 	});
@@ -30,14 +30,14 @@ async function onSubmit(another) {
 		? `${guests.value[0].name}${guests.value.length > 1 ? ` & ${guests.value.length - 1} other guest${guests.value.length > 2 ? 's' : ''}` : ''}`
 		: `${guests.value.length} guest${guests.value.length > 1 ? 's' : ''}`;
 	addToast({
-		title: 'RSVP Created',
-		body: `RSVP for ${guestMsg} successfully created.`
+		title: 'Invitation Created',
+		body: `Invitation for ${guestMsg} successfully created.`
 	});
 	loading.value = false;
 	if (another === true) {
 		guests.value = [ { name: '', status: 0 } ];
 	} else {
-		Router.push({ name: 'Admin List RSVPs' });
+		Router.push({ name: 'Admin List Invitations' });
 	}
 }
 </script>

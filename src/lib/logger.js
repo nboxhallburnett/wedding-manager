@@ -1,10 +1,6 @@
 const Debug = require('debug');
 
-const requestContext = require('./request-context');
-
 const { name } = require('../../package.json');
-
-const requestLog = logger('req');
 
 /**
  * Returns a wrapper for `debug` which automatically prefixes logs with the request context ID if one exists
@@ -12,24 +8,19 @@ const requestLog = logger('req');
  * @param {String} namespace Namespace of the custom debug instance
  */
 function logger(namespace) {
-	const logger = Debug(`${name}:${namespace}`);
-
-	/**
-	 * @param {String} msg Base log message
-	 * @param {...any} args Arguments to pass to the message formatter
-	 */
-	return function (msg, ...args) {
-		const id = requestContext.get('id');
-		if (id) {
-			return logger(`[%s] ${msg}`, id, ...args);
-		}
-		logger(msg, ...args);
-	};
+	return Debug(`${name}:${namespace}`);
 }
 
 module.exports = logger;
 
+/**
+ *
+ * @param {WeddingManagerRequest} req Request
+ * @param {import('express').Response} res Response
+ * @param {import('express').NextFunction} next Next callback
+ */
 module.exports.middleware = function (req, res, next) {
+	req.ctx.log = logger(`req:${req.id}`);
 	req._startTime = Date.now();
 	req._ip = req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || req.ip;
 
@@ -42,7 +33,7 @@ module.exports.middleware = function (req, res, next) {
 
 		const url = req.originalUrl || req.url;
 
-		requestLog('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, req._ip, responseTime);
+		req.ctx.log('%o %s %s ip=%s responseTime=%o', res.statusCode, req.method, url, req._ip, responseTime);
 	};
 
 	next();

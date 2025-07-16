@@ -7,11 +7,11 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'Login',
-			component: () => import('../views/RSVPLogin.vue'),
+			component: () => import('../views/LoginView.vue'),
 			beforeEnter: (to, from, next) => {
 				// If the user has already signed in, redirect them to the home page instead
-				const rsvp = inject('rsvp');
-				if (rsvp.value) {
+				const invitation = inject('invitation');
+				if (invitation.value) {
 					next({ name: 'Home' });
 				}
 				next();
@@ -20,11 +20,11 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'Home',
-			component: () => import('../views/RSVPHome.vue')
+			component: () => import('../views/HomeView.vue')
 		},
 		{
 			path: '/edit',
-			name: 'Edit RSVP',
+			name: 'Edit Invitation',
 			component: () => import('../views/EditRSVP.vue'),
 			meta: { session: true }
 		},
@@ -46,21 +46,21 @@ const router = createRouter({
 			meta: { admin: true }
 		},
 		{
-			path: '/admin/rsvp/new',
-			name: 'Admin Create RSVP',
-			component: () => import('../views/AdminCreateRSVP.vue'),
+			path: '/admin/invitation/new',
+			name: 'Admin Create Invitation',
+			component: () => import('../views/AdminCreateInvitation.vue'),
 			meta: { admin: true }
 		},
 		{
-			path: '/admin/rsvp/:rsvpId',
-			name: 'Admin Edit RSVP',
+			path: '/admin/invitation/:invitationId',
+			name: 'Admin Edit Invitation',
 			component: () => import('../views/EditRSVP.vue'),
 			meta: { admin: true }
 		},
 		{
-			path: '/admin/rsvp/list',
-			name: 'Admin List RSVPs',
-			component: () => import('../views/AdminListRSVPs.vue'),
+			path: '/admin/invitation/list',
+			name: 'Admin List Invitations',
+			component: () => import('../views/AdminListInvitations.vue'),
 			meta: { admin: true }
 		},
 		{
@@ -72,11 +72,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-	const rsvp = inject('rsvp');
-	if (to.meta?.session && !rsvp.value?.id) {
+	const invitation = inject('invitation');
+	if (to.meta?.session && !invitation.value?.id) {
 		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
 	}
-	if (to.meta?.admin && !rsvp.value?.admin) {
+	if (to.meta?.admin && !invitation.value?.admin) {
 		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
 	}
 

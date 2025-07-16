@@ -3,7 +3,7 @@ import { inject } from 'vue';
 
 // import API from 'lib/api';
 
-const rsvp = inject('rsvp');
+const invitation = inject('invitation');
 // const loading = inject('loading');
 </script>
 
@@ -13,12 +13,12 @@ const rsvp = inject('rsvp');
 			<span>
 				Invitation
 			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Edit RSVP' }">
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
 				Update RSVP
 			</router-link>
 		</h5>
 		<p class="card-text">
-			{{ JSON.stringify(rsvp, null, 2) }}
+			{{ JSON.stringify(invitation, null, 2) }}
 		</p>
 	</div>
 </template>

@@ -5,18 +5,18 @@ import Router from 'router';
 import API from 'lib/api';
 import FormInput from 'components/form/FormInput.vue';
 
-const rsvp = inject('rsvp');
+const invitation = inject('invitation');
 const loading = inject('loading');
-const rsvpId = defineModel({ type: String });
+const invitationId = defineModel({ type: String });
 
 async function onSubmit() {
 	loading.value = true;
 	const response = await API('session', {
 		method: 'POST',
-		body: { rsvpId }
+		body: { invitationId }
 	});
 	if (response.status === 200) {
-		rsvp.value = response.result.data;
+		invitation.value = response.result.data;
 		Router.replace({ name: 'Home' });
 	}
 	loading.value = false;
@@ -26,20 +26,20 @@ async function onSubmit() {
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
 		<h5 class="card-title">
-			Manage your RSVP
+			Manage your Invitation
 		</h5>
 		<p class="card-text">
-			Enter the RSVP code included on your invitation below.
+			Enter the Invitation code included on your invitation below.
 		</p>
 		<form-input
-			v-model="rsvpId"
-			name="rsvpId"
+			v-model="invitationId"
+			name="invitationId"
 			class="mb-3"
-			aria-label="RSVP code entry"
-			placeholder="Enter your RSVP code"
+			aria-label="Invitation code entry"
+			placeholder="Enter your Invitation code"
 			focus
 		/>
-		<button :disabled="!rsvpId" class="btn btn-primary w-100" type="submit">
+		<button :disabled="!invitationId" class="btn btn-primary w-100" type="submit">
 			Submit
 		</button>
 	</form>

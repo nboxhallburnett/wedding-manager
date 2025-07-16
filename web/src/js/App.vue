@@ -2,7 +2,7 @@
 import { inject, provide, ref } from 'vue';
 import { RouterView } from 'vue-router';
 
-const rsvp = inject('rsvp');
+const invitation = inject('invitation');
 
 import RingLoader from 'components/RingLoader.vue';
 import SiteFooter from 'components/SiteFooter.vue';
@@ -26,7 +26,7 @@ function welcomeCleanup() {
 
 <template>
 	<toast-container ref="toastContainerComponent" />
-	<welcome-display v-if="!rsvp && showWelcome" @finished="welcomeCleanup" />
+	<welcome-display v-if="!invitation && showWelcome" @finished="welcomeCleanup" />
 	<ring-loader />
 
 	<header class="mb-5">

@@ -4,26 +4,26 @@ import { RouterLink } from 'vue-router';
 
 import API from 'lib/api';
 
-const rsvps = ref([]);
+const invitations = ref([]);
 const loading = inject('loading');
 const addToast = inject('addToast');
 
 loading.value = true;
-API('rsvp').then(({ result }) => {
-	rsvps.value = result.data;
+API('invitation').then(({ result }) => {
+	invitations.value = result.data;
 	loading.value = false;
 }).catch(() => loading.value = false);
 
-async function deleteRsvp(rsvp) {
+async function deleteRsvp(invitation) {
 	loading.value = true;
-	await API(`rsvp/${rsvp.id}`, { method: 'delete' });
-	rsvps.value = await API('rsvp').then(({ result }) => result.data);
-	const guestMsg = rsvp.guests[0].name
-		? `${rsvp.guests[0].name}${rsvp.guests.length > 1 ? ` & ${rsvp.guests.length - 1} other guest${rsvp.guests.length > 2 ? 's' : ''}` : ''}`
-		: `${rsvp.guests.length} guest${rsvp.guests.length > 1 ? 's' : ''}`;
+	await API(`invitation/${invitation.id}`, { method: 'delete' });
+	invitations.value = await API('invitation').then(({ result }) => result.data);
+	const guestMsg = invitation.guests[0].name
+		? `${invitation.guests[0].name}${invitation.guests.length > 1 ? ` & ${invitation.guests.length - 1} other guest${invitation.guests.length > 2 ? 's' : ''}` : ''}`
+		: `${invitation.guests.length} guest${invitation.guests.length > 1 ? 's' : ''}`;
 	addToast({
-		title: 'RSVP Removed',
-		body: `RSVP for ${guestMsg} (${rsvp.id}) successfully removed.`
+		title: 'Invitation Removed',
+		body: `Invitation for ${guestMsg} (${invitation.id}) successfully removed.`
 	});
 	loading.value = false;
 }
@@ -33,9 +33,9 @@ async function deleteRsvp(rsvp) {
 	<div class="card-body">
 		<h5 class="card-title d-flex justify-content-between">
 			<span>
-				RSVPs
+				Invitations
 			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create RSVP' }">
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Invitation' }">
 				New Invitation
 			</router-link>
 		</h5>
@@ -44,7 +44,7 @@ async function deleteRsvp(rsvp) {
 				<thead>
 					<tr>
 						<th scope="col">
-							RSVP ID
+							Invitation ID
 						</th>
 						<th scope="col">
 							Name
@@ -61,10 +61,10 @@ async function deleteRsvp(rsvp) {
 					</tr>
 				</thead>
 				<tbody>
-					<template v-for="item in rsvps" :key="item.id">
+					<template v-for="item in invitations" :key="item.id">
 						<tr v-if="item.guests?.length">
 							<th scope="row" class="font-monospace">
-								<router-link :to="{ name: 'Admin Edit RSVP', params: { rsvpId: item.id } }">
+								<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
 									{{ item.id }}
 								</router-link>
 							</th>
@@ -73,20 +73,20 @@ async function deleteRsvp(rsvp) {
 							<td v-text="'TODO:'" />
 							<td class="text-end py-1 align-middle">
 								<button
-									:id="`rsvp-${item.id}-actions`"
+									:id="`invitation-${item.id}-actions`"
 									class="icon-caret fs-4 p-0"
 									type="button"
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
 								/>
-								<ul class="dropdown-menu" :aria-labelledby="`rsvp-${item.id}-actions`">
+								<ul class="dropdown-menu" :aria-labelledby="`invitation-${item.id}-actions`">
 									<li>
 										<button class="dropdown-item" type="button">
 											View
 										</button>
 									</li>
 									<li>
-										<router-link class="dropdown-item" :to="{ name: 'Admin Edit RSVP', params: { rsvpId: item.id } }">
+										<router-link class="dropdown-item" :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
 											Edit
 										</router-link>
 									</li>

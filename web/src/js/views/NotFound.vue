@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router';
 import { inject } from 'vue';
 
-const rsvp = inject('rsvp');
+const invitation = inject('invitation');
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const rsvp = inject('rsvp');
 		<p class="card-text">
 			You seem to be lost.
 		</p>
-		<RouterLink class="btn btn-primary w-100" :to="rsvp?.id ? { name: 'Home' } : { name: 'Login' }">
+		<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
 			Home
 		</RouterLink>
 	</div>

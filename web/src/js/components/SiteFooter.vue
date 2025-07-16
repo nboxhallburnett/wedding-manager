@@ -9,6 +9,8 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 	timezone: 'UTC'
 });
 const date = dateFormatter.format(CONFIG.date);
+// Calculate number of days from now until the configured date
+const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 </script>
 
 <template>
@@ -20,7 +22,14 @@ const date = dateFormatter.format(CONFIG.date);
 						{{ item.text }}
 					</a>
 				</template>
-				<div class="nav-item nav-link ms-auto pointer" v-text="date" />
+				<div class="ms-auto" />
+				<div v-if="daysToGo > 0" class="nav-item nav-link pointer">
+					{{ daysToGo }} Days
+				</div>
+				<template v-if="daysToGo > 0">
+					|
+				</template>
+				<div class="nav-item nav-link pointer" v-text="date" />
 			</div>
 		</div>
 	</nav>

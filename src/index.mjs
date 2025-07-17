@@ -105,6 +105,7 @@ app.use(Session({
 	store: MongoStore.create({
 		client: DB.MongoClient,
 		stringify: false,
+		autoRemove: false, // This is handled by the db index definition
 		touchAfter: 24 * 60 * 60 // 24 hours in seconds
 	})
 }));
@@ -141,7 +142,7 @@ await API.init(app);
 // Serve the UI
 app.get('*splat', IndexRoute.handle);
 
-// Ensure the database has connected before the server starts listening
+// Ensure the database has connected and indexes are all up to date before the server starts listening
 await dbConnection;
 
 // And finally start listening on the configured port on the unspecified IPv4 address

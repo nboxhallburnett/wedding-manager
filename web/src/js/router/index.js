@@ -46,6 +46,12 @@ const router = createRouter({
 			meta: { admin: true }
 		},
 		{
+			path: '/admin/invitation/list',
+			name: 'Admin List Invitations',
+			component: () => import('../views/AdminListInvitations.vue'),
+			meta: { admin: true }
+		},
+		{
 			path: '/admin/invitation/new',
 			name: 'Admin Create Invitation',
 			component: () => import('../views/AdminCreateInvitation.vue'),
@@ -58,9 +64,28 @@ const router = createRouter({
 			meta: { admin: true }
 		},
 		{
-			path: '/admin/invitation/list',
-			name: 'Admin List Invitations',
-			component: () => import('../views/AdminListInvitations.vue'),
+			path: '/admin/menu/:menuItemId',
+			name: 'Admin View Menu Item',
+			// TODO: Update when the menu item view is created
+			component: () => import('../views/AdminListMenu.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/menu/new',
+			name: 'Admin Create Menu Item',
+			component: () => import('../views/AdminEditMenu.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/menu/:menuItemId/edit',
+			name: 'Admin Edit Menu Item',
+			component: () => import('../views/AdminEditMenu.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/menu/list',
+			name: 'Admin List Menu Items',
+			component: () => import('../views/AdminListMenu.vue'),
 			meta: { admin: true }
 		},
 		{

@@ -29,5 +29,18 @@ const invitation = inject('invitation');
 				/>
 			</div>
 		</div>
+		<hr>
+		<form-text
+			v-if="invitation.message"
+			v-model="invitation.message"
+			label="Message"
+			name="message"
+		/>
+		<form-text
+			v-if="invitation.songs?.length"
+			v-model="invitation.songs"
+			label="Song Suggestions"
+			name="songs"
+		/>
 	</div>
 </template>

@@ -1,7 +1,7 @@
 <script setup>
 import FormItem from './FormItem.vue';
 
-const model = defineModel({ type: [ String, Number ] });
+const model = defineModel({ type: [ String, Number, Boolean ] });
 const props = defineProps({
 	label: { type: String, default: '' },
 	name: { type: String, required: true },

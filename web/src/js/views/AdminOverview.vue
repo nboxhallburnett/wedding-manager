@@ -12,10 +12,10 @@ import { RouterLink } from 'vue-router';
 				View Stats
 			</button>
 			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List Invitations' }">
-				List Invitations
+				Manage Invitations
 			</router-link>
-			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin Create Invitation' }">
-				New Invitation
+			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List Menu Items' }">
+				Manage Menu
 			</router-link>
 		</div>
 	</div>

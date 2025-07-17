@@ -28,3 +28,7 @@ type InvitationPath = {
 	/** ID of the Invitation of which the request is in context */
 	invitationId: Invitation['id']
 }
+type MenuItemPath = {
+	/** ID of the Menu Item of which the request is in context */
+	menuItemId: MenuItem['id']
+}

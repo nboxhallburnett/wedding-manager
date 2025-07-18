@@ -3,6 +3,7 @@ import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import API from 'lib/api';
+import DietIndicator from 'components/DietIndicator.vue';
 
 const menu = ref([]);
 const loading = inject('loading');
@@ -62,14 +63,16 @@ async function deleteItem(menuItem) {
 				<tbody>
 					<template v-for="item in menu" :key="item.id">
 						<tr>
-							<th scope="row" class="font-monospace">
+							<th scope="row">
 								<router-link :to="{ name: 'Admin View Menu Item', params: { menuItemId: item.id } }">
 									{{ item.title }}
 								</router-link>
 							</th>
 							<td v-text="courseText[item.course]" />
 							<td v-text="item.child ? 'Child' : 'Adult'" />
-							<td v-text="'TODO:'" />
+							<td>
+								<diet-indicator :vegan="item.vegan" :vegetarian="item.vegetarian" :gluten-free="item.gluten_free" />
+							</td>
 							<td class="text-end py-1 align-middle">
 								<button
 									:id="`menu-item-${item.id}-actions`"

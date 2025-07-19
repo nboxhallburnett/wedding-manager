@@ -17,6 +17,7 @@ const { $els } = usePopover({
 		:data-bs-content="hint"
 		href="#"
 		class="icon-info align-middle ms-1"
+		@click.prevent
 	>
 		<span class="visually-hidden">Info</span>
 	</a>

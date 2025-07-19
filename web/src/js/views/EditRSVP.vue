@@ -133,6 +133,7 @@ Promise.all([
 						:vegetarian="item.vegetarian"
 						:gluten-free="item.gluten_free"
 					/>
+					<small class="d-block text-muted" v-text="item.description" />
 				</template>
 			</form-radio>
 			<form-radio

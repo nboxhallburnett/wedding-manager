@@ -102,7 +102,7 @@ function fullscreenImage(evt) {
 
 <style lang="scss" scoped>
 .carousel-item img {
-	max-height: 400px;
+	// max-height: 400px;
 	object-fit: cover;
 	cursor: zoom-in;
 }

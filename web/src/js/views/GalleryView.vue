@@ -37,7 +37,7 @@ function fullscreenImage(evt) {
 						:aria-label="`Image ${idx + 1}`"
 					/>
 				</div>
-				<div class="carousel-inner">
+				<div class="carousel-inner ratio ratio-4x3">
 					<div
 						v-for="(src, idx) in gallerySources"
 						:key="idx"
@@ -58,8 +58,8 @@ function fullscreenImage(evt) {
 					data-bs-target="#gallery-carousel"
 					data-bs-slide="prev"
 				>
-					<span class="carousel-control-prev-icon" aria-hidden="true" />
-					<span class="d-none">Previous</span>
+					<span class="carousel-control-prev-icon bg-dark bg-opacity-75 rounded-3 py-4" aria-hidden="true" />
+					<span class="visually-hidden">Previous</span>
 				</button>
 				<button
 					class="carousel-control-next"
@@ -67,8 +67,8 @@ function fullscreenImage(evt) {
 					data-bs-target="#gallery-carousel"
 					data-bs-slide="next"
 				>
-					<span class="carousel-control-next-icon" aria-hidden="true" />
-					<span class="d-none">Next</span>
+					<span class="carousel-control-next-icon bg-dark bg-opacity-75 rounded-3 py-4" aria-hidden="true" />
+					<span class="visually-hidden">Next</span>
 				</button>
 			</div>
 
@@ -77,7 +77,6 @@ function fullscreenImage(evt) {
 				ref="modal"
 				class="modal fade"
 				tabindex="-1"
-				aria-labelledby="imageModalLabel"
 				aria-hidden="true"
 			>
 				<div class="modal-dialog modal-fullscreen">

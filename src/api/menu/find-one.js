@@ -6,8 +6,8 @@ const menuItemDb = require('../../lib/db/menu-items');
 module.exports = {
 	path: 'menu/:menuItemId',
 	auth: async req => {
-		// An Invitation record can only be fetched by itself or by an admin
-		return Boolean(req.params.invitationId === req.session.invitationId || req.session.admin);
+		// A menu item can be fetched by anyone with a session
+		return Boolean(req.session.invitationId);
 	},
 	action: async (req, res) => {
 		const item = await menuItemDb.findOne({ id: req.params.menuItemId }, { projection: { _id: 0 } });

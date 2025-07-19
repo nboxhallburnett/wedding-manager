@@ -1,15 +1,12 @@
 <script setup>
-import { usePopover } from 'composables/popover';
+import InfoPopover from 'components/InfoPopover.vue';
 
 defineProps({
 	label: { type: String, default: '' },
 	hint: { type: String, default: '' },
 	name: { type: String, required: true },
-	groupClass: { type: String, default: 'input-group' }
-});
-
-const { $els } = usePopover({
-	trigger: 'hover focus'
+	groupClass: { type: String, default: 'input-group' },
+	labelClass: { type: String, default: '' }
 });
 </script>
 
@@ -19,15 +16,10 @@ const { $els } = usePopover({
 			v-if="label"
 			:for="name"
 			class="col-sm-3 col-form-label"
+			:class="labelClass"
 		>
 			{{ label }}
-			<a
-				v-if="hint"
-				:ref="$el => $els.push($el)"
-				:data-bs-content="hint"
-				href="#"
-				class="icon-info"
-			>?</a>
+			<info-popover :hint />
 		</label>
 		<div :class="label ? 'col-sm-9' : 'col-12'">
 			<div :class="groupClass">

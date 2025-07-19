@@ -2,16 +2,20 @@
 import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
+import DietIndicator from 'components/DietIndicator.vue';
 import FormArray from 'components/form/FormArray.vue';
 import FormInput from 'components/form/FormInput.vue';
+import FormRadio from 'components/form/FormRadio.vue';
 import FormSelect from 'components/form/FormSelect.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 import API from 'lib/api';
+
 
 const session = inject('invitation');
 const addToast = inject('addToast');
 const loading = inject('loading');
 const invitation = ref({});
+const menu = ref({});
 const songList = useTemplateRef('songList');
 
 // Define available attendance status'
@@ -26,24 +30,6 @@ if (session.value.admin) {
 
 // Define var to track whether the component is used for the admin edit vs the user edit
 const adminEdit = Router.currentRoute.value.name === 'Admin Edit Invitation';
-
-// If this is the admin edit, fetch the invitation from the API
-if (adminEdit) {
-	loading.value = true;
-	API(`invitation/${Router.currentRoute.value.params.invitationId}`).then(({ result }) => {
-		invitation.value = result.data;
-		if (!invitation.value.songs?.length) {
-			invitation.value.songs = [ '' ];
-		}
-		loading.value = false;
-	}).catch(() => loading.value = false);
-} else {
-	// Otherwise, we can use the session
-	invitation.value = session.value;
-	if (!invitation.value.songs?.length) {
-		invitation.value.songs = [ '' ];
-	}
-}
 
 function addGuest() {
 	invitation.value.guests.push({
@@ -62,6 +48,21 @@ function addSong() {
 	});
 }
 
+function getMenuOptions(course, child) {
+	const items = [];
+	for (const item of menu.value) {
+		// Unfortunately inly children can have items from the children's menu
+		if (item.child && !child) {
+			continue;
+		}
+		// If the item is for the requested course, add it to the list
+		if (item.course === course) {
+			items.push({ value: item.id, text: item.title, item });
+		}
+	}
+	return items;
+}
+
 async function onSubmit() {
 	loading.value = true;
 	await API(`invitation/${invitation.value.id}`, {
@@ -74,12 +75,27 @@ async function onSubmit() {
 	addToast({
 		title: 'Invitation Updated',
 		body: adminEdit
-			 ? `Invitation for ${guestMsg} successfully updated.`
-			 : 'Invitation updated successfully. Thank you!'
+			? `Invitation for ${guestMsg} successfully updated.`
+			: 'Invitation updated successfully. Thank you!'
 	});
 	loading.value = false;
 	Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
 }
+
+loading.value = true;
+Promise.all([
+	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
+	adminEdit ? API(`invitation/${Router.currentRoute.value.params.invitationId}`) : { result: { data: session.value } },
+	API('menu')
+]).then(([ invitationResult, menuResult ]) => {
+	invitation.value = invitationResult.result.data;
+	menu.value = menuResult.result.data;
+	// Ensure we have a songs array to access
+	if (!invitation.value.songs?.length) {
+		invitation.value.songs = [ '' ];
+	}
+	loading.value = false;
+});
 </script>
 
 <template>
@@ -104,6 +120,53 @@ async function onSubmit() {
 				placeholder="Pending Confirmation"
 				:name="`guest-${idx}-status`"
 			/>
+			<form-radio
+				v-model="guest.starter_id"
+				label="Starter"
+				name="starter"
+				:options="getMenuOptions(0, false)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+				</template>
+			</form-radio>
+			<form-radio
+				v-model="guest.main_id"
+				label="Main Course"
+				name="main"
+				:options="getMenuOptions(1, false)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+					<small class="d-block text-muted" v-text="item.description" />
+				</template>
+			</form-radio>
+			<form-radio
+				v-model="guest.dessert_id"
+				label="Dessert"
+				name="dessert"
+				:options="getMenuOptions(2, false)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+					<small class="d-block text-muted" v-text="item.description" />
+				</template>
+			</form-radio>
 		</div>
 		<button
 			v-if="session.admin"
@@ -125,6 +188,7 @@ async function onSubmit() {
 			v-model="invitation.songs"
 			name="song-suggestions"
 			label="Song Suggestions"
+			hint="Suggest songs you would like to hear play during the reception"
 			placeholder="Rick Astley - Never Gonna Give You Up"
 		>
 			<template #after>

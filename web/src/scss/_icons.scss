@@ -9,14 +9,23 @@
 }
 
 .icon-info {
-	border-width: 1px;
+	@extend .ratio;
+	@extend .ratio-1x1;
+
+	width: 1rem;
+	border-width: 1.5px;
 	border-radius: 50%;
 	border-style: solid;
-	width: 15%;
 	text-align: center;
-	height: 0;
-	padding-bottom: 13%;
 	display: inline-block;
-	line-height: normal;
+	line-height: 0;
 	text-decoration: none;
+
+	&::after {
+		content: 'i';
+		position: absolute;
+		margin-top: -0.33rem;
+		margin-left: -0.15rem;
+		font-size: small;
+	}
 }

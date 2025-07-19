@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { Modal } from 'bootstrap';
-// const source = SOURCE;
 
 const gallerySources = GALLERY_IMAGES;
 

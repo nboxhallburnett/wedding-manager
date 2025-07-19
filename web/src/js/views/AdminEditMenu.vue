@@ -34,7 +34,6 @@ const menuOptions = [
 // Define var to track whether the component is being used for a create or update operation
 const isNew = Router.currentRoute.value.name.includes('Create');
 
-// If this is the admin edit, fetch the item from the API
 if (!isNew) {
 	loading.value = true;
 	API(`menu/${Router.currentRoute.value.params.menuItemId}`).then(({ result }) => {
@@ -44,6 +43,7 @@ if (!isNew) {
 }
 
 watch(() => item.value.vegan, value => {
+	// If an item is vegan, it is also vegetarian
 	if (value) {
 		item.value.vegetarian = true;
 	}

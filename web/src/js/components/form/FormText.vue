@@ -1,4 +1,5 @@
 <script setup>
+import { ref, watchEffect } from 'vue';
 import FormItem from './FormItem.vue';
 
 const model = defineModel({ type: [ String, Array ] });
@@ -8,10 +9,13 @@ const props = defineProps({
 	name: { type: String, required: true }
 });
 
-let displayValue = model.value || props.value;
-if (Array.isArray(displayValue)) {
-	displayValue = displayValue.join('\n');
-}
+const displayValue = ref(model.value || props.value || '');
+watchEffect(() => {
+	displayValue.value = model.value || props.value || '';
+	if (Array.isArray(displayValue)) {
+		displayValue.value = displayValue.value.join('\n');
+	}
+});
 </script>
 
 <template>

@@ -66,8 +66,7 @@ const router = createRouter({
 		{
 			path: '/admin/menu/:menuItemId',
 			name: 'Admin View Menu Item',
-			// TODO: Update when the menu item view is created
-			component: () => import('../views/AdminListMenu.vue'),
+			component: () => import('../views/AdminViewMenu.vue'),
 			meta: { admin: true }
 		},
 		{

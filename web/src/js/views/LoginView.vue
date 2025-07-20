@@ -5,7 +5,9 @@ import Router from 'router';
 import API from 'lib/api';
 import FormInput from 'components/form/FormInput.vue';
 
+/** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
 const invitationId = defineModel({ type: String });
 
@@ -28,9 +30,9 @@ async function onSubmit() {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h5 class="card-title">
+		<h4 class="card-title">
 			Manage your Invitation
-		</h5>
+		</h4>
 		<p class="card-text">
 			Enter the Invitation code included on your invitation below.
 		</p>

@@ -6,7 +6,9 @@ import FormText from 'components/form/FormText.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import API from 'lib/api';
 
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
+/** @type {Ref<MenuItem>} */
 const item = ref({});
 
 // Define available course options
@@ -22,14 +24,14 @@ API(`menu/${Router.currentRoute.value.params.menuItemId}`).then(({ result }) => 
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			<span>
 				Menu Item
 			</span>
 			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Menu Item', params: $route.params }">
 				Update Menu Item
 			</router-link>
-		</h5>
+		</h4>
 		<hr>
 		<form-text
 			v-model="item.title"

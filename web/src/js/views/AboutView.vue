@@ -4,9 +4,9 @@ const source = SOURCE;
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title">
+		<h4 class="card-title">
 			About
-		</h5>
+		</h4>
 		<div class="card-text">
 			Source:<br>
 			<a :href="source" v-text="source" />

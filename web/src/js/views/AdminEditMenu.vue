@@ -8,7 +8,9 @@ import FormTextarea from 'components/form/FormTextarea.vue';
 import FormSwitch from 'components/form/FormSwitch.vue';
 import API from 'lib/api';
 
+/** @type {AddToast} */
 const addToast = inject('addToast');
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
 const item = ref({
 	child: false,
@@ -75,9 +77,9 @@ async function onSubmit() {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			{{ isNew ? 'Create' : 'Update' }} Menu Item
-		</h5>
+		</h4>
 		<hr>
 		<form-input
 			v-model="item.title"

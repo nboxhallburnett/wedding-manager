@@ -3,7 +3,9 @@ import API from 'lib/api';
 import { computed, inject } from 'vue';
 import { RouterLink } from 'vue-router';
 
+/** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
 
 const navItems = computed(() => {

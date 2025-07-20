@@ -4,9 +4,11 @@ import FormText from 'components/form/FormText.vue';
 
 const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
 
+/** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
+/** @type {Ref<Number>} */
 const pendingPlusOnes = ref(0);
-for (const guest of invitation.value.guests) {
+for (const guest of invitation.value?.guests || []) {
 	if (!guest.name) {
 		pendingPlusOnes.value++;
 	}
@@ -15,14 +17,14 @@ for (const guest of invitation.value.guests) {
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			<span>
 				Invitation
 			</span>
 			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
 				Update RSVP
 			</router-link>
-		</h5>
+		</h4>
 		<div class="card-text">
 			<div v-for="(guest, idx) in (invitation.guests || [])" :key="idx" class="mb-3">
 				<template v-if="guest.name">

@@ -1,9 +1,6 @@
 {
 	"include": [ "js", "web.ts", "../../global.ts" ],
 	"compilerOptions": {
-		"baseUrl": "./js",
-		"module": "es2015",
-		"target": "es6",
-		"jsx": "preserve"
+		"baseUrl": "./js"
 	}
 }

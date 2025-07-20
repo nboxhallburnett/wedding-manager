@@ -28,7 +28,7 @@ module.exports = {
 
 			for (const [ idx, guest ] of req.body.guests.entries()) {
 				// Set initial "updated" record to the existing value
-				const updatedGuest = existingInvitation.guests[idx];
+				const updatedGuest = existingInvitation.guests?.[idx] || {};
 
 				// If the guest has no name, reset them as if they're uninvited
 				if (!guest.name) {
@@ -67,7 +67,7 @@ module.exports = {
 					if (Object.prototype.hasOwnProperty.call(guest, prop)) {
 						// Verify the menu item contained a valid value
 						const isValidMenuItem = await menuItemDb
-							.find({ id: guest[prop] })
+							.find({ id: guest[prop], child: false })
 							.limit(-1)
 							.batchSize(1)
 							.hasNext();
@@ -88,6 +88,75 @@ module.exports = {
 			// If the set of posted guests is valid, mark it as an update candidate
 			if (guests.length) {
 				update.$set.guests = guests;
+			}
+		}
+
+		// Validate guest changes
+		if (Array.isArray(req.body.children)) {
+			// Ensure non-admin users aren't attempting to modify the guest counts
+			if (req.body.children.length > 5) {
+				res.status(400);
+				throw new Error('"children" contained an invaid value: No more than 5 children can be added per invitation');
+			}
+
+			const children = [];
+
+			for (const [ idx, child ] of req.body.children.entries()) {
+				// Set initial "updated" record to the existing value
+				const updatedChild = existingInvitation.children?.[idx] || {};
+
+				// If the child has no name, skip them.
+				if (!child.name) {
+					continue;
+				}
+
+				if (Object.prototype.hasOwnProperty.call(child, 'name')) {
+					// Verify the status contained a valid value
+					if (typeof child.name !== 'string') {
+						res.status(400);
+						throw new Error(`"children[${idx}].name" contained an invalid value: Unsupported value: "${child.name}"`);
+					}
+
+					// Update the verified updated name value
+					updatedChild.name = child.name;
+				}
+
+				if (Object.prototype.hasOwnProperty.call(child, 'age')) {
+					// Verify the age contained a valid value
+					if (child.age < 0 || child.age > 17 || typeof child.age !== 'number') {
+						res.status(400);
+						throw new Error(`"children[${idx}].age" contained an invalid value: Age must be a value between 0 and 17`);
+					}
+
+					// Update the verified age value
+					updatedChild.age = child.age;
+				}
+
+				for (const prop of menuItemProps) {
+					if (Object.prototype.hasOwnProperty.call(child, prop)) {
+						// Verify the menu item contained a valid value
+						const isValidMenuItem = await menuItemDb
+							.find({ id: child[prop] })
+							.limit(-1)
+							.batchSize(1)
+							.hasNext();
+
+						if (!isValidMenuItem) {
+							res.status(400);
+							throw new Error(`"children[${idx}].${prop}" contained an invalid value: Unknown menu item: "${child[prop]}"`);
+						}
+
+						// Update the verified updated status value
+						updatedChild[prop] = child[prop];
+					}
+				}
+
+				children.push(updatedChild);
+			}
+
+			// If the set of posted guests is valid, mark it as an update candidate
+			if (children.length) {
+				update.$set.children = children;
 			}
 		}
 

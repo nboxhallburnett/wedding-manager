@@ -10,12 +10,16 @@ import FormSelect from 'components/form/FormSelect.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 import API from 'lib/api';
 
-
+/** @type {Ref<Invitation>} */
 const session = inject('invitation');
+/** @type {AddToast} */
 const addToast = inject('addToast');
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
+/** @type {Ref<Invitation>} */
 const invitation = ref({});
-const menu = ref({});
+/** @type {Ref<MenuItem[]>} */
+const menu = ref([]);
 const songList = useTemplateRef('songList');
 
 // Define available attendance status'
@@ -39,6 +43,14 @@ function addGuest() {
 }
 function removeGuest(idx) {
 	invitation.value.guests.splice(idx, 1);
+}
+function addChild() {
+	invitation.value.children.push({
+		name: ''
+	});
+}
+function removeChild(idx) {
+	invitation.value.children.splice(idx, 1);
 }
 
 function addSong() {
@@ -90,9 +102,15 @@ Promise.all([
 ]).then(([ invitationResult, menuResult ]) => {
 	invitation.value = invitationResult.result.data;
 	menu.value = menuResult.result.data;
-	// Ensure we have a songs array to access
+	// Ensure we have songs and children arrays to access
 	if (!invitation.value.songs?.length) {
 		invitation.value.songs = [ '' ];
+	}
+	if (!invitation.value.guests?.length) {
+		invitation.value.guests = [];
+	}
+	if (!invitation.value.children?.length) {
+		invitation.value.children = [];
 	}
 	loading.value = false;
 });
@@ -100,9 +118,9 @@ Promise.all([
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			{{ adminEdit ? 'Edit' : 'Update' }} Invitation
-		</h5>
+		</h4>
 		<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
 			<hr>
 			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
@@ -123,7 +141,7 @@ Promise.all([
 			<form-radio
 				v-model="guest.starter_id"
 				label="Starter"
-				name="starter"
+				:name="`guest-${idx}-starter`"
 				:options="getMenuOptions(0, false)"
 			>
 				<template #after-each="{ item }">
@@ -139,7 +157,7 @@ Promise.all([
 			<form-radio
 				v-model="guest.main_id"
 				label="Main Course"
-				name="main"
+				:name="`guest-${idx}-main`"
 				:options="getMenuOptions(1, false)"
 			>
 				<template #after-each="{ item }">
@@ -155,7 +173,7 @@ Promise.all([
 			<form-radio
 				v-model="guest.dessert_id"
 				label="Dessert"
-				name="dessert"
+				:name="`guest-${idx}-dessert`"
 				:options="getMenuOptions(2, false)"
 			>
 				<template #after-each="{ item }">
@@ -176,6 +194,84 @@ Promise.all([
 			@click="addGuest"
 		>
 			Add +1
+		</button>
+		<hr>
+		<h5 class="card-title d-flex justify-content-between">
+			Children
+		</h5>
+		<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
+			<hr v-if="idx">
+			<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`">
+				<template #after>
+					<button type="button" class="btn btn-danger" @click="removeChild(idx)">
+						Remove
+					</button>
+				</template>
+			</form-input>
+			<form-input
+				v-model="child.age"
+				label="Age"
+				type="number"
+				min="0"
+				max="17"
+				:name="`child-${idx}-age`"
+			/>
+			<form-radio
+				v-model="child.starter_id"
+				label="Starter"
+				:name="`child-${idx}-starter`"
+				:options="getMenuOptions(0, true)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+					<small class="d-block text-muted" v-text="item.description" />
+				</template>
+			</form-radio>
+			<form-radio
+				v-model="child.main_id"
+				label="Main Course"
+				:name="`child-${idx}-main`"
+				:options="getMenuOptions(1, true)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+					<small class="d-block text-muted" v-text="item.description" />
+				</template>
+			</form-radio>
+			<form-radio
+				v-model="child.dessert_id"
+				label="Dessert"
+				:name="`child-${idx}-dessert`"
+				:options="getMenuOptions(2, true)"
+			>
+				<template #after-each="{ item }">
+					<diet-indicator
+						class="ms-2 align-top"
+						:vegan="item.vegan"
+						:vegetarian="item.vegetarian"
+						:gluten-free="item.gluten_free"
+					/>
+					<small class="d-block text-muted" v-text="item.description" />
+				</template>
+			</form-radio>
+		</div>
+		<button
+			v-if="invitation.children?.length < 5"
+			class="btn btn-primary"
+			type="button"
+			@click="addChild"
+		>
+			Add Child
 		</button>
 		<hr>
 		<form-textarea

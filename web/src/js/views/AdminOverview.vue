@@ -4,9 +4,9 @@ import { RouterLink } from 'vue-router';
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title mb-3">
+		<h4 class="card-title mb-3">
 			Admin Management
-		</h5>
+		</h4>
 		<div class="card-text">
 			<button class="btn btn-primary w-100 mb-2">
 				View Stats

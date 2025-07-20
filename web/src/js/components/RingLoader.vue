@@ -1,6 +1,7 @@
 <script setup>
 import { inject } from 'vue';
 
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
 </script>
 

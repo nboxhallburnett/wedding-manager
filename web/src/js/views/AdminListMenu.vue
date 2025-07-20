@@ -5,8 +5,11 @@ import { RouterLink } from 'vue-router';
 import API from 'lib/api';
 import DietIndicator from 'components/DietIndicator.vue';
 
+/** @type {Ref<MenuItem[]>} */
 const menu = ref([]);
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
+/** @type {AddToast} */
 const addToast = inject('addToast');
 
 const courseText = [ 'Starter', 'Main', 'Dessert' ];
@@ -31,14 +34,14 @@ async function deleteItem(menuItem) {
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			<span>
 				Menu Items
 			</span>
 			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Menu Item' }">
 				New Item
 			</router-link>
-		</h5>
+		</h4>
 		<div class="card-text">
 			<table class="table table-hover mt-1">
 				<thead>

@@ -2,14 +2,15 @@
 import { RouterLink } from 'vue-router';
 import { inject } from 'vue';
 
+/** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
 </script>
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title">
+		<h4 class="card-title">
 			Ruh roh!
-		</h5>
+		</h4>
 		<p class="card-text">
 			You seem to be lost.
 		</p>

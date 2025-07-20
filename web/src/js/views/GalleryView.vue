@@ -4,6 +4,7 @@ import { Modal } from 'bootstrap';
 
 const gallerySources = GALLERY_IMAGES;
 
+/** @type {Ref<Element>} */
 const modal = ref(null);
 function fullscreenImage(evt) {
 	evt.preventDefault();
@@ -19,9 +20,9 @@ function fullscreenImage(evt) {
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title mb-3">
+		<h4 class="card-title mb-3">
 			Gallery
-		</h5>
+		</h4>
 		<div class="card-text">
 			<div id="gallery-carousel" class="carousel slide img-thumbnail" data-bs-ride="carousel">
 				<div class="carousel-indicators">

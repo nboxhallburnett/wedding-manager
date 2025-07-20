@@ -4,8 +4,11 @@ import { RouterLink } from 'vue-router';
 
 import API from 'lib/api';
 
+/** @type {Ref<Invitation[]>} */
 const invitations = ref([]);
+/** @type {Ref<Boolean>} */
 const loading = inject('loading');
+/** @type {AddToast} */
 const addToast = inject('addToast');
 
 loading.value = true;
@@ -31,14 +34,14 @@ async function deleteRsvp(invitation) {
 
 <template>
 	<div class="card-body">
-		<h5 class="card-title d-flex justify-content-between">
+		<h4 class="card-title d-flex justify-content-between">
 			<span>
 				Invitations
 			</span>
 			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Invitation' }">
 				New Invitation
 			</router-link>
-		</h5>
+		</h4>
 		<div class="card-text">
 			<table class="table table-hover mt-1">
 				<thead>

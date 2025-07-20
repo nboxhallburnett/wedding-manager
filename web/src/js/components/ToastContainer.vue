@@ -3,14 +3,15 @@ import { ref, nextTick } from 'vue';
 import { nanoid } from 'nanoid';
 import { Toast } from 'bootstrap';
 
-// const toasts = inject('toasts');
+/** @type {Ref<Toast[]>} */
 const toasts = ref([]);
+/** @type {Ref<{ [key: String]: Element }>} */
 const $toasts = ref({});
 
 defineExpose({ addToast });
+/** @type {AddToast} */
 function addToast(toast, options = { animation: true, autohide: true }) {
 	toast.id = nanoid();
-	toast.created = Date.now();
 	toasts.value.push(toast);
 	nextTick(() => {
 		const $toast = $toasts.value[toast.id];

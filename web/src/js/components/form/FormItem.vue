@@ -6,12 +6,13 @@ defineProps({
 	hint: { type: String, default: '' },
 	name: { type: String, required: true },
 	groupClass: { type: String, default: 'input-group' },
-	labelClass: { type: String, default: '' }
+	labelClass: { type: String, default: '' },
+	rowClass: { type: String, default: 'mb-3' }
 });
 </script>
 
 <template>
-	<div class="row mb-3">
+	<div class="row" :class="rowClass">
 		<label
 			v-if="label"
 			:for="name"

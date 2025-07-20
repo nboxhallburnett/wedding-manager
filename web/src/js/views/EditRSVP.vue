@@ -48,6 +48,9 @@ function addChild() {
 	invitation.value.children.push({
 		name: ''
 	});
+	nextTick(() => {
+		document.getElementById(`child-${invitation.value.children.length - 1}-name`)?.focus();
+	});
 }
 function removeChild(idx) {
 	invitation.value.children.splice(idx, 1);
@@ -121,71 +124,99 @@ Promise.all([
 		<h4 class="card-title d-flex justify-content-between">
 			{{ adminEdit ? 'Edit' : 'Update' }} Invitation
 		</h4>
-		<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
-			<hr>
-			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
-				<template v-if="idx && session.admin" #after>
-					<button type="button" class="btn btn-danger" @click="removeGuest(idx)">
-						Remove
+
+		<hr>
+
+		<div id="guestAccordion" class="accordion">
+			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">
+				<div class="accordion-header">
+					<button
+						class="accordion-button px-0 bg-body shadow-none pt-0"
+						type="button"
+						data-bs-toggle="collapse"
+						:data-bs-target="`#guest-accordion-${idx}-content`"
+						aria-expanded="true"
+						:aria-controls="`guest-accordion-${idx}-content`"
+					>
+						<h5 class="mb-0 w-100" v-text="guest.name?.trim() || `Guest ${idx + 1}`" />
+						<button
+							v-if="idx && session.admin"
+							type="button"
+							class="btn btn-sm btn-danger ms-auto me-2"
+							@click="removeGuest(idx)"
+							v-text="'Remove'"
+						/>
 					</button>
-				</template>
-			</form-input>
-			<form-select
-				v-model="guest.status"
-				label="Status"
-				:options="statusOptions"
-				:default-option="0"
-				placeholder="Pending Confirmation"
-				:name="`guest-${idx}-status`"
-			/>
-			<form-radio
-				v-model="guest.starter_id"
-				label="Starter"
-				:name="`guest-${idx}-starter`"
-				:options="getMenuOptions(0, false)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
+				</div>
+				<div
+					:id="`guest-accordion-${idx}-content`"
+					class="accordion-collapse collapse"
+					data-bs-parent="#guestAccordion"
+					:class="{ show: idx === 0 }"
+				>
+					<form-input
+						v-model="guest.name"
+						label="Name"
+						:name="`guest-${idx}-name`"
 					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
-			<form-radio
-				v-model="guest.main_id"
-				label="Main Course"
-				:name="`guest-${idx}-main`"
-				:options="getMenuOptions(1, false)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
+					<form-select
+						v-model="guest.status"
+						label="Status"
+						:options="statusOptions"
+						:default-option="0"
+						placeholder="Pending Confirmation"
+						:name="`guest-${idx}-status`"
 					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
-			<form-radio
-				v-model="guest.dessert_id"
-				label="Dessert"
-				:name="`guest-${idx}-dessert`"
-				:options="getMenuOptions(2, false)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
-					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
+					<form-radio
+						v-model="guest.starter_id"
+						label="Starter"
+						:name="`guest-${idx}-starter`"
+						:options="getMenuOptions(0, false)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+					<form-radio
+						v-model="guest.main_id"
+						label="Main Course"
+						:name="`guest-${idx}-main`"
+						:options="getMenuOptions(1, false)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+					<form-radio
+						v-model="guest.dessert_id"
+						label="Dessert"
+						:name="`guest-${idx}-dessert`"
+						:options="getMenuOptions(2, false)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+				</div>
+			</div>
 		</div>
 		<button
 			v-if="session.admin"
@@ -195,75 +226,94 @@ Promise.all([
 		>
 			Add +1
 		</button>
+
 		<hr>
-		<h5 class="card-title d-flex justify-content-between">
-			Children
-		</h5>
-		<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
-			<hr v-if="idx">
-			<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`">
-				<template #after>
-					<button type="button" class="btn btn-danger" @click="removeChild(idx)">
-						Remove
+
+		<div id="childAccordion" class="accordion">
+			<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
+				<div class="accordion-header">
+					<button
+						class="accordion-button px-0 bg-body shadow-none pt-0"
+						type="button"
+						data-bs-toggle="collapse"
+						:data-bs-target="`#child-accordion-${idx}-content`"
+						aria-expanded="true"
+						:aria-controls="`child-accordion-${idx}-content`"
+					>
+						<h5 class="mb-0 w-100" v-text="child.name?.trim() || `Child ${idx + 1}`" />
+						<button
+							v-if="true"
+							type="button"
+							class="btn btn-sm btn-danger ms-auto me-2"
+							@click="removeChild(idx)"
+							v-text="'Remove'"
+						/>
 					</button>
-				</template>
-			</form-input>
-			<form-input
-				v-model="child.age"
-				label="Age"
-				type="number"
-				min="0"
-				max="17"
-				:name="`child-${idx}-age`"
-			/>
-			<form-radio
-				v-model="child.starter_id"
-				label="Starter"
-				:name="`child-${idx}-starter`"
-				:options="getMenuOptions(0, true)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
+				</div>
+				<div
+					:id="`child-accordion-${idx}-content`"
+					class="accordion-collapse collapse show"
+					data-bs-parent="#childAccordion"
+				>
+					<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`" />
+					<form-input
+						v-model="child.age"
+						label="Age"
+						type="number"
+						min="0"
+						max="17"
+						:name="`child-${idx}-age`"
 					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
-			<form-radio
-				v-model="child.main_id"
-				label="Main Course"
-				:name="`child-${idx}-main`"
-				:options="getMenuOptions(1, true)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
-					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
-			<form-radio
-				v-model="child.dessert_id"
-				label="Dessert"
-				:name="`child-${idx}-dessert`"
-				:options="getMenuOptions(2, true)"
-			>
-				<template #after-each="{ item }">
-					<diet-indicator
-						class="ms-2 align-top"
-						:vegan="item.vegan"
-						:vegetarian="item.vegetarian"
-						:gluten-free="item.gluten_free"
-					/>
-					<small class="d-block text-muted" v-text="item.description" />
-				</template>
-			</form-radio>
+					<form-radio
+						v-model="child.starter_id"
+						label="Starter"
+						:name="`child-${idx}-starter`"
+						:options="getMenuOptions(0, true)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+					<form-radio
+						v-model="child.main_id"
+						label="Main Course"
+						:name="`child-${idx}-main`"
+						:options="getMenuOptions(1, true)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+					<form-radio
+						v-model="child.dessert_id"
+						label="Dessert"
+						:name="`child-${idx}-dessert`"
+						:options="getMenuOptions(2, true)"
+					>
+						<template #after-each="{ item }">
+							<diet-indicator
+								class="ms-2 align-top"
+								:vegan="item.vegan"
+								:vegetarian="item.vegetarian"
+								:gluten-free="item.gluten_free"
+							/>
+							<small class="d-block text-muted" v-text="item.description" />
+						</template>
+					</form-radio>
+				</div>
+			</div>
 		</div>
 		<button
 			v-if="invitation.children?.length < 5"
@@ -273,7 +323,9 @@ Promise.all([
 		>
 			Add Child
 		</button>
+
 		<hr>
+
 		<form-array
 			ref="songList"
 			v-model="invitation.songs"
@@ -300,6 +352,7 @@ Promise.all([
 			label="Message"
 			placeholder="Leave us a message!"
 		/>
+
 		<button class="btn btn-primary w-100 mt-3" type="submit">
 			Submit
 		</button>

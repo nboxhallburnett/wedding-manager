@@ -23,9 +23,12 @@ module.exports = {
 			updated: new Date(),
 			login_count: 0,
 			guests: req.body.guests?.map(guest => ({
-				// TODO: Expand with additional fields when they've been defined
 				name: String(guest.name || ''),
-				status: 0
+				status_ceremony: 0,
+				status_reception: 0,
+				starter_id: '',
+				main_id: '',
+				dessert_id: ''
 			})),
 			message: '',
 			songs: []

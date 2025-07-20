@@ -38,7 +38,8 @@ const adminEdit = Router.currentRoute.value.name === 'Admin Edit Invitation';
 function addGuest() {
 	invitation.value.guests.push({
 		name: '',
-		status: 0
+		status_ceremony: 0,
+		status_reception: 0,
 	});
 }
 function removeGuest(idx) {
@@ -160,12 +161,20 @@ Promise.all([
 						:name="`guest-${idx}-name`"
 					/>
 					<form-select
-						v-model="guest.status"
-						label="Status"
+						v-model="guest.status_ceremony"
+						label="Ceremony"
 						:options="statusOptions"
 						:default-option="0"
 						placeholder="Pending Confirmation"
-						:name="`guest-${idx}-status`"
+						:name="`guest-${idx}-ceremony`"
+					/>
+					<form-select
+						v-model="guest.status_reception"
+						label="Reception"
+						:options="statusOptions"
+						:default-option="0"
+						placeholder="Pending Confirmation"
+						:name="`guest-${idx}-reception`"
 					/>
 					<form-radio
 						v-model="guest.starter_id"

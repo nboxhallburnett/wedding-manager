@@ -28,12 +28,14 @@ module.exports = {
 
 			for (const [ idx, guest ] of req.body.guests.entries()) {
 				// Set initial "updated" record to the existing value
+				/** @type {Invitation['guests'][0]} */
 				const updatedGuest = existingInvitation.guests?.[idx] || {};
 
 				// If the guest has no name, reset them as if they're uninvited
 				if (!guest.name) {
 					updatedGuest.name = '';
-					updatedGuest.status = 0;
+					updatedGuest.status_ceremony = 0;
+					updatedGuest.status_reception = 0;
 					updatedGuest.starter_id = undefined;
 					updatedGuest.main_id = undefined;
 					updatedGuest.dessert_id = undefined;
@@ -52,15 +54,26 @@ module.exports = {
 					updatedGuest.name = guest.name;
 				}
 
-				if (Object.prototype.hasOwnProperty.call(guest, 'status')) {
-					// Verify the status contained a valid value
-					if (guest.status < 0 || guest.status > 3 || typeof guest.status !== 'number') {
+				if (Object.prototype.hasOwnProperty.call(guest, 'status_ceremony')) {
+					// Verify the ceremony status contained a valid value
+					if (guest.status_ceremony < 0 || guest.status_ceremony > 3 || typeof guest.status_ceremony !== 'number') {
 						res.status(400);
-						throw new Error(`"guests[${idx}].status" contained an invalid value: Unknown status value: "${guest.status}"`);
+						throw new Error(`"guests[${idx}].status_ceremony" contained an invalid value: Unknown status value: "${guest.status_ceremony}"`);
 					}
 
-					// Update the verified updated status value
-					updatedGuest.status = guest.status;
+					// Update the verified updated ceremony status value
+					updatedGuest.status_ceremony = guest.status_ceremony;
+				}
+
+				if (Object.prototype.hasOwnProperty.call(guest, 'status_reception')) {
+					// Verify the reception status contained a valid value
+					if (guest.status_reception < 0 || guest.status_reception > 3 || typeof guest.status_reception !== 'number') {
+						res.status(400);
+						throw new Error(`"guests[${idx}].status_reception" contained an invalid value: Unknown status value: "${guest.status_reception}"`);
+					}
+
+					// Update the verified updated reception status value
+					updatedGuest.status_reception = guest.status_reception;
 				}
 
 				for (const prop of menuItemProps) {

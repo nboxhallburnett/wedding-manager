@@ -1,3 +1,10 @@
+type AttendanceStatus = {
+	0: 'Pending',
+	1: 'Confirmed'
+	2: 'Tentative',
+	3: 'Declined'
+}
+
 /** Invitation record */
 type Invitation = {
 	/** Invitation Identifier */
@@ -14,8 +21,10 @@ type Invitation = {
 	guests: {
 		/** Name of the guest */
 		name: String,
-		/** Attendance confirmation of the guest. 0: Pending | 1: Confirmed | 2: Tentative | 3: Declined */
-		status: 0|1|2|3,
+		/** Attendance confirmation of the guest for the wedding ceremony. */
+		status_ceremony: keyof AttendanceStatus,
+		/** Attendance confirmation of the guest for the wedding reception. */
+		status_reception: keyof AttendanceStatus,
 		/** ID of the menu item the guest has selected for their starter */
 		starter_id: MenuItem['id'],
 		/** ID of the menu item the guest has selected for their main course */

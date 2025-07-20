@@ -31,10 +31,16 @@ for (const guest of invitation.value?.guests || []) {
 					<hr>
 					<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
 					<form-text
-						:value="statusOptions[guest.status]"
-						label="Status"
+						:value="statusOptions[guest.status_ceremony]"
+						label="Ceremony Attendance"
 						:options="statusOptions"
-						:name="`guest-${idx}-status`"
+						:name="`guest-${idx}-ceremony`"
+					/>
+					<form-text
+						:value="statusOptions[guest.status_reception]"
+						label="Reception Attendance"
+						:options="statusOptions"
+						:name="`guest-${idx}-reception`"
 					/>
 				</template>
 			</div>

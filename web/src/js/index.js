@@ -1,8 +1,9 @@
 // Import our custom CSS
 import '../scss/index.scss';
 
-// Import all of Bootstrap's JS. TODO: Restrict this to only what is actually needed
-import 'bootstrap';
+// Import the bootstrap js used commonly accross the UI
+import '@popperjs/core';
+import 'bootstrap/js/dist/dropdown';
 
 import { createApp, ref } from 'vue';
 

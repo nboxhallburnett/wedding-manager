@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { Popover } from 'bootstrap';
+import Popover from 'bootstrap/js/dist/popover';
 
 /**
  * Composable to handle instantiation and disposal of bootstrap popovers.

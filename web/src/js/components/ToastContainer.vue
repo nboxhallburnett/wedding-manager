@@ -1,7 +1,7 @@
 <script setup>
 import { ref, nextTick } from 'vue';
 import { nanoid } from 'nanoid';
-import { Toast } from 'bootstrap';
+import Toast from 'bootstrap/js/dist/toast';
 
 /** @type {Ref<Toast[]>} */
 const toasts = ref([]);

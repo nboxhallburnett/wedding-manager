@@ -1,6 +1,8 @@
 <script setup>
+import 'bootstrap/js/dist/carousel';
+
 import { ref } from 'vue';
-import { Modal } from 'bootstrap';
+import Modal from 'bootstrap/js/dist/modal';
 
 const gallerySources = GALLERY_IMAGES;
 

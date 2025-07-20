@@ -1,4 +1,6 @@
 <script setup>
+import 'bootstrap/js/dist/collapse';
+
 import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
@@ -39,7 +41,7 @@ function addGuest() {
 	invitation.value.guests.push({
 		name: '',
 		status_ceremony: 0,
-		status_reception: 0,
+		status_reception: 0
 	});
 }
 function removeGuest(idx) {

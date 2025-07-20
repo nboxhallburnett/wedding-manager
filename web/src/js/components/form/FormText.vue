@@ -2,19 +2,20 @@
 import { ref, watchEffect } from 'vue';
 import FormItem from './FormItem.vue';
 
-const model = defineModel({ type: [ String, Array ] });
+const model = defineModel({ type: [ String, Number, Array ] });
 const props = defineProps({
 	label: { type: String, default: '' },
-	value: { type: [ String, Array ], default: '' },
+	value: { type: [ String, Number, Array ], default: '' },
 	name: { type: String, required: true }
 });
 
 const displayValue = ref(model.value || props.value || '');
 watchEffect(() => {
-	displayValue.value = model.value || props.value || '';
-	if (Array.isArray(displayValue)) {
-		displayValue.value = displayValue.value.join('\n');
+	let text = model.value || props.value || '';
+	if (Array.isArray(text)) {
+		text = text.join('\n');
 	}
+	displayValue.value = text;
 });
 </script>
 

@@ -1,10 +1,16 @@
 <script setup>
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import FormText from 'components/form/FormText.vue';
 
 const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
 
 const invitation = inject('invitation');
+const pendingPlusOnes = ref(0);
+for (const guest of invitation.value.guests) {
+	if (!guest.name) {
+		pendingPlusOnes.value++;
+	}
+}
 </script>
 
 <template>
@@ -19,17 +25,26 @@ const invitation = inject('invitation');
 		</h5>
 		<div class="card-text">
 			<div v-for="(guest, idx) in (invitation.guests || [])" :key="idx" class="mb-3">
-				<hr>
-				<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
-				<form-text
-					:value="statusOptions[guest.status]"
-					label="Status"
-					:options="statusOptions"
-					:name="`guest-${idx}-status`"
-				/>
+				<template v-if="guest.name">
+					<hr>
+					<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
+					<form-text
+						:value="statusOptions[guest.status]"
+						label="Status"
+						:options="statusOptions"
+						:name="`guest-${idx}-status`"
+					/>
+				</template>
 			</div>
 		</div>
 		<hr>
+		<form-text
+			v-if="pendingPlusOnes"
+			name="plus-ones"
+			label="Additional Guests"
+			hint="Number of additional guests you are able to bring. Be sure to add their info on the Update RSVP page before the day."
+			:value="pendingPlusOnes"
+		/>
 		<form-text
 			v-if="invitation.message"
 			v-model="invitation.message"

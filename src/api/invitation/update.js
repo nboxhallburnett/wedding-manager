@@ -1,4 +1,7 @@
 const invitationDb = require('../../lib/db/invitations');
+const menuItemDb = require('../../lib/db/menu-items');
+
+const menuItemProps = [ 'starter_id', 'main_id', 'dessert_id' ];
 
 /** @type {API<InvitationPath, Invitation>} */
 module.exports = {
@@ -25,7 +28,18 @@ module.exports = {
 
 			for (const [ idx, guest ] of req.body.guests.entries()) {
 				// Set initial "updated" record to the existing value
-				const updatedGuest = {};
+				const updatedGuest = existingInvitation.guests[idx];
+
+				// If the guest has no name, reset them as if they're uninvited
+				if (!guest.name) {
+					updatedGuest.name = '';
+					updatedGuest.status = 0;
+					updatedGuest.starter_id = undefined;
+					updatedGuest.main_id = undefined;
+					updatedGuest.dessert_id = undefined;
+					guests.push(updatedGuest);
+					continue;
+				}
 
 				if (Object.prototype.hasOwnProperty.call(guest, 'name')) {
 					// Verify the status contained a valid value
@@ -47,6 +61,25 @@ module.exports = {
 
 					// Update the verified updated status value
 					updatedGuest.status = guest.status;
+				}
+
+				for (const prop of menuItemProps) {
+					if (Object.prototype.hasOwnProperty.call(guest, prop)) {
+						// Verify the menu item contained a valid value
+						const isValidMenuItem = await menuItemDb
+							.find({ id: guest[prop] })
+							.limit(-1)
+							.batchSize(1)
+							.hasNext();
+
+						if (!isValidMenuItem) {
+							res.status(400);
+							throw new Error(`"guests[${idx}].${prop}" contained an invalid value: Unknown menu item: "${guest[prop]}"`);
+						}
+
+						// Update the verified updated status value
+						updatedGuest[prop] = guest[prop];
+					}
 				}
 
 				guests.push(updatedGuest);

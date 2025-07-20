@@ -1,5 +1,5 @@
 #header {
-	z-index: 2;
+	z-index: 10;
 
 	@include media-breakpoint-up(sm) {
 		height: $header-height;
@@ -7,7 +7,7 @@
 }
 
 .navbar-toggler {
-	z-index: 2;
+	z-index: 10;
 }
 
 .navbar-nav {

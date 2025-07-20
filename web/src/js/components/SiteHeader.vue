@@ -39,7 +39,7 @@ async function logout() {
 </script>
 
 <template>
-	<nav id="header" class="navbar navbar-expand-sm navbar-light bg-light shadow px-3 w-100 position-fixed top-0">
+	<nav id="header" class="navbar navbar-expand-sm bg-body shadow px-3 w-100 position-fixed top-0">
 		<button
 			class="navbar-toggler"
 			type="button"

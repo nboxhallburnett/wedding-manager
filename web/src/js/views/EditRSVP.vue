@@ -274,12 +274,6 @@ Promise.all([
 			Add Child
 		</button>
 		<hr>
-		<form-textarea
-			v-model="invitation.message"
-			name="message"
-			label="Message"
-			placeholder="Leave us a message!"
-		/>
 		<form-array
 			ref="songList"
 			v-model="invitation.songs"
@@ -300,6 +294,12 @@ Promise.all([
 				</button>
 			</template>
 		</form-array>
+		<form-textarea
+			v-model="invitation.message"
+			name="message"
+			label="Message"
+			placeholder="Leave us a message!"
+		/>
 		<button class="btn btn-primary w-100 mt-3" type="submit">
 			Submit
 		</button>

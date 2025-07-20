@@ -29,7 +29,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 </script>
 
 <template>
-	<div id="welcome-overlay" class="text-center">
+	<div id="welcome-overlay" class="text-center text-dark">
 		<button
 			type="button"
 			class="btn-close p-3"

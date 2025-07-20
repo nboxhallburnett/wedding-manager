@@ -14,7 +14,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 </script>
 
 <template>
-	<nav id="footer" class="navbar navbar-expand navbar-light bg-light px-3 mt-auto">
+	<nav id="footer" class="navbar navbar-expand navbar-light bg-body px-3 mt-auto">
 		<div id="navbarFooter" class="collapse navbar-collapse">
 			<div class="navbar-nav w-100">
 				<template v-for="item in navItems" :key="item.text">
@@ -37,6 +37,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 
 <style lang="scss" scoped>
 #footer {
+	z-index: 10;
 	position: fixed;
 	bottom: 0;
 	width: 100%;

@@ -33,7 +33,7 @@ async function onSubmit(another) {
 		: `${guests.value.length} guest${guests.value.length > 1 ? 's' : ''}`;
 	addToast({
 		title: 'Invitation Created',
-		body: `Invitation for ${guestMsg} successfully created.`
+		body: `Invitation for "${guestMsg}" successfully created.`
 	});
 	loading.value = false;
 	if (another === true) {

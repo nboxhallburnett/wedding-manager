@@ -1,5 +1,6 @@
 <script setup>
 import { inject, ref } from 'vue';
+
 import FormText from 'components/form/FormText.vue';
 
 const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
@@ -13,6 +14,8 @@ for (const guest of invitation.value?.guests || []) {
 		pendingPlusOnes.value++;
 	}
 }
+
+const calendarLink = `webcal://${document.location.host}/api/calendar.ics`;
 </script>
 
 <template>
@@ -65,5 +68,12 @@ for (const guest of invitation.value?.guests || []) {
 			label="Song Suggestions"
 			name="songs"
 		/>
+
+		<a class="btn btn-primary" href="/api/calendar.ics">
+			Add to calendar
+		</a>
+		<a class="btn btn-primary ms-2" :href="calendarLink">
+			Subscribe to calendar
+		</a>
 	</div>
 </template>

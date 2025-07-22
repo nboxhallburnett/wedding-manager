@@ -32,3 +32,7 @@ type MenuItemPath = {
 	/** ID of the Menu Item of which the request is in context */
 	menuItemId: MenuItem['id']
 }
+type CalendarEventPath = {
+	/** ID of the Calendar Event of which the request is in context */
+	calendarEventId: CalendarEvent['id']
+}

@@ -26,7 +26,7 @@ async function deleteRsvp(invitation) {
 		: `${invitation.guests.length} guest${invitation.guests.length > 1 ? 's' : ''}`;
 	addToast({
 		title: 'Invitation Removed',
-		body: `Invitation for ${guestMsg} (${invitation.id}) successfully removed.`
+		body: `Invitation for "${guestMsg}" (${invitation.id}) successfully removed.`
 	});
 	loading.value = false;
 }

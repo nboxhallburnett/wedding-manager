@@ -27,7 +27,7 @@ function addToast(toast, options = { animation: true, autohide: true }) {
 
 <template>
 	<div aria-live="polite" aria-atomic="true" class="position-relative">
-		<div class="toast-container position-absolute end-0 p-3">
+		<div class="toast-container position-fixed end-0 p-3">
 			<div
 				v-for="toast in toasts"
 				:key="toast.id"

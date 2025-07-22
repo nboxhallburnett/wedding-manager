@@ -93,7 +93,7 @@ async function onSubmit() {
 	addToast({
 		title: 'Invitation Updated',
 		body: adminEdit
-			? `Invitation for ${guestMsg} successfully updated.`
+			? `Invitation for "${guestMsg}" successfully updated.`
 			: 'Invitation updated successfully. Thank you!'
 	});
 	loading.value = false;

@@ -2,10 +2,13 @@
  * @type {{ [key: String]: [ import('mongodb').IndexSpecification, import('mongodb').CreateIndexesOptions ][] }}
  */
 module.exports = {
+	calendar_events: [
+		[ { id: 1 }, { name: 'event_id', unique: true } ]
+	],
 	invitations: [
 		[ { id: 1 }, { name: 'invitation_id', unique: true } ]
 	],
-	'menu-items': [
+	menu_items: [
 		[ { id: 1 }, { name: 'item_id', unique: true } ]
 	],
 	sessions: [

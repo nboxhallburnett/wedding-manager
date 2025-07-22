@@ -73,3 +73,43 @@ type MenuItem = {
 	/** Whether the menu item is gluten free */
 	gluten_free: Boolean
 }
+
+type CalendarEvent = {
+	/** Event Identifier */
+	id: String,
+	/** Whether it is an all day event */
+	allDay?: Boolean,
+	/** The description to include in the body of the event */
+	description: String,
+	/** The date/time the event is scheduled to end */
+	end?: Date
+	/** Contact detail to mark as the event organizer */
+	organizer: {
+		/** Name to use as the event organizer */
+		name: String,
+		/** Email address to use for the event organizer */
+		email: String
+	},
+	/** The date/time the event is scheduled to start */
+	start: Date,
+	/** The summary to use for the event */
+	summary: String,
+	/** The timezone the event is scheduled in. Defaults to UTC. E.g. `'Europe/London'` */
+	timezone?: String,
+	/** Configuration for the event location */
+	location: {
+		/** Name of the location for the generated calendar event */
+		title: String,
+		/** Address of the location for the generated calendar event */
+		address: String,
+		/** iCal geo radius. Used for generating Apple's `X-APPLE-STRUCTURED-LOCATION` */
+		radius?: Number,
+		/** Object containing the coordinates of the event location */
+		geo?: {
+			/** Latitude of the event location */
+			lat: Number,
+			/** Longitude of the event location */
+			lon: Number
+		}
+	}
+}

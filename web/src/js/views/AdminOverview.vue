@@ -17,6 +17,9 @@ import { RouterLink } from 'vue-router';
 			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List Menu Items' }">
 				Manage Menu
 			</router-link>
+			<router-link class="btn btn-primary w-100 mb-2" :to="{ name: 'Admin List Calendar Events' }">
+				Manage Calendar
+			</router-link>
 		</div>
 	</div>
 </template>

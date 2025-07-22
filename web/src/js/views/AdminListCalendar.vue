@@ -3,30 +3,35 @@ import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import API from 'lib/api';
-import DietIndicator from 'components/DietIndicator.vue';
+import { formatDate } from 'lib/formatter';
 
-/** @type {Ref<MenuItem[]>} */
-const menu = ref([]);
+/** @type {Ref<CalendarEvent[]>} */
+const events = ref([]);
 /** @type {Ref<Boolean>} */
 const loading = inject('loading');
 /** @type {AddToast} */
 const addToast = inject('addToast');
 
-const courseText = [ 'Starter', 'Main', 'Dessert' ];
-
+// Fetch the list of events
 loading.value = true;
-API('menu').then(({ result }) => {
-	menu.value = result.data;
+API('calendar').then(({ result }) => {
+	events.value = result.data;
 	loading.value = false;
 }).catch(() => loading.value = false);
 
-async function deleteItem(menuItem) {
+/**
+ * Trigger the deletion of an event and refreshes the table content
+ *
+ * @param {CalendarEvent} event Event to remove
+ * @returns {Promise<void>}
+ */
+async function deleteEvent(event) {
 	loading.value = true;
-	await API(`menu/${menuItem.id}`, { method: 'delete' });
-	menu.value = await API('menu').then(({ result }) => result.data);
+	await API(`calendar/${event.id}`, { method: 'delete' });
+	events.value = await API('calendar').then(({ result }) => result.data);
 	addToast({
-		title: 'Menu Item Removed',
-		body: `Menu item "${menuItem.title}" (${menuItem.id}) successfully removed.`
+		title: 'Calendar Event Removed',
+		body: `Calendar event "${event.summary}" (${event.id}) successfully removed.`
 	});
 	loading.value = false;
 }
@@ -36,9 +41,9 @@ async function deleteItem(menuItem) {
 	<div class="card-body">
 		<h4 class="card-title d-flex justify-content-between">
 			<span>
-				Menu Items
+				Calendar Events
 			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Menu Item' }">
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Calendar Event' }">
 				New Item
 			</router-link>
 		</h4>
@@ -47,16 +52,10 @@ async function deleteItem(menuItem) {
 				<thead>
 					<tr>
 						<th scope="col">
-							Title
+							Summary
 						</th>
 						<th scope="col">
-							Course
-						</th>
-						<th scope="col">
-							Menu
-						</th>
-						<th scope="col">
-							Diet
+							When
 						</th>
 						<th scope="col" class="text-end">
 							Actions
@@ -64,18 +63,14 @@ async function deleteItem(menuItem) {
 					</tr>
 				</thead>
 				<tbody>
-					<template v-for="item in menu" :key="item.id">
+					<template v-for="item in events" :key="item.id">
 						<tr>
 							<th scope="row">
-								<router-link :to="{ name: 'Admin View Menu Item', params: { menuItemId: item.id } }">
-									{{ item.title }}
+								<router-link :to="{ name: 'Admin View Calendar Event', params: { calendarEventId: item.id } }">
+									{{ item.summary }}
 								</router-link>
 							</th>
-							<td v-text="courseText[item.course]" />
-							<td v-text="item.child ? 'Child' : 'Adult'" />
-							<td>
-								<diet-indicator :vegan="item.vegan" :vegetarian="item.vegetarian" :gluten-free="item.gluten_free" />
-							</td>
+							<td v-text="formatDate(item)" />
 							<td class="text-end py-1 align-middle">
 								<button
 									:id="`menu-item-${item.id}-actions`"
@@ -86,18 +81,18 @@ async function deleteItem(menuItem) {
 								/>
 								<ul class="dropdown-menu" :aria-labelledby="`menu-item-${item.id}-actions`">
 									<li>
-										<router-link class="dropdown-item" :to="{ name: 'Admin View Menu Item', params: { menuItemId: item.id } }">
+										<router-link class="dropdown-item" :to="{ name: 'Admin View Calendar Event', params: { calendarEventId: item.id } }">
 											View
 										</router-link>
 									</li>
 									<li>
-										<router-link class="dropdown-item" :to="{ name: 'Admin Edit Menu Item', params: { menuItemId: item.id } }">
+										<router-link class="dropdown-item" :to="{ name: 'Admin Edit Calendar Event', params: { calendarEventId: item.id } }">
 											Edit
 										</router-link>
 									</li>
 									<li><hr class="dropdown-divider"></li>
 									<li>
-										<button class="dropdown-item text-danger" type="button" @click="deleteItem(item)">
+										<button class="dropdown-item text-danger" type="button" @click="deleteEvent(item)">
 											Delete
 										</button>
 									</li>

@@ -67,8 +67,8 @@ async function onSubmit() {
 	addToast({
 		title: `Menu Item ${isNew ? 'Created' : 'Updated'}`,
 		body: isNew
-			? `Menu Item ${item.value.title} successfully created.`
-			: `Menu Item ${item.value.title} successfully updated.`
+			? `Menu Item "${item.value.title}" successfully created.`
+			: `Menu Item "${item.value.title}" successfully updated.`
 	});
 	loading.value = false;
 	Router.push({ name: 'Admin List Menu Items' });

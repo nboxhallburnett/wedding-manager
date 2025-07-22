@@ -20,7 +20,8 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'Home',
-			component: () => import('../views/HomeView.vue')
+			component: () => import('../views/HomeView.vue'),
+			meta: { session: true }
 		},
 		{
 			path: '/edit',
@@ -31,7 +32,8 @@ const router = createRouter({
 		{
 			path: '/about',
 			name: 'About',
-			component: () => import('../views/AboutView.vue')
+			component: () => import('../views/AboutView.vue'),
+			meta: { session: true }
 		},
 		{
 			path: '/gallery',
@@ -109,6 +111,12 @@ const router = createRouter({
 			path: '/admin/menu/:menuItemId/edit',
 			name: 'Admin Edit Menu Item',
 			component: () => import('../views/AdminEditMenu.vue'),
+			meta: { admin: true }
+		},
+		{
+			path: '/admin/about',
+			name: 'Admin Edit About Content',
+			component: () => import('../views/AdminEditAbout.vue'),
 			meta: { admin: true }
 		},
 		{

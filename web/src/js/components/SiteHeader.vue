@@ -9,10 +9,13 @@ const invitation = inject('invitation');
 const loading = inject('loading');
 
 const navItems = computed(() => {
+	// If there is no session, only show the login page
+	if (!invitation.value?.id) {
+		return [ { text: 'Home', to: { name: 'Login' } } ];
+	}
+
 	const items = [
-		invitation.value?.id
-			? { text: 'Home', to: { name: 'Home' } }
-			: { text: 'Home', to: { name: 'Login' } },
+		{ text: 'Home', to: { name: 'Home' } },
 		{ text: 'About', to: { name: 'About' } }
 	];
 

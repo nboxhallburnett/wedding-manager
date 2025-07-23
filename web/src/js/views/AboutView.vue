@@ -29,7 +29,7 @@ const source = SOURCE;
 		<hr>
 		<div class="card-text">
 			Source:<br>
-			<a :href="source" v-text="source" />
+			<a :href="source" target="_blank" v-text="source" />
 		</div>
 	</div>
 </template>

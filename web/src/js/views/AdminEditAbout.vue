@@ -42,6 +42,7 @@ async function onSubmit() {
 	<div class="card-body">
 		<card-header title="Edit About Page" />
 		<div class="card-text">
+			<h5 v-text="'Content'" />
 			<textarea v-model="content" class="form-control w-100 mb-2" :placeholder="placeholder" />
 
 			<h5 v-text="'Preview'" />

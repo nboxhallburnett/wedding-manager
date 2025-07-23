@@ -97,6 +97,10 @@ async function onSubmit() {
 			? `Invitation for "${guestMsg}" successfully updated.`
 			: 'Invitation updated successfully. Thank you!'
 	});
+	// If this is the invitee updating their RSVP then update the session with their changes
+	if (!adminEdit) {
+		session.value = invitation.value;
+	}
 	loading.value = false;
 	Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
 }

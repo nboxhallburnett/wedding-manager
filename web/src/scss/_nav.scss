@@ -24,7 +24,7 @@
 		&.active {
 			z-index: 0;
 			box-shadow:
-				-6px 0 0 0 rgb(var(--bs-light-rgb)),
+				-6px 0 0 0 rgb(var(--bs-body-bg-rgb)),
 				-8px 0 0 0 $primary;
 		}
 

@@ -13,9 +13,7 @@ const loading = inject('loading');
 /** @type {Ref<String>} */
 const content = ref('');
 
-const placeholder = 'Add About page content here.\n';
-const defaultHeader = '#### About\n';
-const defaultContent = `\nSource:\n[${source}](${source})`;
+const placeholder = 'Add About page content here.';
 
 loading.value = true;
 API('about').then(({ result }) => {
@@ -45,8 +43,24 @@ async function onSubmit() {
 		</h4>
 		<div class="card-text">
 			<textarea v-model="content" class="form-control w-100 mb-2" :placeholder="placeholder" />
+
 			<h5 v-text="'Preview'" />
-			<vue-showdown :markdown="defaultHeader + (content || placeholder) + defaultContent" flavor="github" class="img-thumbnail" />
+			<div class="card shadow">
+				<div class="card-body">
+					<h4 class="card-title">
+						About
+					</h4>
+					<hr>
+					<div class="card-text">
+						<vue-showdown :markdown="content || placeholder" flavor="github" />
+					</div>
+					<hr>
+					<div class="card-text">
+						Source:<br>
+						<a :href="source" v-text="source" />
+					</div>
+				</div>
+			</div>
 
 			<button class="btn btn-primary w-100 mt-3" @click="onSubmit">
 				Save

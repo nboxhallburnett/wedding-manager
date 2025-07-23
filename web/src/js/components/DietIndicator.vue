@@ -18,6 +18,7 @@ const { vegan, vegetarian, glutenFree } = defineProps({
 			href="#"
 			class="badge bg-success text-decoration-none align-top"
 			title="Vegan"
+			@click.prevent
 			v-text="'VE'"
 		/>
 		<!-- All vegan meals are also vegetarian, so only show if not vegan -->
@@ -27,6 +28,7 @@ const { vegan, vegetarian, glutenFree } = defineProps({
 			href="#"
 			class="badge bg-primary text-decoration-none align-top"
 			title="Vegetarian"
+			@click.prevent
 			v-text="'V'"
 		/>
 		<a
@@ -35,6 +37,7 @@ const { vegan, vegetarian, glutenFree } = defineProps({
 			href="#"
 			class="badge bg-dark text-decoration-none align-top"
 			title="Gluten Free"
+			@click.prevent
 			v-text="'GF'"
 		/>
 	</span>

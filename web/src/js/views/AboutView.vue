@@ -23,9 +23,11 @@ const source = SOURCE;
 		<h4 class="card-title">
 			About
 		</h4>
+		<hr>
 		<div v-if="content" class="card-text">
 			<vue-showdown :markdown="content" flavor="github" />
 		</div>
+		<hr>
 		<div class="card-text">
 			Source:<br>
 			<a :href="source" v-text="source" />

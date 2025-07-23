@@ -1,4 +1,11 @@
+const invitationDb = require('../../lib/db/invitations');
 const menuItemDb = require('../../lib/db/menu-items');
+
+const fieldMap = [
+	'starter_id',
+	'main_id',
+	'dessert_id'
+];
 
 /** @type {API<InvitationPath} */
 module.exports = {
@@ -17,6 +24,21 @@ module.exports = {
 		}
 
 		req.ctx.log('Removing menu item "%s" with ID: %s', item.title, item.id);
+
+		// If the item is not on the children's menu, then remove it as a selected item from any adult guests
+		if (!item.child) {
+			await invitationDb.updateMany(
+				{},
+				{ $set: { [`guests.$[guest].${fieldMap[item.course]}`]: '' } },
+				{ arrayFilters: [ { [`guest.${fieldMap[item.course]}`]: item.id } ] }
+			);
+		}
+		// Always remove the item from children that have it selected as they can use either menu
+		await invitationDb.updateMany(
+			{},
+			{ $set: { [`children.$[child].${fieldMap[item.course]}`]: '' } },
+			{ arrayFilters: [ { [`child.${fieldMap[item.course]}`]: item.id } ] }
+		);
 
 		// Remove the record from the collection
 		await menuItemDb.deleteOne({ id: item.id });

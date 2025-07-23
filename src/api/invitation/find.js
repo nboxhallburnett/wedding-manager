@@ -1,6 +1,11 @@
 const invitationDb = require('../../lib/db/invitations');
 
-/** @type {API} */
+/**
+ * @typedef InvitationQuery
+ * @property {String} menuItemId ID of a menu item to find invitations with it selected
+ */
+
+/** @type {API<{}, {}, InvitationQuery>} */
 module.exports = {
 	path: 'invitation',
 	auth: async req => {
@@ -8,8 +13,24 @@ module.exports = {
 		return Boolean(req.session.admin);
 	},
 	action: async (req, res) => {
-		// TODO: Support supplying sanitized query to db lookup
-		const invitations = await invitationDb.find({}, { projection: { _id: 0 } }).toArray();
+		const filter = {};
+		const projection = { _id: 0 };
+
+		// If a menu item is being queried, query across all item props for guests and children
+		if (req.query.menuItemId) {
+			filter.$or ||= [];
+			filter.$or.push({ 'guests.starter_id': req.query.menuItemId });
+			filter.$or.push({ 'guests.main_id': req.query.menuItemId });
+			filter.$or.push({ 'guests.dessert_id': req.query.menuItemId });
+			filter.$or.push({ 'children.starter_id': req.query.menuItemId });
+			filter.$or.push({ 'children.main_id': req.query.menuItemId });
+			filter.$or.push({ 'children.dessert_id': req.query.menuItemId });
+			projection.id = 1;
+			projection.guests = 1;
+			projection.children = 1;
+		}
+
+		const invitations = await invitationDb.find(filter, { projection }).toArray();
 		return res.json({ success: true, data: invitations });
 	}
 };

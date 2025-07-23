@@ -2,6 +2,7 @@
 import { inject, ref, nextTick } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
@@ -102,10 +103,7 @@ async function onSubmit() {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h4 class="card-title d-flex justify-content-between">
-			{{ isNew ? 'Create' : 'Update' }} Calendar Event
-		</h4>
-		<hr>
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" />
 		<form-input
 			v-model="item.summary"
 			name="summary"

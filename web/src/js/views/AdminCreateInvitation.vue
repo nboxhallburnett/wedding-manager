@@ -2,7 +2,9 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
+
 import API from 'lib/api';
 
 /** @type {AddToast} */
@@ -46,11 +48,9 @@ async function onSubmit(another) {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h4 class="card-title d-flex justify-content-between">
-			New Invitation
-		</h4>
+		<card-header title="New Invitation" />
 		<div v-for="(guest, idx) in guests" :key="idx" class="mb-3">
-			<hr>
+			<hr v-if="idx">
 			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
 				<template v-if="idx" #after>
 					<button type="button" class="btn btn-danger" @click="removeItem(idx)">

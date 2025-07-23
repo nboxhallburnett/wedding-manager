@@ -2,6 +2,7 @@
 import { inject, ref, watch } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
@@ -77,10 +78,7 @@ async function onSubmit() {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h4 class="card-title d-flex justify-content-between">
-			{{ isNew ? 'Create' : 'Update' }} Menu Item
-		</h4>
-		<hr>
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" />
 		<form-input
 			v-model="item.title"
 			name="title"

@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref } from 'vue';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormText from 'components/form/FormText.vue';
 
 const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
@@ -20,18 +21,11 @@ const calendarLink = `webcal://${document.location.host}/api/calendar.ics`;
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Invitation
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
-				Update RSVP
-			</router-link>
-		</h4>
+		<card-header title="Invitation" :action="{ text: 'Update RSVP', to: { name: 'Edit Invitation' } }" />
 		<div class="card-text">
 			<div v-for="(guest, idx) in (invitation.guests || [])" :key="idx" class="mb-3">
 				<template v-if="guest.name">
-					<hr>
+					<hr v-if="idx">
 					<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
 					<form-text
 						:value="statusOptions[guest.status_ceremony]"

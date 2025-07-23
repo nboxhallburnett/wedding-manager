@@ -1,12 +1,12 @@
 <script setup>
 import { RouterLink } from 'vue-router';
+
+import CardHeader from 'components/CardHeader.vue';
 </script>
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title mb-3">
-			Admin Management
-		</h4>
+		<card-header title="Admin Management" />
 		<div class="card-text">
 			<button class="btn btn-primary w-100 mb-2">
 				View Stats

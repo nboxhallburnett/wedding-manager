@@ -2,8 +2,10 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import API from 'lib/api';
+import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
+
+import API from 'lib/api';
 
 /** @type {Ref<MenuItem[]>} */
 const menu = ref([]);
@@ -41,14 +43,7 @@ async function deleteItem(menuItem) {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Menu Items
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Menu Item' }">
-				New Item
-			</router-link>
-		</h4>
+		<card-header title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" />
 		<div class="card-text">
 			<table class="table table-hover mt-1">
 				<thead>

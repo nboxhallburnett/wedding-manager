@@ -2,8 +2,10 @@
 import { inject } from 'vue';
 import Router from 'router';
 
-import API from 'lib/api';
+import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
+
+import API from 'lib/api';
 
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
@@ -30,9 +32,7 @@ async function onSubmit() {
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h4 class="card-title">
-			Manage your Invitation
-		</h4>
+		<card-header title="Manage your Invitation" />
 		<p class="card-text">
 			Enter the Invitation code included on your invitation below.
 		</p>

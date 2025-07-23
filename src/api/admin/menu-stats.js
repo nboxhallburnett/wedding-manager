@@ -20,6 +20,7 @@ module.exports = {
 				{ $addFields: { meal: [ '$guests.starter_id', '$guests.main_id', '$guests.dessert_id' ] } },
 				// And split each guests meal into its own item in the aggregation
 				{ $unwind: '$meal' },
+				{ $match: { meal: { $ne: null } } },
 				// So we can group by the individual IDs, keeping track of the total number of occurrences
 				{ $group: { _id: '$meal', count: { $sum: 1 } } },
 				// Now we can construct a new key/value structure for the data
@@ -36,6 +37,7 @@ module.exports = {
 				// TODO: Make grouping splitting children < 8, < 12, >=12
 				{ $addFields: { meal: [ '$children.starter_id', '$children.main_id', '$children.dessert_id' ] } },
 				{ $unwind: '$meal' },
+				{ $match: { meal: { $ne: null } } },
 				{ $group: { _id: '$meal', count: { $sum: 1 } } },
 				{ $group: { _id: null, counts: { $push: { k: '$_id', v: '$count' } } } },
 				{ $replaceRoot: { newRoot: { $arrayToObject: '$counts' } } }

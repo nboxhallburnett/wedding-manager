@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
+import CardHeader from 'components/CardHeader.vue';
+
 import API from 'lib/api';
 
 const source = SOURCE;
@@ -38,19 +40,14 @@ async function onSubmit() {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title mb-3">
-			Edit About Page
-		</h4>
+		<card-header title="Edit About Page" />
 		<div class="card-text">
 			<textarea v-model="content" class="form-control w-100 mb-2" :placeholder="placeholder" />
 
 			<h5 v-text="'Preview'" />
 			<div class="card shadow">
 				<div class="card-body">
-					<h4 class="card-title">
-						About
-					</h4>
-					<hr>
+					<card-header title="About" />
 					<div class="card-text">
 						<vue-showdown :markdown="content || placeholder" flavor="github" />
 					</div>

@@ -4,6 +4,7 @@ import 'bootstrap/js/dist/collapse';
 import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import FormArray from 'components/form/FormArray.vue';
 import FormInput from 'components/form/FormInput.vue';
@@ -124,11 +125,7 @@ Promise.all([
 
 <template>
 	<form class="card-body" @submit.prevent="onSubmit">
-		<h4 class="card-title d-flex justify-content-between">
-			{{ adminEdit ? 'Edit' : 'Update' }} Invitation
-		</h4>
-
-		<hr>
+		<card-header :title="`${adminEdit ? 'Edit' : 'Update'} Invitation`" />
 
 		<div id="guestAccordion" class="accordion">
 			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">

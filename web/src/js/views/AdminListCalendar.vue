@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import CardHeader from 'components/CardHeader.vue';
+
 import API from 'lib/api';
 import { formatDate } from 'lib/formatter';
 
@@ -39,14 +41,7 @@ async function deleteEvent(event) {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Calendar Events
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Calendar Event' }">
-				New Item
-			</router-link>
-		</h4>
+		<card-header title="Calendar Events" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
 		<div class="card-text">
 			<table class="table table-hover mt-1">
 				<thead>

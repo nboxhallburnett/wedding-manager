@@ -2,8 +2,10 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
+
 import API from 'lib/api';
 import { formatDate } from 'lib/formatter';
 
@@ -21,15 +23,7 @@ API(`calendar/${Router.currentRoute.value.params.calendarEventId}`).then(({ resu
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Calendar Event
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Calendar Event', params: $route.params }">
-				Update Calendar Event
-			</router-link>
-		</h4>
-		<hr>
+		<card-header title="Calendar Event" :action="{ text: 'Update Calendar Event', to: { name: 'Admin Edit Calendar Event', params: $route.params } }" />
 		<form-text v-model="item.summary" name="summary" label="Summary" />
 		<form-text v-model="item.description" name="description" label="Description" />
 		<form-item v-if="item.organizer?.email" name="organizer" label="Organizer">

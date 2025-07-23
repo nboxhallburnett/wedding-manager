@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import CardHeader from 'components/CardHeader.vue';
+
 import API from 'lib/api';
 
 /** @type {Ref<Invitation[]>} */
@@ -75,11 +77,8 @@ function invitationStatus(invitation) {
 		reception: []
 	};
 	for (const section of [ 'ceremony', 'reception' ]) {
-		console.log(section);
 		for (let i = 0; i <= 3; i++) {
-			console.log(i);
 			if (stats[section][i]) {
-				console.log(stats[section][i], `${stats[section][i]} ${statusMessages[i]}`);
 				messages[section].push(`${stats[section][i]} ${statusMessages[i]}`);
 			}
 		}
@@ -91,14 +90,7 @@ function invitationStatus(invitation) {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Invitations
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Invitation' }">
-				New Invitation
-			</router-link>
-		</h4>
+		<card-header title="Invitations" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
 		<div class="card-text">
 			<table class="table table-hover mt-1">
 				<thead>

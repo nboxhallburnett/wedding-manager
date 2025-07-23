@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
+import CardHeader from 'components/CardHeader.vue';
+
 import API from 'lib/api';
 
 /** @type {Ref<Boolean>} */
@@ -20,10 +22,7 @@ const source = SOURCE;
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title">
-			About
-		</h4>
-		<hr>
+		<card-header title="About" />
 		<div v-if="content" class="card-text">
 			<vue-showdown :markdown="content" flavor="github" />
 		</div>

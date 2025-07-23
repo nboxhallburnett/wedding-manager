@@ -67,7 +67,6 @@ module.exports = {
 			}
 			if (Object.prototype.hasOwnProperty.call(req.body.location, 'radius')
 				&& (typeof req.body.location.radius !== 'number' || req.body.location.radius < 0)) {
-				console.log(req.body.location.radius)
 				res.status(400);
 				throw new Error('"location.radius" must be a positive Number.');
 			}

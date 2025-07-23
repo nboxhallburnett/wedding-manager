@@ -4,6 +4,8 @@ import 'bootstrap/js/dist/carousel';
 import { ref } from 'vue';
 import Modal from 'bootstrap/js/dist/modal';
 
+import CardHeader from 'components/CardHeader.vue';
+
 const gallerySources = GALLERY_IMAGES;
 
 /** @type {Ref<Element>} */
@@ -22,9 +24,7 @@ function fullscreenImage(evt) {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title mb-3">
-			Gallery
-		</h4>
+		<card-header title="Gallery" />
 		<div class="card-text">
 			<div id="gallery-carousel" class="carousel slide img-thumbnail" data-bs-ride="carousel">
 				<div class="carousel-indicators">

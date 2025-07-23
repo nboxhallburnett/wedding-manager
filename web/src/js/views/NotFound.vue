@@ -2,15 +2,15 @@
 import { RouterLink } from 'vue-router';
 import { inject } from 'vue';
 
+import CardHeader from 'components/CardHeader.vue';
+
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
 </script>
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title">
-			Ruh roh!
-		</h4>
+		<card-header title="Ruh roh!" />
 		<p class="card-text">
 			You seem to be lost.
 		</p>

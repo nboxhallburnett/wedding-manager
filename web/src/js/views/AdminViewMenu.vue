@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 import DietIndicator from 'components/DietIndicator.vue';
@@ -56,15 +57,7 @@ function invitationDisplay(invitation) {
 
 <template>
 	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between">
-			<span>
-				Menu Item
-			</span>
-			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Menu Item', params: $route.params }">
-				Update Menu Item
-			</router-link>
-		</h4>
-		<hr>
+		<card-header title="Menu Item" :action="{ text: 'Update Menu Item', to: { name: 'Admin Edit Menu Item', params: $route.params } }" />
 		<form-item name="title" label="Title">
 			<div class="form-control-plaintext">
 				<span v-text="item.title" />

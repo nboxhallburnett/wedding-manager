@@ -26,15 +26,9 @@ watchEffect(() => {
 			v-bind="$attrs"
 			ref="input"
 			:name="props.name"
-			class="form-control-plaintext"
+			class="form-control-plaintext ws-pre-wrap"
 			v-text="displayValue"
 		/>
 		<slot name="after" />
 	</form-item>
 </template>
-
-<style lang="scss" scoped>
-.form-control-plaintext {
-	white-space: pre-wrap;
-}
-</style>

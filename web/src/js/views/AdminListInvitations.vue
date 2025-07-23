@@ -30,6 +30,63 @@ async function deleteRsvp(invitation) {
 	});
 	loading.value = false;
 }
+
+const statusMessages = [
+	'Pending',
+	'Attending',
+	'Tentative',
+	'Not Attending'
+];
+
+/**
+ * Construct a status message for a given invitation
+ *
+ * @param {Invitation} invitation invitation record
+ * @returns {String}
+ */
+function invitationStatus(invitation) {
+	const stats = {
+		ceremony: [ 0, 0, 0, 0 ],
+		reception: [ 0, 0, 0, 0 ]
+	};
+
+	// We only care about the stats for named guests here, unused +1s don't need to impact the status
+	let namedGuestCount = 0;
+
+	// Loop through the defined guests and make a tally of the named guests status'
+	for (const guest of invitation.guests || []) {
+		if (guest.name) {
+			namedGuestCount++;
+			stats.ceremony[guest.status_ceremony || 0]++;
+			stats.reception[guest.status_reception || 0]++;
+		}
+	}
+
+	// If all the named invitation guests have the same status, mark them with just that
+	for (let i = 0; i <= 3; i++) {
+		if (stats.ceremony[i] === namedGuestCount && stats.reception[i] === namedGuestCount) {
+			return statusMessages[i];
+		}
+	}
+
+	// Otherwise, construct strings for the counts of each status for the ceremony and reception
+	const messages = {
+		ceremony: [],
+		reception: []
+	};
+	for (const section of [ 'ceremony', 'reception' ]) {
+		console.log(section);
+		for (let i = 0; i <= 3; i++) {
+			console.log(i);
+			if (stats[section][i]) {
+				console.log(stats[section][i], `${stats[section][i]} ${statusMessages[i]}`);
+				messages[section].push(`${stats[section][i]} ${statusMessages[i]}`);
+			}
+		}
+	}
+
+	return `Ceremony: ${messages.ceremony.join(', ')}\nReception: ${messages.reception.join(', ')}`;
+}
 </script>
 
 <template>
@@ -56,6 +113,9 @@ async function deleteRsvp(invitation) {
 							Guests
 						</th>
 						<th scope="col">
+							Children
+						</th>
+						<th scope="col">
 							Status
 						</th>
 						<th scope="col" class="text-end">
@@ -71,9 +131,10 @@ async function deleteRsvp(invitation) {
 									{{ item.id }}
 								</router-link>
 							</th>
-							<td v-text="item.guests[0].name" />
-							<td v-text="item.guests.length" />
-							<td v-text="'TODO:'" />
+							<td v-text="item.guests[0].name || '---'" />
+							<td class="text-end" v-text="item.guests.length" />
+							<td class="text-end" v-text="item.children?.length || 0" />
+							<td class="ws-pre-wrap" v-text="invitationStatus(item)" />
 							<td class="text-end py-1 align-middle">
 								<button
 									:id="`invitation-${item.id}-actions`"

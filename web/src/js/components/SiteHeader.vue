@@ -64,7 +64,7 @@ async function logout() {
 					:key="item.text"
 					:to="item.to"
 					class="nav-item nav-link"
-					:class="{ active: $router.currentRoute.value.name === item.to.name }"
+					:class="{ active: $route.name === item.to.name }"
 				>
 					{{ item.text }}
 				</router-link>

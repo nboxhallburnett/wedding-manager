@@ -7,7 +7,7 @@ module.exports = {
 		// Auth success is determined by whether there is a valid admin session
 		return Boolean(req.session.admin);
 	},
-	action: async (req, res) => {
+	action: async (_req, res) => {
 		const [ adultCursor, childCursor ] = await Promise.all([
 			invitationDb.aggregate([
 				// For adult meal stats, we only care about the contents of the guests array

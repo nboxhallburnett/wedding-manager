@@ -3,9 +3,7 @@ import { RouterLink } from 'vue-router';
 
 defineProps({
 	title: { type: String, required: true },
-	action: { type: Object, default: null },
-	// TODO:
-	breadcrumbs: { type: Array, default: () => [] }
+	action: { type: Object, default: null }
 });
 </script>
 

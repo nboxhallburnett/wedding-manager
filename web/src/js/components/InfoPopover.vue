@@ -1,24 +1,29 @@
 <script setup>
 import { usePopover } from 'composables/popover';
 
-defineProps({
-	hint: { type: String, default: '' }
+const props = defineProps({
+	hint: { type: String, default: '' },
+	title: { type: String, default: undefined },
+	opts: { type: Object, default: () => {} }
 });
 
 const { $els } = usePopover({
-	trigger: 'hover focus'
+	trigger: 'hover focus',
+	...props.opts
 });
 </script>
 
 <template>
-	<a
+	<span
 		v-if="hint"
 		:ref="$el => $els.push($el)"
 		:data-bs-content="hint"
-		href="#"
-		class="icon-info align-middle ms-1"
-		@click.prevent
+		:title
 	>
-		<span class="visually-hidden">Info</span>
-	</a>
+		<slot>
+			<a href="#" class="icon-info align-middle ms-1" @click.prevent>
+				<span class="visually-hidden">Info</span>
+			</a>
+		</slot>
+	</span>
 </template>

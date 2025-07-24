@@ -3,6 +3,7 @@ import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import CardHeader from 'components/CardHeader.vue';
+import InfoPopover from 'components/InfoPopover.vue';
 
 import API from 'lib/api';
 
@@ -44,7 +45,7 @@ const statusMessages = [
  * Construct a status message for a given invitation
  *
  * @param {Invitation} invitation invitation record
- * @returns {String}
+ * @returns {{ message: String, class: String }}
  */
 function invitationStatus(invitation) {
 	const stats = {
@@ -64,11 +65,37 @@ function invitationStatus(invitation) {
 		}
 	}
 
-	// If all the named invitation guests have the same status, mark them with just that
+	// We'll want to output two things, the displayed message for the popover, and the class(es) for the indicator badge styling
+	const out = {
+		message: '',
+		class: ''
+	};
+	// Track the displayed status for each part of the event to use for the indicator badge classes
+	let ceremonyStatus = 0;
+	let receptionStatus = 0;
+
+	// Loop through each potential status value
 	for (let i = 0; i <= 3; i++) {
-		if (stats.ceremony[i] === namedGuestCount && stats.reception[i] === namedGuestCount) {
-			return statusMessages[i];
+		// If all the named invitation guests have the same status, mark them with just that
+		if (!out.message && stats.ceremony[i] === namedGuestCount && stats.reception[i] === namedGuestCount) {
+			out.message = `${namedGuestCount} ${statusMessages[i]}`;
+			ceremonyStatus = receptionStatus = i;
+			continue;
 		}
+		// If all the named invitees have this status for the ceremony and/or reception then that
+		// is the one to show for the respective part of the badge
+		if (stats.ceremony[i] === namedGuestCount) {
+			ceremonyStatus = i;
+		}
+		if (stats.reception[i] === namedGuestCount) {
+			receptionStatus = i;
+		}
+	}
+	// Define the classes to use on the badge, we'll have an appropriate value at this point
+	out.class = `start-${ceremonyStatus} end-${receptionStatus}`;
+	// If we have a message already, return now
+	if (out.message) {
+		return out;
 	}
 
 	// Otherwise, construct strings for the counts of each status for the ceremony and reception
@@ -83,8 +110,9 @@ function invitationStatus(invitation) {
 			}
 		}
 	}
+	out.message ||= `Ceremony:<br>${messages.ceremony.join('<br>')}<br><br>Reception:<br>${messages.reception.join('<br>')}`;
 
-	return `Ceremony: ${messages.ceremony.join(', ')}\nReception: ${messages.reception.join(', ')}`;
+	return out;
 }
 </script>
 
@@ -126,7 +154,11 @@ function invitationStatus(invitation) {
 							<td v-text="item.guests[0].name || '---'" />
 							<td class="text-end" v-text="item.guests.length" />
 							<td class="text-end" v-text="item.children?.length || 0" />
-							<td class="ws-pre-wrap" v-text="invitationStatus(item)" />
+							<td class="text-center" :class="invitationStatus(item).class">
+								<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
+									<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
+								</info-popover>
+							</td>
 							<td class="text-end py-1 align-middle">
 								<button
 									:id="`invitation-${item.id}-actions`"
@@ -161,3 +193,36 @@ function invitationStatus(invitation) {
 		</div>
 	</div>
 </template>
+
+<style lang="scss" scoped>
+td {
+	&.start-0 {
+		--start-bg: var(--bs-gray-500);
+	}
+	&.end-0 {
+		--end-bg: var(--bs-gray-500);
+	}
+	&.start-1 {
+		--start-bg: var(--bs-success);
+	}
+	&.end-1 {
+		--end-bg: var(--bs-success);
+	}
+	&.start-2 {
+		--start-bg: var(--bs-info);
+	}
+	&.end-2 {
+		--end-bg: var(--bs-info);
+	}
+	&.start-3 {
+		--start-bg: var(--bs-danger);
+	}
+	&.end-3 {
+		--end-bg: var(--bs-danger);
+	}
+
+	.bg-split-status {
+		background-image: linear-gradient(120deg, var(--start-bg) 50%, var(--end-bg) 50%);
+	}
+}
+</style>

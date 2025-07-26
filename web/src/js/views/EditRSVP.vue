@@ -175,8 +175,15 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<form class="card-body" @submit.prevent="onSubmit">
-		<card-header :title="`${adminEdit ? 'Edit' : 'Update'} Invitation`" />
+	<form @submit.prevent="onSubmit">
+		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'">
+			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: adminEdit ? 'Admin List Invitations' : 'Home' }">
+				Back
+			</router-link>
+			<button class="btn btn-primary btn-sm" type="submit">
+				Submit
+			</button>
+		</card-header>
 
 		<div id="guestAccordion" class="accordion">
 			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">
@@ -222,19 +229,21 @@ function getMenuOptions(course, child) {
 						placeholder="Pending Confirmation"
 						:name="`guest-${idx}-reception`"
 					/>
-					<form-radio
-						v-for="(meal, mealIdx) in mealsMap"
-						:key="`guest-${idx}-${mealIdx}`"
-						v-model="guest[meal.key]"
-						:label="meal.text"
-						:name="`guest-${idx}-${meal.key}`"
-						:options="getMenuOptions(mealIdx, false)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator class="ms-2 align-top" :item />
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
+					<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+						<hr>
+						<form-radio
+							v-model="guest[meal.key]"
+							:label="meal.text"
+							:name="`guest-${idx}-${meal.key}`"
+							:options="getMenuOptions(mealIdx, false)"
+						>
+							<template #after-each="{ item }">
+								<diet-indicator class="ms-2 align-top" :item />
+								<small class="d-block text-muted" v-text="item.description" />
+							</template>
+						</form-radio>
+					</template>
+					<hr>
 					<form-textarea
 						v-model="guest.diet"
 						name="diet"
@@ -242,6 +251,7 @@ function getMenuOptions(course, child) {
 						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 						placeholder="Allergies, health conditions, ethical choices, etc."
 					/>
+					<hr>
 				</div>
 			</div>
 		</div>
@@ -342,15 +352,12 @@ function getMenuOptions(course, child) {
 				/>
 			</template>
 		</form-array>
+		<hr>
 		<form-textarea
 			v-model="invitation.message"
 			name="message"
 			label="Message"
 			placeholder="Leave us a message!"
 		/>
-
-		<button class="btn btn-primary w-100 mt-3" type="submit">
-			Submit
-		</button>
 	</form>
 </template>

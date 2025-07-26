@@ -26,7 +26,7 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<form class="card-body" @submit.prevent="onSubmit">
+	<form @submit.prevent="onSubmit">
 		<card-header title="Manage your Invitation" />
 		<p class="card-text">
 			Enter the Invitation code included on your invitation below.

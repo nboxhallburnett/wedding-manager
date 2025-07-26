@@ -9,13 +9,11 @@ const invitation = inject('invitation');
 </script>
 
 <template>
-	<div class="card-body">
-		<card-header title="Ruh roh!" />
-		<p class="card-text">
-			You seem to be lost.
-		</p>
-		<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
-			Home
-		</RouterLink>
-	</div>
+	<card-header title="Ruh roh!" />
+	<p class="card-text">
+		You seem to be lost.
+	</p>
+	<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
+		Home
+	</RouterLink>
 </template>

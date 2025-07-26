@@ -96,8 +96,15 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<form class="card-body" @submit.prevent="onSubmit">
-		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" />
+	<form @submit.prevent="onSubmit">
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`">
+			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }">
+				Back
+			</router-link>
+			<button class="btn btn-primary btn-sm" type="submit">
+				Submit
+			</button>
+		</card-header>
 		<form-input
 			v-model="item.summary"
 			name="summary"
@@ -208,9 +215,5 @@ const { onSubmit } = useForm({
 				>
 			</div>
 		</form-item>
-
-		<button class="btn btn-primary w-100 mt-3" type="submit">
-			Submit
-		</button>
 	</form>
 </template>

@@ -74,30 +74,28 @@ const tableOpts = {
 </script>
 
 <template>
-	<div class="card-body">
-		<card-header title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" />
-		<div class="card-text">
-			<table-component v-slot="{ item }" :items="menu" v-bind="tableOpts">
-				<th scope="row">
-					<router-link :to="{ name: 'Admin View Menu Item', params: { menuItemId: item.id } }">
-						{{ item.title }}
-					</router-link>
-				</th>
-				<td v-text="courseText[item.course]" />
-				<td v-text="item.child ? 'Child' : 'Adult'" />
-				<td>
-					<diet-indicator :item />
-				</td>
-				<td>
-					<template v-if="!item.child">
-						Full: {{ stats.adult[item.id] || 0 }} |
-						Junior: {{ stats.child[item.id] || 0 }}
-					</template>
-					<template v-else>
-						Child: {{ stats.child[item.id] || 0 }}
-					</template>
-				</td>
-			</table-component>
-		</div>
+	<card-header title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" />
+	<div class="card-text">
+		<table-component v-slot="{ item }" :items="menu" v-bind="tableOpts">
+			<th scope="row">
+				<router-link :to="{ name: 'Admin View Menu Item', params: { menuItemId: item.id } }">
+					{{ item.title }}
+				</router-link>
+			</th>
+			<td v-text="courseText[item.course]" />
+			<td v-text="item.child ? 'Child' : 'Adult'" />
+			<td>
+				<diet-indicator :item />
+			</td>
+			<td>
+				<template v-if="!item.child">
+					Full: {{ stats.adult[item.id] || 0 }} |
+					Junior: {{ stats.child[item.id] || 0 }}
+				</template>
+				<template v-else>
+					Child: {{ stats.child[item.id] || 0 }}
+				</template>
+			</td>
+		</table-component>
 	</div>
 </template>

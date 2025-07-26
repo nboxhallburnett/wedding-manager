@@ -1,5 +1,11 @@
 * {
 	box-sizing: border-box;
+	font-optical-sizing: auto;
+
+	::placeholder {
+		font-style: italic;
+		font-size: 0.9rem;
+	}
 }
 
 html {
@@ -14,4 +20,8 @@ body {
 	background-position: center top;
 	background-attachment: fixed;
 	padding-top: $header-height;
+}
+
+:root {
+	--header-height: #{$header-height};
 }

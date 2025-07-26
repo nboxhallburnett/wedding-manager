@@ -5,7 +5,7 @@ const groom = CONFIG.groom_short;
 
 <template>
 	<div id="welcome-banner" class="text-center d-inline-flex h1 mb-3">
-		<h1 id="site-title" class="text-dark mb-3 pt-4">
+		<h1 id="site-title" class="text-dark mb-3 pt-4 fw-normal">
 			<span class="font-script">Welcome</span> to the wedding of
 			<br>
 			{{ groom }}<span class="font-script px-1">&</span>{{ bride }}

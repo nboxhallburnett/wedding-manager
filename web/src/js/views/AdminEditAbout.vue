@@ -33,30 +33,28 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<div class="card-body">
-		<card-header title="Edit About Page" />
-		<div class="card-text">
-			<h5 v-text="'Content'" />
-			<textarea v-model="content" class="form-control w-100 mb-2" :placeholder="placeholder" />
+	<card-header title="Edit About Page">
+		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
+			Submit
+		</button>
+	</card-header>
+	<div class="card-text">
+		<h5 v-text="'Content'" />
+		<textarea v-model="content" class="form-control w-100 mb-2" :placeholder="placeholder" />
 
-			<h5 v-text="'Preview'" />
-			<div class="card shadow">
-				<div class="card-body">
-					<card-header title="About" />
-					<div class="card-text">
-						<vue-showdown :markdown="content || placeholder" flavor="github" />
-					</div>
-					<hr>
-					<div class="card-text">
-						Source:<br>
-						<a :href="source" v-text="source" />
-					</div>
+		<h5 v-text="'Preview'" />
+		<div class="card shadow">
+			<div class="card-body pt-0">
+				<card-header title="About" class="z-0" />
+				<div class="card-text">
+					<vue-showdown :markdown="content || placeholder" flavor="github" />
+				</div>
+				<hr>
+				<div class="card-text">
+					Source:<br>
+					<a :href="source" v-text="source" />
 				</div>
 			</div>
-
-			<button class="btn btn-primary w-100 mt-3" @click="onSubmit">
-				Save
-			</button>
 		</div>
 	</div>
 </template>

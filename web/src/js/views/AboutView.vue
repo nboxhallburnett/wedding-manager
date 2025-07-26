@@ -17,15 +17,13 @@ useLoader('about', content);
 </script>
 
 <template>
-	<div class="card-body">
-		<card-header title="About" />
-		<div v-if="content" class="card-text">
-			<vue-showdown :markdown="content" flavor="github" />
-		</div>
-		<hr>
-		<div class="card-text">
-			Source:<br>
-			<a :href="source" target="_blank" v-text="source" />
-		</div>
+	<card-header title="About" />
+	<div v-if="content" class="card-text">
+		<vue-showdown :markdown="content" flavor="github" />
+	</div>
+	<hr>
+	<div class="card-text">
+		Source:<br>
+		<a :href="source" target="_blank" v-text="source" />
 	</div>
 </template>

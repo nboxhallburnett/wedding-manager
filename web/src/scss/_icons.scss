@@ -1,3 +1,13 @@
+.badge {
+	&.bg-vegetarian {
+		background-color: shade-color($success, 40%);
+	}
+
+	&.bg-vegan {
+		background-color: shade-color($primary, 30%);
+	}
+}
+
 .icon-caret {
 	box-sizing: content-box;
 	width: 1em;

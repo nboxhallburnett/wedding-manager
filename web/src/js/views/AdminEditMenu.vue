@@ -66,8 +66,15 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<form class="card-body" @submit.prevent="onSubmit">
-		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" />
+	<form @submit.prevent="onSubmit">
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`">
+			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }">
+				Back
+			</router-link>
+			<button class="btn btn-primary btn-sm" type="submit">
+				Submit
+			</button>
+		</card-header>
 		<form-input
 			v-model="item.title"
 			name="title"
@@ -95,8 +102,5 @@ watch(() => item.value.vegan, value => {
 		<form-switch v-model="item.vegan" name="vegan" label="Vegan" />
 		<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />
 		<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten Free" />
-		<button class="btn btn-primary w-100 mt-3" type="submit">
-			Submit
-		</button>
 	</form>
 </template>

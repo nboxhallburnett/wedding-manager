@@ -41,7 +41,9 @@ function welcomeCleanup() {
 
 	<div id="view-container" class="container d-flex justify-content-center">
 		<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
-			<router-view />
+			<div class="card-body pt-0">
+				<router-view />
+			</div>
 		</div>
 	</div>
 

@@ -24,7 +24,7 @@ const { item } = defineProps({
 			v-else-if="item.vegetarian"
 			:ref="$el => $els.push($el)"
 			href="#"
-			class="badge bg-primary text-decoration-none align-top"
+			class="badge bg-vegetarian text-decoration-none align-top"
 			title="Vegetarian"
 			@click.prevent
 			v-text="'V'"

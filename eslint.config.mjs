@@ -11,7 +11,8 @@ export default defineConfig([
 		...globals.browser,
 		'CONFIG': 'readonly',
 		'SOURCE': 'readonly',
-		'GALLERY_IMAGES': 'readonly'
+		'GALLERY_IMAGES': 'readonly',
+		'GALLERY_TEXT': 'readonly'
 	} } },
 	pluginVue.configs['flat/recommended'],
 	{ rules: {

@@ -7,6 +7,7 @@ import Modal from 'bootstrap/js/dist/modal';
 import CardHeader from 'components/CardHeader.vue';
 
 const gallerySources = GALLERY_IMAGES;
+const galleryText = GALLERY_TEXT;
 
 /** @type {Ref<Element>} */
 const modal = ref(null);
@@ -51,6 +52,9 @@ function fullscreenImage(evt) {
 						alt="..."
 						@click="fullscreenImage"
 					>
+					<div v-if="galleryText[idx]" class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 pb-0 mb-3 pt-3">
+						<p v-text="galleryText[idx]" />
+					</div>
 				</div>
 			</div>
 			<button
@@ -101,10 +105,18 @@ function fullscreenImage(evt) {
 </template>
 
 <style lang="scss" scoped>
-.carousel-item img {
-	// max-height: 400px;
-	object-fit: cover;
-	cursor: zoom-in;
+.carousel-item {
+	img {
+		object-fit: cover;
+		cursor: zoom-in;
+	}
+
+	.carousel-caption {
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: auto;
+	}
 }
 
 #modalImage {

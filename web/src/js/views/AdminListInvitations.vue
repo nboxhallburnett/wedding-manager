@@ -7,6 +7,7 @@ import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 import InfoPopover from 'components/InfoPopover.vue';
+import TableComponent from 'components/TableComponent.vue';
 
 /** @type {Ref<Invitation[]>} */
 const invitations = ref([]);
@@ -31,6 +32,27 @@ const { onSubmit: deleteInvitation } = useForm({
 		useLoader('invitation', invitations);
 	}
 });
+
+const tableOpts = {
+	columns: [
+		{ id: 'id', text: 'Invitation ID' },
+		{ id: 'name', text: 'Name' },
+		{ id: 'guests', text: 'Guests' },
+		{ id: 'children', text: 'Children' },
+		{ id: 'status', text: 'Status' }
+	],
+	actions(item) {
+		if (!item.id) {
+			return [];
+		}
+		return [
+			{ text: 'View', onClick: () => console.log(item) },
+			{ text: 'Edit', to: { name: 'Admin Edit Invitation', params: { invitationId: item.id } } },
+			{ divider: true },
+			{ text: 'Delete', onClick: () => deleteInvitation(item), class: 'text-danger' }
+		];
+	}
+};
 
 const statusMessages = [
 	'Pending',
@@ -118,76 +140,21 @@ function invitationStatus(invitation) {
 	<div class="card-body">
 		<card-header title="Invitations" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
 		<div class="card-text">
-			<table class="table table-hover mt-1">
-				<thead>
-					<tr>
-						<th scope="col">
-							Invitation ID
-						</th>
-						<th scope="col">
-							Name
-						</th>
-						<th scope="col">
-							Guests
-						</th>
-						<th scope="col">
-							Children
-						</th>
-						<th scope="col">
-							Status
-						</th>
-						<th scope="col" class="text-end">
-							Actions
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<template v-for="item in invitations" :key="item.id">
-						<tr v-if="item.guests?.length">
-							<th scope="row" class="font-monospace">
-								<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
-									{{ item.id }}
-								</router-link>
-							</th>
-							<td v-text="item.guests[0].name || '---'" />
-							<td class="text-end" v-text="item.guests.length" />
-							<td class="text-end" v-text="item.children?.length || 0" />
-							<td class="text-center" :class="invitationStatus(item).class">
-								<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
-									<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
-								</info-popover>
-							</td>
-							<td class="text-end py-1 align-middle">
-								<button
-									:id="`invitation-${item.id}-actions`"
-									class="icon-caret fs-4 p-0"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								/>
-								<ul class="dropdown-menu" :aria-labelledby="`invitation-${item.id}-actions`">
-									<li>
-										<button class="dropdown-item" type="button">
-											View
-										</button>
-									</li>
-									<li>
-										<router-link class="dropdown-item" :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
-											Edit
-										</router-link>
-									</li>
-									<li><hr class="dropdown-divider"></li>
-									<li>
-										<button class="dropdown-item text-danger" type="button" @click="deleteInvitation(item)">
-											Delete
-										</button>
-									</li>
-								</ul>
-							</td>
-						</tr>
-					</template>
-				</tbody>
-			</table>
+			<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
+				<th scope="row" class="font-monospace">
+					<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
+						{{ item.id }}
+					</router-link>
+				</th>
+				<td v-text="item.guests?.[0]?.name || '---'" />
+				<td class="text-end" v-text="item.guests?.length || 0" />
+				<td class="text-end" v-text="item.children?.length || 0" />
+				<td class="text-center" :class="invitationStatus(item).class">
+					<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
+						<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
+					</info-popover>
+				</td>
+			</table-component>
 		</div>
 	</div>
 </template>

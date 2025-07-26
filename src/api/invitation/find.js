@@ -13,7 +13,7 @@ module.exports = {
 		return Boolean(req.session.admin);
 	},
 	action: async (req, res) => {
-		const filter = {};
+		const filter = { admin: { $ne: true } };
 		const projection = { _id: 0 };
 
 		// If a menu item is being queried, query across all item props for guests and children

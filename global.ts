@@ -25,24 +25,28 @@ type Invitation = {
 		status_ceremony: keyof AttendanceStatus,
 		/** Attendance confirmation of the guest for the wedding reception. */
 		status_reception: keyof AttendanceStatus,
+		/** Dietary requirement for the guest. Used if the defined menu does not cover their specific requirements */
+		diet: String,
 		/** ID of the menu item the guest has selected for their starter */
-		starter_id: MenuItem['id'],
+		starter_id: MenuItem['id'] | 'other',
 		/** ID of the menu item the guest has selected for their main course */
-		main_id: MenuItem['id'],
+		main_id: MenuItem['id'] | 'other',
 		/** ID of the menu item the guest has selected for their dessert */
-		dessert_id: MenuItem['id']
+		dessert_id: MenuItem['id'] | 'other'
 	}[],
 	children: {
 		/** Name of the child */
 		name: String,
 		/** Age of the child */
 		age: Number,
+		/** Dietary requirement for the child. Used if the defined menu does not cover their specific requirements */
+		diet: String,
 		/** ID of the menu item the child has selected for their starter */
-		starter_id: MenuItem['id'],
+		starter_id: MenuItem['id'] | 'other',
 		/** ID of the menu item the child has selected for their main course */
-		main_id: MenuItem['id'],
+		main_id: MenuItem['id'] | 'other',
 		/** ID of the menu item the child has selected for their dessert */
-		dessert_id: MenuItem['id']
+		dessert_id: MenuItem['id'] | 'other'
 	}[],
 	/** Message from the Invitation recipient(s) */
 	message: String,

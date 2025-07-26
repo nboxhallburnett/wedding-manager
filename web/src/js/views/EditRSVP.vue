@@ -35,9 +35,19 @@ if (session.value.admin) {
 	statusOptions.unshift({ text: 'Pending', value: 0 });
 }
 
+// Define a map of the different menu items to be captured on the form
+const mealsMap = [
+	{ text: 'Starter', key: 'starter_id' },
+	{ text: 'Main Course', key: 'main_id' },
+	{ text: 'Dessert', key: 'dessert_id' }
+];
+
 // Define var to track whether the component is used for the admin edit vs the user edit
 const adminEdit = Router.currentRoute.value.name === 'Admin Edit Invitation';
 
+/**
+ * Add a new guest to the invitation
+ */
 function addGuest() {
 	invitation.value.guests.push({
 		name: '',
@@ -45,9 +55,18 @@ function addGuest() {
 		status_reception: 0
 	});
 }
+/**
+ * Remove a guest from the invitation
+ *
+ * @param {Number} idx Index of the guest to remove
+ */
 function removeGuest(idx) {
 	invitation.value.guests.splice(idx, 1);
 }
+
+/**
+ * Add a child to the invitation
+ */
 function addChild() {
 	invitation.value.children.push({
 		name: ''
@@ -56,10 +75,18 @@ function addChild() {
 		document.getElementById(`child-${invitation.value.children.length - 1}-name`)?.focus();
 	});
 }
+/**
+ * Remove a child from the invitation
+ *
+ * @param {Number} idx Index of the child to remove
+ */
 function removeChild(idx) {
 	invitation.value.children.splice(idx, 1);
 }
 
+/**
+ * Add a new item to the invitation's song capture array
+ */
 function addSong() {
 	invitation.value.songs.push('');
 	nextTick(() => {
@@ -67,8 +94,15 @@ function addSong() {
 	});
 }
 
+/**
+ * Build the set of available menu items for a given course and guest type
+ *
+ * @param {0|1|2} course Course of the menu items to return
+ * @param {Boolean} child Whether to include items from the children's menu
+ */
 function getMenuOptions(course, child) {
 	const items = [];
+	// Loop through the set of fetched menu items
 	for (const item of menu.value) {
 		// Unfortunately inly children can have items from the children's menu
 		if (item.child && !child) {
@@ -79,6 +113,14 @@ function getMenuOptions(course, child) {
 			items.push({ value: item.id, text: item.title, item });
 		}
 	}
+	// Add the 'Other' option at the end of the list
+	items.push({
+		value: 'other',
+		text: 'Other',
+		item: {
+			description: 'If you have specific dietary requirements not covered by the available menu options, please let us know below.'
+		}
+	});
 	return items;
 }
 
@@ -105,6 +147,7 @@ async function onSubmit() {
 	Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
 }
 
+// Fetch the required data for the form
 loading.value = true;
 Promise.all([
 	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
@@ -158,11 +201,7 @@ Promise.all([
 					data-bs-parent="#guestAccordion"
 					:class="{ show: idx === 0 }"
 				>
-					<form-input
-						v-model="guest.name"
-						label="Name"
-						:name="`guest-${idx}-name`"
-					/>
+					<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
 					<form-select
 						v-model="guest.status_ceremony"
 						label="Ceremony"
@@ -180,53 +219,25 @@ Promise.all([
 						:name="`guest-${idx}-reception`"
 					/>
 					<form-radio
-						v-model="guest.starter_id"
-						label="Starter"
-						:name="`guest-${idx}-starter`"
-						:options="getMenuOptions(0, false)"
+						v-for="(meal, mealIdx) in mealsMap"
+						:key="`guest-${idx}-${mealIdx}`"
+						v-model="guest[meal.key]"
+						:label="meal.text"
+						:name="`guest-${idx}-${meal.key}`"
+						:options="getMenuOptions(mealIdx, false)"
 					>
 						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
+							<diet-indicator class="ms-2 align-top" :item />
 							<small class="d-block text-muted" v-text="item.description" />
 						</template>
 					</form-radio>
-					<form-radio
-						v-model="guest.main_id"
-						label="Main Course"
-						:name="`guest-${idx}-main`"
-						:options="getMenuOptions(1, false)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
-					<form-radio
-						v-model="guest.dessert_id"
-						label="Dessert"
-						:name="`guest-${idx}-dessert`"
-						:options="getMenuOptions(2, false)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
+					<form-textarea
+						v-model="guest.diet"
+						name="diet"
+						label="Dietary Requirement"
+						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+						placeholder="Allergies, health conditions, ethical choices, etc."
+					/>
 				</div>
 			</div>
 		</div>
@@ -235,9 +246,8 @@ Promise.all([
 			class="btn btn-primary"
 			type="button"
 			@click="addGuest"
-		>
-			Add +1
-		</button>
+			v-text="'Add +1'"
+		/>
 
 		<hr>
 
@@ -277,53 +287,25 @@ Promise.all([
 						:name="`child-${idx}-age`"
 					/>
 					<form-radio
-						v-model="child.starter_id"
-						label="Starter"
-						:name="`child-${idx}-starter`"
-						:options="getMenuOptions(0, true)"
+						v-for="(meal, mealIdx) in mealsMap"
+						:key="`child-${idx}-${mealIdx}`"
+						v-model="child[meal.key]"
+						:label="meal.text"
+						:name="`child-${idx}-${meal.key}`"
+						:options="getMenuOptions(mealIdx, true)"
 					>
 						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
+							<diet-indicator class="ms-2 align-top" :item />
 							<small class="d-block text-muted" v-text="item.description" />
 						</template>
 					</form-radio>
-					<form-radio
-						v-model="child.main_id"
-						label="Main Course"
-						:name="`child-${idx}-main`"
-						:options="getMenuOptions(1, true)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
-					<form-radio
-						v-model="child.dessert_id"
-						label="Dessert"
-						:name="`child-${idx}-dessert`"
-						:options="getMenuOptions(2, true)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator
-								class="ms-2 align-top"
-								:vegan="item.vegan"
-								:vegetarian="item.vegetarian"
-								:gluten-free="item.gluten_free"
-							/>
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
+					<form-textarea
+						v-model="child.diet"
+						name="diet"
+						label="Dietary Requirement"
+						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+						placeholder="Allergies, health conditions, ethical choices, etc."
+					/>
 				</div>
 			</div>
 		</div>
@@ -332,9 +314,8 @@ Promise.all([
 			class="btn btn-primary"
 			type="button"
 			@click="addChild"
-		>
-			Add Child
-		</button>
+			v-text="'Add Child'"
+		/>
 
 		<hr>
 
@@ -353,9 +334,8 @@ Promise.all([
 					:disabled="invitation.songs?.length === 5"
 					type="button"
 					@click="addSong"
-				>
-					Add Suggestion
-				</button>
+					v-text="'Add Suggestion'"
+				/>
 			</template>
 		</form-array>
 		<form-textarea

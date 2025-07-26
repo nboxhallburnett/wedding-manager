@@ -79,7 +79,7 @@ async function deleteItem(menuItem) {
 							<td v-text="courseText[item.course]" />
 							<td v-text="item.child ? 'Child' : 'Adult'" />
 							<td>
-								<diet-indicator :vegan="item.vegan" :vegetarian="item.vegetarian" :gluten-free="item.gluten_free" />
+								<diet-indicator :item />
 							</td>
 							<td>
 								<template v-if="!item.child">

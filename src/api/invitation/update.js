@@ -39,6 +39,7 @@ module.exports = {
 					updatedGuest.starter_id = undefined;
 					updatedGuest.main_id = undefined;
 					updatedGuest.dessert_id = undefined;
+					updatedGuest.diet = undefined;
 					guests.push(updatedGuest);
 					continue;
 				}
@@ -76,10 +77,21 @@ module.exports = {
 					updatedGuest.status_reception = guest.status_reception;
 				}
 
+				if (Object.prototype.hasOwnProperty.call(guest, 'diet')) {
+					// Verify the status contained a valid value
+					if (typeof guest.diet !== 'string') {
+						res.status(400);
+						throw new Error(`"guests[${idx}].diet" contained an invalid value: Unsupported value: "${guest.name}"`);
+					}
+
+					// Update the verified updated dietary requirement value
+					updatedGuest.diet = guest.diet;
+				}
+
 				for (const prop of menuItemProps) {
 					if (Object.prototype.hasOwnProperty.call(guest, prop)) {
 						// Verify the menu item contained a valid value
-						const isValidMenuItem = await menuItemDb
+						const isValidMenuItem = guest[prop] === 'other' || await menuItemDb
 							.find({ id: guest[prop], child: false })
 							.limit(-1)
 							.batchSize(1)
@@ -88,6 +100,12 @@ module.exports = {
 						if (!isValidMenuItem) {
 							res.status(400);
 							throw new Error(`"guests[${idx}].${prop}" contained an invalid value: Unknown menu item: "${guest[prop]}"`);
+						}
+
+						// If the guest selected 'Other' for their meal, verify they specified their dietary requirements
+						if (guest[prop] === 'other' && !updatedGuest.diet) {
+							res.status(400);
+							throw new Error(`"guests[${idx}].${prop}" contained an invalid value: A dietary requirement must be specified if "Other" is selected for a meal`);
 						}
 
 						// Update the verified updated status value
@@ -148,7 +166,7 @@ module.exports = {
 				for (const prop of menuItemProps) {
 					if (Object.prototype.hasOwnProperty.call(child, prop)) {
 						// Verify the menu item contained a valid value
-						const isValidMenuItem = await menuItemDb
+						const isValidMenuItem = child[prop] === 'other'|| await menuItemDb
 							.find({ id: child[prop] })
 							.limit(-1)
 							.batchSize(1)
@@ -157,6 +175,12 @@ module.exports = {
 						if (!isValidMenuItem) {
 							res.status(400);
 							throw new Error(`"children[${idx}].${prop}" contained an invalid value: Unknown menu item: "${child[prop]}"`);
+						}
+
+						// If the child selected 'Other' for their meal, verify they specified their dietary requirements
+						if (child[prop] === 'other' && !updatedChild.diet) {
+							res.status(400);
+							throw new Error(`"children[${idx}].${prop}" contained an invalid value: A dietary requirement must be specified if "Other" is selected for a meal`);
 						}
 
 						// Update the verified updated status value

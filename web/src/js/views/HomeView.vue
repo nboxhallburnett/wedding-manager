@@ -57,7 +57,7 @@ const calendarLink = `webcal://${document.location.host}/api/calendar.ics`;
 			name="message"
 		/>
 		<form-text
-			v-if="invitation.songs?.length"
+			v-if="invitation.songs?.filter(Boolean).length"
 			v-model="invitation.songs"
 			label="Song Suggestions"
 			name="songs"

@@ -28,14 +28,14 @@ module.exports = {
 		// If the item is not on the children's menu, then remove it as a selected item from any adult guests
 		if (!item.child) {
 			await invitationDb.updateMany(
-				{},
+				{ guests: { $exists: true, $ne: [] } },
 				{ $set: { [`guests.$[guest].${fieldMap[item.course]}`]: '' } },
 				{ arrayFilters: [ { [`guest.${fieldMap[item.course]}`]: item.id } ] }
 			);
 		}
 		// Always remove the item from children that have it selected as they can use either menu
 		await invitationDb.updateMany(
-			{},
+			{ children: { $exists: true, $ne: [] } },
 			{ $set: { [`children.$[child].${fieldMap[item.course]}`]: '' } },
 			{ arrayFilters: [ { [`child.${fieldMap[item.course]}`]: item.id } ] }
 		);

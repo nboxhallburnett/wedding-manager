@@ -61,13 +61,7 @@ function invitationDisplay(invitation) {
 		<form-item name="title" label="Title">
 			<div class="form-control-plaintext">
 				<span v-text="item.title" />
-				<diet-indicator
-					v-if="!loading"
-					class="ms-2"
-					:vegan="item.vegan"
-					:vegetarian="item.vegetarian"
-					:gluten-free="item.gluten_free"
-				/>
+				<diet-indicator v-if="!loading" class="ms-2" :item />
 			</div>
 		</form-item>
 		<form-text

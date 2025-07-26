@@ -2,40 +2,34 @@
 import { inject, ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
-import CardHeader from 'components/CardHeader.vue';
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
 
-import API from 'lib/api';
+import CardHeader from 'components/CardHeader.vue';
 
 const source = SOURCE;
 
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 /** @type {Ref<String>} */
 const content = ref('');
 
 const placeholder = 'Add About page content here.';
 
-loading.value = true;
-API('about').then(({ result }) => {
-	content.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
+// Fetch the about content from the API
+useLoader('about', content);
 
-
-async function onSubmit() {
-	loading.value = true;
-	await API('about', {
-		method: 'PUT',
-		body: { content }
-	});
-	addToast({
-		title: 'About content Updated',
-		body: 'About page content successfully saved.'
-	});
-	loading.value = false;
-}
+const { onSubmit } = useForm({
+	path: 'about',
+	method: 'PUT',
+	body: { content },
+	onSuccess() {
+		addToast({
+			title: 'About content Updated',
+			body: 'About page content successfully saved.'
+		});
+	}
+});
 </script>
 
 <template>

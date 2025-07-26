@@ -1,23 +1,19 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
+
+import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 
-import API from 'lib/api';
+// The source code's repository, set from webpack
+const source = SOURCE;
 
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 /** @type {Ref<String>} */
 const content = ref('');
 
-loading.value = true;
-API('about').then(({ result }) => {
-	content.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
-
-const source = SOURCE;
+// Fetch the about content from the API
+useLoader('about', content);
 </script>
 
 <template>

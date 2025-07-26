@@ -2,47 +2,51 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import { useForm } from 'composables/form';
+
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 
-import API from 'lib/api';
-
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 const guests = ref([ { name: '', status: 0 } ]);
 
+const { onSubmit } = useForm({
+	path: 'invitation',
+	method: 'POST',
+	body: { guests },
+	onSuccess(_data, _response, another) {
+		const guestMsg = guests.value[0].name
+			? `${guests.value[0].name}${guests.value.length > 1 ? ` & ${guests.value.length - 1} other guest${guests.value.length > 2 ? 's' : ''}` : ''}`
+			: `${guests.value.length} guest${guests.value.length > 1 ? 's' : ''}`;
+		addToast({
+			title: 'Invitation Created',
+			body: `Invitation for "${guestMsg}" successfully created.`
+		});
+		if (another === true) {
+			guests.value = [ { name: '', status: 0 } ];
+		} else {
+			Router.push({ name: 'Admin List Invitations' });
+		}
+	}
+});
+
+/**
+ * Add a new guest to the invitation
+ */
 function addGuest() {
 	guests.value.push({
 		name: '',
 		status: 0
 	});
 }
-
-function removeItem(idx) {
+/**
+ * Remove a guest from the invitation
+ *
+ * @param {Number} idx Index of the guest to remove
+ */
+function removeGuest(idx) {
   	guests.value.splice(idx, 1);
-}
-
-async function onSubmit(another) {
-	loading.value = true;
-	await API('invitation', {
-		method: 'POST',
-		body: { guests }
-	});
-	const guestMsg = guests.value[0].name
-		? `${guests.value[0].name}${guests.value.length > 1 ? ` & ${guests.value.length - 1} other guest${guests.value.length > 2 ? 's' : ''}` : ''}`
-		: `${guests.value.length} guest${guests.value.length > 1 ? 's' : ''}`;
-	addToast({
-		title: 'Invitation Created',
-		body: `Invitation for "${guestMsg}" successfully created.`
-	});
-	loading.value = false;
-	if (another === true) {
-		guests.value = [ { name: '', status: 0 } ];
-	} else {
-		Router.push({ name: 'Admin List Invitations' });
-	}
 }
 </script>
 
@@ -53,7 +57,7 @@ async function onSubmit(another) {
 			<hr v-if="idx">
 			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
 				<template v-if="idx" #after>
-					<button type="button" class="btn btn-danger" @click="removeItem(idx)">
+					<button type="button" class="btn btn-danger" @click="removeGuest(idx)">
 						Remove
 					</button>
 				</template>

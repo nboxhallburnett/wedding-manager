@@ -2,18 +2,18 @@
 import { inject, ref, watch } from 'vue';
 import Router from 'router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 import FormSwitch from 'components/form/FormSwitch.vue';
 
-import API from 'lib/api';
-
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
+
 const item = ref({
 	child: false,
 	course: 0,
@@ -39,12 +39,23 @@ const menuOptions = [
 const isNew = Router.currentRoute.value.name.includes('Create');
 
 if (!isNew) {
-	loading.value = true;
-	API(`menu/${Router.currentRoute.value.params.menuItemId}`).then(({ result }) => {
-		item.value = result.data;
-		loading.value = false;
-	}).catch(() => loading.value = false);
+	useLoader(`menu/${Router.currentRoute.value.params.menuItemId}`, item);
 }
+
+const { onSubmit } = useForm({
+	method: () => isNew ? 'POST' : 'PUT',
+	path: () => isNew ? 'calendar' : `calendar/${item.value.id}`,
+	body: item,
+	onSuccess() {
+		addToast({
+			title: `Menu Item ${isNew ? 'Created' : 'Updated'}`,
+			body: isNew
+				? `Menu Item "${item.value.title}" successfully created.`
+				: `Menu Item "${item.value.title}" successfully updated.`
+		});
+		Router.push({ name: 'Admin List Menu Items' });
+	}
+});
 
 watch(() => item.value.vegan, value => {
 	// If an item is vegan, it is also vegetarian
@@ -52,29 +63,6 @@ watch(() => item.value.vegan, value => {
 		item.value.vegetarian = true;
 	}
 });
-
-async function onSubmit() {
-	loading.value = true;
-	if (isNew) {
-		await API('menu', {
-			method: 'POST',
-			body: item
-		});
-	} else {
-		await API(`menu/${item.value.id}`, {
-			method: 'PUT',
-			body: item
-		});
-	}
-	addToast({
-		title: `Menu Item ${isNew ? 'Created' : 'Updated'}`,
-		body: isNew
-			? `Menu Item "${item.value.title}" successfully created.`
-			: `Menu Item "${item.value.title}" successfully updated.`
-	});
-	loading.value = false;
-	Router.push({ name: 'Admin List Menu Items' });
-}
 </script>
 
 <template>

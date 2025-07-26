@@ -2,32 +2,27 @@
 import { inject } from 'vue';
 import Router from 'router';
 
+import { useForm } from 'composables/form';
+
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 
-import API from 'lib/api';
-
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 const invitationId = defineModel({ type: String });
 
-async function onSubmit() {
-	loading.value = true;
-	const response = await API('session', {
-		method: 'POST',
-		body: { invitationId }
-	});
-	if (response.status === 200) {
-		invitation.value = response.result.data;
+const { onSubmit } = useForm({
+	method: 'POST',
+	path: 'session',
+	body: { invitationId },
+	onSuccess({ data }) {
+		invitation.value = data;
 		Router.replace(invitation.value.admin
 			? { name: 'Admin Overview' }
 			: { name: 'Home' }
 		);
 	}
-	loading.value = false;
-}
+});
 </script>
 
 <template>

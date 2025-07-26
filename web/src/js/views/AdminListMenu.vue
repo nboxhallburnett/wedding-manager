@@ -2,43 +2,36 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 
-import API from 'lib/api';
-
 /** @type {Ref<MenuItem[]>} */
 const menu = ref([]);
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
+
 /** @type {AddToast} */
 const addToast = inject('addToast');
-const stats = ref({ adult: {}, child: {} });
 
+const stats = ref({ adult: {}, child: {} });
 const courseText = [ 'Starter', 'Main', 'Dessert' ];
 
-loading.value = true;
-Promise.all([
-	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
-	API('menu'),
-	API('admin/stats/menu')
-]).then(([ menuResult, menuStats ]) => {
-	menu.value = menuResult.result.data;
-	stats.value.adult = menuStats.result.data.adult;
-	stats.value.child = menuStats.result.data.child;
-	loading.value = false;
-}).catch(() => loading.value = false);
+// Fetch the menu and the associated stats
+useLoader([ 'menu', 'admin/stats/menu' ], [ menu, stats ]);
 
-async function deleteItem(menuItem) {
-	loading.value = true;
-	await API(`menu/${menuItem.id}`, { method: 'delete' });
-	menu.value = await API('menu').then(({ result }) => result.data);
-	addToast({
-		title: 'Menu Item Removed',
-		body: `Menu item "${menuItem.title}" (${menuItem.id}) successfully removed.`
-	});
-	loading.value = false;
-}
+const { onSubmit: deleteItem } = useForm({
+	method: 'DELETE',
+	path: menuItem => `menu/${menuItem.id}`,
+	onSuccess(_data, _response, menuItem) {
+		addToast({
+			title: 'Menu Item Removed',
+			body: `Menu item "${menuItem.title}" (${menuItem.id}) successfully removed.`
+		});
+		// Refetch the menu items for the table
+		useLoader('menu', menu);
+	}
+});
 </script>
 
 <template>

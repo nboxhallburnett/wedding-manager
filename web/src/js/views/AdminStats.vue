@@ -1,12 +1,10 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { ref } from 'vue';
+
+import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 
-import API from 'lib/api';
-
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 const stats = ref({
 	status_ceremony: {},
 	status_reception: {},
@@ -36,11 +34,7 @@ const countMap = [
 ];
 
 // Fetch the list of events
-loading.value = true;
-API('admin/stats/invitations').then(({ result }) => {
-	stats.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
+useLoader('admin/stats/invitations', stats);
 
 </script>
 

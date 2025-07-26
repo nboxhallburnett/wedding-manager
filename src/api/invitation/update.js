@@ -89,7 +89,7 @@ module.exports = {
 				}
 
 				for (const prop of menuItemProps) {
-					if (Object.prototype.hasOwnProperty.call(guest, prop)) {
+					if (guest[prop]) {
 						// Verify the menu item contained a valid value
 						const isValidMenuItem = guest[prop] === 'other' || await menuItemDb
 							.find({ id: guest[prop], child: false })
@@ -164,7 +164,7 @@ module.exports = {
 				}
 
 				for (const prop of menuItemProps) {
-					if (Object.prototype.hasOwnProperty.call(child, prop)) {
+					if (child[prop]) {
 						// Verify the menu item contained a valid value
 						const isValidMenuItem = child[prop] === 'other'|| await menuItemDb
 							.find({ id: child[prop] })

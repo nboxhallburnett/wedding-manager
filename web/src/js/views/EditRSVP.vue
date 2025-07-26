@@ -4,6 +4,9 @@ import 'bootstrap/js/dist/collapse';
 import { inject, ref, nextTick, useTemplateRef } from 'vue';
 import Router from 'router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import FormArray from 'components/form/FormArray.vue';
@@ -17,8 +20,6 @@ import API from 'lib/api';
 const session = inject('invitation');
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 /** @type {Ref<Invitation>} */
 const invitation = ref({});
 /** @type {Ref<MenuItem[]>} */
@@ -44,6 +45,54 @@ const mealsMap = [
 
 // Define var to track whether the component is used for the admin edit vs the user edit
 const adminEdit = Router.currentRoute.value.name === 'Admin Edit Invitation';
+
+const { onSubmit } = useForm({
+	path: () => `invitation/${invitation.value.id}`,
+	method: 'PUT',
+	body: invitation,
+	onSuccess() {
+		const guestMsg = invitation.value.guests[0].name
+			? `${invitation.value.guests[0].name}${invitation.value.guests.length > 1 ? ` & ${invitation.value.guests.length - 1} other guest${invitation.value.guests.length > 2 ? 's' : ''}` : ''}`
+			: `${invitation.value.guests.length} guest${invitation.value.guests.length > 1 ? 's' : ''}`;
+		addToast({
+			title: 'Invitation Updated',
+			body: adminEdit
+				? `Invitation for "${guestMsg}" successfully updated.`
+				: 'Invitation updated successfully. Thank you!'
+		});
+		// If this is the invitee updating their RSVP then update the session with their changes
+		if (!adminEdit) {
+			session.value = invitation.value;
+		}
+		Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
+	},
+	onError(data) {
+		addToast({
+			title: 'Error Updating Invitation',
+			body: data.description
+		});
+	}
+});
+
+// Fetch the required data for the form
+useLoader([
+	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
+	adminEdit ? API(`invitation/${Router.currentRoute.value.params.invitationId}`) : { result: { data: session.value } },
+	API('menu')
+], ([ invitationResult, menuResult ]) => {
+	invitation.value = invitationResult.result.data;
+	menu.value = menuResult.result.data;
+	// Ensure we have songs and children arrays to access
+	if (!invitation.value.songs?.length) {
+		invitation.value.songs = [ '' ];
+	}
+	if (!invitation.value.guests?.length) {
+		invitation.value.guests = [];
+	}
+	if (!invitation.value.children?.length) {
+		invitation.value.children = [];
+	}
+});
 
 /**
  * Add a new guest to the invitation
@@ -123,51 +172,6 @@ function getMenuOptions(course, child) {
 	});
 	return items;
 }
-
-async function onSubmit() {
-	loading.value = true;
-	await API(`invitation/${invitation.value.id}`, {
-		method: 'PUT',
-		body: invitation
-	});
-	const guestMsg = invitation.value.guests[0].name
-		? `${invitation.value.guests[0].name}${invitation.value.guests.length > 1 ? ` & ${invitation.value.guests.length - 1} other guest${invitation.value.guests.length > 2 ? 's' : ''}` : ''}`
-		: `${invitation.value.guests.length} guest${invitation.value.guests.length > 1 ? 's' : ''}`;
-	addToast({
-		title: 'Invitation Updated',
-		body: adminEdit
-			? `Invitation for "${guestMsg}" successfully updated.`
-			: 'Invitation updated successfully. Thank you!'
-	});
-	// If this is the invitee updating their RSVP then update the session with their changes
-	if (!adminEdit) {
-		session.value = invitation.value;
-	}
-	loading.value = false;
-	Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
-}
-
-// Fetch the required data for the form
-loading.value = true;
-Promise.all([
-	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
-	adminEdit ? API(`invitation/${Router.currentRoute.value.params.invitationId}`) : { result: { data: session.value } },
-	API('menu')
-]).then(([ invitationResult, menuResult ]) => {
-	invitation.value = invitationResult.result.data;
-	menu.value = menuResult.result.data;
-	// Ensure we have songs and children arrays to access
-	if (!invitation.value.songs?.length) {
-		invitation.value.songs = [ '' ];
-	}
-	if (!invitation.value.guests?.length) {
-		invitation.value.guests = [];
-	}
-	if (!invitation.value.children?.length) {
-		invitation.value.children = [];
-	}
-	loading.value = false;
-});
 </script>
 
 <template>

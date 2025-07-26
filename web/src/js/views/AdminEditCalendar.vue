@@ -2,17 +2,18 @@
 import { inject, ref, nextTick } from 'vue';
 import Router from 'router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 import FormSwitch from 'components/form/FormSwitch.vue';
-import API from 'lib/api';
 
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
+
 /** @type {Ref<CalendarEvent>} */
 const item = ref({
 	allDay: false,
@@ -40,8 +41,7 @@ const item = ref({
 const isNew = Router.currentRoute.value.name.includes('Create');
 
 if (!isNew) {
-	loading.value = true;
-	API(`calendar/${Router.currentRoute.value.params.calendarEventId}`).then(({ result }) => {
+	useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, ([ { result } ]) => {
 		// `date` and `datetime-local` inputs are very specific about their
 		// allowed formats, so generate their values from the returned dates
 		const start = result.data.start
@@ -56,7 +56,6 @@ if (!isNew) {
 		delete result.data.end;
 
 		item.value = result.data;
-		loading.value = false;
 
 		// The input type can have issues with the value binding correctly on load,
 		// so wait for vue to propagate the DOM change and manually set their values
@@ -65,40 +64,35 @@ if (!isNew) {
 			item.value.start = start;
 			item.value.end = end;
 		});
-	}).catch(() => loading.value = false);
+	});
 }
 
-async function onSubmit() {
-	loading.value = true;
-	item.value.location.radius = Number(item.value.location.radius) >= 0
-		? Number(item.value.location.radius)
-		: undefined;
-	item.value.location.geo.lat = Number(item.value.location.geo.lat) >= 0
-		? Number(item.value.location.geo.lat)
-		: undefined;
-	item.value.location.geo.lon = Number(item.value.location.geo.lon) >= 0
-		? Number(item.value.location.geo.lon)
-		: undefined;
-	if (isNew) {
-		await API('calendar', {
-			method: 'POST',
-			body: item
+const { onSubmit } = useForm({
+	method: () => isNew ? 'POST' : 'PUT',
+	path: () => isNew ? 'calendar' : `calendar/${item.value.id}`,
+	body() {
+		// ical files are specific about radius/lat/lon values so ensure we only send valid values for them
+		item.value.location.radius = Number(item.value.location.radius) >= 0
+			? Number(item.value.location.radius)
+			: undefined;
+		item.value.location.geo.lat = Number(item.value.location.geo.lat) >= 0
+			? Number(item.value.location.geo.lat)
+			: undefined;
+		item.value.location.geo.lon = Number(item.value.location.geo.lon) >= 0
+			? Number(item.value.location.geo.lon)
+			: undefined;
+		return item;
+	},
+	onSuccess() {
+		addToast({
+			title: `Calendar Event ${isNew ? 'Created' : 'Updated'}`,
+			body: isNew
+				? `Calendar Event "${item.value.summary}" successfully created.`
+				: `Calendar Event "${item.value.summary}" successfully updated.`
 		});
-	} else {
-		await API(`calendar/${item.value.id}`, {
-			method: 'PUT',
-			body: item
-		});
+		Router.push({ name: 'Admin List Calendar Events' });
 	}
-	addToast({
-		title: `Calendar Event ${isNew ? 'Created' : 'Updated'}`,
-		body: isNew
-			? `Calendar Event "${item.value.summary}" successfully created.`
-			: `Calendar Event "${item.value.summary}" successfully updated.`
-	});
-	loading.value = false;
-	Router.push({ name: 'Admin List Calendar Events' });
-}
+});
 </script>
 
 <template>

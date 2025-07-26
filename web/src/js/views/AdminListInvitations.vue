@@ -2,37 +2,35 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 
-import API from 'lib/api';
-
 /** @type {Ref<Invitation[]>} */
 const invitations = ref([]);
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
+
 /** @type {AddToast} */
 const addToast = inject('addToast');
 
-loading.value = true;
-API('invitation').then(({ result }) => {
-	invitations.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
+useLoader('invitation', invitations);
 
-async function deleteRsvp(invitation) {
-	loading.value = true;
-	await API(`invitation/${invitation.id}`, { method: 'delete' });
-	invitations.value = await API('invitation').then(({ result }) => result.data);
-	const guestMsg = invitation.guests[0].name
-		? `${invitation.guests[0].name}${invitation.guests.length > 1 ? ` & ${invitation.guests.length - 1} other guest${invitation.guests.length > 2 ? 's' : ''}` : ''}`
-		: `${invitation.guests.length} guest${invitation.guests.length > 1 ? 's' : ''}`;
-	addToast({
-		title: 'Invitation Removed',
-		body: `Invitation for "${guestMsg}" (${invitation.id}) successfully removed.`
-	});
-	loading.value = false;
-}
+const { onSubmit: deleteInvitation } = useForm({
+	method: 'DELETE',
+	path: invitation => `invitation/${invitation.id}`,
+	onSuccess(_data, _response, invitation) {
+		const guestMsg = invitation.guests[0].name
+			? `${invitation.guests[0].name}${invitation.guests.length > 1 ? ` & ${invitation.guests.length - 1} other guest${invitation.guests.length > 2 ? 's' : ''}` : ''}`
+			: `${invitation.guests.length} guest${invitation.guests.length > 1 ? 's' : ''}`;
+		addToast({
+			title: 'Invitation Removed',
+			body: `Invitation for "${guestMsg}" (${invitation.id}) successfully removed.`
+		});
+		// Refetch the invitations for the table
+		useLoader('invitation', invitations);
+	}
+});
 
 const statusMessages = [
 	'Pending',
@@ -180,7 +178,7 @@ function invitationStatus(invitation) {
 									</li>
 									<li><hr class="dropdown-divider"></li>
 									<li>
-										<button class="dropdown-item text-danger" type="button" @click="deleteRsvp(item)">
+										<button class="dropdown-item text-danger" type="button" @click="deleteInvitation(item)">
 											Delete
 										</button>
 									</li>

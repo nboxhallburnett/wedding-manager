@@ -1,24 +1,19 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { ref } from 'vue';
 import Router from 'router';
+
+import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 
-import API from 'lib/api';
 import { formatDate } from 'lib/formatter';
 
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
 /** @type {Ref<CalendarEvent>} */
 const item = ref({});
 
-loading.value = true;
-API(`calendar/${Router.currentRoute.value.params.calendarEventId}`).then(({ result }) => {
-	item.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
+useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
 </script>
 
 <template>

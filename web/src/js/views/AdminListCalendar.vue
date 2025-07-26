@@ -2,41 +2,34 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import { useForm } from 'composables/form';
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 
-import API from 'lib/api';
 import { formatDate } from 'lib/formatter';
 
 /** @type {Ref<CalendarEvent[]>} */
 const events = ref([]);
-/** @type {Ref<Boolean>} */
-const loading = inject('loading');
+
 /** @type {AddToast} */
 const addToast = inject('addToast');
 
 // Fetch the list of events
-loading.value = true;
-API('calendar').then(({ result }) => {
-	events.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
+useLoader('calendar', events);
 
-/**
- * Trigger the deletion of an event and refreshes the table content
- *
- * @param {CalendarEvent} event Event to remove
- * @returns {Promise<void>}
- */
-async function deleteEvent(event) {
-	loading.value = true;
-	await API(`calendar/${event.id}`, { method: 'delete' });
-	events.value = await API('calendar').then(({ result }) => result.data);
-	addToast({
-		title: 'Calendar Event Removed',
-		body: `Calendar event "${event.summary}" (${event.id}) successfully removed.`
-	});
-	loading.value = false;
-}
+const { onSubmit: deleteEvent } = useForm({
+	method: 'DELETE',
+	path: event => `calendar/${event.id}`,
+	onSuccess(_data, _response, event) {
+		addToast({
+			title: 'Calendar Event Removed',
+			body: `Calendar event "${event.summary}" (${event.id}) successfully removed.`
+		});
+		// Refetch the events for the table
+		useLoader('calendar', events);
+	}
+});
 </script>
 
 <template>

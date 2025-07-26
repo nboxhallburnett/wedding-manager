@@ -2,19 +2,17 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 import DietIndicator from 'components/DietIndicator.vue';
-import API from 'lib/api';
 
 /** @type {Ref<Boolean>} */
 const loading = inject('loading');
 /** @type {Ref<MenuItem>} */
 const item = ref({});
-
-const invitationsLoading = ref(true);
-
 /** @type {Ref<Invitation[]>} */
 const invitations = ref([]);
 
@@ -22,16 +20,10 @@ const invitations = ref([]);
 const courseOptions = [ 'Starter', 'Main', 'Dessert' ];
 const menuOptions = [ 'Adult', 'Children' ];
 
-loading.value = true;
-API(`menu/${Router.currentRoute.value.params.menuItemId}`).then(({ result }) => {
-	item.value = result.data;
-	loading.value = false;
-}).catch(() => loading.value = false);
-
-API(`invitation?menuItemId=${Router.currentRoute.value.params.menuItemId}`).then(({ result }) => {
-	invitations.value = result.data;
-	invitationsLoading.value = false;
-}).catch(() => invitationsLoading.value = false);
+useLoader([
+	`menu/${Router.currentRoute.value.params.menuItemId}`,
+	`invitation?menuItemId=${Router.currentRoute.value.params.menuItemId}`
+], [ item, invitations ]);
 
 /**
  * Construct a display name for a given invitation record
@@ -80,7 +72,6 @@ function invitationDisplay(invitation) {
 			label="Menu"
 		/>
 		<form-item
-			v-if="!invitationsLoading"
 			name="invitations"
 			label="Invitations"
 			hint="Invitations in which the menu item is selected"
@@ -96,6 +87,9 @@ function invitationDisplay(invitation) {
 					({{ invitationDisplay(invitation) }})
 				</div>
 			</template>
+			<div v-if="!invitations.length" class="form-control-plaintext">
+				---
+			</div>
 		</form-item>
 	</div>
 </template>

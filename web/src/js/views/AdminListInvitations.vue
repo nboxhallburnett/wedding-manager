@@ -41,6 +41,23 @@ const tableOpts = {
 		{ id: 'children', text: 'Children' },
 		{ id: 'status', text: 'Status' }
 	],
+	search(item, term) {
+		// Match on the invitation ID
+		if (item.id === term) {
+			return true;
+		}
+		// Or if a guest or child's name case-insensitively matches the term, or if they have a menu item matching the term
+		if (item.guests?.some(guest => guest.name.toLowerCase().includes(term.toLowerCase())
+			|| [ guest.starter_id, guest.main_id, guest.dessert_id ].includes(term))) {
+			return true;
+		}
+		if (item.children?.some(child => child.name.toLowerCase().includes(term.toLowerCase())
+			|| [ child.starter_id, child.main_id, child.dessert_id ].includes(term))) {
+			return true;
+		}
+		// Otherwise, no match
+		return false;
+	},
 	actions(item) {
 		if (!item.id) {
 			return [];

@@ -42,6 +42,23 @@ const tableOpts = {
 		{ id: 'diet', text: 'Diet' },
 		{ id: 'chosen', text: 'Chosen' }
 	],
+	search(item, term) {
+		// Match on the menu item ID
+		if (item.id === term) {
+			return true;
+		}
+		if (item.title.toLowerCase().includes(term.toLowerCase())) {
+			return true;
+		}
+		if (item.description.toLowerCase().includes(term.toLowerCase())) {
+			return true;
+		}
+		if (courseText[item.course].toLowerCase().includes(term.toLowerCase())) {
+			return true;
+		}
+		// Otherwise, no match
+		return false;
+	},
 	actions(item) {
 		if (!item.id) {
 			return [];

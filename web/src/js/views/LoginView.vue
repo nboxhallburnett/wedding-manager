@@ -1,15 +1,14 @@
 <script setup>
-import { inject } from 'vue';
+import { inject, ref, useTemplateRef, onMounted } from 'vue';
 import Router from 'router';
 
 import { useForm } from 'composables/form';
 
 import CardHeader from 'components/CardHeader.vue';
-import FormInput from 'components/form/FormInput.vue';
 
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
-const invitationId = defineModel({ type: String });
+const invitationId = ref('');
 
 const { onSubmit } = useForm({
 	method: 'POST',
@@ -23,22 +22,31 @@ const { onSubmit } = useForm({
 		);
 	}
 });
+
+// Attempt to focus the input when the page is mounted if requested
+const input = useTemplateRef('invitationInput');
+onMounted(() => {
+	input.value?.focus();
+});
 </script>
 
 <template>
 	<form @submit.prevent="onSubmit">
 		<card-header title="Manage your Invitation" />
 		<p class="card-text">
-			Enter the Invitation code included on your invitation below.
+			Enter the ID included on your invitation below.
 		</p>
-		<form-input
-			v-model="invitationId"
-			name="invitationId"
-			class="mb-3"
-			aria-label="Invitation code entry"
-			placeholder="Enter your Invitation code"
-			focus
-		/>
+		<div class="form-floating mb-3">
+			<input
+				id="invitationId"
+				ref="invitationInput"
+				v-model="invitationId"
+				type="text"
+				class="form-control"
+				placeholder="Invitation ID"
+			>
+			<label for="invitationId">Invitation ID</label>
+		</div>
 		<button :disabled="!invitationId" class="btn btn-primary w-100" type="submit">
 			Submit
 		</button>

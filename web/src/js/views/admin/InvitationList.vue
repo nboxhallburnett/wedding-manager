@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { useForm } from 'composables/form';
@@ -31,6 +31,16 @@ const { onSubmit: deleteInvitation } = useForm({
 		// Refetch the invitations for the table
 		useLoader('invitation', invitations);
 	}
+});
+
+const searchSuggestions = computed(() => {
+	const items = [];
+	for (const invitation of invitations.value) {
+		for (const guest of invitation.guests || []) {
+			guest.name && items.push(guest.name);
+		}
+	}
+	return items.sort();
 });
 
 const tableOpts = {
@@ -72,6 +82,7 @@ const tableOpts = {
 		// Otherwise, no match
 		return false;
 	},
+	suggestions: searchSuggestions,
 	actions(item) {
 		if (!item.id) {
 			return [];

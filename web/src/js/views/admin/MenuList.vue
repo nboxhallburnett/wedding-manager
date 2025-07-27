@@ -86,6 +86,7 @@ const tableOpts = {
 		// Otherwise, no match
 		return false;
 	},
+	suggestions: courseText,
 	actions(item) {
 		if (!item.id) {
 			return [];

@@ -5,7 +5,8 @@ const props = defineProps({
 	columns: { type: Array, required: true },
 	items: { type: [ Array, Object ], required: true },
 	actions: { type: Function, default: null },
-	search: { type: Function, default: null }
+	search: { type: Function, default: null },
+	suggestions: { type: [ Array, Object ], default: null }
 });
 
 const searchTerm = ref('');
@@ -41,7 +42,15 @@ function sort(col) {
 
 <template>
 	<div v-if="search" class="">
-		<input v-model="searchTerm" class="form-control mx-auto w-75" placeholder="Search">
+		<input
+			v-model="searchTerm"
+			class="form-control mx-auto w-75"
+			placeholder="Search"
+			:list="(suggestions?.value?.length || suggestions?.length) && 'searchSuggestions' || undefined"
+		>
+		<datalist v-if="suggestions?.value?.length || suggestions?.length" id="searchSuggestions">
+			<option v-for="item in suggestions?.value || suggestions" :key="item" :value="item" />
+		</datalist>
 	</div>
 	<div class="table-responsive">
 		<table class="table table-hover mt-1">

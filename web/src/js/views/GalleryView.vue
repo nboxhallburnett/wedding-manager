@@ -1,7 +1,7 @@
 <script setup>
 import 'bootstrap/js/dist/carousel';
 
-import { ref } from 'vue';
+import { useTemplateRef, ref, onMounted } from 'vue';
 import Modal from 'bootstrap/js/dist/modal';
 
 import CardHeader from 'components/CardHeader.vue';
@@ -9,17 +9,14 @@ import CardHeader from 'components/CardHeader.vue';
 const gallerySources = GALLERY_IMAGES;
 const galleryText = GALLERY_TEXT;
 
-/** @type {Ref<Element>} */
+const $modal = useTemplateRef('modal');
+const $modalImage = useTemplateRef('modalImage');
 const modal = ref(null);
-function fullscreenImage(evt) {
-	evt.preventDefault();
-	const imageUrl = evt.target?.getAttribute('src');
-	if (imageUrl) {
-		const modalImage = document.getElementById('modalImage');
-		modalImage.src = imageUrl;
-		const imageModal = new Modal(modal.value);
-		imageModal.show();
-	}
+onMounted(() => modal.value = new Modal($modal.value));
+
+function fullscreenImage(src) {
+	$modalImage.value.src = src;
+	modal.value.show();
 }
 </script>
 
@@ -50,10 +47,10 @@ function fullscreenImage(evt) {
 						:src="`/img/gallery/${src}`"
 						class="d-block w-100 img-fluid"
 						alt="..."
-						@click="fullscreenImage"
+						@click.prevent="fullscreenImage(`/img/gallery/${src}`)"
 					>
 					<div v-if="galleryText[idx]" class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 pb-0 mb-3 pt-3">
-						<p v-text="galleryText[idx]" />
+						<p class="text-white" v-text="galleryText[idx]" />
 					</div>
 				</div>
 			</div>
@@ -94,6 +91,7 @@ function fullscreenImage(evt) {
 					/>
 					<img
 						id="modalImage"
+						ref="modalImage"
 						src=""
 						class="img-fluid"
 						alt="Full Screen Image"

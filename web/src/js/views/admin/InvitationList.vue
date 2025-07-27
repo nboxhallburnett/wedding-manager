@@ -36,9 +36,23 @@ const { onSubmit: deleteInvitation } = useForm({
 const tableOpts = {
 	columns: [
 		{ id: 'id', text: 'Invitation ID' },
-		{ id: 'name', text: 'Name' },
-		{ id: 'guests', text: 'Guests' },
-		{ id: 'children', text: 'Children' },
+		{ id: 'name', text: 'Name', sort(a, b, dir) {
+			const nameA = a.guests?.[0]?.name?.toUpperCase();
+			const nameB = b.guests?.[0]?.name?.toUpperCase();
+			if (nameA < nameB) {
+				return dir * -1;
+			}
+			if (nameA > nameB) {
+				return dir * 1;
+			}
+			return 0;
+		} },
+		{ id: 'guests', text: 'Guests', sort(a, b, dir) {
+			return ((a?.guests?.length || 0) - (b?.guests?.length || 0)) * dir;
+		} },
+		{ id: 'children', text: 'Children', sort(a, b, dir) {
+			return ((a?.children?.length || 0) - (b?.children?.length || 0)) * dir;
+		} },
 		{ id: 'status', text: 'Status' }
 	],
 	search(item, term) {

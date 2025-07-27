@@ -36,11 +36,38 @@ const { onSubmit: deleteItem } = useForm({
 
 const tableOpts = {
 	columns: [
-		{ id: 'title', text: 'Title' },
-		{ id: 'course', text: 'Course' },
-		{ id: 'menu', text: 'Menu' },
+		{ id: 'title', text: 'Title', sort(a, b, dir) {
+			const titleA = a.title?.toUpperCase();
+			const titleB = b.title?.toUpperCase();
+			if (titleA < titleB) {
+				return dir * -1;
+			}
+			if (titleA > titleB) {
+				return dir * 1;
+			}
+			return 0;
+		} },
+		{ id: 'course', text: 'Course', sort(a, b, dir) {
+			return ((a?.course || 0) - (b?.course || 0)) * dir;
+		} },
+		{ id: 'menu', text: 'Menu', sort(a, b, dir) {
+			return (Number(a?.child) - (Number(b?.child))) * dir;
+		} },
 		{ id: 'diet', text: 'Diet' },
-		{ id: 'chosen', text: 'Chosen' }
+		{ id: 'chosen', text: 'Chosen', sort(a, b, dir) {
+			// Convert the two counts to padded number strings to sort using. JS sorting is weird.
+			const aCount = String(stats.value.adult[a.id] || 0).padStart(4, '0')
+				+ String(stats.value.child[a.id] || 0).padStart(4, '0');
+			const bCount = String(stats.value.adult[b.id] || 0).padStart(4, '0')
+				+ String(stats.value.child[b.id] || 0).padStart(4, '0');
+			if (aCount < bCount) {
+				return dir * -1;
+			}
+			if (aCount > bCount) {
+				return dir * 1;
+			}
+			return 0;
+		} }
 	],
 	search(item, term) {
 		// Match on the menu item ID

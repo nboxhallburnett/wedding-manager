@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 const searchTerm = ref('');
+const currentSort = ref({ col: '', dir: 1, fn: null });
 
 const filteredItems = computed(() => {
 	const term = searchTerm.value.trim();
@@ -17,13 +18,32 @@ const filteredItems = computed(() => {
 	}
 	return props.items.filter(item => props.search(item, term));
 });
+
+const displayedItems = computed(() => {
+	if (!currentSort.value.col) {
+		return filteredItems.value;
+	}
+	return Array.from(filteredItems.value).sort(currentSort.value.fn);
+});
+
+function sort(col) {
+	if (!col.sort) {
+		return;
+	}
+	const dir = currentSort.value.col === col.id ? (-1 * currentSort.value.dir) : 1;
+	currentSort.value = {
+		fn: (a, b) => col.sort(a, b, dir),
+		col: col.id,
+		dir
+	};
+}
 </script>
 
 <template>
 	<div v-if="search" class="">
 		<input v-model="searchTerm" class="form-control mx-auto w-75" placeholder="Search">
 	</div>
-	<div class="table-responsive-sm">
+	<div class="table-responsive">
 		<table class="table table-hover mt-1">
 			<thead>
 				<tr>
@@ -31,9 +51,17 @@ const filteredItems = computed(() => {
 						v-for="col in columns"
 						:key="col.id"
 						scope="col"
-						:class="col.class"
+						class="text-nowrap"
+						:role="col.sort && 'button' || undefined"
+						:class="[ col.class, {
+							'sortable': col.sort,
+							'table-active': currentSort.col === col.id,
+							'table-active-flip': currentSort.col === col.id && currentSort.dir === 1
+						} ]"
+						@click="sort(col)"
 					>
-						{{ col.text }}
+						<span v-text="col.text" />
+						<span v-if="col.sort" class="icon-caret d-inline-block ms-1" />
 					</th>
 					<th v-if="actions" scope="col" class="text-end">
 						Actions
@@ -41,7 +69,7 @@ const filteredItems = computed(() => {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in filteredItems" :key="item.id">
+				<tr v-for="item in displayedItems" :key="item.id">
 					<slot :item />
 					<td v-if="actions" class="text-end py-1 align-middle">
 						<button
@@ -77,3 +105,17 @@ const filteredItems = computed(() => {
 		</table>
 	</div>
 </template>
+
+<style lang="scss" scoped>
+.sortable {
+	cursor: pointer;
+
+	&:hover {
+		background-color: var(--bs-table-active-bg);
+	}
+}
+
+.table-active.table-active-flip > .icon-caret {
+	transform: rotate(180deg);
+}
+</style>

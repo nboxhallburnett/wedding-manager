@@ -17,7 +17,7 @@ const props = defineProps({
 			});
 		}
 	},
-	defaultOption: { default: '' },
+	defaultOption: { type: [ String, Number ], default: '' },
 	placeholder: { type: String, default: '' }
 });
 

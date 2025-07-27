@@ -4,9 +4,10 @@ import pluginVue from 'eslint-plugin-vue';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
-	{ files: [ '**/*.{js,mjs,vue}' ], plugins: { js }, extends: [ 'js/recommended' ] },
-	{ files: [ '**/*.js' ], languageOptions: { sourceType: 'commonjs' } },
-	{ files: [ '**/*.{js,mjs,vue}' ], languageOptions: { globals: globals.node } },
+	{ ignores: [ 'node_modules/', 'web/public/', 'jsconfig.json' ] },
+	{ files: [ 'src/**/*.{js,mjs}', 'web/src/**/*.{js,vue}' ], plugins: { js }, extends: [ 'js/recommended' ] },
+	{ files: [ 'src/**/*.js', 'web/src/**/*.js' ], languageOptions: { sourceType: 'commonjs' } },
+	{ files: [ 'src/**/*.{js,mjs}' ], languageOptions: { globals: globals.node } },
 	{ files: [ 'web/src/**/*.{js,vue}' ], languageOptions: { globals: {
 		...globals.browser,
 		'CONFIG': 'readonly',
@@ -23,9 +24,7 @@ export default defineConfig([
 		'quotes': [ 'error', 'single' ],
 		'semi': [ 'error' ],
 		'vue/html-indent': [ 'error', 'tab' ],
-		'vue/max-attributes-per-line': [ 'error', {
-			'singleline': { 'max': 3 },
-			'multiline': { 'max': 1 }
-		} ]
+		'vue/max-attributes-per-line': [ 'error', { 'singleline': { 'max': 3 }, 'multiline': { 'max': 1 } } ],
+		'vue/multi-word-component-names': [ 'error', { 'ignores': [ 'Index' ] } ]
 	} }
 ]);

@@ -26,7 +26,7 @@ const router = createRouter({
 		{
 			path: '/edit',
 			name: 'Edit Invitation',
-			component: () => import('../views/EditRSVP.vue'),
+			component: () => import('../views/InvitationEdit.vue'),
 			meta: { session: true }
 		},
 		{
@@ -44,73 +44,73 @@ const router = createRouter({
 		{
 			path: '/admin',
 			name: 'Admin Overview',
-			component: () => import('../views/AdminOverview.vue'),
+			component: () => import('../views/admin/Index.vue'),
 			meta: { admin: true },
 			children: [
 				{
 					path: 'stats',
 					name: 'Admin Stats',
-					component: () => import('../views/AdminStats.vue')
+					component: () => import('../views/admin/InvitationStats.vue')
 				},
 				{
 					path: 'calendar',
 					name: 'Admin List Calendar Events',
-					component: () => import('../views/AdminListCalendar.vue')
+					component: () => import('../views/admin/CalendarList.vue')
 				},
 				{
 					path: 'calendar/new',
 					name: 'Admin Create Calendar Event',
-					component: () => import('../views/AdminEditCalendar.vue')
+					component: () => import('../views/admin/CalendarEdit.vue')
 				},
 				{
 					path: 'calendar/:calendarEventId/edit',
 					name: 'Admin Edit Calendar Event',
-					component: () => import('../views/AdminEditCalendar.vue')
+					component: () => import('../views/admin/CalendarEdit.vue')
 				},
 				{
 					path: 'calendar/:calendarEventId',
 					name: 'Admin View Calendar Event',
-					component: () => import('../views/AdminViewCalendar.vue')
+					component: () => import('../views/admin/CalendarView.vue')
 				},
 				{
 					path: 'invitation',
 					name: 'Admin List Invitations',
-					component: () => import('../views/AdminListInvitations.vue')
+					component: () => import('../views/admin/InvitationList.vue')
 				},
 				{
 					path: 'invitation/new',
 					name: 'Admin Create Invitation',
-					component: () => import('../views/AdminCreateInvitation.vue')
+					component: () => import('../views/admin/InvitationCreate.vue')
 				},
 				{
 					path: 'invitation/:invitationId',
 					name: 'Admin Edit Invitation',
-					component: () => import('../views/EditRSVP.vue')
+					component: () => import('../views/InvitationEdit.vue')
 				},
 				{
 					path: 'menu',
 					name: 'Admin List Menu Items',
-					component: () => import('../views/AdminListMenu.vue')
+					component: () => import('../views/admin/MenuList.vue')
 				},
 				{
 					path: 'menu/:menuItemId',
 					name: 'Admin View Menu Item',
-					component: () => import('../views/AdminViewMenu.vue')
+					component: () => import('../views/admin/MenuView.vue')
 				},
 				{
 					path: 'menu/new',
 					name: 'Admin Create Menu Item',
-					component: () => import('../views/AdminEditMenu.vue')
+					component: () => import('../views/admin/MenuEdit.vue')
 				},
 				{
 					path: 'menu/:menuItemId/edit',
 					name: 'Admin Edit Menu Item',
-					component: () => import('../views/AdminEditMenu.vue')
+					component: () => import('../views/admin/MenuEdit.vue')
 				},
 				{
 					path: 'about',
 					name: 'Admin Edit About Content',
-					component: () => import('../views/AdminEditAbout.vue')
+					component: () => import('../views/admin/AboutEdit.vue')
 				}
 			]
 		},

@@ -1,14 +1,10 @@
-module.exports = {
-	formatDate
-};
-
 /**
  * Formats an events display date/time
  *
  * @param {CalendarEvent} event
  * @returns {String}
  */
-function formatDate(event) {
+export function formatDate(event) {
 	const start = new Date(event.start);
 	const end = new Date(event.end);
 

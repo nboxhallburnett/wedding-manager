@@ -18,7 +18,8 @@ const navItems = computed(() => {
 
 	const items = [
 		{ text: 'Home', to: { name: 'Home' } },
-		{ text: 'About', to: { name: 'About' } }
+		{ text: 'About', to: { name: 'About' } },
+		{ text: 'Q&A', to: { name: 'Q&A' } }
 	];
 
 	if (GALLERY_IMAGES.length && invitation.value?.id) {

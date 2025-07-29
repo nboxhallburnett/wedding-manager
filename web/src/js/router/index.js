@@ -36,6 +36,12 @@ const router = createRouter({
 			meta: { session: true }
 		},
 		{
+			path: '/questions',
+			name: 'Q&A',
+			component: () => import('../views/QAndA.vue'),
+			meta: { session: true }
+		},
+		{
 			path: '/gallery',
 			name: 'Gallery',
 			component: () => import('../views/GalleryView.vue'),

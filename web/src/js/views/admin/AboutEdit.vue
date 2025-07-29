@@ -7,8 +7,6 @@ import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 
-const source = SOURCE;
-
 /** @type {AddToast} */
 const addToast = inject('addToast');
 /** @type {Ref<String>} */
@@ -48,11 +46,6 @@ const { onSubmit } = useForm({
 				<card-header title="About" class="z-0" />
 				<div class="card-text">
 					<vue-showdown :markdown="content || placeholder" flavor="github" />
-				</div>
-				<hr>
-				<div class="card-text">
-					Source:<br>
-					<a :href="source" v-text="source" />
 				</div>
 			</div>
 		</div>

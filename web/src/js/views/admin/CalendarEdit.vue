@@ -96,9 +96,9 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent.stop="onSubmit">
 		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`">
-			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }">
 				Back
 			</router-link>
 			<button class="btn btn-primary btn-sm" type="submit">

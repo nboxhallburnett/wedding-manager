@@ -51,7 +51,7 @@ function removeGuest(idx) {
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent.stop="onSubmit">
 		<card-header title="New Invitation" />
 		<div v-for="(guest, idx) in guests" :key="idx" class="mb-3">
 			<hr v-if="idx">

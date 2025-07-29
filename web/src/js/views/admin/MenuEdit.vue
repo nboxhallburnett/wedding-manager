@@ -66,9 +66,9 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent.stop="onSubmit">
 		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`">
-			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }">
 				Back
 			</router-link>
 			<button class="btn btn-primary btn-sm" type="submit">

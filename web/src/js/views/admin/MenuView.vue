@@ -49,7 +49,7 @@ function invitationDisplay(invitation) {
 
 <template>
 	<card-header title="Menu Item">
-		<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: 'Admin List Menu Items' }">
+		<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Menu Items' }">
 			Back
 		</router-link>
 		<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Menu Item' }">

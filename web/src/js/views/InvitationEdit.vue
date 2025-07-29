@@ -1,7 +1,6 @@
 <script setup>
-import 'bootstrap/js/dist/collapse';
-
-import { inject, ref, nextTick, useTemplateRef } from 'vue';
+import { inject, ref, nextTick, useTemplateRef, watch } from 'vue';
+import Collapse from 'bootstrap/js/dist/collapse';
 import Router from 'router';
 
 import { useForm } from 'composables/form';
@@ -18,13 +17,18 @@ import API from 'lib/api';
 
 /** @type {Ref<Invitation>} */
 const session = inject('invitation');
+
 /** @type {AddToast} */
 const addToast = inject('addToast');
+
 /** @type {Ref<Invitation>} */
 const invitation = ref({});
+
 /** @type {Ref<MenuItem[]>} */
 const menu = ref([]);
+
 const songList = useTemplateRef('songList');
+const guestCollapses = ref([]);
 
 // Define available attendance status'
 const statusOptions = [
@@ -50,6 +54,7 @@ const { onSubmit } = useForm({
 	path: () => `invitation/${invitation.value.id}`,
 	method: 'PUT',
 	body: invitation,
+	validation: true,
 	onSuccess() {
 		const guestMsg = invitation.value.guests[0].name
 			? `${invitation.value.guests[0].name}${invitation.value.guests.length > 1 ? ` & ${invitation.value.guests.length - 1} other guest${invitation.value.guests.length > 2 ? 's' : ''}` : ''}`
@@ -92,6 +97,30 @@ useLoader([
 	if (!invitation.value.children?.length) {
 		invitation.value.children = [];
 	}
+
+	nextTick(() => {
+		guestCollapses.value = [];
+		for (let i = 0; i < invitation.value.guests.length; i++) {
+			const collapse = new Collapse(`#guest-${i}-collapse`, {
+				toggle: Boolean(invitation.value.guests[i]?.name)
+			});
+			guestCollapses.value.push(collapse);
+		}
+	});
+});
+
+// Watch for names being defined for each of the guests to determine whether to show the rest of their forms
+watch(() => invitation.value.guests?.map(g => Boolean(g.name)), (nameExists, prev) => {
+	if (!nameExists || !prev || nameExists?.length !== prev?.length) {
+		return;
+	}
+	for (let i = 0; i < nameExists.length; i++) {
+		if (nameExists[i] && !prev[i]) {
+			guestCollapses.value[i].show();
+		} else if (!nameExists[i] && prev[i]) {
+			guestCollapses.value[i].hide();
+		}
+	}
 });
 
 /**
@@ -103,6 +132,10 @@ function addGuest() {
 		status_ceremony: 0,
 		status_reception: 0
 	});
+	nextTick(() => {
+		const collapse = new Collapse(`#guest-${invitation.value.guests.length - 1}-collapse`, { toggle: false });
+		guestCollapses.value.push(collapse);
+	});
 }
 /**
  * Remove a guest from the invitation
@@ -110,6 +143,8 @@ function addGuest() {
  * @param {Number} idx Index of the guest to remove
  */
 function removeGuest(idx) {
+	guestCollapses.value[idx]?.dispose();
+	guestCollapses.value.splice(idx, 1);
 	invitation.value.guests.splice(idx, 1);
 }
 
@@ -175,9 +210,9 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit">
+	<form class="needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'">
-			<router-link class="btn btn-outline-dark btn-sm me-2" :to="{ name: adminEdit ? 'Admin List Invitations' : 'Home' }">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: adminEdit ? 'Admin List Invitations' : 'Home' }">
 				Back
 			</router-link>
 			<button class="btn btn-primary btn-sm" type="submit">
@@ -196,7 +231,7 @@ function getMenuOptions(course, child) {
 						aria-expanded="true"
 						:aria-controls="`guest-accordion-${idx}-content`"
 					>
-						<h5 class="mb-0 w-100" v-text="guest.name?.trim() || `Guest ${idx + 1}`" />
+						<h5 class="mb-0 w-100" v-text="guest.name?.trim() || (idx ? '+1' : `Guest ${idx + 1}`)" />
 						<button
 							v-if="idx && session.admin"
 							type="button"
@@ -213,45 +248,49 @@ function getMenuOptions(course, child) {
 					:class="{ show: idx === 0 }"
 				>
 					<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
-					<form-select
-						v-model="guest.status_ceremony"
-						label="Ceremony"
-						:options="statusOptions"
-						:default-option="0"
-						placeholder="Pending Confirmation"
-						:name="`guest-${idx}-ceremony`"
-					/>
-					<form-select
-						v-model="guest.status_reception"
-						label="Reception"
-						:options="statusOptions"
-						:default-option="0"
-						placeholder="Pending Confirmation"
-						:name="`guest-${idx}-reception`"
-					/>
-					<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+					<span :id="`guest-${idx}-collapse`" class="collapse">
+						<form-select
+							v-model="guest.status_ceremony"
+							label="Ceremony"
+							:options="statusOptions"
+							:default-option="0"
+							placeholder="Pending Confirmation"
+							:name="`guest-${idx}-ceremony`"
+						/>
+						<form-select
+							v-model="guest.status_reception"
+							label="Reception"
+							:options="statusOptions"
+							:default-option="0"
+							placeholder="Pending Confirmation"
+							:name="`guest-${idx}-reception`"
+						/>
+						<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+							<hr>
+							<form-radio
+								v-model="guest[meal.key]"
+								:label="meal.text"
+								:name="`guest-${idx}-${meal.key}`"
+								:options="getMenuOptions(mealIdx, false)"
+							>
+								<template #after-each="{ item }">
+									<diet-indicator class="ms-2 align-top" :item />
+									<small class="d-block text-muted" v-text="item.description" />
+								</template>
+							</form-radio>
+						</template>
 						<hr>
-						<form-radio
-							v-model="guest[meal.key]"
-							:label="meal.text"
-							:name="`guest-${idx}-${meal.key}`"
-							:options="getMenuOptions(mealIdx, false)"
-						>
-							<template #after-each="{ item }">
-								<diet-indicator class="ms-2 align-top" :item />
-								<small class="d-block text-muted" v-text="item.description" />
-							</template>
-						</form-radio>
-					</template>
-					<hr>
-					<form-textarea
-						v-model="guest.diet"
-						name="diet"
-						label="Dietary Requirement"
-						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
-						placeholder="Allergies, health conditions, ethical choices, etc."
-					/>
-					<hr>
+						<form-textarea
+							v-model="guest.diet"
+							:name="`guest-${idx}-diet`"
+							label="Dietary Requirement"
+							hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+							placeholder="Allergies, health conditions, ethical choices, etc."
+							validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
+							:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other')"
+						/>
+						<hr>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -319,6 +358,8 @@ function getMenuOptions(course, child) {
 						label="Dietary Requirement"
 						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 						placeholder="Allergies, health conditions, ethical choices, etc."
+						validation
+						:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other')"
 					/>
 				</div>
 			</div>

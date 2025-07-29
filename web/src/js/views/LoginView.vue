@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent.stop="onSubmit">
 		<card-header title="Manage your Invitation" />
 		<p class="card-text">
 			Enter the ID included on your invitation below.

@@ -37,7 +37,12 @@ export function useForm(options) {
 	provide('validate', validate);
 
 	// Store a reference to the form container when the page is mounted
-	onMounted(() => $form = document.querySelector('form'));
+	onMounted(() => {
+		$form = document.querySelector('form.needs-validation');
+		if (options.validation && !$form) {
+			console.warn('No valid form found. Ensure one is defined like the following:\n	<form class="needs-validation card-text" novalidate @submit.prevent.stop="onSubmit">');
+		}
+	});
 
 	/**
 	 * Validates the form's data
@@ -71,7 +76,7 @@ export function useForm(options) {
 
 	async function onSubmit(...args) {
 		// Validate the form before attempting to actually submit it
-		if (!validate()) {
+		if (options.validation && !validate()) {
 			const $errors = $form.querySelectorAll(':invalid');
 			let $highest;
 

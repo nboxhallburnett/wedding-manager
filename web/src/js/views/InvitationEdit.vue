@@ -12,6 +12,7 @@ import FormArray from 'components/form/FormArray.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormRadio from 'components/form/FormRadio.vue';
 import FormSelect from 'components/form/FormSelect.vue';
+import FormText from 'components/form/FormText.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 import API from 'lib/api';
 
@@ -219,6 +220,14 @@ function getMenuOptions(course, child) {
 				Submit
 			</button>
 		</card-header>
+
+		<form-text
+			v-if="adminEdit"
+			v-model="invitation.id"
+			name="id"
+			label="ID"
+			class="font-monospace"
+		/>
 
 		<div id="guestAccordion" class="accordion">
 			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">

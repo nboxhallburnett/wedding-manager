@@ -35,6 +35,7 @@ const { onSubmit: deleteItem } = useForm({
 });
 
 const tableOpts = {
+	caption: 'Menu Item',
 	columns: [
 		{ id: 'title', text: 'Title', sort(a, b, dir) {
 			const titleA = a.title?.toUpperCase();

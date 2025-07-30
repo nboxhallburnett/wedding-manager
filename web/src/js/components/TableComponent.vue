@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 
 const props = defineProps({
+	caption: { type: String, default: '' },
 	columns: { type: Array, required: true },
 	items: { type: [ Array, Object ], required: true },
 	actions: { type: Function, default: null },
@@ -54,6 +55,9 @@ function sort(col) {
 	</div>
 	<div class="table-responsive">
 		<table class="table table-hover mt-1">
+			<caption v-if="caption" class="text-nowrap">
+				{{ displayedItems.length !== items.length ? `${displayedItems.length} of ${items.length}` : displayedItems.length }} {{ caption }}{{ items.length !== 1 ? 's' : '' }}
+			</caption>
 			<thead>
 				<tr>
 					<th

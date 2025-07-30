@@ -117,6 +117,11 @@ const router = createRouter({
 					path: 'about',
 					name: 'Admin Edit About Content',
 					component: () => import('../views/admin/AboutEdit.vue')
+				},
+				{
+					path: 'questions',
+					name: 'Admin Q&A Content',
+					component: () => import('../views/admin/QAndAEdit.vue')
 				}
 			]
 		},

@@ -17,6 +17,13 @@ const addToast = inject('addToast');
 
 useLoader('invitation', invitations);
 
+const statusMessages = [
+	'Pending',
+	'Attending',
+	'Tentative',
+	'Not Attending'
+];
+
 const { onSubmit: deleteInvitation } = useForm({
 	method: 'DELETE',
 	path: invitation => `invitation/${invitation.id}`,
@@ -40,10 +47,11 @@ const searchSuggestions = computed(() => {
 			guest.name && items.push(guest.name);
 		}
 	}
-	return items.sort();
+	return Array.from(statusMessages).concat(items.sort());
 });
 
 const tableOpts = {
+	caption: 'Invitation',
 	columns: [
 		{ id: 'id', text: 'Invitation ID' },
 		{ id: 'name', text: 'Name', sort(a, b, dir) {
@@ -68,6 +76,10 @@ const tableOpts = {
 	search(item, term) {
 		// Match on the invitation ID
 		if (item.id === term) {
+			return true;
+		}
+		const statusIndex = statusMessages.indexOf(term);
+		if (statusIndex > -1 && item.guests.some(guest => guest.name && (guest.status_ceremony === statusIndex || guest.status_reception === statusIndex))) {
 			return true;
 		}
 		// Or if a guest or child's name case-insensitively matches the term, or if they have a menu item matching the term
@@ -95,13 +107,6 @@ const tableOpts = {
 		];
 	}
 };
-
-const statusMessages = [
-	'Pending',
-	'Attending',
-	'Tentative',
-	'Not Attending'
-];
 
 /**
  * Construct a status message for a given invitation

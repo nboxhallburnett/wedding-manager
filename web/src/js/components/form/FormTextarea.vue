@@ -21,15 +21,20 @@ if (props.focus) {
 
 <template>
 	<form-item :label :name>
-		<textarea
-			:id="props.name"
-			v-bind="$attrs"
-			ref="input"
-			v-model="model"
-			:name="props.name"
-			class="form-control"
-			:placeholder="placeholder"
-		/>
-		<slot name="after" />
+		<template #default>
+			<textarea
+				:id="props.name"
+				v-bind="$attrs"
+				ref="input"
+				v-model="model"
+				:name="props.name"
+				class="form-control"
+				:placeholder="placeholder"
+			/>
+			<slot name="after" />
+		</template>
+		<template #below>
+			<slot name="below" />
+		</template>
 	</form-item>
 </template>

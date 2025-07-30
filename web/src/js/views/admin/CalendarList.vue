@@ -33,6 +33,7 @@ const { onSubmit: deleteEvent } = useForm({
 });
 
 const tableOpts = {
+	caption: 'Calendar Event',
 	columns: [
 		{ id: 'summary', text: 'Summary' },
 		{ id: 'when', text: 'When' }

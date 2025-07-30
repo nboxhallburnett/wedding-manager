@@ -68,7 +68,7 @@ export async function useLoader(toLoad, onLoad) {
 		}
 		// If onLoad is a function, call it with the responses
 		if (typeof onLoad === 'function') {
-			return onLoad(response);
+			return onLoad(Array.isArray(toLoad) ? response : response[0]);
 		}
 	});
 }

@@ -8,7 +8,8 @@ const links = [
 	{ text: 'Invitations', to: { name: 'Admin List Invitations' } },
 	{ text: 'Menu', to: { name: 'Admin List Menu Items' } },
 	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
-	{ text: 'About', to: { name: 'Admin Edit About Content' } }
+	{ text: 'About', to: { name: 'Admin Edit About Content' } },
+	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } }
 ];
 </script>
 

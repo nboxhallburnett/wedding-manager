@@ -78,6 +78,7 @@ type MenuItem = {
 	gluten_free: Boolean
 }
 
+/** Calendar event definition */
 type CalendarEvent = {
 	/** Event Identifier */
 	id: String,
@@ -116,4 +117,14 @@ type CalendarEvent = {
 			lon: Number
 		}
 	}
+}
+
+/** Definition of an item to display on the Q&A page */
+type Question = {
+	/** Title to use for the question */
+	title: String,
+	/** Answer to the question */
+	answer: String
+	/** Whether the answer should be rendered as markdown */
+	markdown: Boolean
 }

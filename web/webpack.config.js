@@ -121,7 +121,7 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			// Purge unused CSS
 			new PurgeCSSPlugin({
 				paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, { nodir: true }),
-				safelist: { greedy: [ /data-v-.*/ ], standard: [ 'body', 'html' ] }
+				safelist: { greedy: [ /data-v-.*/ ], standard: [ 'body', 'html', 'collapse', 'collapsing' ] }
 			}),
 			// And generate a manifest file for the index handler to reference hashed assets
 			new WebpackManifestPlugin()

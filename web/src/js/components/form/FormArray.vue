@@ -33,7 +33,12 @@ function removeItem(idx) {
 					type="text"
 					:placeholder="placeholder"
 				>
-				<button type="button" class="btn btn-danger" @click="removeItem(idx)">
+				<button
+					type="button"
+					class="btn btn-danger"
+					aria-label="Remove Item"
+					@click="removeItem(idx)"
+				>
 					<div class="btn-close btn-close-white" />
 					<div class="d-none">
 						Remove

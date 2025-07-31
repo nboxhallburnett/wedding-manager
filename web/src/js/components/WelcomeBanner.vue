@@ -25,6 +25,7 @@ const groom = CONFIG.groom_short;
 	box-shadow: 0 0 33px 42px var(--bs-secondary);
 	background-color: var(--bs-secondary);
 	overflow: hidden;
+	opacity: 0.9;
 
 	// Add artificial negative top margin to make the border radius to appear to fade into the header
 	margin-top: -1 * $artificial-margin;

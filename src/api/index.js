@@ -1,7 +1,6 @@
 const { STATUS_CODES } = require('http');
 const { join } = require('path');
 const { readdir } = require('fs').promises;
-
 const log = require('../lib/logger')('api');
 
 module.exports = {
@@ -18,8 +17,8 @@ async function init(app) {
 	app.use('/api/*splat', (req, res, next) => {
 		// Add cache control headers to API responses
 		res.set({
-			'cache-control': 'no-store, no-cache, must-revalidate',
-			expires: 0
+			'Cache-Control': 'no-store, no-cache, must-revalidate',
+			Expires: 0
 		});
 		next();
 	});

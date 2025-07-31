@@ -99,7 +99,8 @@ app.use(Session({
 	secret: config.server.session.secret,
 	unset: 'destroy',
 	cookie: {
-		proxy: true,
+		domain: config.host,
+		sameSite: 'strict',
 		secure: config.server.external_port === 443
 	},
 	store: MongoStore.create({
@@ -147,7 +148,7 @@ await dbConnection;
 
 // And finally start listening on the configured port on the unspecified IPv4 address
 const server = app.listen(config.server.port, '0.0.0.0', function () {
-	log('Server listening on :%d. Accessible at http://%s:%d', config.server.port, config.host, config.server.external_port);
+	log('Server listening on :%d. Accessible at http%s://%s%s', config.server.port, config.server.external_port === 443 ? 's' : '', config.host, config.server.external_port !== 443 ? ':' + config.server.external_port : '');
 });
 
 // Listen for SIGTERM events to gracefully close the server

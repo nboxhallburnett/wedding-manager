@@ -7,7 +7,7 @@
     "build": "rm -rf web/public/js/*; rm -rf web/public/css/*; set -a; . .env && NODE_ENV=production npx webpack-cli build --config web/webpack.config.js",
     "build-hot": "set -a; . .env && npx webpack serve --config web/webpack.config.js --progress",
     "lint": "eslint ./",
-    "start": "set -a; . .env && DEBUG=wedding-manager:* node --dns-result-order ipv4first src/index.mjs",
+    "start": "node --dns-result-order ipv4first src/index.mjs",
     "test": "npm run lint",
     "watch": "set -a; . .env && DEBUG=wedding-manager:* node --dns-result-order ipv4first --watch-path=./src --watch-path=./conf --watch-preserve-output src/index.mjs"
   },
@@ -30,6 +30,7 @@
     "express": "5.1.0",
     "express-rate-limit": "8.0.1",
     "express-session": "1.18.2",
+    "ical-generator": "9.0.0",
     "mongodb": "6.17.0",
     "nanoid": "5.1.5"
   },
@@ -44,7 +45,6 @@
     "eslint": "9.31.0",
     "eslint-plugin-vue": "10.3.0",
     "globals": "16.3.0",
-    "ical-generator": "9.0.0",
     "mini-css-extract-plugin": "2.9.2",
     "postcss-loader": "8.1.1",
     "purgecss-webpack-plugin": "7.0.2",

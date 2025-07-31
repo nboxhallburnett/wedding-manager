@@ -13,8 +13,8 @@ const config = {
 	gallery_text: process.env.GALLERYTEXT?.split('|'),
 
 	server: {
-		port: process.env.SERVER_PORT,
-		external_port: process.env.SERVER_EXTERNALPORT || 443,
+		port: Number(process.env.SERVER_PORT),
+		external_port: Number(process.env.SERVER_EXTERNALPORT) || 443,
 
 		db: {
 			host: process.env.SERVER_DB_HOST,

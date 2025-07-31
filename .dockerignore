@@ -1,0 +1,43 @@
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+#
+# For more help, visit the .dockerignore file reference guide at
+# https://docs.docker.com/go/build-context-dockerignore/
+
+**/.DS_Store
+**/*.ts
+**/.cache
+**/.classpath
+**/.dockerignore
+**/.editorconfig
+**/.*.env
+**/.env
+**/.git
+**/.gitignore
+**/.next
+**/.project
+**/.settings
+**/.stylelintignore
+**/.stylelintrc
+**/.toolstarget
+**/.vs
+**/.vscode
+**/Dockerfile*
+**/build
+**/compose.y*ml
+**/dist
+**/docker-compose*
+**/eslint.config.mjs
+**/jsconfig.json
+**/node_modules
+**/npm-debug.log
+
+LICENSE
+README.Docker.md
+README.md
+vetur.config.js
+
+# Ignore all of web
+web/
+# Except the public directory
+!web/public/

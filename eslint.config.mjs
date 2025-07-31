@@ -10,6 +10,7 @@ export default defineConfig([
 	{ files: [ 'src/**/*.{js,mjs}' ], languageOptions: { globals: globals.node } },
 	{ files: [ 'web/src/**/*.{js,vue}' ], languageOptions: { globals: {
 		...globals.browser,
+		'__webpack_nonce__': 'writeable',
 		'CONFIG': 'readonly',
 		'SOURCE': 'readonly',
 		'GALLERY_IMAGES': 'readonly',

@@ -2,13 +2,18 @@
 import 'bootstrap/js/dist/collapse';
 
 import API from 'lib/api';
-import { computed, inject } from 'vue';
+import { computed, inject, ref, useTemplateRef } from 'vue';
 import { RouterLink } from 'vue-router';
 
+/** @type {AddToast} */
+const addToast = inject('addToast');
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
 /** @type {Ref<Boolean>} */
 const loading = inject('loading');
+
+const feedback = ref('');
+const $feedbackToggle = useTemplateRef('feedbackToggle');
 
 const navItems = computed(() => {
 	// If there is no session, only show the login page
@@ -39,6 +44,24 @@ async function logout() {
 		// TODO: Handle logout errors
 	}
 }
+async function submitFeedback() {
+	loading.value = true;
+	const response = await API('feedback', { method: 'POST', body: { message: feedback } });
+	if (response.status === 204) {
+		addToast({
+			title: 'Feedback Sent',
+			body: 'We look forward to hearing what you had to say!'
+		});
+	} else {
+		addToast({
+			title: 'Feedback Error',
+			body: 'I\'m sure that wasn\'t the feedback you wanted to send, but I should see it anyway...'
+		});
+	}
+	feedback.value = '';
+	$feedbackToggle.value.click();
+	loading.value = false;
+}
 </script>
 
 <template>
@@ -67,9 +90,40 @@ async function logout() {
 					{{ item.text }}
 				</router-link>
 
-				<button v-if="invitation" class="ms-sm-auto text-start nav-item nav-link" @click="logout">
-					Sign out
-				</button>
+				<template v-if="invitation">
+					<div class="ms-sm-auto nav-item dropdown">
+						<button
+							ref="feedbackToggle"
+							class="text-start dropdown-toggle nav-link h-100"
+							type="button"
+							data-bs-auto-close="outside"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Feedback
+						</button>
+						<div id="feedback-menu" class="dropdown-menu p-3">
+							<div class="mb-3">
+								<textarea
+									id="feedback-input"
+									v-model="feedback"
+									type="text"
+									class="form-control"
+									rows="5"
+									maxlength="512"
+									placeholder="Comments or feedback you have for the website or the wedding"
+								/>
+							</div>
+							<button type="submit" class="btn btn-primary btn-sm" @click.prevent.stop="submitFeedback">
+								Submit
+							</button>
+						</div>
+					</div>
+
+					<button class="text-start nav-item nav-link" @click="logout">
+						Sign out
+					</button>
+				</template>
 			</div>
 		</div>
 	</nav>
@@ -83,5 +137,9 @@ async function logout() {
 	height: 40px;
 	top: 4px;
 	left: -8px;
+}
+
+#feedback-menu {
+	min-width: 175px;
 }
 </style>

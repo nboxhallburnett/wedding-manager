@@ -127,6 +127,11 @@ const router = createRouter({
 					path: 'gallery',
 					name: 'Admin Gallery Content',
 					component: () => import('../views/admin/GalleryEdit.vue')
+				},
+				{
+					path: 'feedback',
+					name: 'Admin List Feedback Items',
+					component: () => import('../views/admin/FeedbackList.vue')
 				}
 			]
 		},

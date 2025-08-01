@@ -5,6 +5,9 @@ module.exports = {
 	calendar_events: [
 		[ { id: 1 }, { name: 'event_id', unique: true } ]
 	],
+	feedback: [
+		[ { id: 1 }, { name: 'feedback_id', unique: true } ]
+	],
 	invitations: [
 		[ { id: 1 }, { name: 'invitation_id', unique: true } ]
 	],

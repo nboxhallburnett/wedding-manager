@@ -36,3 +36,7 @@ type CalendarEventPath = {
 	/** ID of the Calendar Event of which the request is in context */
 	calendarEventId: CalendarEvent['id']
 }
+type FeedbackPath = {
+	/** ID of the Feedback Item of which the request is in context */
+	feedbackId: FeedbackItem['id']
+}

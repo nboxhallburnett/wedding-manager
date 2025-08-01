@@ -136,3 +136,17 @@ type Image = {
 	/** Caption to show alongside the image */
 	caption?: String
 }
+
+/** Feedback item definition */
+type FeedbackItem = {
+	/** Item Identifier */
+	id: String,
+	/** Identifier of the invitation that left the feedback */
+	invitation: Invitation['id'],
+	/** Date the item was defined */
+	created: Date,
+	/** Date the item was last updated */
+	updated: Date,
+	/** Message of the feedback item */
+	description: String
+}

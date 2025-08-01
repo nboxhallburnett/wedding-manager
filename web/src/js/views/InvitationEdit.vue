@@ -296,7 +296,7 @@ function getMenuOptions(course, child) {
 							hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 							placeholder="Allergies, health conditions, ethical choices, etc."
 							validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
-							:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other')"
+							:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
 						/>
 						<hr>
 					</span>
@@ -368,7 +368,7 @@ function getMenuOptions(course, child) {
 						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 						placeholder="Allergies, health conditions, ethical choices, etc."
 						validation
-						:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other')"
+						:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
 					/>
 				</div>
 			</div>

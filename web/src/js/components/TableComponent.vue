@@ -48,6 +48,7 @@ function sort(col) {
 			class="form-control mx-auto w-75"
 			placeholder="Search"
 			:list="(suggestions?.value?.length || suggestions?.length) && 'searchSuggestions' || undefined"
+			@keyup.escape="searchTerm = ''"
 		>
 		<datalist v-if="suggestions?.value?.length || suggestions?.length" id="searchSuggestions">
 			<option v-for="item in suggestions?.value || suggestions" :key="item" :value="item" />

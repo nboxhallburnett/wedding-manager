@@ -1,5 +1,6 @@
 const host = process.env.HOST || require('os').networkInterfaces()?.en0?.find(i => i.family === 'IPv4')?.address || 'localhost';
 
+// Construct the configuration object from the supplied environment variables, casting and defaulting as applicable
 const config = {
 	host,
 	hot: process.env.HOT === 'true',
@@ -33,10 +34,45 @@ const config = {
 	}
 };
 
-const footerItems = process.env.CLIENT_FOOTER?.split(',');
-for (const item of footerItems) {
-	const [ text, url ] = item.split('|');
-	config.client.footer.push({ text, url });
+const errors = [];
+const required = [
+	'BRIDE',
+	'BRIDE_SHORT',
+	'GROOM',
+	'GROOM_SHORT',
+	'DATE',
+	'SERVER_PORT',
+	'SERVER_DB_HOST',
+	'SERVER_DB_DB',
+	'SERVER_DB_USERNAME',
+	'SERVER_DB_PASSWORD',
+	'SERVER_SESSION_NAME',
+	'SERVER_SESSION_SECRET'
+];
+
+// Loop over the defined required configuration variables and add them to the error set if they don't exist
+for (const prop of required) {
+	if (!process.env[prop]) {
+		errors.push(prop);
+	}
+}
+
+// An individual footer item is defined in markdown link syntax, `[text](url)`.
+// Note that both sections are optional, but items without either will be ignored
+const reFooterItem = /^(?:\[([^|]*)])?(?:\(([^|]*)\))?$/;
+for (const item of process.env.CLIENT_FOOTER?.split('|') || []) {
+	const [ , text, url ] = reFooterItem.exec(item);
+	if (text || url) {
+		config.client.footer.push({ text, url });
+	} else {
+		console.warn('Ignoring configured footer item:', item, '- Does not match required format');
+	}
+}
+
+// If there are any errors, log them and exit
+if (errors.length) {
+	console.error('Error: Missing required configuration item(s):', required);
+	process.exit(1);
 }
 
 /** @type {Config} */

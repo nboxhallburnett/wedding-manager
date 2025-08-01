@@ -17,6 +17,7 @@ const addToast = inject('addToast');
 
 useLoader('invitation', invitations);
 
+const menuRequest = 'Menu Request';
 const statusMessages = [
 	'Pending',
 	'Attending',
@@ -47,7 +48,7 @@ const searchSuggestions = computed(() => {
 			guest.name && items.push(guest.name);
 		}
 	}
-	return Array.from(statusMessages).concat(items.sort());
+	return [ ...statusMessages, menuRequest ].concat(items.sort());
 });
 
 const tableOpts = {
@@ -84,11 +85,11 @@ const tableOpts = {
 		}
 		// Or if a guest or child's name case-insensitively matches the term, or if they have a menu item matching the term
 		if (item.guests?.some(guest => guest.name.toLowerCase().includes(term.toLowerCase())
-			|| [ guest.starter_id, guest.main_id, guest.dessert_id ].includes(term))) {
+			|| [ guest.starter_id, guest.main_id, guest.dessert_id ].includes(term === menuRequest ? 'other' : term))) {
 			return true;
 		}
 		if (item.children?.some(child => child.name.toLowerCase().includes(term.toLowerCase())
-			|| [ child.starter_id, child.main_id, child.dessert_id ].includes(term))) {
+			|| [ child.starter_id, child.main_id, child.dessert_id ].includes(term === menuRequest ? 'other' : term))) {
 			return true;
 		}
 		// Otherwise, no match

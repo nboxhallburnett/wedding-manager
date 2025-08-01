@@ -9,7 +9,8 @@ const links = [
 	{ text: 'Menu', to: { name: 'Admin List Menu Items' } },
 	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
 	{ text: 'About', to: { name: 'Admin Edit About Content' } },
-	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } }
+	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } },
+	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } }
 ];
 </script>
 

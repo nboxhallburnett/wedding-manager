@@ -11,8 +11,6 @@ const config = {
 	groom_short: process.env.GROOM_SHORT,
 	date: new Date(process.env.DATE).valueOf(),
 
-	gallery_text: process.env.GALLERYTEXT?.split('|'),
-
 	server: {
 		port: Number(process.env.SERVER_PORT),
 		external_port: Number(process.env.SERVER_EXTERNALPORT) || 443,

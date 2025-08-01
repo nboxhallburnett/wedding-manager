@@ -79,7 +79,7 @@ function removeGuest(idx) {
 				aria-expanded="false"
 				data-bs-reference="parent"
 			>
-				<span class="d-none">Dropdown</span>
+				<span class="visually-hidden">Dropdown</span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="save-add-more">
 				<li>

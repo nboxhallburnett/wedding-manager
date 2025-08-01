@@ -40,7 +40,7 @@ function removeItem(idx) {
 					@click="removeItem(idx)"
 				>
 					<div class="btn-close btn-close-white" />
-					<div class="d-none">
+					<div class="visually-hidden">
 						Remove
 					</div>
 				</button>

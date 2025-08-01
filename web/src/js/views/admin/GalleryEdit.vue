@@ -1,6 +1,5 @@
 <script setup>
 import { inject, ref } from 'vue';
-import { VueShowdown } from 'vue-showdown';
 import { nanoid } from 'nanoid';
 
 import { useForm } from 'composables/form';
@@ -8,36 +7,38 @@ import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
-import FormTextarea from 'components/form/FormTextarea.vue';
-import FormSwitch from 'components/form/FormSwitch.vue';
 
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<Question[]>} */
+/** @type {Ref<Image[]>} */
 const items = ref([]);
 
-// Fetch the Q&A content from the API
-useLoader('question', response => {
+// Fetch the gallery content from the API
+useLoader('gallery', response => {
 	items.value = response.result.data.map(i => ({ id: nanoid(), ...i }));
 });
 
 const { onSubmit } = useForm({
-	path: 'question',
+	path: 'gallery',
 	method: 'PUT',
 	validation: true,
 	body() {
 		return {
-			items: items.value.map(i => ({
-				title: i.title,
-				answer: i.answer,
-				markdown: i.markdown
-			}))
+			items: items.value.map(i => {
+				const item = {
+					path: i.path
+				};
+				if (i.caption) {
+					item.caption = i.caption;
+				}
+				return item;
+			})
 		};
 	},
 	onSuccess() {
 		addToast({
-			title: 'Q&A items Updated',
-			body: 'Q&A page items successfully saved.'
+			title: 'Gallery items Updated',
+			body: 'Gallery page items successfully saved.'
 		});
 	}
 });
@@ -48,9 +49,8 @@ const { onSubmit } = useForm({
 function addItem() {
 	items.value.push({
 		id: nanoid(),
-		title: '',
-		answer: '',
-		markdown: false
+		path: '',
+		caption: ''
 	});
 }
 /**
@@ -73,7 +73,7 @@ function moveItem(idx, to) {
 </script>
 
 <template>
-	<card-header title="Edit Q&A Items">
+	<card-header title="Edit Gallery Items">
 		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
 			Submit
 		</button>
@@ -99,11 +99,10 @@ function moveItem(idx, to) {
 				</div>
 			</div>
 			<form-input
-				v-model="item.title"
+				v-model="item.path"
 				:name="`question-${item.id}`"
-				label="Question"
-				placeholder="What is the meaning of life?"
-				validation="Can't have an answer without a question"
+				label="Path"
+				placeholder="/img/gallery/1.jpg"
 				required
 			>
 				<template #after>
@@ -118,29 +117,22 @@ function moveItem(idx, to) {
 						</div>
 					</button>
 				</template>
-			</form-input>
-			<form-textarea
-				v-model="item.answer"
-				:name="`answer-${item.id}`"
-				label="Answer"
-				placeholder="42"
-				validation="Can't have a question without an answer"
-				required
-			>
-				<template #below>
-					<div class="img-thumbnail p-2 text-body-secondary">
-						<vue-showdown v-if="item.markdown" :markdown="item.answer || 'Preview'" flavor="github" />
-						<div v-else v-text="item.answer || 'Preview'" />
-					</div>
+				<template v-if="item.path" #below>
+					<img class="img-thumbnail" :src="item.path" alt="Preview">
 				</template>
-			</form-textarea>
-			<form-switch v-model="item.markdown" :name="`markdown-${item.id}`" label="Markdown" />
+			</form-input>
+			<form-input
+				v-model="item.caption"
+				:name="`caption-${item.id}`"
+				label="Caption"
+				placeholder="The happy couple enjoying life"
+			/>
 		</div>
 		<button
 			role="button"
 			class="btn btn-primary"
 			@click.prevent.stop="addItem"
-			v-text="'Add Question'"
+			v-text="'Add Item'"
 		/>
 	</form>
 </template>

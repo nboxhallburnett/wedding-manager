@@ -128,3 +128,11 @@ type Question = {
 	/** Whether the answer should be rendered as markdown */
 	markdown: Boolean
 }
+
+/** Definition of an item to display on the gallery page */
+type Image = {
+	/** Path to the image */
+	path: String,
+	/** Caption to show alongside the image */
+	caption?: String
+}

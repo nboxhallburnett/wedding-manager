@@ -122,6 +122,11 @@ const router = createRouter({
 					path: 'questions',
 					name: 'Admin Q&A Content',
 					component: () => import('../views/admin/QAndAEdit.vue')
+				},
+				{
+					path: 'gallery',
+					name: 'Admin Gallery Content',
+					component: () => import('../views/admin/GalleryEdit.vue')
 				}
 			]
 		},

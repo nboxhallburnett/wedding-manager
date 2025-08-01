@@ -26,7 +26,7 @@ function addToast(toast, options = { animation: true, autohide: true }) {
 </script>
 
 <template>
-	<div aria-live="polite" aria-atomic="true" class="position-relative">
+	<div id="toast-container" aria-live="polite" aria-atomic="true">
 		<div class="toast-container position-fixed end-0 p-3">
 			<div
 				v-for="toast in toasts"
@@ -52,3 +52,10 @@ function addToast(toast, options = { animation: true, autohide: true }) {
 		</div>
 	</div>
 </template>
+
+<style lang="scss">
+#toast-container {
+	position: absolute;
+	top: var(--header-height);
+}
+</style>

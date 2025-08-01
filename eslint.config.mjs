@@ -11,10 +11,7 @@ export default defineConfig([
 	{ files: [ 'web/src/**/*.{js,vue}' ], languageOptions: { globals: {
 		...globals.browser,
 		'__webpack_nonce__': 'writeable',
-		'CONFIG': 'readonly',
-		'SOURCE': 'readonly',
-		'GALLERY_IMAGES': 'readonly',
-		'GALLERY_TEXT': 'readonly'
+		'CONFIG': 'readonly'
 	} } },
 	pluginVue.configs['flat/recommended'],
 	{ rules: {

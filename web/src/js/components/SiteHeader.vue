@@ -19,12 +19,9 @@ const navItems = computed(() => {
 	const items = [
 		{ text: 'Home', to: { name: 'Home' } },
 		{ text: 'About', to: { name: 'About' } },
-		{ text: 'Q&A', to: { name: 'Q&A' } }
+		{ text: 'Q&A', to: { name: 'Q&A' } },
+		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];
-
-	if (GALLERY_IMAGES.length && invitation.value?.id) {
-		items.push({ text: 'Gallery', to: { name: 'Gallery' } });
-	}
 
 	if (invitation.value?.admin) {
 		items.push({ text: 'Admin', to: { name: 'Admin Overview' } });

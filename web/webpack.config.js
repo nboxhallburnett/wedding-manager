@@ -8,18 +8,7 @@ const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-const pkg = require('../package.json');
 const config = require('../conf');
-
-// Find images defined in the public gallery directory to supply to the front-end
-const reImgExt = /\.(?:jpe?g|a?png|gif|webp)$/;
-const galleryImages = [];
-const galleryText = config.gallery_text || [];
-for (const file of readdirSync(path.resolve(__dirname, 'public', 'img', 'gallery'))) {
-	if (reImgExt.test(file)) {
-		galleryImages.push(file);
-	}
-}
 
 const devServerPort = 8468;
 
@@ -71,9 +60,6 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			new VueLoaderPlugin(),
 			new DefinePlugin({
 				CONFIG: JSON.stringify(config),
-				SOURCE: JSON.stringify(pkg.repository.url.split('+')[1].slice(0, -4)),
-				GALLERY_IMAGES: JSON.stringify(galleryImages),
-				GALLERY_TEXT: JSON.stringify(galleryText),
 				// Vue ESM builds require these options to be defined, even if they are the default values
 				__VUE_OPTIONS_API__: true,
 				__VUE_PROD_DEVTOOLS__: false,

@@ -4,19 +4,24 @@ import 'bootstrap/js/dist/carousel';
 import { useTemplateRef, ref, onMounted } from 'vue';
 import Modal from 'bootstrap/js/dist/modal';
 
+import { useLoader } from 'composables/loader';
+
 import CardHeader from 'components/CardHeader.vue';
 
-const gallerySources = GALLERY_IMAGES;
-const galleryText = GALLERY_TEXT;
+/** @type {Ref<Image[]>} */
+const items = ref([]);
+
+// Fetch the gallery content from the API
+useLoader('gallery', items);
 
 const $modal = useTemplateRef('modal');
 const $modalImage = useTemplateRef('modalImage');
-const modal = ref(null);
-onMounted(() => modal.value = new Modal($modal.value));
+const bsModal = ref(null);
+onMounted(() => bsModal.value = new Modal($modal.value));
 
 function fullscreenImage(src) {
 	$modalImage.value.src = src;
-	modal.value.show();
+	bsModal.value.show();
 }
 </script>
 
@@ -26,7 +31,7 @@ function fullscreenImage(src) {
 		<div id="gallery-carousel" class="carousel slide img-thumbnail" data-bs-ride="carousel">
 			<div class="carousel-indicators">
 				<button
-					v-for="(_src, idx) in gallerySources"
+					v-for="(_src, idx) in items"
 					:key="idx"
 					type="button"
 					data-bs-target="#gallery-carousel"
@@ -38,19 +43,19 @@ function fullscreenImage(src) {
 			</div>
 			<div class="carousel-inner ratio ratio-4x3">
 				<div
-					v-for="(src, idx) in gallerySources"
+					v-for="(item, idx) in items"
 					:key="idx"
 					class="carousel-item"
 					:class="{ active: idx === 0 }"
 				>
 					<img
-						:src="`/img/gallery/${src}`"
+						:src="item.path"
 						class="d-block w-100 img-fluid"
 						alt="..."
-						@click.prevent="fullscreenImage(`/img/gallery/${src}`)"
+						@click.prevent="fullscreenImage(item.path)"
 					>
-					<div v-if="galleryText[idx]" class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 pb-0 mb-3 pt-3">
-						<p class="text-white" v-text="galleryText[idx]" />
+					<div v-if="item.caption" class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 pb-0 mb-3 pt-3">
+						<p class="text-white" v-text="item.caption" />
 					</div>
 				</div>
 			</div>

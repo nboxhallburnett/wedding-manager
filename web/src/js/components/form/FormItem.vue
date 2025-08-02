@@ -45,7 +45,7 @@ watch(() => errors.value?.[props.name], (err, prev) => {
 		<label
 			v-if="label"
 			:for="name"
-			class="col-sm-3 col-form-label"
+			class="col-sm-3 col-form-label fw-medium pb-0"
 			:class="labelClass"
 		>
 			{{ label }}

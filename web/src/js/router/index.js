@@ -8,13 +8,12 @@ const router = createRouter({
 			path: '/',
 			name: 'Login',
 			component: () => import('../views/LoginView.vue'),
-			beforeEnter: (to, from, next) => {
+			beforeEnter: () => {
 				// If the user has already signed in, redirect them to the home page instead
 				const invitation = inject('invitation');
 				if (invitation.value) {
-					return next({ name: 'Home' });
+					return { name: 'Home' };
 				}
-				next();
 			}
 		},
 		{
@@ -84,12 +83,17 @@ const router = createRouter({
 					component: () => import('../views/admin/InvitationList.vue')
 				},
 				{
+					path: 'invitation/:invitationId',
+					name: 'Admin View Invitation',
+					component: () => import('../views/InvitationView.vue')
+				},
+				{
 					path: 'invitation/new',
 					name: 'Admin Create Invitation',
 					component: () => import('../views/admin/InvitationCreate.vue')
 				},
 				{
-					path: 'invitation/:invitationId',
+					path: 'invitation/:invitationId/edit',
 					name: 'Admin Edit Invitation',
 					component: () => import('../views/InvitationEdit.vue')
 				},
@@ -143,16 +147,14 @@ const router = createRouter({
 	]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(to => {
 	const invitation = inject('invitation');
 	if (to.meta?.session && !invitation.value?.id) {
-		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
+		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
 	}
 	if (to.meta?.admin && !invitation.value?.admin) {
-		return next({ name: '404', params: { pathMatch: to.path.split('/').slice(1) } });
+		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
 	}
-
-	next();
 });
 
 export default router;

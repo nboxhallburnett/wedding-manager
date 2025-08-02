@@ -14,7 +14,6 @@ import FormRadio from 'components/form/FormRadio.vue';
 import FormSelect from 'components/form/FormSelect.vue';
 import FormText from 'components/form/FormText.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
-import API from 'lib/api';
 
 /** @type {Ref<Invitation>} */
 const session = inject('invitation');
@@ -83,8 +82,8 @@ const { onSubmit } = useForm({
 // Fetch the required data for the form
 useLoader([
 	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
-	adminEdit ? API(`invitation/${Router.currentRoute.value.params.invitationId}`) : { result: { data: session.value } },
-	API('menu')
+	adminEdit ? `invitation/${Router.currentRoute.value.params.invitationId}` : { result: { data: session.value } },
+	'menu'
 ], ([ invitationResult, menuResult ]) => {
 	invitation.value = invitationResult.result.data;
 	menu.value = menuResult.result.data;
@@ -213,7 +212,7 @@ function getMenuOptions(course, child) {
 <template>
 	<form class="needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'">
-			<router-link class="btn btn-link btn-sm me-2" :to="{ name: adminEdit ? 'Admin List Invitations' : 'Home' }">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }">
 				Back
 			</router-link>
 			<button class="btn btn-primary btn-sm" type="submit">
@@ -314,6 +313,7 @@ function getMenuOptions(course, child) {
 		<hr>
 
 		<div id="childAccordion" class="accordion">
+			<h5 class="mb-3" v-text="'Children'" />
 			<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
 				<div class="accordion-header">
 					<button

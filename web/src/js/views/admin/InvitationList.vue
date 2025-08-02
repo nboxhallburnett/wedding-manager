@@ -101,7 +101,7 @@ const tableOpts = {
 			return [];
 		}
 		return [
-			{ text: 'View', onClick: () => console.log(item) },
+			{ text: 'View', to: { name: 'Admin View Invitation', params: { invitationId: item.id } } },
 			{ text: 'Edit', to: { name: 'Admin Edit Invitation', params: { invitationId: item.id } } },
 			{ divider: true },
 			{ text: 'Delete', onClick: () => deleteInvitation(item), class: 'text-danger' }
@@ -189,7 +189,7 @@ function invitationStatus(invitation) {
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
 			<th scope="row" class="font-monospace">
-				<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.id } }">
+				<router-link :to="{ name: 'Admin View Invitation', params: { invitationId: item.id } }">
 					{{ item.id }}
 				</router-link>
 			</th>

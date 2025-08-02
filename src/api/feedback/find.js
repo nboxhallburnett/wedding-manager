@@ -1,6 +1,11 @@
 const feedbackDb = require('../../lib/db/feedback');
 
-/** @type {API} */
+/**
+ * @typedef FeedbackQuery
+ * @property {Boolean} [read] Read status of the feedback items to find
+ */
+
+/** @type {API<{}, {}, FeedbackQuery>} */
 module.exports = {
 	path: 'feedback',
 	auth: async req => {
@@ -8,7 +13,20 @@ module.exports = {
 		return Boolean(req.session.admin);
 	},
 	action: async (req, res) => {
-		const data = await feedbackDb.find({}, { projection: { _id: 0 } }).toArray();
+		const filter = {};
+		// If the call was made with the `read` query param, add it to the filter
+		if (Object.prototype.hasOwnProperty.call(req.query, 'read')) {
+			filter.read = String(req.query.read) === 'true';
+		}
+		// Fetch the feedback items
+		const data = await feedbackDb
+			// With any requested filters
+			.find(filter, { projection: { _id: 0 } })
+			// Sorted by read status, then by most recently created
+			.sort({ read: 1, created: -1 })
+			// And finally we'll always want the entire set so get the entire contents of the cursor as an array
+			.toArray();
+
 		return res.json({ success: true, data });
 	}
 };

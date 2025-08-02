@@ -7,7 +7,8 @@ const props = defineProps({
 	items: { type: [ Array, Object ], required: true },
 	actions: { type: Function, default: null },
 	search: { type: Function, default: null },
-	suggestions: { type: [ Array, Object ], default: null }
+	suggestions: { type: [ Array, Object ], default: null },
+	rowClass: { type: [ Function, String ], default: null }
 });
 
 const searchTerm = ref('');
@@ -83,7 +84,7 @@ function sort(col) {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in displayedItems" :key="item.id">
+				<tr v-for="item in displayedItems" :key="item.id" :class="typeof rowClass === 'function' ? rowClass(item) : rowClass">
 					<slot :item />
 					<td v-if="actions" class="text-end py-1 align-middle">
 						<button
@@ -131,5 +132,9 @@ function sort(col) {
 
 .table-active.table-active-flip > .icon-caret {
 	transform: rotate(180deg);
+}
+
+.table-warning .icon-caret {
+	filter: none;
 }
 </style>

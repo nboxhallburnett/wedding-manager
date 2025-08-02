@@ -87,7 +87,7 @@ type CalendarEvent = {
 	/** The description to include in the body of the event */
 	description: String,
 	/** The date/time the event is scheduled to end */
-	end?: Date
+	end?: Date,
 	/** Contact detail to mark as the event organizer */
 	organizer: {
 		/** Name to use as the event organizer */
@@ -124,7 +124,7 @@ type Question = {
 	/** Title to use for the question */
 	title: String,
 	/** Answer to the question */
-	answer: String
+	answer: String,
 	/** Whether the answer should be rendered as markdown */
 	markdown: Boolean
 }
@@ -141,12 +141,14 @@ type Image = {
 type FeedbackItem = {
 	/** Item Identifier */
 	id: String,
-	/** Identifier of the invitation that left the feedback */
-	invitation: Invitation['id'],
 	/** Date the item was defined */
 	created: Date,
 	/** Date the item was last updated */
 	updated: Date,
+	/** Identifier of the invitation that left the feedback */
+	invitation: Invitation['id'],
 	/** Message of the feedback item */
-	description: String
+	description: String,
+	/** Whether the feedback has been marked as read */
+	read: Boolean
 }

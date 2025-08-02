@@ -22,14 +22,14 @@ const navItems = computed(() => {
 	}
 
 	const items = [
-		{ text: 'Home', to: { name: 'Home' } },
+		{ text: 'Home', to: { name: 'Home' }, pathMatch: /^\/(?:edit)?$/ },
 		{ text: 'About', to: { name: 'About' } },
 		{ text: 'Q&A', to: { name: 'Q&A' } },
 		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];
 
 	if (invitation.value?.admin) {
-		items.push({ text: 'Admin', to: { name: 'Admin Overview' } });
+		items.push({ text: 'Admin', to: { name: 'Admin Overview' }, pathMatch: /^\/admin/ });
 	}
 
 	return items;
@@ -45,6 +45,11 @@ async function logout() {
 	}
 }
 async function submitFeedback() {
+	// Don't attempt to submit an empty message
+	if (!feedback.value) {
+		return;
+	}
+
 	loading.value = true;
 	const response = await API('feedback', { method: 'POST', body: { message: feedback } });
 	if (response.status === 204) {
@@ -85,7 +90,7 @@ async function submitFeedback() {
 					:key="item.text"
 					:to="item.to"
 					class="nav-item nav-link"
-					:class="{ active: $route.name === item.to.name }"
+					:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
 				>
 					{{ item.text }}
 				</router-link>
@@ -114,7 +119,12 @@ async function submitFeedback() {
 									placeholder="Comments or feedback you have for the website or the wedding"
 								/>
 							</div>
-							<button type="submit" class="btn btn-primary btn-sm" @click.prevent.stop="submitFeedback">
+							<button
+								type="submit"
+								class="btn btn-primary btn-sm"
+								:disabled="!feedback"
+								@click.prevent.stop="submitFeedback"
+							>
 								Submit
 							</button>
 						</div>

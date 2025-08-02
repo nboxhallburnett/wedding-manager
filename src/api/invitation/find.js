@@ -19,12 +19,14 @@ module.exports = {
 		// If a menu item is being queried, query across all item props for guests and children
 		if (req.query.menuItemId) {
 			filter.$or ||= [];
-			filter.$or.push({ 'guests.starter_id': req.query.menuItemId });
-			filter.$or.push({ 'guests.main_id': req.query.menuItemId });
-			filter.$or.push({ 'guests.dessert_id': req.query.menuItemId });
-			filter.$or.push({ 'children.starter_id': req.query.menuItemId });
-			filter.$or.push({ 'children.main_id': req.query.menuItemId });
-			filter.$or.push({ 'children.dessert_id': req.query.menuItemId });
+			filter.$or.push(...[
+				{ 'guests.starter_id': req.query.menuItemId },
+				{ 'guests.main_id': req.query.menuItemId },
+				{ 'guests.dessert_id': req.query.menuItemId },
+				{ 'children.starter_id': req.query.menuItemId },
+				{ 'children.main_id': req.query.menuItemId },
+				{ 'children.dessert_id': req.query.menuItemId }
+			]);
 			projection.id = 1;
 			projection.guests = 1;
 			projection.children = 1;

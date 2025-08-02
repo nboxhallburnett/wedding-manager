@@ -36,7 +36,7 @@ const router = createRouter({
 			meta: { session: true }
 		},
 		{
-			path: '/questions',
+			path: '/question',
 			name: 'Q&A',
 			component: () => import('../views/QAndA.vue'),
 			meta: { session: true }
@@ -119,7 +119,7 @@ const router = createRouter({
 					component: () => import('../views/admin/AboutEdit.vue')
 				},
 				{
-					path: 'questions',
+					path: 'question',
 					name: 'Admin Q&A Content',
 					component: () => import('../views/admin/QAndAEdit.vue')
 				},

@@ -17,7 +17,8 @@ module.exports = {
 			invitation: req.session.invitationId,
 			created: new Date(),
 			updated: new Date(),
-			message: String(req.body.message)
+			message: String(req.body.message),
+			read: false
 		};
 
 		// Title is required for a menu item
@@ -30,7 +31,7 @@ module.exports = {
 			res.status(400);
 			throw new Error('"message" must be a string.');
 		}
-		// And must be <512 characters
+		// And must be <=512 characters
 		if (item.message.length > 512) {
 			res.status(400);
 			throw new Error('"message" must be a string.');

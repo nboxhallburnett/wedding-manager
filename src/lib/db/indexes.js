@@ -6,7 +6,9 @@ module.exports = {
 		[ { id: 1 }, { name: 'event_id', unique: true } ]
 	],
 	feedback: [
-		[ { id: 1 }, { name: 'feedback_id', unique: true } ]
+		[ { id: 1 }, { name: 'feedback_id', unique: true } ],
+		[ { read: 1 }, { name: 'feedback_read', background: true } ],
+		[ { read: 1, created: -1 }, { name: 'feedback_search_order' } ]
 	],
 	invitations: [
 		[ { id: 1 }, { name: 'invitation_id', unique: true } ]

@@ -11,9 +11,14 @@ const props = defineProps({
 	rowClass: { type: [ Function, String ], default: null }
 });
 
+const displayedPage = ref(0);
+const perPage = ref(10);
+const perPageOptions = [ 5, 10, 25, 50, 100 ];
+
 const searchTerm = ref('');
 const currentSort = ref({ col: '', dir: 1, fn: null });
 
+// Constructs a copy of the provided data after applying any requested filters
 const filteredItems = computed(() => {
 	const term = searchTerm.value.trim();
 	if (!props.search || !term) {
@@ -22,13 +27,46 @@ const filteredItems = computed(() => {
 	return props.items.filter(item => props.search(item, term));
 });
 
-const displayedItems = computed(() => {
+// Constructs a copy of the filtered data that has been sorted by any requested sort function
+const sortedItems = computed(() => {
 	if (!currentSort.value.col) {
 		return filteredItems.value;
 	}
 	return Array.from(filteredItems.value).sort(currentSort.value.fn);
 });
 
+// Constructs a copy of the sorted data that has been split into whichever subset will fit on the currently selected page
+const displayedItems = computed(() => {
+	if (perPage.value >= sortedItems.value.length) {
+		return sortedItems.value;
+	}
+	const initialIdx = displayedPage.value * perPage.value;
+	return sortedItems.value.slice(initialIdx, initialIdx + perPage.value);
+});
+
+// Keeps track of the total number of pages
+const pages = computed(() => Math.ceil(sortedItems.value.length / perPage.value));
+
+// Constructs the displayed table's caption text
+const captionText = computed(() => {
+	const itemText = `${props.caption}${props.items.length !== 1 ? 's' : ''}`;
+	const filteredText = filteredItems.value.length !== props.items.length
+		? `${filteredItems.value.length}/${props.items.length}`
+		: props.items.length;
+
+	if (pages.value > 1) {
+		const initialIdx = displayedPage.value * perPage.value;
+		return `${initialIdx + 1} - ${Math.min(initialIdx + perPage.value, filteredItems.value.length)} of ${filteredText} ${itemText}`;
+	}
+
+	return `${filteredText} ${itemText}`;
+});
+
+/**
+ * Sets the current sort based on a selected column and the current sort direction
+ *
+ * @param col Column definition to sort by
+ */
 function sort(col) {
 	if (!col.sort) {
 		return;
@@ -39,6 +77,28 @@ function sort(col) {
 		col: col.id,
 		dir
 	};
+}
+
+/**
+ * Navigate to the page prior to the one currently displayed
+ */
+function previousPage() {
+	// Don't attempt to go to an earlier page if we're on the first page already
+	if (displayedPage.value <= 0) {
+		return;
+	}
+	displayedPage.value = displayedPage.value - 1;
+}
+
+/**
+ * Navigate to the page after to the one currently displayed
+ */
+function nextPage() {
+	// Don't attempt to go to an earlier page if we're on the first page already
+	if (displayedPage.value >= pages.value - 1) {
+		return;
+	}
+	displayedPage.value = displayedPage.value + 1;
 }
 </script>
 
@@ -58,7 +118,43 @@ function sort(col) {
 	<div class="table-responsive">
 		<table class="table table-hover mt-1">
 			<caption v-if="caption" class="text-nowrap">
-				{{ displayedItems.length !== items.length ? `${displayedItems.length} of ${items.length}` : displayedItems.length }} {{ caption }}{{ items.length !== 1 ? 's' : '' }}
+				<span v-text="captionText" />
+
+				<div class="float-end">
+					<nav v-if="pages > 1" class="d-inline-flex" aria-label="Table pagination controls">
+						<ul class="pagination pagination-sm">
+							<li class="page-item" :class="{ disabled: displayedPage === 0 }" @click.prevent.stop="previousPage">
+								<a class="page-link" href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li v-for="idx in pages" :key="idx" class="page-item">
+								<a
+									class="page-link"
+									:class="{ active: displayedPage === idx - 1 }"
+									href="#"
+									@click.prevent.stop="displayedPage = idx - 1"
+									v-text="idx"
+								/>
+							</li>
+							<li class="page-item" :class="{ disabled: displayedPage === pages - 1 }" @click.prevent.stop="nextPage">
+								<a class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+					<select
+						id="table-per-page"
+						v-model="perPage"
+						class="btn btn-sm ps-0"
+						aria-label="Table pagination per-page selection"
+					>
+						<template v-for="option of perPageOptions" :key="option">
+							<option :value="option" v-text="`${option} per page`" />
+						</template>
+					</select>
+				</div>
 			</caption>
 			<thead>
 				<tr>
@@ -93,7 +189,11 @@ function sort(col) {
 							type="button"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
-						/>
+						>
+							<div class="visually-hidden">
+								Open Actions Dropdown
+							</div>
+						</button>
 						<ul class="dropdown-menu" :aria-labelledby="`table-${item.id}-actions`">
 							<li v-for="(action, actionIdx) in actions(item)" :key="actionIdx">
 								<router-link

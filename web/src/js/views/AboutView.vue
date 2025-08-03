@@ -14,7 +14,7 @@ useLoader('about', content, aboutLoading);
 </script>
 
 <template>
-	<card-header title="About" />
+	<card-header title="The Day" />
 	<div v-if="aboutLoading" class="placeholder-wave">
 		<span class="placeholder w-100 rounded-1" />
 		<span class="placeholder w-75 rounded-1" />

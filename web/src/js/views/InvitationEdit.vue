@@ -8,6 +8,7 @@ import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
+import InfoPopover from 'components/InfoPopover.vue';
 import FormArray from 'components/form/FormArray.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormRadio from 'components/form/FormRadio.vue';
@@ -81,8 +82,8 @@ const { onSubmit } = useForm({
 
 // Fetch the required data for the form
 useLoader([
-	// If this is the admin edit, fetch the invitation from the API, otherwise we can use the session
-	adminEdit ? `invitation/${Router.currentRoute.value.params.invitationId}` : { result: { data: session.value } },
+	// If this is the admin edit, fetch the invitation from the API, otherwise we can use a clone of the session
+	adminEdit ? `invitation/${Router.currentRoute.value.params.invitationId}` : { result: { data: JSON.parse(JSON.stringify(session.value)) } },
 	'menu'
 ], ([ invitationResult, menuResult ]) => {
 	invitation.value = invitationResult.result.data;
@@ -273,30 +274,32 @@ function getMenuOptions(course, child) {
 							placeholder="Pending Confirmation"
 							:name="`guest-${idx}-reception`"
 						/>
-						<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+						<template v-if="[ 1, 2 ].includes(guest.status_reception)">
+							<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+								<hr>
+								<form-radio
+									v-model="guest[meal.key]"
+									:label="meal.text"
+									:name="`guest-${idx}-${meal.key}`"
+									:options="getMenuOptions(mealIdx, false)"
+								>
+									<template #after-each="{ item }">
+										<diet-indicator class="ms-2 align-top" :item />
+										<small class="d-block text-muted" v-text="item.description" />
+									</template>
+								</form-radio>
+							</template>
 							<hr>
-							<form-radio
-								v-model="guest[meal.key]"
-								:label="meal.text"
-								:name="`guest-${idx}-${meal.key}`"
-								:options="getMenuOptions(mealIdx, false)"
-							>
-								<template #after-each="{ item }">
-									<diet-indicator class="ms-2 align-top" :item />
-									<small class="d-block text-muted" v-text="item.description" />
-								</template>
-							</form-radio>
+							<form-textarea
+								v-model="guest.diet"
+								:name="`guest-${idx}-diet`"
+								label="Dietary Requirement"
+								hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+								placeholder="Allergies, health conditions, ethical choices, etc."
+								validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
+								:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
+							/>
 						</template>
-						<hr>
-						<form-textarea
-							v-model="guest.diet"
-							:name="`guest-${idx}-diet`"
-							label="Dietary Requirement"
-							hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
-							placeholder="Allergies, health conditions, ethical choices, etc."
-							validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
-							:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
-						/>
 						<hr>
 					</span>
 				</div>
@@ -313,7 +316,10 @@ function getMenuOptions(course, child) {
 		<hr>
 
 		<div id="childAccordion" class="accordion">
-			<h5 class="mb-3" v-text="'Children'" />
+			<h5 class="mb-3">
+				Children
+				<info-popover hint="Even if your child is young enough to not require a meal, please still let us know so we can accommodate them at the table." />
+			</h5>
 			<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
 				<div class="accordion-header">
 					<button
@@ -348,28 +354,30 @@ function getMenuOptions(course, child) {
 						max="17"
 						:name="`child-${idx}-age`"
 					/>
-					<form-radio
-						v-for="(meal, mealIdx) in mealsMap"
-						:key="`child-${idx}-${mealIdx}`"
-						v-model="child[meal.key]"
-						:label="meal.text"
-						:name="`child-${idx}-${meal.key}`"
-						:options="getMenuOptions(mealIdx, true)"
-					>
-						<template #after-each="{ item }">
-							<diet-indicator class="ms-2 align-top" :item />
-							<small class="d-block text-muted" v-text="item.description" />
-						</template>
-					</form-radio>
-					<form-textarea
-						v-model="child.diet"
-						name="diet"
-						label="Dietary Requirement"
-						hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
-						placeholder="Allergies, health conditions, ethical choices, etc."
-						validation
-						:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
-					/>
+					<template v-if="child.age">
+						<form-radio
+							v-for="(meal, mealIdx) in mealsMap"
+							:key="`child-${idx}-${mealIdx}`"
+							v-model="child[meal.key]"
+							:label="meal.text"
+							:name="`child-${idx}-${meal.key}`"
+							:options="getMenuOptions(mealIdx, child.age <= 12)"
+						>
+							<template #after-each="{ item }">
+								<diet-indicator class="ms-2 align-top" :item />
+								<small class="d-block text-muted" v-text="item.description" />
+							</template>
+						</form-radio>
+						<form-textarea
+							v-model="child.diet"
+							name="diet"
+							label="Dietary Requirement"
+							hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+							placeholder="Allergies, health conditions, ethical choices, etc."
+							validation
+							:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
+						/>
+					</template>
 				</div>
 			</div>
 		</div>

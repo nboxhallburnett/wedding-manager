@@ -22,7 +22,7 @@ defineProps({
 
 <style lang="scss" scoped>
 h4 {
-	z-index: 5;
+	z-index: 7;
 	position: sticky;
 	top: var(--header-height);
 	padding-top: 1rem;

@@ -8,15 +8,46 @@ import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<Calendar[]>} */
 const questions = ref([]);
+const QAndALoading = ref(true);
 
 // Fetch the Q&A content from the API
-useLoader('question', questions);
+useLoader('question', questions, QAndALoading);
 </script>
 
 <template>
 	<card-header>
 		Q<span class="font-script h2 lh-0 px-1">&</span>A
 	</card-header>
+	<div v-if="QAndALoading" class="placeholder-wave">
+		<h5>
+			<div class="placeholder w-50 rounded-1" />
+			<div class="visually-hidden">
+				Loading Placeholder
+			</div>
+		</h5>
+		<span class="placeholder bg-body-secondary w-100 rounded-1" />
+		<span class="placeholder bg-body-secondary w-75 rounded-1" />
+		<hr class="fancy-hr">
+		<h5>
+			<div class="placeholder w-75 rounded-1" />
+			<div class="placeholder w-25 d-block mt-1 rounded-1" />
+			<div class="visually-hidden">
+				Loading Placeholder
+			</div>
+		</h5>
+		<span class="placeholder bg-body-secondary w-100 rounded-1" />
+		<span class="placeholder bg-body-secondary w-75 rounded-1" />
+		<hr class="fancy-hr">
+		<h5>
+			<div class="placeholder w-75 rounded-1" />
+			<div class="visually-hidden">
+				Loading Placeholder
+			</div>
+		</h5>
+		<span class="placeholder bg-body-secondary w-100 rounded-1" />
+		<span class="placeholder bg-body-secondary w-100 rounded-1" />
+		<span class="placeholder bg-body-secondary w-75 rounded-1" />
+	</div>
 	<div v-for="(item, idx) in questions" :key="idx" :class="{ 'pt-2': !idx }">
 		<hr v-if="idx" class="fancy-hr">
 		<h5 v-text="item.title" />

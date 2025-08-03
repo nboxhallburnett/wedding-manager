@@ -9,7 +9,7 @@ const invitation = inject('invitation');
 </script>
 
 <template>
-	<card-header title="Ruh roh!" />
+	<card-header title="Uh Oh!" />
 	<p class="card-text">
 		You seem to be lost.
 	</p>

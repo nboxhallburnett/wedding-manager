@@ -12,13 +12,17 @@ let loading;
  *
  * @param {Promise<Response>|Promise<Response>[]|String|String[]} toLoad Options for the form to submit
  * @param {Ref|Ref[]|((response: Response|Response[]) => void)} onLoad Path of the API to call. Can either be a string or a function that returns the path
+ * @param {Ref} [loadingRef] A custom ref to use instead of the global loading indicator
  *
  * @returns {void}
  */
-export async function useLoader(toLoad, onLoad) {
+export async function useLoader(toLoad, onLoad, loadingRef) {
 	// If the addToast and loading injections aren't already defined, define them
 	addToast ||= inject('addToast');
 	loading ||= inject('loading');
+
+	// Use either a custom loading ref or the global loader depending on the supplied arguments
+	const _loader = loadingRef || loading;
 
 	// If toLoad and onLoad are arrays, ensure they have the same length for the shorthand use
 	if (Array.isArray(toLoad) && Array.isArray(onLoad) && onLoad.length !== toLoad.length) {
@@ -36,7 +40,7 @@ export async function useLoader(toLoad, onLoad) {
 	});
 
 	// Trigger the fetches and enable the loading indicator
-	loading.value = true;
+	_loader.value = true;
 	Promise.all(promises).then((response) => {
 		let hasError = false;
 		for (const item of response) {
@@ -48,7 +52,7 @@ export async function useLoader(toLoad, onLoad) {
 			}
 		}
 		// Disable the loading indicator
-		loading.value = false;
+		_loader.value = false;
 
 		// If any errors occurred, fall out
 		if (hasError) {

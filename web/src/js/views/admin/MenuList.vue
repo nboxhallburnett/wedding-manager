@@ -118,11 +118,11 @@ const tableOpts = {
 			</td>
 			<td>
 				<template v-if="!item.child">
-					Full: {{ stats.adult[item.id] || 0 }} |
-					Junior: {{ stats.child[item.id] || 0 }}
+					Full: {{ stats.adult?.[item.id] || 0 }} |
+					Junior: {{ stats.child?.[item.id] || 0 }}
 				</template>
 				<template v-else>
-					Child: {{ stats.child[item.id] || 0 }}
+					Child: {{ stats.child?.[item.id] || 0 }}
 				</template>
 			</td>
 		</table-component>

@@ -22,7 +22,7 @@ dns.resolve4(config.host, (err, addresses) => {
 	}
 	log('Fetched host machine IPv4 address(es): %o', addresses);
 	for (const address of addresses) {
-		localAddressList.addAddress(address)
+		localAddressList.addAddress(address);
 	}
 });
 

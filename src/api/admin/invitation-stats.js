@@ -74,11 +74,11 @@ module.exports = {
 		return res.json({ success: true, data: {
 			status_ceremony: statusCeremony,
 			status_reception: statusReception,
-			unused_plus_one: unusedPlusOne[0].count,
-			total_children: childrenCount[0].count,
-			total_logins: loginCount[0].count,
-			total_song_requests: songRequestCount[0].count,
-			total_messages: messageCount[0].count
+			unused_plus_one: unusedPlusOne[0]?.count || 0,
+			total_children: childrenCount[0]?.count || 0,
+			total_logins: loginCount[0]?.count || 0,
+			total_song_requests: songRequestCount[0]?.count || 0,
+			total_messages: messageCount[0]?.count || 0
 		} });
 	}
 };

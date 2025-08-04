@@ -10,6 +10,7 @@ const links = [
 	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
 	{ text: 'About', to: { name: 'Admin Edit About Content' } },
 	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } },
+	{ text: 'Our Story', to: { name: 'Admin Our Story Content' } },
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
 	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } }
 ];

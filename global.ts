@@ -129,6 +129,16 @@ type Question = {
 	markdown: Boolean
 }
 
+/** Definition of an item to display on the Our Story page */
+type StoryItem = {
+	/** Title to use for the story item */
+	title: String,
+	/** Description of the story item */
+	description: String,
+	/** When the story item occurred. Specifically not a date object to allow for ad-hoc formatting */
+	date: String
+}
+
 /** Definition of an item to display on the gallery page */
 type Image = {
 	/** Path to the image */

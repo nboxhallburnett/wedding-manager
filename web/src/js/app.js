@@ -20,6 +20,8 @@ export async function init() {
 	app.provide('invitation', invitation);
 	const loading = ref(false);
 	app.provide('loading', loading);
+	const cache = ref({});
+	app.provide('cache', cache);
 
 	// Ensure the invitation fetch resolves before we mount the application
 	const invitationResult = await sessionFetch;

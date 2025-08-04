@@ -47,6 +47,12 @@ const router = createRouter({
 			meta: { session: true }
 		},
 		{
+			path: '/story',
+			name: 'Our Story',
+			component: () => import('../views/OurStory.vue'),
+			meta: { session: true }
+		},
+		{
 			path: '/admin',
 			name: 'Admin Overview',
 			component: () => import('../views/admin/Index.vue'),
@@ -131,6 +137,11 @@ const router = createRouter({
 					path: 'gallery',
 					name: 'Admin Gallery Content',
 					component: () => import('../views/admin/GalleryEdit.vue')
+				},
+				{
+					path: 'story',
+					name: 'Admin Our Story Content',
+					component: () => import('../views/admin/OurStoryEdit.vue')
 				},
 				{
 					path: 'feedback',

@@ -12,7 +12,7 @@ import CardHeader from 'components/CardHeader.vue';
 const items = ref([]);
 
 // Fetch the gallery content from the API
-useLoader('gallery', items);
+useLoader('gallery', items, undefined, true);
 
 const $modal = useTemplateRef('modal');
 const $modalImage = useTemplateRef('modalImage');

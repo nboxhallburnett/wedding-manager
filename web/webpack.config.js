@@ -106,8 +106,17 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			}),
 			// Purge unused CSS
 			new PurgeCSSPlugin({
-				paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, { nodir: true }),
-				safelist: { greedy: [ /data-v-.*/ ], standard: [ 'body', 'html', 'collapse', 'collapsing' ] }
+				paths: glob.sync([
+					`${path.join(__dirname, 'src')}/**/*`,
+					'node_modules/bootstrap/js/dist/carousel.js',
+					'node_modules/bootstrap/js/dist/collapse.js',
+					'node_modules/bootstrap/js/dist/dropdown.js',
+					'node_modules/bootstrap/js/dist/modal.js',
+					'node_modules/bootstrap/js/dist/popover.js',
+					'node_modules/bootstrap/js/dist/toast.js',
+					'node_modules/bootstrap/js/dist/tooltip.js'
+				], { nodir: true }),
+				safelist: { greedy: [ /data-v-.*/ ], standard: [ 'body', 'html' ] }
 			}),
 			// And generate a manifest file for the index handler to reference hashed assets
 			new WebpackManifestPlugin()

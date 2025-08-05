@@ -50,14 +50,15 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 
 <style lang="scss" scoped>
 @keyframes fade-in {
-	0% {opacity: 0;}
-	100% {opacity: 1;}
+	0% { opacity: 0; }
+	100% { opacity: 1; }
 }
 @keyframes fade-out {
 	0% {
 		opacity: 1;
 		background-color: var(--bs-secondary);
 	}
+
 	100% {
 		opacity: 0;
 		background-color: var(--bs-primary);
@@ -91,9 +92,9 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	margin-top: 25vh;
 	line-height: 1;
 	font-size: calc(2rem + 7vmin);
-
 	animation-delay: 0.5s;
 }
+
 #welcome-date {
 	position: absolute;
 	top: 0;
@@ -103,9 +104,9 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	min-height: 100%;
 	min-width: 100%;
 	font-size: calc(2rem + 4vmin);
-
 	animation-delay: 2.5s;
 }
+
 #welcome-names {
 	position: absolute;
 	min-width: 100%;
@@ -116,7 +117,6 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	flex-wrap: wrap;
 	line-height: 1;
 	justify-content: center;
-
 	animation-delay: 4.5s;
 
 	.font-script {

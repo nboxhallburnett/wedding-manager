@@ -95,7 +95,7 @@ function fullscreenImage(src) {
 						aria-label="Close"
 					/>
 					<img
-						id="modalImage"
+						id="modal-image"
 						ref="modalImage"
 						src=""
 						class="img-fluid"
@@ -115,14 +115,11 @@ function fullscreenImage(src) {
 	}
 
 	.carousel-caption {
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: auto;
+		inset: 0 0 auto;
 	}
 }
 
-#modalImage {
+#modal-image {
 	max-width: 100%;
 	max-height: 100%;
 }

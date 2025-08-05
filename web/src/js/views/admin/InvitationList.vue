@@ -210,24 +210,31 @@ td {
 	&.start-0 {
 		--start-bg: var(--bs-gray-500);
 	}
+
 	&.end-0 {
 		--end-bg: var(--bs-gray-500);
 	}
+
 	&.start-1 {
 		--start-bg: var(--bs-success);
 	}
+
 	&.end-1 {
 		--end-bg: var(--bs-success);
 	}
+
 	&.start-2 {
 		--start-bg: var(--bs-info);
 	}
+
 	&.end-2 {
 		--end-bg: var(--bs-info);
 	}
+
 	&.start-3 {
 		--start-bg: var(--bs-danger);
 	}
+
 	&.end-3 {
 		--end-bg: var(--bs-danger);
 	}

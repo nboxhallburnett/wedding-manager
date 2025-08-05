@@ -28,6 +28,7 @@ const groom = CONFIG.groom_short;
 	opacity: 0.9;
 
 	// Add artificial negative top margin to make the border radius to appear to fade into the header
+	/* stylelint-disable-next-line declaration-property-value-no-unknown */
 	margin-top: -1 * $artificial-margin;
 
 	#site-title {

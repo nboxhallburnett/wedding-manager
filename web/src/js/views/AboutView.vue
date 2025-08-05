@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
+import { classExtensions } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
@@ -16,7 +17,7 @@ useLoader('about', content, aboutLoading, true);
 <template>
 	<card-header title="The Day" />
 	<div v-if="content" class="card-text">
-		<vue-showdown :markdown="content" flavor="github" />
+		<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
 	</div>
 	<div v-if="aboutLoading" class="placeholder-wave">
 		<span class="placeholder w-100 rounded-1" />

@@ -14,6 +14,7 @@ const loading = inject('loading');
 
 const feedback = ref('');
 const $feedbackToggle = useTemplateRef('feedbackToggle');
+const $navbarToggle = useTemplateRef('navbarToggle');
 
 const navItems = computed(() => {
 	// If there is no session, only show the login page
@@ -29,6 +30,7 @@ const navItems = computed(() => {
 		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];
 
+	// Only show the admin link if there is an admin session
 	if (invitation.value?.admin) {
 		items.push({ text: 'Admin', to: { name: 'Admin Overview' }, pathMatch: /^\/admin/ });
 	}
@@ -36,6 +38,20 @@ const navItems = computed(() => {
 	return items;
 });
 
+/**
+ * Toggles the navbar. Used as an additional click listener on router links so the navbar closes on navigation
+ */
+function collapseNavbar() {
+	// Use aria-expanded rather than checking for the collapsed class so it works regardless of whether it's been toggled
+	if ($navbarToggle.value.getAttribute('aria-expanded') === 'false') {
+		return;
+	}
+	$navbarToggle.value.click();
+}
+
+/**
+ * Calls the session logout API and redirects the user back to the login page
+ */
 async function logout() {
 	loading.value = true;
 	const response = await API('session', { method: 'DELETE' });
@@ -45,6 +61,10 @@ async function logout() {
 		// TODO: Handle logout errors
 	}
 }
+
+/**
+ * Posts any supplied feedback to the feedback API and resets the dropdown
+ */
 async function submitFeedback() {
 	// Don't attempt to submit an empty message
 	if (!feedback.value) {
@@ -73,6 +93,7 @@ async function submitFeedback() {
 <template>
 	<nav id="header" class="navbar navbar-expand-sm bg-body shadow px-3 w-100 position-fixed top-0">
 		<button
+			ref="navbarToggle"
 			class="navbar-toggler"
 			type="button"
 			data-bs-toggle="collapse"
@@ -92,6 +113,7 @@ async function submitFeedback() {
 					:to="item.to"
 					class="nav-item nav-link"
 					:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
+					@click="collapseNavbar"
 				>
 					{{ item.text }}
 				</router-link>

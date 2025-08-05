@@ -2,7 +2,7 @@
 __webpack_nonce__ = '__NONCE__';
 
 // Trigger the import our custom CSS
-import('../scss/index.scss');
+import '../scss/index.scss';
 
 // Load the actual app code in a separate bundle.
 import('./app.js').then(app => app.init());

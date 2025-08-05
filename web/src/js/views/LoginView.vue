@@ -8,7 +8,7 @@ import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
-const invitationId = ref('');
+const invitationId = ref(Router.currentRoute.value.query.id || '');
 
 const { onSubmit } = useForm({
 	method: 'POST',

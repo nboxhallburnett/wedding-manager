@@ -19,12 +19,3 @@ defineProps({
 		</span>
 	</h4>
 </template>
-
-<style lang="scss" scoped>
-h4 {
-	z-index: 7;
-	position: sticky;
-	top: var(--header-height);
-	padding-top: 1rem;
-}
-</style>

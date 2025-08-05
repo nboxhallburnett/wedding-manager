@@ -97,7 +97,7 @@ onMounted(() => {
 	<site-footer />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 header {
 	margin-bottom: 175px;
 }

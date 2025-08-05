@@ -165,7 +165,7 @@ function nextPage() {
 						class="text-nowrap"
 						:role="col.sort && 'button' || undefined"
 						:class="[ col.class, {
-							'sortable': col.sort,
+							'col-sortable': col.sort,
 							'table-active': currentSort.col === col.id,
 							'table-active-flip': currentSort.col === col.id && currentSort.dir === 1
 						} ]"
@@ -221,8 +221,8 @@ function nextPage() {
 	</div>
 </template>
 
-<style lang="scss" scoped>
-.sortable {
+<style lang="scss">
+.col-sortable {
 	cursor: pointer;
 
 	&:hover {

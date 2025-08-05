@@ -33,15 +33,15 @@ const csp = {
 	'img-src': '\'self\' data:',
 	// Don't allow objects
 	'object-src': '\'none\'',
-	// Allow styles from google fonts
-	'style-src': 'https://fonts.googleapis.com'
+	// Allow styles from ourself and google fonts
+	'style-src': '\'self\' https://fonts.googleapis.com'
 };
 
 // When using hot reload we'll want to add a few extra options to the base policy
 if (config.hot) {
 	csp['script-src'] = `'self' 'unsafe-eval' http://${config.host}:8468`;
 	csp['connect-src'] = `'self' http://${config.host}:8468 ws://${config.host}:8468/ws`;
-	csp['style-src'] += ` 'self' 'unsafe-inline' http://${config.host}:8468`;
+	csp['style-src'] += ` 'unsafe-inline' http://${config.host}:8468`;
 } else {
 	// Otherwise, add a nonce value to the script and style sources
 	csp['script-src'] = '\'nonce-NONCE\'';

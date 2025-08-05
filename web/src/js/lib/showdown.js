@@ -1,8 +1,5 @@
 const classMap = {
-	table: 'table table-hover',
-	// h2: 'ui medium header',
-	// ul: 'ui list',
-	// li: 'ui item'
+	table: 'table table-hover'
 };
 
 export const classExtensions = Object.keys(classMap).map(key => ({

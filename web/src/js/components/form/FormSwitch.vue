@@ -26,8 +26,8 @@ const props = defineProps({
 	</form-item>
 </template>
 
-<style lang="scss" scoped>
-.form-check-input {
+<style lang="scss">
+.form-switch .form-check-input {
 	font-size: x-large;
 	margin-left: -2.5rem;
 }

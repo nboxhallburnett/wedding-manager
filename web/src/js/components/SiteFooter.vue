@@ -41,7 +41,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 	</nav>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #footer {
 	z-index: 10;
 	position: fixed;

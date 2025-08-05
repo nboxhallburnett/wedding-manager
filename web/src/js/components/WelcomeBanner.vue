@@ -13,7 +13,7 @@ const groom = CONFIG.groom_short;
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #welcome-banner {
 	$artificial-margin: 250px;
 	$banner-border-radius: 45%;
@@ -36,7 +36,7 @@ const groom = CONFIG.groom_short;
 	}
 }
 
-h1 .font-script {
+#site-title .font-script {
 	font-size: larger;
 }
 </style>

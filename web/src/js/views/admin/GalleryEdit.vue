@@ -136,9 +136,3 @@ function moveItem(idx, to) {
 		/>
 	</form>
 </template>
-
-<style lang="scss" scoped>
-.rotate-180 {
-	transform: rotate(180deg);
-}
-</style>

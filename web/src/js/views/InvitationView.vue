@@ -152,9 +152,3 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 		name="songs"
 	/>
 </template>
-
-<style lang="scss" scoped>
-.w-33 {
-	width: 33% !important;
-}
-</style>

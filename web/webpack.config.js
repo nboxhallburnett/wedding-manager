@@ -10,6 +10,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 const config = require('../conf');
 
+const secure = config.server.external_port === 443;
 const devServerPort = 8468;
 
 module.exports = function ({ WEBPACK_SERVE }) {
@@ -52,7 +53,7 @@ module.exports = function ({ WEBPACK_SERVE }) {
 			]
 		},
 		output: {
-			publicPath: `//${config.host}${config.server.external_port !== 443 ? ':' + config.server.external_port : ''}/`,
+			publicPath: `http${secure ? 's' : ''}://${config.host}${!secure ? ':' + config.server.external_port : ''}/`,
 			path: path.resolve(__dirname, 'public'),
 			filename: 'js/[name].[contenthash].js'
 		},
@@ -79,7 +80,7 @@ module.exports = function ({ WEBPACK_SERVE }) {
 		conf.devtool = 'eval-source-map';
 
 		// Switch the public path to the dev server and remove content hashing from the output filename
-		conf.output.publicPath = `//${config.host}:${devServerPort}/`;
+		conf.output.publicPath = `http${secure ? 's' : ''}://${config.host}:${devServerPort}/`;
 		conf.output.filename = 'js/[name].js';
 
 		// Establish the dev server

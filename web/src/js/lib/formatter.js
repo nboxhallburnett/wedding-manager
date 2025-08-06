@@ -4,7 +4,7 @@
  * @param {CalendarEvent} event
  * @returns {String}
  */
-export function formatDate(event) {
+export function formatEventDate(event) {
 	const start = new Date(event.start);
 	const end = new Date(event.end);
 
@@ -21,3 +21,11 @@ export function formatDate(event) {
 	// Otherwise show the start and end as full datetime strings
 	return `${start.toLocaleString()} - ${end.toLocaleString()}`;
 }
+
+// Formatter to make displayed date appropriately formatted for the users locale
+export const dateFormatter = new Intl.DateTimeFormat(undefined, {
+	month: 'long',
+	day: 'numeric',
+	year: 'numeric',
+	timezone: 'UTC'
+});

@@ -1,13 +1,8 @@
 <script setup>
+import { dateFormatter } from 'lib/formatter';
+
 const navItems = CONFIG.client.footer;
 
-// Formatter to make displayed date appropriately formatted for the users locale
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric',
-	timezone: 'UTC'
-});
 const date = dateFormatter.format(CONFIG.date);
 // Calculate number of days from now until the configured date
 const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));

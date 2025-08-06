@@ -94,6 +94,11 @@ const router = createRouter({
 					component: () => import('../views/InvitationView.vue')
 				},
 				{
+					path: 'invitation/:invitationId/card',
+					name: 'Admin View Invitation Card',
+					component: () => import('../views/admin/InvitationCard.vue')
+				},
+				{
 					path: 'invitation/new',
 					name: 'Admin Create Invitation',
 					component: () => import('../views/admin/InvitationCreate.vue')

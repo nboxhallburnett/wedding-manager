@@ -103,6 +103,7 @@ const tableOpts = {
 		return [
 			{ text: 'View', to: { name: 'Admin View Invitation', params: { invitationId: item.id } } },
 			{ text: 'Edit', to: { name: 'Admin Edit Invitation', params: { invitationId: item.id } } },
+			{ text: 'Share', to: { name: 'Admin View Invitation Card', params: { invitationId: item.id } } },
 			{ divider: true },
 			{ text: 'Delete', onClick: () => deleteInvitation(item), class: 'text-danger' }
 		];

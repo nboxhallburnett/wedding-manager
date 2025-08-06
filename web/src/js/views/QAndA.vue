@@ -5,11 +5,7 @@ import { VueShowdown } from 'vue-showdown';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
-
-// Get the bride and groom's first initial for use as the content in alternating Q&A dividers
-const brideInitial = String(CONFIG.bride).toUpperCase().charAt(0);
-const groomInitial = String(CONFIG.groom).toUpperCase().charAt(0);
-const dividerAlternatingContent = ref(`"${brideInitial}⚭${groomInitial}"`);
+import CustomHR from 'components/CustomHR.vue';
 
 /** @type {Ref<Calendar[]>} */
 const questions = ref([]);
@@ -24,7 +20,8 @@ useLoader('question', questions, QAndALoading, true);
 		Q<span class="font-script h2 lh-0 px-1">&</span>A
 	</card-header>
 	<div v-for="(item, idx) in questions" :key="idx" :class="{ 'pt-2': !idx }">
-		<hr v-if="idx" class="fancy-hr">
+		<hr v-if="idx && idx % 2 === 0" class="fancy-hr">
+		<custom-h-r v-else-if="idx" />
 		<h5 v-text="item.title" />
 		<vue-showdown
 			v-if="item.markdown"
@@ -43,7 +40,7 @@ useLoader('question', questions, QAndALoading, true);
 		</h5>
 		<span class="placeholder bg-body-secondary w-100 rounded-1" />
 		<span class="placeholder bg-body-secondary w-75 rounded-1" />
-		<hr class="fancy-hr">
+		<custom-h-r />
 		<h5>
 			<div class="placeholder w-75 rounded-1" />
 			<div class="placeholder w-25 d-block mt-1 rounded-1" />
@@ -65,11 +62,3 @@ useLoader('question', questions, QAndALoading, true);
 		<span class="placeholder bg-body-secondary w-75 rounded-1" />
 	</div>
 </template>
-
-<style lang="scss" scoped>
-div:nth-of-type(2n) > hr.fancy-hr {
-	&::after {
-		content: v-bind(dividerAlternatingContent);
-	}
-}
-</style>

@@ -24,6 +24,9 @@ const csp = {
 	'default-src': '\'self\'',
 	// Set ourselves as the only allowed base uri
 	'base-uri': '\'self\'',
+	// Set ourselves, data blobs, and google fonts for connect-src.
+	// data: is used for the generation of themed qr codes, and google fonts in the sharing of the invitation card
+	'connect-src': '\'self\' data: https://fonts.gstatic.com',
 	// Allow fonts from ourselves and google fonts
 	'font-src': '\'self\' https://fonts.gstatic.com',
 	// Don't allow the site to be framed
@@ -40,7 +43,7 @@ const csp = {
 // When using hot reload we'll want to add a few extra options to the base policy
 if (config.hot) {
 	csp['script-src'] = `'self' 'unsafe-eval' http://${config.host}:8468`;
-	csp['connect-src'] = `'self' http://${config.host}:8468 ws://${config.host}:8468/ws`;
+	csp['connect-src'] += ` http://${config.host}:8468 ws://${config.host}:8468/ws`;
 	csp['style-src'] += ` 'unsafe-inline' http://${config.host}:8468`;
 } else {
 	// Otherwise, add a nonce value to the script and style sources

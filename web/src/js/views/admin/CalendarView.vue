@@ -8,7 +8,7 @@ import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 
-import { formatDate } from 'lib/formatter';
+import { formatEventDate } from 'lib/formatter';
 
 /** @type {Ref<CalendarEvent>} */
 const item = ref({});
@@ -23,7 +23,7 @@ useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
 	<form-item v-if="item.organizer?.email" name="organizer" label="Organizer">
 		<a class="form-control-plaintext link-primary" :href="`mailto:${item.organizer.name} <${item.organizer.email}>`" v-text="item.organizer.name" />
 	</form-item>
-	<form-text name="date" label="Date" :value="formatDate(item)" />
+	<form-text name="date" label="Date" :value="formatEventDate(item)" />
 	<form-text
 		v-if="item.timezone"
 		v-model="item.timezone"

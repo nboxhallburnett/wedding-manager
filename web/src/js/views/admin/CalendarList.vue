@@ -8,7 +8,7 @@ import { useLoader } from 'composables/loader';
 import CardHeader from 'components/CardHeader.vue';
 import TableComponent from 'components/TableComponent.vue';
 
-import { formatDate } from 'lib/formatter';
+import { formatEventDate } from 'lib/formatter';
 
 /** @type {Ref<CalendarEvent[]>} */
 const events = ref([]);
@@ -61,7 +61,7 @@ const tableOpts = {
 					{{ item.summary }}
 				</router-link>
 			</th>
-			<td v-text="formatDate(item)" />
+			<td v-text="formatEventDate(item)" />
 		</table-component>
 	</div>
 </template>

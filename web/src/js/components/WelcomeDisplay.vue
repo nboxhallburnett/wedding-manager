@@ -1,13 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
+import { dateFormatter } from 'lib/formatter';
 
-// Formatter to make displayed date appropriately formatted for the users locale
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric',
-	timezone: 'UTC'
-});
 const date = dateFormatter.format(CONFIG.date);
 
 const bride = CONFIG.bride_short;

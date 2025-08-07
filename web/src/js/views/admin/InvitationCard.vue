@@ -27,6 +27,7 @@ const $qrCode = useTemplateRef('qrCode');
 const $card = useTemplateRef('card');
 const qrCodeSize = 150;
 const qrCodeSizePx = ref(`${qrCodeSize}px`);
+const borderContent = ref('');
 
 const listFormatter = new Intl.ListFormat('en', {
 	style: 'long',
@@ -59,21 +60,32 @@ onMounted(async () => {
 	const primaryColour = getComputedStyle($card.value).getPropertyValue('--bs-primary');
 	const dotColour = getComputedStyle($card.value).getPropertyValue('--bs-secondary-color');
 
-	// Fetch the ring svg content from the server
-	const svg = await fetch('/img/ring.svg');
-	const svgContent = await svg.text();
-	const themedSvg = svgContent
-		// And replace its fill colour with the themed primary colour
+	// Fetch the ring and border svg content from the server
+	const [ ringSvg, borderSvg ] = await Promise.all([
+		fetch('/img/ring.svg'),
+		fetch('/img/invitation/border.svg')
+	]);
+	// Get their text value
+	const [ ringSvgContent, borderSvgContent ] = await Promise.all([
+		ringSvg.text(),
+		borderSvg.text()
+	]);
+	const themedRingSvg = ringSvgContent
+		// Replace the ring svg fill colour with the themed primary colour
 		.replace(reFill, ` fill="${primaryColour}"`)
 		// And its view box to be square to better fit the QR code instead of its use as a loading spinner
 		.replace(reViewbox, ' viewBox="377 256 300 300"');
+
+	borderContent.value = borderSvgContent
+		// Replace the border fill colour with the themed primary colour
+		.replace(reFill, ` fill="${primaryColour}"`);
 
 	// Generate the themed QR code to point to the specific users id
 	const qrCode = new QRCodeStyling({
 		width: qrCodeSize,
 		height: qrCodeSize,
 		data: `${window.location.origin}/?id=${Router.currentRoute.value.params.invitationId}`,
-		image: 'data:image/svg+xml,' + encodeURIComponent(themedSvg),
+		image: 'data:image/svg+xml,' + encodeURIComponent(themedRingSvg),
 		dotsOptions: {
 			color: dotColour,
 			type: 'rounded',
@@ -198,6 +210,9 @@ async function shareImage() {
 						</div>
 					</div>
 				</div>
+
+				<div id="decoration-top-left" v-html="borderContent" />
+				<div id="decoration-top-right" v-html="borderContent" />
 				<div id="qr-code" ref="qrCode" class="pe-2" />
 			</div>
 		</div>
@@ -216,6 +231,7 @@ $qr-code-size: v-bind(qrCodeSizePx);
 
 #invitation-footer {
 	position: absolute;
+	max-width: 410px;
 	bottom: $invitation-border-size;
 	height: $qr-code-size;
 }
@@ -226,6 +242,12 @@ $qr-code-size: v-bind(qrCodeSizePx);
 	margin-left: calc(50% - 300px);
 	z-index: 12;
 	user-select: none;
+
+	hr {
+		border-color: var(--bs-primary);
+		color: var(--bs-primary);
+		opacity: 1;
+	}
 }
 
 .card-body {
@@ -294,6 +316,21 @@ $qr-code-size: v-bind(qrCodeSizePx);
 
 .card-text {
 	font-size: medium;
+}
+
+#decoration-top-left,
+#decoration-top-right {
+	position: absolute;
+	top: $invitation-border-size * 2;
+}
+
+#decoration-top-left {
+	left: $invitation-border-size * 2;
+}
+
+#decoration-top-right {
+	right: $invitation-border-size * 2;
+	transform: rotate(90deg);
 }
 
 #qr-code {

@@ -56,8 +56,8 @@ onMounted(async () => {
 	rsvpLocation.value = window.location.hostname;
 
 	// Fetch the themed colours to use for the QR code content
-	const primaryColour = getComputedStyle(document.body).getPropertyValue('--bs-primary');
-	const dotColour = getComputedStyle(document.body).getPropertyValue('--bs-secondary-color');
+	const primaryColour = getComputedStyle($card.value).getPropertyValue('--bs-primary');
+	const dotColour = getComputedStyle($card.value).getPropertyValue('--bs-secondary-color');
 
 	// Fetch the ring svg content from the server
 	const svg = await fetch('/img/ring.svg');
@@ -171,7 +171,7 @@ async function shareImage() {
 			Share
 		</button>
 	</card-header>
-	<div ref="card" class="card shadow ratio ratio-1x1">
+	<div ref="card" class="card shadow ratio ratio-1x1" data-bs-theme="light">
 		<div class="card-body">
 			<div class="card-content text-body-secondary">
 				<div class="card-text h-100">
@@ -224,51 +224,69 @@ $qr-code-size: v-bind(qrCodeSizePx);
 	width: 600px;
 	left: 0;
 	margin-left: calc(50% - 300px);
+	z-index: 12;
+	user-select: none;
 }
 
 .card-body {
 	width: 100%;
 	padding: $invitation-border-size;
 	border: 2px solid var(--bs-primary);
-	&:before, &:after {
-		content: " ";
+
+	&::before,
+	&::after {
+		content: ' ';
 		position: absolute;
+		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		width: 3 * $invitation-border-size;
+		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		height: 3 * $invitation-border-size;
+		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		font-size: 3 * $invitation-border-size;
 		color: var(--bs-primary);
 		border: 2px solid var(--bs-primary);
+		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		line-height: 3 * $invitation-border-size;
 		top: $invitation-border-size;
 		text-align: center;
 	}
-	&:before {
+
+	&::before {
 		left: $invitation-border-size;
 	}
-	&:after {
+
+	&::after {
 		right: $invitation-border-size;
 	}
+
 	.card-content {
 		border: 2px solid var(--bs-primary);
 		height: 100%;
 		padding: 1rem;
 
-		&:before, &:after {
-			content: " ";
+		&::before,
+		&::after {
+			content: ' ';
 			position: absolute;
+			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			width: 3 * $invitation-border-size;
+			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			height: 3 * $invitation-border-size;
+			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			font-size: 3 * $invitation-border-size;
 			color: var(--bs-primary);
 			border: 2px solid var(--bs-primary);
+			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			line-height: 3 * $invitation-border-size;
 			bottom: $invitation-border-size;
 			text-align: center;
 		}
-		&:before {
+
+		&::before {
 			left: $invitation-border-size;
 		}
-		&:after {
+
+		&::after {
 			right: $invitation-border-size;
 		}
 	}

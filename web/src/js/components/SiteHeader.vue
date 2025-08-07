@@ -24,7 +24,7 @@ const navItems = computed(() => {
 
 	const items = [
 		{ text: 'Home', to: { name: 'Home' }, pathMatch: /^\/(?:edit)?$/ },
-		{ text: 'The Day', to: { name: 'About' } },
+		{ text: 'Details', to: { name: 'About' } },
 		{ text: 'Q&A', to: { name: 'Q&A' } },
 		{ text: 'Our Story', to: { name: 'Our Story' } },
 		{ text: 'Gallery', to: { name: 'Gallery' } }

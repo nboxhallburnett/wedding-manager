@@ -24,15 +24,15 @@ const { onSubmit } = useForm({
 	body: { content },
 	onSuccess() {
 		addToast({
-			title: 'About content Updated',
-			body: 'About page content successfully saved.'
+			title: 'Details content Updated',
+			body: 'Details page content successfully saved.'
 		});
 	}
 });
 </script>
 
 <template>
-	<card-header title="Edit About Page">
+	<card-header title="Edit Details Page">
 		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
 			Submit
 		</button>
@@ -49,7 +49,7 @@ const { onSubmit } = useForm({
 		<h5 v-text="'Preview'" />
 		<div class="card shadow">
 			<div class="card-body pt-0">
-				<card-header title="About" class="z-0" />
+				<card-header title="Details" class="z-0" />
 				<div class="card-text">
 					<vue-showdown :markdown="content || placeholder" flavor="github" :extensions="classExtensions" />
 				</div>

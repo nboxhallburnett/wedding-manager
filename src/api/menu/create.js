@@ -8,7 +8,7 @@ module.exports = {
 	path: 'menu',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.session.admin);
+		return Boolean(req.ctx.admin);
 	},
 	action: async (req, res) => {
 		/** @type {MenuItem} */

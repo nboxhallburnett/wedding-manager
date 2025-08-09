@@ -9,10 +9,11 @@ import Express from 'express';
 import { nanoid } from 'nanoid';
 import { rateLimit } from 'express-rate-limit';
 
-import RequestContext from './lib/request-context.js';
-import Logger from './lib/logger.js';
 import API from './api/index.js';
+import Admin from './lib/admin.js';
 import DB from './lib/db/index.js';
+import Logger from './lib/logger.js';
+import RequestContext from './lib/request-context.js';
 
 import IndexRoute from './routes/index.js';
 
@@ -110,6 +111,9 @@ app.use(Session({
 		touchAfter: 24 * 60 * 60 // 24 hours in seconds
 	})
 }));
+
+// Add admin middleware
+app.use(Admin.middleware);
 
 // API-wide middlewares
 app.use('/api', ...[

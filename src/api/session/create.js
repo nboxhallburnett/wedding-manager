@@ -14,6 +14,7 @@ module.exports = {
 			}
 			// Otherwise, store the id in the session
 			req.session.invitationId = invitation.id;
+			// If the invitation grants admin access, store that in the session record
 			if (invitation.admin) {
 				req.session.admin = true;
 			}

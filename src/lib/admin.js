@@ -3,6 +3,7 @@ const { BlockList } = require('net');
 
 const config = require('../../conf');
 const log = require('../lib/logger')('admin');
+const tokenDb = require('./db/tokens');
 
 // Yes, we're using "BlockList" as an allow list
 const localAddressList = new BlockList();
@@ -27,7 +28,8 @@ dns.resolve4(config.host, (err, addresses) => {
 });
 
 module.exports = {
-	isPrivateIp
+	isPrivateIp,
+	middleware
 };
 
 /**
@@ -38,4 +40,35 @@ module.exports = {
  */
 function isPrivateIp(ip) {
 	return localAddressList.check(ip);
+}
+
+/**
+ * Handle setting an appropriate value for elevated access in the request context.
+ *
+ * @param {WeddingManagerRequest} req Request
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
+async function middleware(req, _res, next) {
+	// If there is an admin session, mark the request as having admin access
+	if (req.session.admin) {
+		req.ctx.admin = true;
+		return next();
+	}
+	// If an auth token header was passed, verify it is known
+	if (req.headers['x-auth-token']) {
+		const tokenDoc = await tokenDb.findOne({ id: req.headers['x-auth-token'] });
+		// If it doesn't exist, log the request and continue with the request flow
+		if (!tokenDoc) {
+			req.ctx.log('Invalid auth token provided: %s', req.headers['x-auth-token']);
+			return next();
+		}
+		// Valid auth tokens grant admin access
+		req.ctx.admin = true;
+		// Store a reference to the token name in the request context for logging
+		req.ctx.token = tokenDoc.name;
+		return next();
+	}
+	// If neither admin flows were followed, continue with the request flow
+	next();
 }

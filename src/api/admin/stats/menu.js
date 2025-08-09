@@ -1,11 +1,11 @@
-const invitationDb = require('../../lib/db/invitations');
+const invitationDb = require('../../../lib/db/invitations');
 
 /** @type {API} */
 module.exports = {
 	path: 'admin/stats/menu',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.session.admin);
+		return Boolean(req.ctx.admin);
 	},
 	action: async (_req, res) => {
 		const [ adultCursor, childCursor ] = await Promise.all([

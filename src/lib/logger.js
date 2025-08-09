@@ -33,7 +33,14 @@ module.exports.middleware = function (req, res, next) {
 
 		const url = req.originalUrl || req.url;
 
-		req.ctx.log('%o %s %s invitationId=%s ip=%s responseTime=%o', res.statusCode, req.method, url, req.session?.invitationId || 'none', req._ip, responseTime);
+		req.ctx.log('%o %s %s %s=%s ip=%s responseTime=%o',
+			res.statusCode,
+			req.method, url,
+			req.ctx.token ? 'token' : 'invitationId',
+			req.ctx.token || req.session?.invitationId || 'none',
+			req._ip,
+			responseTime
+		);
 	};
 
 	next();

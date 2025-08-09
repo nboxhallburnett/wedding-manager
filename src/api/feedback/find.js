@@ -10,7 +10,7 @@ module.exports = {
 	path: 'feedback',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.session.admin);
+		return Boolean(req.ctx.admin);
 	},
 	action: async (req, res) => {
 		const filter = {};

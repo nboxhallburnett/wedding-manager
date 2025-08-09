@@ -7,6 +7,8 @@ type WeddingManagerRequest<P={}, B={}, Q=import('qs').ParsedQs> = import('expres
 	},
 	/** Data contextual to the request */
 	ctx: {
+		/** Whether the request has elevated permissions */
+		admin?: Boolean,
 		invitation?: Invitation,
 		/** Logger instance contextual to the request */
 		log: import('debug').Debugger
@@ -39,4 +41,8 @@ type CalendarEventPath = {
 type FeedbackPath = {
 	/** ID of the Feedback Item of which the request is in context */
 	feedbackId: FeedbackItem['id']
+}
+type TokenPath = {
+	/** ID of the Auth Token of which the request is in context */
+	tokenId: import('mongodb').ObjectId
 }

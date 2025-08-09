@@ -18,5 +18,8 @@ module.exports = {
 	],
 	sessions: [
 		[ { expires: 1 }, { name: 'session_expire', expireAfterSeconds: 0, background: true } ]
+	],
+	tokens: [
+		[ { id: 1 }, { name: 'token_id', unique: true } ]
 	]
 };

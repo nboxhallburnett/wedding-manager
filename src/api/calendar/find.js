@@ -5,7 +5,7 @@ module.exports = {
 	path: 'calendar',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.session.admin);
+		return Boolean(req.ctx.admin);
 	},
 	// TODO: Auth on calendar, or open to allow source?
 	action: async (req, res) => {

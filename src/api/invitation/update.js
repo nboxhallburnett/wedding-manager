@@ -9,7 +9,7 @@ module.exports = {
 	path: 'invitation/:invitationId',
 	auth: async req => {
 		// An Invitation record can only be modified by itself or by an admin
-		return Boolean(req.params.invitationId === req.session.invitationId || req.session.admin);
+		return Boolean(req.params.invitationId === req.session.invitationId || req.ctx.admin);
 	},
 	action: async (req, res) => {
 		const existingInvitation = await invitationDb.findOne({ id: req.params.invitationId });
@@ -19,7 +19,7 @@ module.exports = {
 		// Validate guest changes
 		if (Array.isArray(req.body.guests)) {
 			// Ensure non-admin users aren't attempting to modify the guest counts
-			if (!req.session.admin && req.body.guests.length !== existingInvitation.guests.length) {
+			if (!req.ctx.admin && req.body.guests.length !== existingInvitation.guests.length) {
 				res.status(400);
 				throw new Error('Guest count cannot be modified');
 			}

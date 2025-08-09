@@ -12,7 +12,8 @@ const links = [
 	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } },
 	{ text: 'Our Story', to: { name: 'Admin Our Story Content' } },
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
-	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } }
+	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
+	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } }
 ];
 </script>
 

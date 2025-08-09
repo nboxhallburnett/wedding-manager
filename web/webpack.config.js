@@ -1,6 +1,5 @@
 const glob = require('glob');
 const path = require('path');
-const { readdirSync } = require('fs');
 
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const { DefinePlugin } = require('webpack');

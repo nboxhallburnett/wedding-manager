@@ -152,6 +152,16 @@ const router = createRouter({
 					path: 'feedback',
 					name: 'Admin List Feedback Items',
 					component: () => import('../views/admin/FeedbackList.vue')
+				},
+				{
+					path: 'token',
+					name: 'Admin List Auth Tokens',
+					component: () => import('../views/admin/TokenList.vue')
+				},
+				{
+					path: 'token/new',
+					name: 'Admin Create Auth Token',
+					component: () => import('../views/admin/TokenEdit.vue')
 				}
 			]
 		},

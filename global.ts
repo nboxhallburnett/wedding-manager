@@ -151,7 +151,7 @@ type Image = {
 type FeedbackItem = {
 	/** Item Identifier */
 	id: String,
-	/** Date the item was defined */
+	/** Date the item was created */
 	created: Date,
 	/** Date the item was last updated */
 	updated: Date,
@@ -161,4 +161,16 @@ type FeedbackItem = {
 	description: String,
 	/** Whether the feedback has been marked as read */
 	read: Boolean
+}
+
+/** Definition of an administrative authentication token */
+type Token = {
+	/** Token Identifier */
+	id: String,
+	/** Date the token was created */
+	created: Date,
+	/** Display name to use for the token */
+	name: String,
+	/** Description of the token's use */
+	description?: String,
 }

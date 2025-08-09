@@ -13,8 +13,8 @@ import WelcomeDisplay from 'components/WelcomeDisplay.vue';
 
 const toastContainerComponent = ref(null);
 provide('addToast', addToast);
-function addToast(toast) {
-	toastContainerComponent.value.addToast(toast);
+function addToast(toast, options) {
+	toastContainerComponent.value.addToast(toast, options);
 }
 
 // We only want the welcome display to be on the DOM until it's finished as it's an overlay

@@ -56,6 +56,7 @@ Management/Administration capabilities:
 - Dynamic management of the "Our Story" timeline content
 - Dynamic management of the Gallery page content
 - Ability to view and manage provided feedback
+- Ability to create and manage adminstrative auth tokens for headless service management
 
 ## Dependencies
 

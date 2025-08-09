@@ -13,7 +13,7 @@ module.exports = {
 	path: 'calendar/:calendarEventId',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.session.admin);
+		return Boolean(req.ctx.admin);
 	},
 	action: async (req, res) => {
 		const existingEvent = await calendarEventsDb.findOne({ id: req.params.calendarEventId });

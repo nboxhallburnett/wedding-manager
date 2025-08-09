@@ -1,7 +1,7 @@
 {
   "name": "wedding-manager",
   "version": "1.0.0",
-  "description": "Wedding Invitation & guest management service",
+  "description": "Wedding invitation & guest management service",
   "main": "src/index.mjs",
   "scripts": {
     "build": "rm -rf web/public/js/*; rm -rf web/public/css/*; set -a; . .env && NODE_ENV=production npx webpack-cli build --config web/webpack.config.js",

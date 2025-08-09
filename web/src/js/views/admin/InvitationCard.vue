@@ -211,7 +211,9 @@ async function shareImage() {
 					</div>
 				</div>
 
+				<!-- eslint-disable-next-line vue/no-v-html -->
 				<div id="decoration-top-left" v-html="borderContent" />
+				<!-- eslint-disable-next-line vue/no-v-html -->
 				<div id="decoration-top-right" v-html="borderContent" />
 				<div id="qr-code" ref="qrCode" class="pe-2" />
 			</div>

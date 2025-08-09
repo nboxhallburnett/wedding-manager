@@ -23,7 +23,7 @@ const config = {
 		},
 
 		session: {
-			name: process.env.SERVER_SESSION_NAME,
+			name: process.env.SERVER_SESSION_NAME || 'invitation',
 			secret: process.env.SERVER_SESSION_SECRET
 		}
 	},

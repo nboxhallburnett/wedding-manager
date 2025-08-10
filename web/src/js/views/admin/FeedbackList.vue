@@ -6,6 +6,7 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
+import RelativeDate from 'components/RelativeDate.vue';
 import TableComponent from 'components/TableComponent.vue';
 
 /** @type {Ref<FeedbackItem[]>} */
@@ -109,7 +110,9 @@ const tableOpts = {
 				</router-link>
 			</th>
 			<td v-text="item.read ? 'Read' : 'Unread'" />
-			<td v-text="new Date(item.created).toLocaleString()" />
+			<td>
+				<relative-date :date="item.created" />
+			</td>
 			<td v-text="item.message" />
 		</table-component>
 	</div>

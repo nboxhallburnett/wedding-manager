@@ -5,6 +5,7 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
+import RelativeDate from 'components/RelativeDate.vue';
 import TableComponent from 'components/TableComponent.vue';
 
 /** @type {Ref<Token[]>} */
@@ -52,8 +53,10 @@ const tableOpts = {
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="tokens" v-bind="tableOpts">
 			<td v-text="item.name" />
-			<td v-text="new Date(item.created).toLocaleString()" />
-			<td v-text="item.description" />
+			<td>
+				<relative-date :date="item.created" />
+			</td>
+			<td v-text="item.description || '---'" />
 		</table-component>
 	</div>
 </template>

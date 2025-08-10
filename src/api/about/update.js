@@ -9,7 +9,6 @@ module.exports = {
 		return Boolean(req.ctx.admin);
 	},
 	action: async (req, res) => {
-
 		if (req.body.content && typeof req.body.content === 'string') {
 			req.ctx.log('Updating about content');
 			await aboutDb.updateOne({}, { $set: {

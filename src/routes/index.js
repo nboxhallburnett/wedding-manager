@@ -9,16 +9,22 @@ const log = require('../lib/logger')('route:index');
 let assetManifest;
 let indexJs;
 try {
+	// Load the asset manifest that was output from the webpack build
 	assetManifest = JSON.parse(readFileSync(path.resolve(__dirname, '..', '..', 'web', 'public', 'manifest.json')));
 	if (!config.hot) {
+		// When not using the dev server, we'll include the minimal content of the index javascript file
+		// with the index html response to allow us to provide webpack with the nonce value to use for its
+		// subsequent requests
 		const indexJsFilename = assetManifest['index.js'].split('/js/')[1];
 		indexJs = String(readFileSync(path.resolve(__dirname, '..', '..', 'web', 'public', 'js', indexJsFilename)));
 	}
 } catch (err) {
+	// If we failed to load the asset manifest, then we won't be able to serve the UI, so fall out
 	log('Error reading asset manifest, ensure build is ran before startup. Error: %o', err);
 	process.exit(1);
 }
 
+// Define base set of CSP headers
 const csp = {
 	// Set default rule to self
 	'default-src': '\'self\'',
@@ -56,18 +62,27 @@ module.exports = {
 };
 
 /**
+ * Catch-all html handler to load the front-end assets.
+ * No specific route matching is performed here, we rely on the front-end
+ * router to handle rendering the expected page.
  *
- * @param {import('express').Request} req
+ * @param {WeddingManagerRequest} req
  * @param {import('express').Response} res
- * @returns
+ * @param {import('express').NextFunction} next
  */
-async function handle(req, res) {
+async function handle(req, res, next) {
+	// If the request does not accept html response, fall out and continue to the generic 404 handler
+	if (!req.accepts('html')) {
+		return next();
+	}
+
 	let nonce = '';
 	if (!config.hot) {
 		// Generate a 22 char nanoid to give us 132 bits of entropy.
 		nonce = nanoid(22).toString('base64');
 	}
 
+	// Define the base set of headers
 	const headers = {
 		'Cache-Control': 'no-store, no-cache, must-revalidate',
 		'Content-Security-Policy': Object.entries(csp)
@@ -85,8 +100,10 @@ async function handle(req, res) {
 		headers['Cross-Origin-Resource-Policy'] = 'same-origin';
 	}
 
+	// Set the constructed headers on the response
 	res.set(headers);
 
+	// Finally, render the index route with the appropriate javascript content
 	return res.render('index', {
 		assetManifest,
 		indexJs: config.hot

@@ -13,7 +13,6 @@ import API from './api/index.js';
 import Admin from './lib/admin.js';
 import DB from './lib/db/index.js';
 import Logger from './lib/logger.js';
-import RequestContext from './lib/request-context.js';
 
 import IndexRoute from './routes/index.js';
 
@@ -70,12 +69,6 @@ app.use(function (req, res, next) {
 	next();
 });
 
-// Wire up request context middleware
-app.use(RequestContext.middleware);
-
-// Request logging middleware
-app.use(Logger.middleware);
-
 // Serve static assets
 app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
 	maxAge,
@@ -85,6 +78,16 @@ app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'),
 		res.setHeader('X-Content-Type-Options', 'nosniff');
 	}
 }));
+
+// Add request context store and define an id for the request
+app.use(function(req, res, next) {
+	req.ctx = {};
+	req.id = nanoid();
+	next();
+});
+
+// Request logging middleware
+app.use(Logger.middleware);
 
 // Add cookie parsing
 app.use(CookieParser());
@@ -146,6 +149,17 @@ await API.init(app);
 
 // Serve the UI
 app.get('*splat', IndexRoute.handle);
+
+// Return 404 for any other requests
+app.use('*splat', (req, res) => {
+	res.status(404);
+	// If the request accepts json, send an appropriate response
+	if (req.accepts('json')) {
+		return res.json({ success: false, description: STATUS_CODES[404] });
+	}
+	// Otherwise just send the standard 404 text
+	return res.send(STATUS_CODES[404]);
+});
 
 // Ensure the database has connected and indexes are all up to date before the server starts listening
 await dbConnection;

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
+import { dateExtension } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
@@ -26,6 +27,7 @@ useLoader('question', questions, QAndALoading, true);
 		<vue-showdown
 			v-if="item.markdown"
 			class="text-body-secondary"
+			:extensions="[ dateExtension ]"
 			:markdown="item.answer || 'Preview'"
 			flavor="github"
 		/>

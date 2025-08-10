@@ -31,7 +31,7 @@ export const dateFormatter = new Intl.DateTimeFormat(undefined, {
 	month: 'long',
 	day: 'numeric',
 	year: 'numeric',
-	timezone: 'UTC'
+	timeZone: 'UTC'
 });
 
 /**

@@ -13,7 +13,8 @@ const links = [
 	{ text: 'Our Story', to: { name: 'Admin Our Story Content' } },
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
 	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
-	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } }
+	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
+	{ text: 'Table layouts', to: { name: 'Admin View Dining Layout' } }
 ];
 </script>
 

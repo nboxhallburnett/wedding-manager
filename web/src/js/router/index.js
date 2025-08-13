@@ -162,6 +162,11 @@ const router = createRouter({
 					path: 'token/new',
 					name: 'Admin Create Auth Token',
 					component: () => import('../views/admin/TokenEdit.vue')
+				},
+				{
+					path: 'tables',
+					name: 'Admin View Dining Layout',
+					component: () => import('../views/admin/DiningView.vue')
 				}
 			]
 		},

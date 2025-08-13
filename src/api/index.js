@@ -23,12 +23,15 @@ async function init(app) {
 		next();
 	});
 
+	// Recursively loop through all files inside the api directory
 	for (const file of await readdir(__dirname, { recursive: true })) {
+		// If the file is a non-index javascript file, treat it as if it is an API definition and attempt to load it
 		if (file.endsWith('.js') && !file.endsWith('index.js')) {
 			try {
 				/** @type {API} */
 				const api = require(join(__dirname, file));
 
+				// If it has the expected exports of an API definition, wire it up
 				if (typeof api.path === 'string' && typeof api.action === 'function') {
 					const method = (api.method || 'get').toLowerCase();
 					const path = `/api/${api.path}`;

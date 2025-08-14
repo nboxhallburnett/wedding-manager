@@ -174,3 +174,14 @@ type Token = {
 	/** Description of the token's use */
 	description?: String,
 }
+
+/** Definition of a seat at a dining table */
+type DiningTableSeat = {
+	/** Id of the invitation the guest occupying the seat is managed under */
+	id: Invitation['id'],
+	/** Index the guest is stored under in the invitation */
+	idx: Number
+}
+
+/** Definition of the seating arrangement of a specific dining table */
+type DiningTable = DiningTableSeat[]

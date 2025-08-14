@@ -4,8 +4,8 @@ import { ref } from 'vue';
 import InfoPopover from './InfoPopover.vue';
 
 const props = defineProps({
-	count: { type: Number, required: true },
-	hints: { type: Array, default: () => [] }
+	id: { type: String, default: '' },
+	occupants: { type: Array, default: () => [] }
 });
 
 // Calculate the relative table and chair sizing to pass to the CSS
@@ -15,6 +15,8 @@ const tableSize = ref(`${tableSizePx}px`);
 const chairSize = ref(`${chairSizePx}px`);
 const chairOffset = ref(`${(tableSizePx - (chairSizePx * 1.4)) * -1}px`);
 
+const diameter = ref(`${tableSizePx + (3 * chairSizePx)}px`);
+
 /**
  * Calculates the appropriate transform for a chair around the table at a given index
  *
@@ -22,26 +24,29 @@ const chairOffset = ref(`${(tableSizePx - (chairSizePx * 1.4)) * -1}px`);
  */
 function chairTransform(idx) {
 	// The degree increment is the total degrees in the table circle divided by the number of items to surround it
-	const incr = 360 / props.count;
+	const incr = 360 / props.occupants.length;
 	// Return that as a degree recognised by CSS, offset by 1 to start with chair 1 at 0deg
-	return `${(idx - 1) * incr}deg`;
+	return `${(idx) * incr}deg`;
 }
 </script>
 
 <template>
-	<div class="table">
-		<div class="flower">
-			<div v-for="i in 5" :key="i" class="petal" />
-			<div class="pistil" />
+	<div class="dining-container">
+		<div class="table">
+			<div class="flower">
+				<div v-for="i in 5" :key="i" class="petal" />
+				<div class="pistil" />
+			</div>
+			<div class="table-id" v-text="id" />
+			<template v-for="(occupant, idx) in occupants" :key="idx">
+				<info-popover :hint="occupant?.hint || 'Unassigned'" :opts="{ selector: `#chair-${idx}` }">
+					<div :id="`chair-${idx}`" class="chair" :style="{ '--chair-rotation': chairTransform(idx) }">
+						{{ idx + 1 }}
+						<div class="plate" />
+					</div>
+				</info-popover>
+			</template>
 		</div>
-		<template v-for="i in count" :key="i">
-			<info-popover :hint="hints[i] || 'Unused'" :opts="{ selector: `#chair-${i}` }">
-				<div :id="`chair-${i}`" class="chair" :style="{ '--chair-rotation': chairTransform(i) }">
-					{{ i }}
-					<div class="plate" />
-				</div>
-			</info-popover>
-		</template>
 	</div>
 </template>
 
@@ -62,6 +67,22 @@ $chair-offset: v-bind(chairOffset);
 	}
 }
 
+.dining-container {
+	// Set a width and height that is large enough to contain the table and chairs
+	width: v-bind(diameter);
+	height: v-bind(diameter);
+	// Add padding around the table with enough room to fit the chairs around the table
+	padding: calc(1.5 * v-bind(chairSize));
+}
+
+.table-id {
+    position: absolute;
+	line-height: 0;
+    top: 50%;
+    text-align: center;
+    width: 100%;
+}
+
 // Define the styling for the base table element
 .table {
 	position: relative;
@@ -72,14 +93,14 @@ $chair-offset: v-bind(chairOffset);
 	border: 2px solid var(--bs-primary);
 	// Rendered as a circle
 	border-radius: 50%;
-	// With a surrounding margin that is large enough to contain the chairs
-	margin: calc(1.5 * v-bind(chairSize));
 }
 
 .chair {
 	// Define base rotation variable to be overwritten by the `chairTransform()` function
 	--chair-rotation: 0deg;
 
+	// Set an appropriate cursor styling for the chair content
+	cursor: context-menu;
 	position: absolute;
 	// Each chair is a fixed size square
 	width: $chair-size;
@@ -98,7 +119,7 @@ $chair-offset: v-bind(chairOffset);
 	// Set the positioning transform for the chair
 	transform: translate(-50%, -50%) rotate(var(--chair-rotation)) translateY($chair-offset);
 	// Add a transition to smoothly move the chair around the table when one is added or removed
-	transition: transform 0.2s;
+	transition: transform 0.2s, background-color 0.2s;
 	// And an animation to
 	// Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position fade and slide the chair towards the table
 	animation: fade-slide-in 0.35s;
@@ -106,12 +127,15 @@ $chair-offset: v-bind(chairOffset);
 	// If the chair is selected then highlight it with a fill
 	&.active {
 		background-color: var(--bs-primary);
+
+		&::after {
+			background-color: var(--bs-primary-bg-subtle);
+		}
 	}
 
-	// Apply the same fill on hover, though with an opacity to show it as not active
-	&:hover {
-		background-color: var(--bs-primary);
-		opacity: 50%;
+	// Apply the same fill on hover, though with the subtle background colour to differentiate it from active items
+	&:not(.active):hover {
+		background-color: var(--bs-primary-bg-subtle);
 	}
 
 	// Create the backrest for the chair
@@ -141,6 +165,10 @@ $chair-offset: v-bind(chairOffset);
 	// Apply a rotation to appropriately offset the glass
 	transform: rotate(40deg);
 
+	.active > & {
+		background-color: var(--bs-primary-bg-subtle);
+	}
+
 	// Creates the glass that appears next to the plate on the table
 	&::before {
 		content: '';
@@ -149,7 +177,7 @@ $chair-offset: v-bind(chairOffset);
 		border-radius: 50%;
 		width: 60%;
 		height: 60%;
-		top: 170%;
+		top: 165%;
 	}
 
 	// Creates the cutlery either side of the plate

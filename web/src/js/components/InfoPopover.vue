@@ -9,6 +9,7 @@ const props = defineProps({
 
 const { $els } = usePopover({
 	trigger: 'hover focus',
+	content: () => props.hint,
 	...props.opts
 });
 </script>

@@ -4,6 +4,7 @@ import Router from 'router';
 
 import API from 'lib/api';
 import { useLoader } from 'composables/loader';
+import { statusMessages } from 'lib/formatter';
 
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
@@ -12,7 +13,6 @@ import FormItem from 'components/form/FormItem.vue';
 
 // Define var to track whether the component is used for the admin edit vs the user edit
 const adminView = Router.currentRoute.value.name === 'Admin View Invitation';
-const statusOptions = [ 'Pending', 'Attending', 'Tentative', 'Not Attending' ];
 
 // Define a map of the different menu items to be displayed on the view
 const mealsMap = [
@@ -88,15 +88,15 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 					<hr v-if="idx">
 					<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
 					<form-text
-						:value="statusOptions[guest.status_ceremony]"
+						:value="statusMessages[guest.status_ceremony]"
 						label="Ceremony Attendance"
-						:options="statusOptions"
+						:options="statusMessages"
 						:name="`guest-${idx}-ceremony`"
 					/>
 					<form-text
-						:value="statusOptions[guest.status_reception]"
+						:value="statusMessages[guest.status_reception]"
 						label="Reception Attendance"
-						:options="statusOptions"
+						:options="statusMessages"
 						:name="`guest-${idx}-reception`"
 					/>
 					<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">

@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router';
 
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
+import { statusMessages } from 'lib/formatter';
 
 import CardHeader from 'components/CardHeader.vue';
 import InfoPopover from 'components/InfoPopover.vue';
@@ -18,12 +19,6 @@ const addToast = inject('addToast');
 useLoader('invitation', invitations);
 
 const menuRequest = 'Menu Request';
-const statusMessages = [
-	'Pending',
-	'Attending',
-	'Tentative',
-	'Not Attending'
-];
 
 const { onSubmit: deleteInvitation } = useForm({
 	method: 'DELETE',

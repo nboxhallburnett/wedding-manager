@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 
 import { useLoader } from 'composables/loader';
+import { statusMessages } from 'lib/formatter';
 
 import CardHeader from 'components/CardHeader.vue';
 
@@ -15,12 +16,6 @@ const stats = ref({
 	total_messages: 0
 });
 
-const statusMessages = [
-	'Pending',
-	'Attending',
-	'Tentative',
-	'Not Attending'
-];
 const statusMap = [
 	{ title: 'Ceremony', key: 'status_ceremony' },
 	{ title: 'Reception', key: 'status_reception' }

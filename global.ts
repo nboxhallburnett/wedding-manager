@@ -179,8 +179,10 @@ type Token = {
 type DiningTableSeat = {
 	/** Id of the invitation the guest occupying the seat is managed under */
 	id: Invitation['id'],
-	/** Index the guest is stored under in the invitation */
-	idx: Number
+	/** Index the guest/child is stored under in the invitation */
+	idx: Number,
+	/** Whether the seat is occupied by an adult or child guest */
+	child: Boolean
 }
 
 /** Definition of the seating arrangement of a specific dining table */

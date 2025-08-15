@@ -2,6 +2,26 @@ const relativeTimeFormatter = new Intl.RelativeTimeFormat(undefined, {
 	numeric: 'auto'
 });
 
+// Formatter to make displayed date appropriately formatted for the users locale
+export const dateFormatter = new Intl.DateTimeFormat(undefined, {
+	month: 'long',
+	day: 'numeric',
+	year: 'numeric',
+	timeZone: 'UTC'
+});
+
+/**
+ * Escapes a string to ensure it is safe from XSS when used directly in html
+ *
+ * @param {String} string string to escape
+ * @returns {String}
+ */
+export function escapeHtml(string) {
+	const div = document.createElement('div');
+	div.textContent = string;
+	return div.innerHTML;
+}
+
 /**
  * Formats an events display date/time
  *
@@ -25,14 +45,6 @@ export function formatEventDate(event) {
 	// Otherwise show the start and end as full datetime strings
 	return `${start.toLocaleString()} - ${end.toLocaleString()}`;
 }
-
-// Formatter to make displayed date appropriately formatted for the users locale
-export const dateFormatter = new Intl.DateTimeFormat(undefined, {
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric',
-	timeZone: 'UTC'
-});
 
 /**
  * Formats a date to a relative time string appropriate for the users locale
@@ -93,3 +105,11 @@ export function fromNow(_date) {
 
 	return relativeTimeFormatter.format(value * -1, unit);
 }
+
+/** Map of display status messages for the stored `status_ceremony` and `status_reception` enum values */
+export const statusMessages = [
+	'Pending',
+	'Attending',
+	'Tentative',
+	'Not Attending'
+];

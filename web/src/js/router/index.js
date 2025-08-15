@@ -164,7 +164,7 @@ const router = createRouter({
 					component: () => import('../views/admin/TokenEdit.vue')
 				},
 				{
-					path: 'tables',
+					path: 'seating',
 					name: 'Admin View Dining Layout',
 					component: () => import('../views/admin/DiningView.vue')
 				}

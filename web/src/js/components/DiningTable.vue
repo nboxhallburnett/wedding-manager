@@ -105,7 +105,7 @@ function onDropped(evt, chairIdx) {
 					<div
 						:id="`chair-${idx}`"
 						class="chair"
-						:class="{ occupied: occupant?.name }"
+						:class="[ { occupied: occupant?.name, child: occupant?.child }, (occupant?.status || '').toLowerCase().replace(' ', '-') ]"
 						:style="{ '--chair-rotation': chairTransform(idx) }"
 						@dragenter.prevent="onDragEnter"
 						@dragover.prevent="onDragOver"
@@ -211,16 +211,39 @@ $chair-offset: v-bind(chairOffset);
 	// If the chair is selected then highlight it with a fill
 	&.active {
 		background-color: var(--bs-primary);
+		color: var(--bs-dark);
 
 		&::after {
-			background-color: var(--bs-primary-bg-subtle);
+			background-color: var(--bs-primary-border-subtle);
+		}
+	}
+
+	&.occupied {
+		&.attending::after {
+			background-color: var(--bs-success);
+		}
+
+		&.tentative::after {
+			background-color: var(--bs-warning-border-subtle)
+		}
+
+		&.pending::after {
+			background-color: var(--bs-gray-400);
+		}
+
+		&.not-attending::after {
+			background-color: var(--bs-danger-border-subtle);
+		}
+
+		&.child::after {
+			background-color: var(--bs-info-border-subtle);
 		}
 	}
 
 	// Apply the same fill on hover, though with the subtle background colour to differentiate it from active items
 	&:not(.active):hover,
 	&:not(.active).occupied {
-		background-color: var(--bs-primary-bg-subtle);
+		background-color: var(--bs-primary-border-subtle);
 	}
 
 	// Create the backrest for the chair

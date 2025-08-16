@@ -7,7 +7,8 @@ import { escapeHtml } from 'lib/formatter';
 const props = defineProps({
 	id: { type: String, default: '' },
 	occupants: { type: Array, default: () => [] },
-	searchTerm: { type: String, default: '' }
+	searchTerm: { type: String, default: '' },
+	style: { type: String, default: 'circle' }
 });
 
 const emit = defineEmits([ 'setSeat' ]);
@@ -167,7 +168,7 @@ function onDropped(evt, chairIdx) {
 </script>
 
 <template>
-	<div class="dining-container">
+	<div class="dining-container" :class="{ rectangle: style === 'rectangle' }">
 		<div class="dining-table">
 			<div class="flower">
 				<div v-for="i in 5" :key="i" class="petal" />
@@ -175,12 +176,12 @@ function onDropped(evt, chairIdx) {
 			</div>
 			<div class="table-id" v-text="id" />
 			<template v-for="(occupant, idx) in occupants" :key="idx">
-				<info-popover :hint="hintText(occupant)" :opts="{ selector: `#chair-${idx}`, html: true }">
+				<info-popover :hint="hintText(occupant)" :opts="{ selector: `#chair-${idx}`, html: true, placement: 'top' }">
 					<div
 						:id="`chair-${idx}`"
 						class="chair"
 						:class="[
-							{ occupied: occupant?.name, child: occupant?.child, active: hasSearchMatch(occupant) },
+							{ occupied: occupant?.name, 'me-0': idx === occupants.length - 1, child: occupant?.child, active: hasSearchMatch(occupant) },
 							(occupant?.status || '').toLowerCase().replace(' ', '-')
 						]"
 						:style="{ '--chair-rotation': chairTransform(idx) }"
@@ -222,6 +223,19 @@ $chair-offset: v-bind(chairOffset);
 	}
 }
 
+// Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position
+@keyframes rectangle-fade-slide-in {
+	0% {
+		opacity: 0;
+		transform: translate(0, 42%) translateY(calc($chair-offset * 1.33));
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate(0, 42%) translateY($chair-offset);
+	}
+}
+
 .dining-container {
 	// Set a width and height that is large enough to contain the table and chairs
 	width: v-bind(diameter);
@@ -229,6 +243,12 @@ $chair-offset: v-bind(chairOffset);
 
 	// Add padding around the table with enough room to fit the chairs around the table
 	padding: calc(1.5 * v-bind(chairSize));
+
+	&.rectangle {
+		padding-left: 0;
+		padding-right: 0;
+		height: calc(v-bind(diameter) * 0.5);
+	}
 }
 
 .table-id {
@@ -237,6 +257,10 @@ $chair-offset: v-bind(chairOffset);
 	top: 50%;
 	text-align: center;
 	width: 100%;
+
+	.rectangle & {
+		top: 80%;
+	}
 }
 
 // Define the styling for the base table element
@@ -252,6 +276,13 @@ $chair-offset: v-bind(chairOffset);
 
 	// Rendered as a circle
 	border-radius: 50%;
+
+	.rectangle & {
+		height: calc($table-size * 0.5);
+		width: v-bind(diameter);
+		border-radius: 2px;
+		text-align: center;
+	}
 }
 
 .chair {
@@ -288,6 +319,16 @@ $chair-offset: v-bind(chairOffset);
 	// And an animation to
 	// Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position fade and slide the chair towards the table
 	animation: fade-slide-in 0.35s;
+
+	.rectangle & {
+		position: relative;
+		display: inline-flex;
+		top: initial;
+		left: initial;
+		margin-right: 0.4rem;
+		transform: translate(0, 42%) translateY($chair-offset);
+		animation: rectangle-fade-slide-in 0.35s;
+	}
 
 	.drag-text {
 		z-index: 2;
@@ -409,10 +450,6 @@ $chair-offset: v-bind(chairOffset);
 	width: $chair-size;
 	height: $chair-size;
 
-	// Center it on the table
-	top: 50%;
-	left: 50%;
-
 	// And make it opaque to make it not draw as much attention
 	opacity: 0.5;
 
@@ -433,7 +470,12 @@ $chair-offset: v-bind(chairOffset);
 		// Use an elliptical shape for the petals
 		border-radius: 50% / 100%;
 
-		// Position and rotate individual petals. These are always static so no need to define the transformations programmatically
+		.rectangle & {
+			top: calc(80% - calc($petal-height * 0.5));
+		}
+
+		// Position and rotate individual petals.
+		// These are always static so no need to define the transformations programmatically
 		&:nth-child(1) { transform: rotate(0deg) translate(0, calc($chair-size * -0.2)); }
 		&:nth-child(2) { transform: rotate(72deg) translate(0, calc($chair-size * -0.2)); }
 		&:nth-child(3) { transform: rotate(144deg) translate(0, calc($chair-size * -0.2)); }
@@ -451,6 +493,10 @@ $chair-offset: v-bind(chairOffset);
 		height: calc($chair-size * 0.2);
 		background-color: var(--bs-secondary);
 		border-radius: 50%;
+
+		.rectangle & {
+			top: 80%;
+		}
 	}
 }
 </style>

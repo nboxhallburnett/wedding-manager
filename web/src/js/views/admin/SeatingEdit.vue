@@ -302,6 +302,7 @@ function onDropped(evt) {
 					:id="String(idx + 1)"
 					:occupants="table.guests"
 					:search-term
+					:style="idx === 0 ? 'rectangle' : undefined"
 					class="d-inline-block"
 					@set-seat="evt => setSeat(idx, evt)"
 				/>
@@ -319,7 +320,7 @@ function onDropped(evt) {
 					<button
 						type="button"
 						class="btn btn-sm btn-primary"
-						:disabled="table.guests.length >= 8"
+						:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
 						@click="table.guests.push({})"
 						v-text="'Add Chair'"
 					/>

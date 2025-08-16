@@ -15,17 +15,23 @@ const addToast = inject('addToast');
 
 const guests = ref([]);
 const tables = ref([]);
+const searchTerm = ref('');
+const searchSuggestions = ref([]);
 
 useLoader([
 	'invitation',
 	'seating'
 ], ([ invitationResponse, seatingResponse ]) => {
+	const suggestions = new Set();
 	guests.value = invitationResponse.result.data.reduce((arr, invitation) => {
 		for (const [ idx, guest ] of invitation.guests?.entries() || []) {
 			// Skip the guest if they are marked as not attending the reception
 			if (guest.status_reception === 3) {
 				continue;
 			}
+			// Add their name to the search suggestion list
+			suggestions.add(guest.name);
+			// And then add them to the flattened guest set
 			arr.push({
 				id: invitation.id,
 				idx,
@@ -39,6 +45,8 @@ useLoader([
 			return arr;
 		}
 		for (const [ idx, child ] of invitation.children?.entries() || []) {
+			// Add their name to the search suggestion list
+			suggestions.add(child.name);
 			arr.push({
 				id: invitation.id,
 				idx,
@@ -48,6 +56,8 @@ useLoader([
 		}
 		return arr;
 	}, []);
+
+	searchSuggestions.value = Array.from(statusMessages).slice(0, -1).concat(Array.from(suggestions));
 
 	// Map the stored table structure to the enriched version we use for the form.
 	// This includes adding an id for vue to track each item with, and using the above
@@ -90,7 +100,7 @@ const { onSubmit } = useForm({
 const unassignedGuests = computed(() => {
 	return guests.value.filter(guest => {
 		return !tables.value.some(table => table.guests.some(tableGuest => {
-			return tableGuest.id === guest.id && tableGuest.idx === guest.idx;
+			return tableGuest.id === guest.id && tableGuest.idx === guest.idx && tableGuest.child === guest.child;
 		}));
 	});
 });
@@ -159,6 +169,20 @@ function setSeat(tableIdx, { occupant, chairIdx }) {
  */
 function popoverHint(occupant) {
 	return `<b>ID</b>: <span class="font-monospace">${occupant.id}</span><br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
+}
+
+/**
+ * Returns whether a given guest matches the current search term
+ * @param {DiningTableSeat} guest
+ * @returns {Boolean}
+ */
+function hasSearchMatch(guest) {
+	if (!searchTerm.value) {
+		return false;
+	}
+	return guest?.id === searchTerm.value
+		|| guest?.name === searchTerm.value
+		|| guest?.status === searchTerm.value;
 }
 
 /**
@@ -261,17 +285,28 @@ function onDropped(evt) {
 	</card-header>
 	<!-- TODO: Search by invitation ID or name -->
 	<form class="card-text row">
+		<input
+			v-model="searchTerm"
+			class="form-control mx-auto w-75 mb-3"
+			placeholder="Search"
+			:list="searchSuggestions.length && 'searchSuggestions' || undefined"
+			@keyup.escape="searchTerm = ''"
+		>
+		<datalist v-if="searchSuggestions.length" id="searchSuggestions">
+			<option v-for="item in searchSuggestions" :key="item" :value="item" />
+		</datalist>
 		<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7': unassignedGuests.length }">
 			<div v-for="(table, idx) in tables" :key="table.id">
 				<hr v-if="idx">
 				<dining-table
 					:id="String(idx + 1)"
 					:occupants="table.guests"
+					:search-term
 					class="d-inline-block"
 					@set-seat="evt => setSeat(idx, evt)"
 				/>
 				<ol class="d-inline-block">
-					<li v-for="(guest, guestIdx) in table.guests" :key="guestIdx">
+					<li v-for="(guest, guestIdx) in table.guests" :class="{ 'fw-bold': hasSearchMatch(guest) }" :key="guestIdx">
 						<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
 							{{ guest.name }}
 						</info-popover>
@@ -346,7 +381,10 @@ function onDropped(evt) {
 				<li
 					v-for="guest in unassignedGuests"
 					:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
-					:class="[ { child: guest?.child }, (guest?.status || '').toLowerCase().replace(' ', '-') ]"
+					:class="[
+						{ child: guest?.child, 'fw-bold': hasSearchMatch(guest) },
+						(guest?.status || '').toLowerCase().replace(' ', '-')
+					]"
 					draggable="true"
 					@dragstart="evt => onDragStart(evt, guest)"
 					@dragend="onDragEnd"

@@ -6,7 +6,8 @@ import { escapeHtml } from 'lib/formatter';
 
 const props = defineProps({
 	id: { type: String, default: '' },
-	occupants: { type: Array, default: () => [] }
+	occupants: { type: Array, default: () => [] },
+	searchTerm: { type: String, default: '' }
 });
 
 const emit = defineEmits([ 'setSeat' ]);
@@ -45,6 +46,20 @@ function hintText(occupant) {
 	return `<b>Name</b>: ${escapeHtml(occupant.name)}
 		<br><b>ID</b>: <span class="font-monospace">${occupant.id}</span>
 		<br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
+}
+
+/**
+ * Returns whether a given guest matches the current search term
+ * @param {DiningTableSeat} guest
+ * @returns {Boolean}
+ */
+function hasSearchMatch(guest) {
+	if (!props.searchTerm) {
+		return false;
+	}
+	return guest?.id === props.searchTerm
+		|| guest?.name === props.searchTerm
+		|| guest?.status === props.searchTerm;
 }
 
 /**
@@ -164,7 +179,10 @@ function onDropped(evt, chairIdx) {
 					<div
 						:id="`chair-${idx}`"
 						class="chair"
-						:class="[ { occupied: occupant?.name, child: occupant?.child }, (occupant?.status || '').toLowerCase().replace(' ', '-') ]"
+						:class="[
+							{ occupied: occupant?.name, child: occupant?.child, active: hasSearchMatch(occupant) },
+							(occupant?.status || '').toLowerCase().replace(' ', '-')
+						]"
 						:style="{ '--chair-rotation': chairTransform(idx) }"
 
 						:draggable="Boolean(occupant?.name)"
@@ -344,7 +362,7 @@ $chair-offset: v-bind(chairOffset);
 	top: 140%;
 
 	// Apply a rotation to appropriately offset the glass
-	transform: rotate(40deg);
+	transform: rotate(27deg);
 
 	.active > & {
 		background-color: var(--bs-primary-bg-subtle);
@@ -381,7 +399,7 @@ $chair-offset: v-bind(chairOffset);
 		left: -75%;
 
 		// Apply an inverse transform on the cutlery to align them back centred to the chair
-		transform: rotate(-40deg);
+		transform: rotate(-27deg);
 	}
 }
 

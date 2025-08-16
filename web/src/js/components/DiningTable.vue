@@ -337,10 +337,12 @@ $chair-offset: v-bind(chairOffset);
 	// If the chair is selected then highlight it with a fill
 	&.active {
 		background-color: var(--bs-primary);
+		border-color: var(--bs-primary-text-emphasis);
 		color: var(--bs-dark);
 
 		&::after {
 			background-color: var(--bs-primary-border-subtle);
+			border-color: var(--bs-primary-text-emphasis);
 		}
 	}
 

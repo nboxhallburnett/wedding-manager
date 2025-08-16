@@ -186,6 +186,27 @@ function hasSearchMatch(guest) {
 }
 
 /**
+ * Attempts to focus any matches for the current search term
+ */
+function onSearch() {
+	// If there is no search term, there won't be anything to focus
+	if (!searchTerm.value) {
+		return;
+	}
+	// Find all items on the DOM with the `active` class
+	const $searchResults = document.querySelectorAll('.active');
+	let $highest;
+	// Find which element is highest on the DOM
+	$searchResults.forEach($el => {
+		if (!$highest || ($el.offsetHeight && $el.offsetHeight < $highest.offsetHeight)) {
+			$highest = $el;
+		}
+	});
+	// If one was found, scroll it into view
+	$highest?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/**
  * Drag source event handlers
  */
 
@@ -283,7 +304,6 @@ function onDropped(evt) {
 			Submit
 		</button>
 	</card-header>
-	<!-- TODO: Search by invitation ID or name -->
 	<form class="card-text row">
 		<input
 			v-model="searchTerm"
@@ -291,6 +311,7 @@ function onDropped(evt) {
 			placeholder="Search"
 			:list="searchSuggestions.length && 'searchSuggestions' || undefined"
 			@keyup.escape="searchTerm = ''"
+			@keydown.enter.prevent="onSearch"
 		>
 		<datalist v-if="searchSuggestions.length" id="searchSuggestions">
 			<option v-for="item in searchSuggestions" :key="item" :value="item" />
@@ -383,7 +404,7 @@ function onDropped(evt) {
 					v-for="guest in unassignedGuests"
 					:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
 					:class="[
-						{ child: guest?.child, 'fw-bold': hasSearchMatch(guest) },
+						{ child: guest?.child, 'fw-bold active': hasSearchMatch(guest) },
 						(guest?.status || '').toLowerCase().replace(' ', '-')
 					]"
 					draggable="true"

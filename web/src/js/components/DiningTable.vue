@@ -64,6 +64,36 @@ function hasSearchMatch(guest) {
 }
 
 /**
+ * Returns the most appropriate default position for the info popover for a chair
+ *
+ * @param {Number} idx Index of the chair
+ * @returns {'top'|'right'|'bottom'|'left'} Placement to use for the popover
+ */
+function chairPopoverPlacement(idx) {
+	// For rectangular tables, always put the popover above the chair
+	if (props.style === 'rectangle') {
+		return 'top';
+	}
+	// Otherwise, for circular tables calculate the position dependant on the chairs position around it.
+	const incr = 360 / props.occupants.length;
+	const rotation = idx * incr;
+	// If the chair is in the top quarter of the table, put it above
+	if (rotation < 45 || rotation > 315) {
+		return 'top';
+	}
+	// Likewise, in the right quarter put it to the right
+	if (rotation >= 45 && rotation <= 135) {
+		return 'right';
+	}
+	// Same for the bottom
+	if (rotation > 135 && rotation < 225) {
+		return 'bottom';
+	}
+	// Which leaves the left quarter
+	return 'left';
+}
+
+/**
  * Drag source event handlers
  */
 
@@ -176,7 +206,15 @@ function onDropped(evt, chairIdx) {
 			</div>
 			<div class="table-id" v-text="id" />
 			<template v-for="(occupant, idx) in occupants" :key="idx">
-				<info-popover :hint="hintText(occupant)" :opts="{ selector: `#chair-${idx}`, html: true, placement: 'top' }">
+				<info-popover
+					:hint="hintText(occupant)"
+					:opts="{
+						selector: `#chair-${idx}`,
+						container: 'body',
+						html: true,
+						placement: () => chairPopoverPlacement(idx)
+					}"
+				>
 					<div
 						:id="`chair-${idx}`"
 						class="chair"

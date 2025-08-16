@@ -48,6 +48,65 @@ function hintText(occupant) {
 }
 
 /**
+ * Drag source event handlers
+ */
+
+/**
+ * Handle the initialisation of an occupant drag occurrence
+ *
+ * @param {DragEvent} evt
+ * @param {DiningTableSeat} occupant
+ */
+function onDragStart(evt, occupant, idx) {
+	// Define the drag operation settings
+	evt.dataTransfer.effectAllowed = 'move';
+	evt.dataTransfer.dropEffect = 'move';
+	// And store a serialised copy of the occupant to be transferred
+	evt.dataTransfer.setData('wedding-manager/occupant', JSON.stringify({
+		...occupant,
+		chairIdx: idx,
+		tableIdx: props.id
+	}));
+	// Replace the seat number with the current occupant's name for inclusion in the generated drag image
+	const originalText = evt.target.children[0].textContent;
+	evt.target.children[0].textContent = occupant?.name || originalText;
+	// Then immediately reset it once the image has been generated
+	setTimeout(() => {
+		evt.target.children[0].textContent = originalText;
+	}, 0);
+
+	// Add a 'dragging' class to body to add an appropriate cursor style
+	window.document.body.classList.add('dragging');
+}
+
+/**
+ * Remove the 'dragging' class from body when the occupant dragging ends
+ */
+function onDragEnd() {
+	window.document.body.classList.remove('dragging');
+}
+
+/**
+ * Scroll the container page if a drag item is moved near the top or bottom of the viewport
+ *
+ * @param {DragEvent} evt
+ */
+function onDragging(evt) {
+	// If the cursor is near the top of the viewport, scroll up
+	if (evt.clientY <= 75){
+		window.scrollBy(0, -33);
+	}
+	// Likewise, if the cursor is near the bottom then scroll down
+	if(evt.clientY >= window.innerHeight - 75){
+		window.scrollBy(0, 33);
+	}
+}
+
+/**
+ * Drag receipt event handlers
+ */
+
+/**
  * Adds the occupied class to a chair when an occupant is dragged over it
  *
  * @param {DragEvent} evt
@@ -94,7 +153,7 @@ function onDropped(evt, chairIdx) {
 
 <template>
 	<div class="dining-container">
-		<div class="table">
+		<div class="dining-table">
 			<div class="flower">
 				<div v-for="i in 5" :key="i" class="petal" />
 				<div class="pistil" />
@@ -107,12 +166,18 @@ function onDropped(evt, chairIdx) {
 						class="chair"
 						:class="[ { occupied: occupant?.name, child: occupant?.child }, (occupant?.status || '').toLowerCase().replace(' ', '-') ]"
 						:style="{ '--chair-rotation': chairTransform(idx) }"
+
+						:draggable="Boolean(occupant?.name)"
+						@dragstart="evt => onDragStart(evt, occupant, idx)"
+						@dragend="onDragEnd"
+						@drag="onDragging"
+
 						@dragenter.prevent="onDragEnter"
 						@dragover.prevent="onDragOver"
 						@dragleave.prevent="evt => onDragLeave(evt, idx)"
 						@drop.prevent="evt => onDropped(evt, idx)"
 					>
-						{{ idx + 1 }}
+						<span class="drag-text" v-text="idx + 1" />
 						<div class="plate" />
 					</div>
 				</info-popover>
@@ -157,7 +222,7 @@ $chair-offset: v-bind(chairOffset);
 }
 
 // Define the styling for the base table element
-.table {
+.dining-table {
 	position: relative;
 
 	// It is a simple fixes sized element
@@ -175,8 +240,6 @@ $chair-offset: v-bind(chairOffset);
 	// Define base rotation variable to be overwritten by the `chairTransform()` function
 	--chair-rotation: 0deg;
 
-	// Set an appropriate cursor styling for the chair content
-	cursor: context-menu;
 	position: absolute;
 
 	// Each chair is a fixed size square
@@ -208,6 +271,10 @@ $chair-offset: v-bind(chairOffset);
 	// Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position fade and slide the chair towards the table
 	animation: fade-slide-in 0.35s;
 
+	.drag-text {
+		z-index: 2;
+	}
+
 	// If the chair is selected then highlight it with a fill
 	&.active {
 		background-color: var(--bs-primary);
@@ -219,12 +286,14 @@ $chair-offset: v-bind(chairOffset);
 	}
 
 	&.occupied {
+		cursor: grab;
+
 		&.attending::after {
 			background-color: var(--bs-success);
 		}
 
 		&.tentative::after {
-			background-color: var(--bs-warning-border-subtle)
+			background-color: var(--bs-warning-border-subtle);
 		}
 
 		&.pending::after {

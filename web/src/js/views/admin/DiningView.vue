@@ -83,6 +83,35 @@ function moveTable(idx, to) {
 }
 
 /**
+ * Define an occupant for a chair in a given table
+ *
+ * @param {Number} tableIdx Index of the table to add the occupant to
+ * @param {{ occupant: DiningTableSeat, chairIdx: Number, previous?: DiningTableSeat }} occupantInfo The occupant and the chair number at the table to add them to
+ */
+function setSeat(tableIdx, { occupant, chairIdx }) {
+	// Check if the target occupant was already in a chair
+	const sourceChairIdx = occupant.chairIdx;
+	const sourceTableIdx = occupant.tableIdx;
+	// Remove the stored values to not set them on the new chair
+	delete occupant.chairIdx;
+	delete occupant.tableIdx;
+	// If they were already in a chair, swap them with any existing occupant in the target chair
+	if (sourceChairIdx !== undefined && sourceTableIdx !== undefined) {
+		[
+			tables.value[tableIdx].guests[chairIdx],
+			tables.value[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)]
+		] = [
+			tables.value[Number(sourceTableIdx) - 1]?.guests?.[Number(sourceChairIdx)] || {},
+			tables.value[tableIdx].guests[chairIdx]
+		];
+
+	// Otherwise, just set them in the seat
+	} else {
+		tables.value[tableIdx].guests[chairIdx] = occupant;
+	}
+}
+
+/**
  * Generate the hint to show when hovering over a guest or child
  *
  * @param {DiningTableSeat} occupant occupant to generate hint content for
@@ -91,6 +120,10 @@ function moveTable(idx, to) {
 function popoverHint(occupant) {
 	return `<b>ID</b>: <span class="font-monospace">${occupant.id}</span><br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
 }
+
+/**
+ * Drag source event handlers
+ */
 
 /**
  * Handle the initialisation of an occupant drag occurrence
@@ -133,13 +166,50 @@ function onDragging(evt) {
 }
 
 /**
- * Define an occupant for a chair in a given table
- *
- * @param {Number} tableIdx Index of the table to add the occupant to
- * @param {{ occupant: DiningTableSeat, chairIdx: Number }} occupantInfo The occupant and the chair number at the table to add them to
+ * Drag receipt event handlers
  */
-function setSeat(tableIdx, { occupant, chairIdx }) {
-	tables.value[tableIdx].guests[chairIdx] = occupant;
+
+/**
+ * Adds the 'hovering' class to a unassigned guests el when an occupant is dragged over it
+ *
+ * @param {DragEvent} evt
+ */
+function onDragEnter(evt) {
+	evt.dataTransfer.dropEffect = 'move';
+	document.getElementById('unassigned-guests').classList.add('hovering');
+}
+
+/**
+ * Maintains the 'move' drop effect when the cursor moves within the chair drop target
+ *
+ * @param {DragEvent} evt
+ */
+function onDragOver(evt) {
+	evt.dataTransfer.dropEffect = 'move';
+}
+
+/**
+ * Reset the 'hovering' class on the unassigned guests el when the cursor leaves its bounds
+ */
+function onDragLeave() {
+	document.getElementById('unassigned-guests').classList.remove('hovering');
+}
+
+/**
+ * Handle an occupant being dragged onto a chair
+ *
+ * @param {DragEvent} evt
+ */
+function onDropped(evt) {
+	document.getElementById('unassigned-guests').classList.remove('hovering');
+	// Parse the occupant data stored in the data transfer
+	const occupant = JSON.parse(evt.dataTransfer.getData('wedding-manager/occupant'));
+
+	const sourceChairIdx = occupant.chairIdx;
+	const sourceTableIdx = occupant.tableIdx;
+	if (sourceChairIdx !== undefined && sourceTableIdx !== undefined) {
+		tables.value[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)] = {};
+	}
 }
 </script>
 
@@ -158,7 +228,12 @@ function setSeat(tableIdx, { occupant, chairIdx }) {
 				/>
 				<ol class="d-inline-block">
 					<li v-for="(guest, guestIdx) in table.guests" :key="guestIdx">
-						{{ guest.name || 'Unassigned' }}
+						<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
+							{{ guest.name }}
+						</info-popover>
+						<template v-else>
+							Unassigned
+						</template>
 					</li>
 				</ol>
 				<div class="pb-1 d-flex gap-3 align-items-center">
@@ -205,14 +280,22 @@ function setSeat(tableIdx, { occupant, chairIdx }) {
 				v-text="'Add Table'"
 			/>
 		</div>
-		<div v-if="unassignedGuests.length" class="col-md-5 col-12 order-md-1 order-0">
+		<div
+			id="unassigned-guests"
+			class="col-md-5 col-12 order-md-1 order-0 h-100"
+			@dragenter.prevent.stop="onDragEnter"
+			@dragover.prevent.stop="onDragOver"
+			@dragleave.prevent.stop="onDragLeave"
+			@drop.prevent.stop="onDropped"
+		>
 			<span class="fw-bold">
 				Unassigned Guests
 			</span>
-			<ul id="unassigned-guests">
+			<ul>
 				<li
 					v-for="guest in unassignedGuests"
 					:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
+					:class="[ { child: guest?.child }, (guest?.status || '').toLowerCase().replace(' ', '-') ]"
 					draggable="true"
 					@dragstart="evt => onDragStart(evt, guest)"
 					@dragend="onDragEnd"
@@ -229,14 +312,47 @@ function setSeat(tableIdx, { occupant, chairIdx }) {
 </template>
 
 <style lang="scss" scoped>
-#unassigned-guests li {
-	list-style-position: outside;
-	cursor: grab;
+#unassigned-guests {
+	&.hovering {
+		// Add a dotted border to signify the unassigned guests section as a drop target
+		border: 1px dotted var(--bs-body-color);
 
-	&::marker {
-		content: '⠿ ';
-		line-height: 0;
-		font-size: larger;
+		// When the hovering style is applied to the unassigned guests section, disable pointer events on all its children
+		// If we don't do this, then all child elements will also trigger dragenter events
+		* {
+			pointer-events: none;
+		}
+	}
+
+	li {
+		list-style-position: outside;
+		cursor: grab;
+
+		&::marker {
+			content: '⠿ ';
+			line-height: 0;
+			font-size: larger;
+		}
+
+		&.attending::marker {
+			color: var(--bs-success);
+		}
+
+		&.tentative::marker {
+			color: var(--bs-warning-border-subtle);
+		}
+
+		&.pending::marker {
+			color: var(--bs-gray-400);
+		}
+
+		&.not-attending::marker {
+			color: var(--bs-danger-border-subtle);
+		}
+
+		&.child::marker {
+			color: var(--bs-info-border-subtle);
+		}
 	}
 }
 </style>

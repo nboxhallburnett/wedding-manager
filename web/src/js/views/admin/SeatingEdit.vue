@@ -1,18 +1,26 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, inject } from 'vue';
 import { nanoid } from 'nanoid';
 
 import { useLoader } from 'composables/loader';
+import { useForm } from 'composables/form';
 import { statusMessages } from 'lib/formatter';
 
 import CardHeader from 'components/CardHeader.vue';
 import DiningTable from 'components/DiningTable.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 
-const guests = ref([]);
+/** @type {AddToast} */
+const addToast = inject('addToast');
 
-useLoader('invitation', response => {
-	guests.value = response.result.data.reduce((arr, invitation) => {
+const guests = ref([]);
+const tables = ref([]);
+
+useLoader([
+	'invitation',
+	'seating'
+], ([ invitationResponse, seatingResponse ]) => {
+	guests.value = invitationResponse.result.data.reduce((arr, invitation) => {
 		for (const [ idx, guest ] of invitation.guests?.entries() || []) {
 			// Skip the guest if they are marked as not attending the reception
 			if (guest.status_reception === 3) {
@@ -40,6 +48,40 @@ useLoader('invitation', response => {
 		}
 		return arr;
 	}, []);
+
+	// Map the stored table structure to the enriched version we use for the form.
+	// This includes adding an id for vue to track each item with, and using the above
+	// defined name/status enriched object in the place of the stored occupant
+	tables.value = (seatingResponse.result.data || []).map(table => ({
+		id: nanoid(),
+		guests: table.map(occupant => {
+			return guests.value.find(guest => guest.id === occupant.id
+				&& guest.idx === occupant.idx
+				&& guest.child === occupant.child
+			) || {};
+		})
+	}));
+});
+
+const { onSubmit } = useForm({
+	path: 'seating',
+	method: 'PUT',
+	body() {
+		// Flatten the table to the base array of arrays, and return the supplementary data from the table guest store
+		return {
+			items: tables.value.map(table => table.guests.map(guest => ({
+				'id': guest.id,
+				'idx': guest.idx,
+				'child': guest.child
+			})))
+		};
+	},
+	onSuccess() {
+		addToast({
+			title: 'Seating plan Updated',
+			body: 'Seating plan successfully saved.'
+		});
+	}
 });
 
 /**
@@ -52,8 +94,6 @@ const unassignedGuests = computed(() => {
 		}));
 	});
 });
-
-const tables = ref([]);
 
 /**
  * Add a new table to the array
@@ -214,9 +254,13 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<card-header title="Seating Plan" />
+	<card-header title="Edit Seating Plan">
+		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
+			Submit
+		</button>
+	</card-header>
 	<!-- TODO: Search by invitation ID or name -->
-	<div class="card-text row">
+	<form class="card-text row">
 		<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7': unassignedGuests.length }">
 			<div v-for="(table, idx) in tables" :key="table.id">
 				<hr v-if="idx">
@@ -238,18 +282,25 @@ function onDropped(evt) {
 				</ol>
 				<div class="pb-1 d-flex gap-3 align-items-center">
 					<button
+						type="button"
 						class="btn btn-sm btn-primary"
 						:disabled="table.guests.length >= 8"
 						@click="table.guests.push({})"
 						v-text="'Add Chair'"
 					/>
 					<button
+						type="button"
 						class="btn btn-sm btn-primary"
 						:disabled="table.guests.length <= 1"
 						@click="table.guests.pop()"
 						v-text="'Remove Chair'"
 					/>
-					<button class="btn btn-sm btn-danger" @click="removeTable(idx)" v-text="'Remove Table'" />
+					<button
+						type="button"
+						class="btn btn-sm btn-danger"
+						@click="removeTable(idx)"
+						v-text="'Remove Table'"
+					/>
 					<button
 						v-if="idx !== 0"
 						class="icon-caret rotate-180 fs-4 p-0"
@@ -308,7 +359,7 @@ function onDropped(evt) {
 			</ul>
 			<hr class="d-md-none">
 		</div>
-	</div>
+	</form>
 </template>
 
 <style lang="scss" scoped>

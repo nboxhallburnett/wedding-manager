@@ -165,6 +165,11 @@ const router = createRouter({
 				},
 				{
 					path: 'seating',
+					name: 'Admin View Seating Plan',
+					component: () => import('../views/admin/SeatingView.vue')
+				},
+				{
+					path: 'seating/edit',
 					name: 'Admin Edit Seating Plan',
 					component: () => import('../views/admin/SeatingEdit.vue')
 				}

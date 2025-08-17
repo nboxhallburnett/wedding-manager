@@ -11,7 +11,8 @@ module.exports = {
 		[ { read: 1, created: -1 }, { name: 'feedback_search_order' } ]
 	],
 	invitations: [
-		[ { id: 1 }, { name: 'invitation_id', unique: true } ]
+		[ { id: 1 }, { name: 'invitation_id', unique: true } ],
+		[ { admin: 1 }, { name: 'is_admin' } ]
 	],
 	menu_items: [
 		[ { id: 1 }, { name: 'item_id', unique: true } ]

@@ -44,6 +44,10 @@ function hintText(occupant) {
 		return 'Unassigned';
 	}
 
+	if (!Object.prototype.hasOwnProperty.call(occupant, 'id')) {
+		return escapeHtml(occupant.name);
+	}
+
 	return `<b>Name</b>: ${escapeHtml(occupant.name)}
 		<br><b>ID</b>: <span class="font-monospace">${occupant.id}</span>
 		<br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;

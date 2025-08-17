@@ -30,19 +30,19 @@ module.exports.connect = async () => {
 		const collection = MongoClient.db().collection(collectionName);
 		const existingIndexes = await collection.listIndexes().toArray();
 
-		// Add any new indexes that don't already exist
-		for (const [ indexSpec, indexOpts ] of indexes) {
-			if (!existingIndexes.some(existingIndex => existingIndex.name === indexOpts.name)) {
-				log('Adding index to collection "%s": "%s"', collectionName, indexOpts.name);
-				await collection.createIndex(indexSpec, indexOpts);
-			}
-		}
-
-		// And drop any existing indexes that we don't have defined
+		// Drop any existing indexes that we don't have defined
 		for (const existingIndex of existingIndexes) {
 			if (existingIndex.name !== '_id_' && !indexes.some(([ , indexOpts ]) => indexOpts.name === existingIndex.name)) {
 				log('Removing unknown index from collection "%s": "%s"', collectionName, existingIndex.name);
 				await collection.dropIndex(existingIndex.name);
+			}
+		}
+
+		// And add any new indexes that don't already exist
+		for (const [ indexSpec, indexOpts ] of indexes) {
+			if (!existingIndexes.some(existingIndex => existingIndex.name === indexOpts.name)) {
+				log('Adding index to collection "%s": "%s"', collectionName, indexOpts.name);
+				await collection.createIndex(indexSpec, indexOpts);
 			}
 		}
 	}

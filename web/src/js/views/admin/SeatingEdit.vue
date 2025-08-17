@@ -13,10 +13,15 @@ import InfoPopover from 'components/InfoPopover.vue';
 /** @type {AddToast} */
 const addToast = inject('addToast');
 
+const headerHeight = Number(getComputedStyle(document.body)
+	.getPropertyValue('--header-height')
+	.split('px')[0]);
+
 const guests = ref([]);
 const tables = ref([]);
 const searchTerm = ref('');
 const searchSuggestions = ref([]);
+const maxGuestHeight = ref(`${window.innerHeight - (2 * headerHeight)}px`);
 
 useLoader([
 	'invitation',
@@ -328,7 +333,11 @@ function onDropped(evt) {
 					@set-seat="evt => setSeat(idx, evt)"
 				/>
 				<ol class="d-inline-block">
-					<li v-for="(guest, guestIdx) in table.guests" :class="{ 'fw-bold': hasSearchMatch(guest) }" :key="guestIdx">
+					<li
+						v-for="(guest, guestIdx) in table.guests"
+						:key="guestIdx"
+						:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+					>
 						<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
 							{{ guest.name }}
 						</info-popover>
@@ -424,6 +433,11 @@ function onDropped(evt) {
 
 <style lang="scss" scoped>
 #unassigned-guests {
+	position: sticky;
+	top: calc((var(--header-height) * 2) + 16px);
+	max-height: v-bind(maxGuestHeight);
+	overflow-y: scroll;
+
 	&.hovering {
 		// Add a dotted border to signify the unassigned guests section as a drop target
 		border: 1px dotted var(--bs-body-color);

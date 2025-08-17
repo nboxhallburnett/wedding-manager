@@ -1,25 +1,47 @@
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { nanoid } from 'nanoid';
 
 import { useLoader } from 'composables/loader';
-// import { statusMessages } from 'lib/formatter';
 
 import CardHeader from 'components/CardHeader.vue';
 import DiningTable from 'components/DiningTable.vue';
+
+const invitation = inject('invitation');
 
 const tables = ref([]);
 const searchTerm = ref('');
 const searchSuggestions = ref([]);
 
-useLoader('seating?enrich=true', seatingResponse => {
+useLoader([
+	'seating?enrich=true',
+	invitation.value?.admin ? 'menu' : undefined
+].filter(Boolean), ([ seatingResponse, menuResponse ]) => {
+	const menuItems = menuResponse?.result.data.reduce((items, item) => {
+		items[item.id] = item.title;
+		return items;
+	}, {}) || {};
+
 	// Set the search suggestions to be the list of table occupant names
-	searchSuggestions.value = seatingResponse.result.data.flatMap(table => table.map(table => table.name)).filter(Boolean);
+	searchSuggestions.value = seatingResponse.result.data.flatMap(table => table.map(table => table.name))
+		.concat(...Object.values(menuItems))
+		.filter(Boolean);
 
 	// Add an id for vue to track each table item with
 	tables.value = (seatingResponse.result.data || []).map(guests => ({
 		id: nanoid(),
-		guests
+		guests: guests.map(guest => {
+			if (!menuResponse) {
+				return guest;
+			}
+			guest.starter = menuItems[guest.starter_id];
+			guest.main = menuItems[guest.main_id];
+			guest.dessert = menuItems[guest.dessert_id];
+			delete guest.starter_id;
+			delete guest.main_id;
+			delete guest.dessert_id;
+			return guest;
+		})
 	}));
 });
 
@@ -91,7 +113,7 @@ function onSearch() {
 		<hr class="fancy-hr">
 		<div class="row">
 			<div v-for="(table, idx) in tables" :key="table.id" class="col-3">
-				<div>Table: {{ idx + 1 }}</div>
+				<b>Table {{ idx + 1 }}</b>
 				<ol class="d-inline-block">
 					<li
 						v-for="(guest, guestIdx) in table.guests"

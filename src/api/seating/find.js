@@ -17,6 +17,14 @@ module.exports = {
 			const filter = { admin: { $ne: true } };
 			// And we only care about the invitation id and the names of guests and children
 			const projection = { _id: 0, id: 1, 'guests.name': 1, 'children.name': 1 };
+			// Include menu options for admin users
+			if (req.ctx.admin) {
+				for (const type of [ 'guests', 'children' ]) {
+					projection[`${type}.starter_id`] = 1;
+					projection[`${type}.main_id`] = 1;
+					projection[`${type}.dessert_id`] = 1;
+				}
+			}
 			const invitationsCursor = await invitationDb.find(filter, { projection });
 			// Loop over the returned cursor and create a map of invitations by their ID for easy reference later
 			for await (const invitation of invitationsCursor) {
@@ -36,6 +44,11 @@ module.exports = {
 				for (const seat of table) {
 					// And add the occupants name from the associated record of the stored invitation ID
 					seat.name = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.name;
+					if (req.ctx.admin) {
+						seat.starter_id = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.starter_id;
+						seat.main_id = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.main_id;
+						seat.dessert_id = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.dessert_id;
+					}
 					// We no longer need the invitation ID or index in the record, so remove that now
 					delete seat.id;
 					delete seat.idx;

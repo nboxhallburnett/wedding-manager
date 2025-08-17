@@ -1,10 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 
 import InfoPopover from './InfoPopover.vue';
 import { escapeHtml } from 'lib/formatter';
 
+const invitation = inject('invitation');
+
 const props = defineProps({
+	edit: { type: Boolean, default: false },
 	id: { type: String, default: '' },
 	occupants: { type: Array, default: () => [] },
 	searchTerm: { type: String, default: '' },
@@ -55,16 +58,21 @@ function hintText(occupant) {
 
 /**
  * Returns whether a given guest matches the current search term
+ *
  * @param {DiningTableSeat} guest
  * @returns {Boolean}
  */
 function hasSearchMatch(guest) {
+	// If no search term is provided, return whether the guest is defined in the active session
 	if (!props.searchTerm) {
-		return false;
+		return invitation.value.id === guest.id;
 	}
 	return guest?.id === props.searchTerm
-		|| guest?.name === props.searchTerm
-		|| guest?.status === props.searchTerm;
+		|| (guest?.name || '').toLowerCase() === props.searchTerm.toLowerCase()
+		|| (guest?.status || '').toLowerCase() === props.searchTerm.toLowerCase()
+		|| (guest?.starter || '').toLowerCase() === props.searchTerm.toLowerCase()
+		|| (guest?.main || '').toLowerCase() === props.searchTerm.toLowerCase()
+		|| (guest?.dessert || '').toLowerCase() === props.searchTerm.toLowerCase();
 }
 
 /**
@@ -223,12 +231,18 @@ function onDropped(evt, chairIdx) {
 						:id="`chair-${idx}`"
 						class="chair"
 						:class="[
-							{ occupied: occupant?.name, 'me-0': idx === occupants.length - 1, child: occupant?.child, active: hasSearchMatch(occupant) },
+							{
+								occupied: occupant?.name,
+								draggable: edit && occupant?.name,
+								'me-0': idx === occupants.length - 1,
+								child: occupant?.child,
+								active: hasSearchMatch(occupant)
+							},
 							(occupant?.status || '').toLowerCase().replace(' ', '-')
 						]"
 						:style="{ '--chair-rotation': chairTransform(idx) }"
 
-						:draggable="Boolean(occupant?.name)"
+						:draggable="edit && Boolean(occupant?.name)"
 						@dragstart="evt => onDragStart(evt, occupant, idx)"
 						@dragend="onDragEnd"
 						@drag="onDragging"
@@ -388,9 +402,11 @@ $chair-offset: v-bind(chairOffset);
 		}
 	}
 
-	&.occupied {
+	&.draggable {
 		cursor: grab;
+	}
 
+	&.occupied {
 		&.attending::after {
 			background-color: var(--bs-success);
 		}

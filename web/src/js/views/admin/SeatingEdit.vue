@@ -330,6 +330,7 @@ function onDropped(evt) {
 					:search-term
 					:style="idx === 0 ? 'rectangle' : undefined"
 					class="d-inline-block"
+					edit
 					@set-seat="evt => setSeat(idx, evt)"
 				/>
 				<ol class="d-inline-block">

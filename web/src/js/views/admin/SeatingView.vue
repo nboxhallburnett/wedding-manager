@@ -113,8 +113,8 @@ function onSearch() {
 		</div>
 		<custom-h-r />
 		<div class="row">
-			<div v-for="(table, idx) in tables" :key="table.id" class="col-3">
-				<b>Table {{ idx + 1 }}</b>
+			<div v-for="(table, idx) in tables" :key="table.id" class="col-6 col-md-4 col-lg-3">
+				<b class="d-block">Table {{ idx + 1 }}</b>
 				<ol class="d-inline-block">
 					<li
 						v-for="(guest, guestIdx) in table.guests"

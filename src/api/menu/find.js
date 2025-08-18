@@ -16,8 +16,6 @@ module.exports = {
 		const filter = {};
 		const projection = { _id: 0 };
 
-		console.log(req.query);
-
 		if (typeof req.query.id === 'string') {
 			req.query.id = [ req.query.id ];
 		}

@@ -86,7 +86,7 @@ onMounted(() => {
 		</div>
 	</header>
 
-	<div id="view-container" ref="viewContainer" class="container d-flex justify-content-center">
+	<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center">
 		<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
 			<div class="card-body pt-0">
 				<router-view />

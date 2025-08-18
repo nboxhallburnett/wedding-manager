@@ -17,7 +17,7 @@ const props = defineProps({
 const emit = defineEmits([ 'setSeat' ]);
 
 // Calculate the relative table and chair sizing to pass to the CSS
-const tableSizeVMin = 17.5;
+const tableSizeVMin = 20;
 const chairSizeVMin = tableSizeVMin * 0.25;
 const tableSize = ref(`${tableSizeVMin}vmin`);
 const chairSize = ref(`${chairSizeVMin}vmin`);
@@ -381,7 +381,7 @@ $chair-offset: v-bind(chairOffset);
 		display: inline-flex;
 		top: initial;
 		left: initial;
-		margin-right: 0.5vmin;
+		margin-right: 0.75vmin;
 		transform: translate(0, 42%) translateY($chair-offset);
 		animation: rectangle-fade-slide-in 0.35s;
 	}

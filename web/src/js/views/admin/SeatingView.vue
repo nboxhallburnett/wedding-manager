@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { useLoader } from 'composables/loader';
 
 import CardHeader from 'components/CardHeader.vue';
+import CustomHR from 'components/CustomHR.vue';
 import DiningTable from 'components/DiningTable.vue';
 
 const invitation = inject('invitation');
@@ -98,7 +99,7 @@ function onSearch() {
 			<div
 				v-for="(table, idx) in tables"
 				:key="table.id"
-				class="text-center"
+				class="d-flex justify-content-center"
 				:class="idx ? 'col-6' : 'col-12'"
 			>
 				<dining-table
@@ -110,7 +111,7 @@ function onSearch() {
 				/>
 			</div>
 		</div>
-		<hr class="fancy-hr">
+		<custom-h-r />
 		<div class="row">
 			<div v-for="(table, idx) in tables" :key="table.id" class="col-3">
 				<b>Table {{ idx + 1 }}</b>

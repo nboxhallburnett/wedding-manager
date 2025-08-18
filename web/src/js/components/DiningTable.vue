@@ -17,12 +17,12 @@ const props = defineProps({
 const emit = defineEmits([ 'setSeat' ]);
 
 // Calculate the relative table and chair sizing to pass to the CSS
-const tableSizePx = 150;
-const chairSizePx = tableSizePx * 0.25;
-const tableSize = ref(`${tableSizePx}px`);
-const chairSize = ref(`${chairSizePx}px`);
-const chairOffset = ref(`${(tableSizePx - (chairSizePx * 1.4)) * -1}px`);
-const diameter = ref(`${tableSizePx + (3 * chairSizePx)}px`);
+const tableSizeVMin = 17.5;
+const chairSizeVMin = tableSizeVMin * 0.25;
+const tableSize = ref(`${tableSizeVMin}vmin`);
+const chairSize = ref(`${chairSizeVMin}vmin`);
+const chairOffset = ref(`${(tableSizeVMin - (chairSizeVMin * 1.4)) * -1}vmin`);
+const diameter = ref(`${tableSizeVMin + (3 * chairSizeVMin)}vmin`);
 
 /**
  * Calculates the appropriate transform for a chair around the table at a given index
@@ -216,7 +216,7 @@ function onDropped(evt, chairIdx) {
 				<div v-for="i in 5" :key="i" class="petal" />
 				<div class="pistil" />
 			</div>
-			<div class="table-id" v-text="id" />
+			<div class="table-id fw-bold" v-text="id" />
 			<template v-for="(occupant, idx) in occupants" :key="idx">
 				<info-popover
 					:hint="hintText(occupant)"
@@ -328,7 +328,7 @@ $chair-offset: v-bind(chairOffset);
 	height: $table-size;
 
 	// Which uses a simple border to mark its position
-	border: 2px solid var(--bs-primary);
+	border: 0.3vmin solid var(--bs-primary);
 
 	// Rendered as a circle
 	border-radius: 50%;
@@ -336,7 +336,7 @@ $chair-offset: v-bind(chairOffset);
 	.rectangle & {
 		height: calc($table-size * 0.5);
 		width: v-bind(diameter);
-		border-radius: 2px;
+		border-radius: 0.4vmin;
 		text-align: center;
 	}
 }
@@ -352,7 +352,7 @@ $chair-offset: v-bind(chairOffset);
 	height: $chair-size;
 
 	// With a themed border as its outline with no fill colour
-	border: 2px solid var(--bs-primary);
+	border: 0.3vmin solid var(--bs-primary);
 
 	// Slightly round the corners to make it look more appropriate
 	border-radius: 15%;
@@ -381,7 +381,7 @@ $chair-offset: v-bind(chairOffset);
 		display: inline-flex;
 		top: initial;
 		left: initial;
-		margin-right: 0.4rem;
+		margin-right: 0.5vmin;
 		transform: translate(0, 42%) translateY($chair-offset);
 		animation: rectangle-fade-slide-in 0.35s;
 	}
@@ -438,7 +438,7 @@ $chair-offset: v-bind(chairOffset);
 	&::after {
 		content: '';
 		position: absolute;
-		border: 2px solid var(--bs-primary);
+		border: 0.3vmin solid var(--bs-primary);
 		border-radius: 15%;
 		width: 130%;
 		height: 25%;
@@ -451,7 +451,7 @@ $chair-offset: v-bind(chairOffset);
 	position: absolute;
 
 	// Use a double border for the plates to add the illusion of depth
-	border: thick double var(--bs-primary);
+	border: 0.6vmin double var(--bs-primary);
 
 	// Add a background colour matching the body so they render over the table during animation
 	background-color: var(--bs-body-bg);
@@ -473,7 +473,7 @@ $chair-offset: v-bind(chairOffset);
 	&::before {
 		content: '';
 		position: absolute;
-		border: 2px double var(--bs-primary);
+		border: 0.4vmin double var(--bs-primary);
 		border-radius: 50%;
 		width: 60%;
 		height: 60%;
@@ -486,7 +486,7 @@ $chair-offset: v-bind(chairOffset);
 		position: absolute;
 
 		// Use a double border for the cutlery to give the impression of multiple courses worth
-		border: 2px double var(--bs-primary);
+		border: 0.4vmin double var(--bs-primary);
 
 		// Making the top/bottom borders transparent, coupled with the doubled border, gives the
 		// impression of different sizing to the cutlery while using a single element

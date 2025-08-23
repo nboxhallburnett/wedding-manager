@@ -304,12 +304,8 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<card-header title="Edit Seating Plan">
-		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
-			Submit
-		</button>
-	</card-header>
-	<form class="card-text row">
+	<card-header title="Edit Seating Plan" :back="{ name: 'Admin Overview' }" :on-submit />
+	<form class="card-text row" @submit.prevent.stop="onSubmit">
 		<input
 			v-model="searchTerm"
 			class="form-control mx-auto w-75 mb-3"

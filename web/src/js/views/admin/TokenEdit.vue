@@ -32,15 +32,8 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<form class="needs-validation card-text" novalidate @submit.prevent.stop="onSubmit">
-		<card-header title="Create Auth Token">
-			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Auth Tokens' }">
-				Back
-			</router-link>
-			<button class="btn btn-primary btn-sm" type="submit">
-				Submit
-			</button>
-		</card-header>
+	<card-header title="Create Auth Token" :back="{ name: 'Admin List Auth Tokens' }" :on-submit />
+	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<form-input
 			v-model="item.name"
 			name="name"

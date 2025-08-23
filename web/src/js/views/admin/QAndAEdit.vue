@@ -3,6 +3,7 @@ import { inject, ref } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 import { nanoid } from 'nanoid';
 
+import { dateExtension } from 'lib/showdown';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
@@ -73,12 +74,8 @@ function moveItem(idx, to) {
 </script>
 
 <template>
-	<card-header title="Edit Q&A Items">
-		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
-			Submit
-		</button>
-	</card-header>
-	<form class="needs-validation card-text" novalidate @submit.prevent.stop="onSubmit">
+	<card-header title="Edit Q&A Items" :back="{ name: 'Admin Overview' }" :on-submit />
+	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<div v-for="(item, idx) in items" :key="item.id">
 			<div v-if="idx" class="d-flex align-items-center pb-3">
 				<hr class="fancy-hr w-100">
@@ -129,7 +126,7 @@ function moveItem(idx, to) {
 			>
 				<template #below>
 					<div class="img-thumbnail p-2 text-body-secondary">
-						<vue-showdown v-if="item.markdown" :markdown="item.answer || 'Preview'" flavor="github" />
+						<vue-showdown v-if="item.markdown" :markdown="item.answer || 'Preview'" :extensions="[ dateExtension ]" flavor="github" />
 						<div v-else v-text="item.answer || 'Preview'" />
 					</div>
 				</template>

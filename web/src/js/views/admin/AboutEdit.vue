@@ -32,12 +32,8 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<card-header title="Edit Details Page">
-		<button class="btn btn-primary btn-sm" type="submit" @click="onSubmit">
-			Submit
-		</button>
-	</card-header>
-	<div class="card-text">
+	<card-header title="Edit Details Page" :back="{ name: 'Admin Overview' }" :on-submit />
+	<form class="card-text" @submit.prevent.stop="onSubmit">
 		<h5 v-text="'Content'" />
 		<textarea
 			v-model="content"
@@ -55,5 +51,5 @@ const { onSubmit } = useForm({
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </template>

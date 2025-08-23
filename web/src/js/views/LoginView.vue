@@ -31,9 +31,9 @@ onMounted(() => {
 </script>
 
 <template>
-	<form @submit.prevent.stop="onSubmit">
-		<card-header title="Manage your Invitation" />
-		<p class="card-text">
+	<card-header title="Manage your Invitation" />
+	<form class="card-text" @submit.prevent.stop="onSubmit">
+		<p>
 			Enter the ID included on your invitation below.
 		</p>
 		<div class="form-floating mb-3">

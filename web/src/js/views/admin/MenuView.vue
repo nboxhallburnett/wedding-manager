@@ -48,53 +48,48 @@ function invitationDisplay(invitation) {
 </script>
 
 <template>
-	<card-header title="Menu Item">
-		<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Menu Items' }">
-			Back
-		</router-link>
-		<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Menu Item' }">
-			Update Menu Item
-		</router-link>
-	</card-header>
-	<form-item name="title" label="Title">
-		<div class="form-control-plaintext">
-			<span v-text="item.title" />
-			<diet-indicator v-if="!loading" class="ms-2" :item />
-		</div>
-	</form-item>
-	<form-text
-		v-model="item.description"
-		name="description"
-		label="Description"
-	/>
-	<form-text
-		:value="courseOptions[item.course]"
-		name="course"
-		label="Course"
-	/>
-	<form-text
-		:value="menuOptions[Number(item.child)]"
-		name="child"
-		label="Menu"
-	/>
-	<form-item
-		name="invitations"
-		label="Invitations"
-		hint="Invitations in which the menu item is selected"
-	>
-		<template v-for="invitation in invitations" :key="invitation.id">
+	<card-header title="Menu Item" :back="{ name: 'Admin List Menu Items' }" :action="{ text: 'Update Menu Item', to: { name: 'Admin Edit Menu Item' } }" />
+	<div class="card-text">
+		<form-item name="title" label="Title">
 			<div class="form-control-plaintext">
-				<router-link
-					:to="{ name: 'Admin Edit Invitation', params: { invitationId: invitation.id } }"
-					class="link-primary font-monospace"
-				>
-					{{ invitation.id }}
-				</router-link>
-				({{ invitationDisplay(invitation) }})
+				<span v-text="item.title" />
+				<diet-indicator v-if="!loading" class="ms-2" :item />
 			</div>
-		</template>
-		<div v-if="!invitations.length" class="form-control-plaintext">
-			---
-		</div>
-	</form-item>
+		</form-item>
+		<form-text
+			v-model="item.description"
+			name="description"
+			label="Description"
+		/>
+		<form-text
+			:value="courseOptions[item.course]"
+			name="course"
+			label="Course"
+		/>
+		<form-text
+			:value="menuOptions[Number(item.child)]"
+			name="child"
+			label="Menu"
+		/>
+		<form-item
+			name="invitations"
+			label="Invitations"
+			hint="Invitations in which the menu item is selected"
+		>
+			<template v-for="invitation in invitations" :key="invitation.id">
+				<div class="form-control-plaintext">
+					<router-link
+						:to="{ name: 'Admin View Invitation', params: { invitationId: invitation.id } }"
+						class="link-primary font-monospace"
+					>
+						{{ invitation.id }}
+					</router-link>
+					({{ invitationDisplay(invitation) }})
+				</div>
+			</template>
+			<div v-if="!invitations.length" class="form-control-plaintext">
+				---
+			</div>
+		</form-item>
+	</div>
 </template>

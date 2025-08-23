@@ -53,7 +53,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Calendar Events" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
+	<card-header title="Calendar Events" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="events" v-bind="tableOpts">
 			<th scope="row">

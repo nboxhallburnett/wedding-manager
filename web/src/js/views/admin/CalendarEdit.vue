@@ -41,7 +41,7 @@ const item = ref({
 const isNew = Router.currentRoute.value.name.includes('Create');
 
 if (!isNew) {
-	useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, ([ { result } ]) => {
+	useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, ({ result }) => {
 		// `date` and `datetime-local` inputs are very specific about their
 		// allowed formats, so generate their values from the returned dates
 		const start = result.data.start
@@ -96,15 +96,8 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<form @submit.prevent.stop="onSubmit">
-		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`">
-			<router-link class="btn btn-link btn-sm me-2" :to="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }">
-				Back
-			</router-link>
-			<button class="btn btn-primary btn-sm" type="submit">
-				Submit
-			</button>
-		</card-header>
+	<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" :back="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }" :on-submit />
+	<form class="card-text" @submit.prevent.stop="onSubmit">
 		<form-input
 			v-model="item.summary"
 			name="summary"

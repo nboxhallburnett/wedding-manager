@@ -49,7 +49,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Auth Tokens" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }" />
+	<card-header title="Auth Tokens" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }" />
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="tokens" v-bind="tableOpts">
 			<td v-text="item.name" />

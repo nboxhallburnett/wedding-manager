@@ -6,7 +6,8 @@ const model = defineModel({ type: [ String, Number, Array ] });
 const props = defineProps({
 	label: { type: String, default: '' },
 	value: { type: [ String, Number, Array ], default: '' },
-	name: { type: String, required: true }
+	name: { type: String, required: true },
+	textClass: { type: [ String, Object ], default: null }
 });
 
 const displayValue = ref(model.value || props.value || '');
@@ -27,6 +28,7 @@ watchEffect(() => {
 			ref="input"
 			:name="props.name"
 			class="form-control-plaintext ws-pre-wrap"
+			:class="textClass"
 			v-text="displayValue"
 		/>
 		<slot name="after" />

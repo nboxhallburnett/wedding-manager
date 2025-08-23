@@ -82,8 +82,8 @@ function onSearch() {
 </script>
 
 <template>
-	<card-header title="Seating Plan" />
-	<form class="card-text">
+	<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" />
+	<div class="card-text">
 		<input
 			v-model="searchTerm"
 			class="form-control mx-auto w-75 mb-3"
@@ -125,5 +125,5 @@ function onSearch() {
 				</ol>
 			</div>
 		</div>
-	</form>
+	</div>
 </template>

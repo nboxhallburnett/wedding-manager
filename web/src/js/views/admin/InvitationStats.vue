@@ -34,7 +34,7 @@ useLoader('admin/stats/invitations', stats);
 </script>
 
 <template>
-	<card-header title="Stats" />
+	<card-header title="Stats" :back="{ name: 'Admin Overview' }" />
 	<div class="row g-3">
 		<div v-for="({ key, title }) in statusMap" :key class="col-12 col-md-6">
 			<div class="card shadow">

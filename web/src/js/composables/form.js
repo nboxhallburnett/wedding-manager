@@ -14,7 +14,7 @@ let loading;
  * @param {String|(U) => String} options.path Path of the API to call. Can either be a string or a function that returns the path
  * @param {'POST'|'PUT'|'DELETE'|((U) => 'POST'|'PUT'|'DELETE')} options.method Method to use when calling the API,
  * @param {T|((U) => T)} [options.body] Body to include in the request
- * @param {{ [prop: keyof T]: (T) => Boolean }} [options.validation] Validation to perform before the request is made
+ * @param {Boolean|{ [prop: keyof T]: (T) => Boolean }} [options.validation] Validation to perform before the request is made
  * @param {(data?: Object, response: Response, U) => void} [options.onSuccess] Function to call on successful request
  * @param {(data?: Object, response: Response, U) => void} [options.onError] Function to call on failed request
  *

@@ -101,7 +101,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Feedback" />
+	<card-header title="Feedback" :back="{ name: 'Admin Overview' }" />
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="items" v-bind="tableOpts">
 			<th scope="row">

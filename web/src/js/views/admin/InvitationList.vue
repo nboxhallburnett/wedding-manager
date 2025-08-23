@@ -181,7 +181,7 @@ function invitationStatus(invitation) {
 </script>
 
 <template>
-	<card-header title="Invitations" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
+	<card-header title="Invitations" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
 			<th scope="row" class="font-monospace">

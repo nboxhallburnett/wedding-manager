@@ -10,10 +10,12 @@ const invitation = inject('invitation');
 
 <template>
 	<card-header title="Uh Oh!" />
-	<p class="card-text">
-		You seem to be lost.
-	</p>
-	<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
-		Home
-	</RouterLink>
+	<div class="card-text">
+		<p>
+			You seem to be lost.
+		</p>
+		<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
+			Home
+		</RouterLink>
+	</div>
 </template>

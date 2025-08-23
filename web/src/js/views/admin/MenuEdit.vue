@@ -44,7 +44,8 @@ if (!isNew) {
 
 const { onSubmit } = useForm({
 	method: () => isNew ? 'POST' : 'PUT',
-	path: () => isNew ? 'calendar' : `calendar/${item.value.id}`,
+	path: () => isNew ? 'menu' : `menu/${item.value.id}`,
+	validation: true,
 	body: item,
 	onSuccess() {
 		addToast({
@@ -66,20 +67,14 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<form @submit.prevent.stop="onSubmit">
-		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`">
-			<router-link class="btn btn-link btn-sm me-2" :to="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }">
-				Back
-			</router-link>
-			<button class="btn btn-primary btn-sm" type="submit">
-				Submit
-			</button>
-		</card-header>
+	<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit />
+	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<form-input
 			v-model="item.title"
 			name="title"
 			label="Title"
 			placeholder="Pizza"
+			required
 		/>
 		<form-textarea
 			v-model="item.description"

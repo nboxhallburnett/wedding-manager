@@ -103,7 +103,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" />
+	<card-header title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" :back="{ name: 'Admin Overview' }" />
 	<div class="card-text">
 		<table-component v-slot="{ item }" :items="menu" v-bind="tableOpts">
 			<th scope="row">

@@ -68,21 +68,13 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 </script>
 
 <template>
-	<card-header title="Invitation">
-		<router-link v-if="adminView" class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
-			Back
-		</router-link>
-		<router-link
-			class="btn btn-primary btn-sm"
-			:to="adminView
-				? { name: 'Admin Edit Invitation' }
-				: { name: 'Edit Invitation' }"
-		>
-			{{ adminView ? 'Edit Invitation' : 'Manage RSVP' }}
-		</router-link>
-	</card-header>
-	<template v-if="invitation?.guests?.length">
-		<div class="card-text">
+	<card-header
+		title="Invitation"
+		:back="adminView ? { name: 'Admin List Invitations' } : undefined"
+		:action="adminView ? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } } : { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }"
+	/>
+	<div class="card-text">
+		<template v-if="invitation?.guests?.length">
 			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
 				<template v-if="guest.name">
 					<hr v-if="idx">
@@ -112,43 +104,43 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 					</template>
 				</template>
 			</div>
-		</div>
-		<hr>
-	</template>
-	<template v-if="invitation?.children?.length">
-		<h5 class="mb-3" v-text="'Children'" />
-		<div class="card-text">
-			<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
-				<template v-if="child.name">
-					<hr v-if="idx">
-					<form-text v-model="child.name" label="Name" :name="`child-${idx}-name`" />
-					<form-text v-model="child.age" label="Age" :name="`child-${idx}-age`" />
-					<template v-for="(meal, mealIdx) in mealsMap" :key="`child-${idx}-${mealIdx}`">
-						<form-item v-if="child[meal.key]" :name="`child-${idx}-${meal.key}`" :label="meal.text">
-							<div v-if="menuItems[child[meal.key]]" class="form-control-plaintext">
-								<span v-text="menuItems[child[meal.key]].title" />
-								<diet-indicator class="ms-2" :item="menuItems[child[meal.key]]" />
-							</div>
-							<div v-else class="form-control-plaintext placeholder-wave">
-								<span class="placeholder rounded-1" :class="[ 'w-33', 'w-50', 'w-25' ][mealIdx]" />
-							</div>
-						</form-item>
+			<hr>
+		</template>
+		<template v-if="invitation?.children?.length">
+			<h5 class="mb-3" v-text="'Children'" />
+			<div class="card-text">
+				<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
+					<template v-if="child.name">
+						<hr v-if="idx">
+						<form-text v-model="child.name" label="Name" :name="`child-${idx}-name`" />
+						<form-text v-model="child.age" label="Age" :name="`child-${idx}-age`" />
+						<template v-for="(meal, mealIdx) in mealsMap" :key="`child-${idx}-${mealIdx}`">
+							<form-item v-if="child[meal.key]" :name="`child-${idx}-${meal.key}`" :label="meal.text">
+								<div v-if="menuItems[child[meal.key]]" class="form-control-plaintext">
+									<span v-text="menuItems[child[meal.key]].title" />
+									<diet-indicator class="ms-2" :item="menuItems[child[meal.key]]" />
+								</div>
+								<div v-else class="form-control-plaintext placeholder-wave">
+									<span class="placeholder rounded-1" :class="[ 'w-33', 'w-50', 'w-25' ][mealIdx]" />
+								</div>
+							</form-item>
+						</template>
 					</template>
-				</template>
+				</div>
 			</div>
-		</div>
-		<hr>
-	</template>
-	<form-text
-		v-if="invitation?.message"
-		v-model="invitation.message"
-		label="Message"
-		name="message"
-	/>
-	<form-text
-		v-if="invitation?.songs?.filter(Boolean).length"
-		v-model="invitation.songs"
-		label="Song Suggestions"
-		name="songs"
-	/>
+			<hr>
+		</template>
+		<form-text
+			v-if="invitation?.message"
+			v-model="invitation.message"
+			label="Message"
+			name="message"
+		/>
+		<form-text
+			v-if="invitation?.songs?.filter(Boolean).length"
+			v-model="invitation.songs"
+			label="Song Suggestions"
+			name="songs"
+		/>
+	</div>
 </template>

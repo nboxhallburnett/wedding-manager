@@ -211,22 +211,14 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<form class="needs-validation" novalidate @submit.prevent.stop="onSubmit">
-		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'">
-			<router-link class="btn btn-link btn-sm me-2" :to="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }">
-				Back
-			</router-link>
-			<button class="btn btn-primary btn-sm" type="submit">
-				Submit
-			</button>
-		</card-header>
-
+	<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit />
+	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<form-text
 			v-if="adminEdit"
 			v-model="invitation.id"
 			name="id"
 			label="ID"
-			class="font-monospace"
+			text-class="font-monospace"
 		/>
 
 		<div id="guestAccordion" class="accordion">

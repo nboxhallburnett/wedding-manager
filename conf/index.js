@@ -28,7 +28,11 @@ const config = {
 		}
 	},
 	client: {
-		footer: []
+		footer: [],
+		theme: {
+			primary: process.env.CLIENT_THEME_PRIMARY,
+			secondary: process.env.CLIENT_THEME_SECONDARY,
+		}
 	}
 };
 
@@ -93,14 +97,17 @@ module.exports = Object.freeze(config);
  * @property {Object} server Configuration for the running server.
  * @property {Number} server.port Port the server is listening on.
  * @property {Number} server.external_port Port the server is accessible on. Used when running behind a reverse proxy. Defaults to `443`
- * @property {Object} server.db Configuration for the connected database
- * @property {String} server.db.host Host of the database to connect to
- * @property {String} server.db.db Name of the db where the application data is stored
- * @property {String} server.db.username Username of a user in the database with read/write access to the application data
- * @property {String} server.db.password Password to authenticate the database user
- * @property {Object} server.session Configuration for the session store and cookie
- * @property {String} server.session.name Name of the session cookie
- * @property {String} server.session.secret Secret used to sign the session
+ * @property {Object} server.db Configuration for the connected database.
+ * @property {String} server.db.host Host of the database to connect to.
+ * @property {String} server.db.db Name of the db where the application data is stored.
+ * @property {String} server.db.username Username of a user in the database with read/write access to the application data.
+ * @property {String} server.db.password Password to authenticate the database user.
+ * @property {Object} server.session Configuration for the session store and cookie.
+ * @property {String} server.session.name Name of the session cookie.
+ * @property {String} server.session.secret Secret used to sign the session.
  * @property {Object} client Configuration for the front-end client.
  * @property {FooterItem[]} client.footer Data to include in the UI footer.
+ * @property {Object} client.theme Values to use for default theme overrides.
+ * @property {String} [client.theme.primary] Value to use for the primary theme colour.
+ * @property {String} [client.theme.secondary] Value to use for the secondary theme colour.
  */

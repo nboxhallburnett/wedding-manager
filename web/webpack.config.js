@@ -44,6 +44,20 @@ module.exports = function ({ WEBPACK_SERVE }) {
 								sassOptions: {
 									quietDeps: true,
 									silenceDeprecations: [ 'import' ]
+								},
+								additionalData: (content, { resourcePath }) => {
+									// Add theme overrides from conf to scss imports
+									if (resourcePath.endsWith('scss')) {
+										let overrides = '';
+										if (config.client.theme.primary) {
+											overrides += `$primary: ${config.client.theme.primary}; `;
+										}
+										if (config.client.theme.secondary) {
+											overrides += `$secondary: ${config.client.theme.secondary}; `;
+										}
+										return `${overrides}${content}`;
+									}
+									return content;
 								}
 							}
 						}

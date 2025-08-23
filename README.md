@@ -82,7 +82,7 @@ The following are a collection of codebase locations to make easy adjustments to
 
 Name | Location | Use | Expected value
 --- | --- | --- | ---
-Theme colours | [./web/src/scss/_vars.scss](./web/src/scss/_vars.scss) | Adjust the colour scheme used by the service | SCSS overrides for bootstrap's colour palette. [See their documentation for more details.](https://getbootstrap.com/docs/5.3/customize/color/)
+Bootstrap overrides | [./web/src/scss/_vars.scss](./web/src/scss/_vars.scss) | Adjust the bootstrap variable overrides | SCSS overrides for bootstrap's scss variables outside of the primary/secondary set in conf. [See their documentation for more details.](https://getbootstrap.com/docs/5.3/customize/color/)
 
 ## Development
 
@@ -121,6 +121,8 @@ Name | Description | Type | Default
 `SERVER_SESSION_NAME` | Name to use for the browser session cookie | String | `'invitation'`
 `SERVER_SESSION_SECRET` | The secret used to sign the session ID cookie | String value that is supported by the key param of the Node.js [`crypto.createHmac()`](https://nodejs.org/api/crypto.html#cryptocreatehmacalgorithm-key-options) | N/A
 `CLIENT_FOOTER` | Content to include in the footer of the front-end client | An individual footer item is defined in markdown link syntax `[text](url)`, and multiple items split by `\|` | N/A
+`CLIENT_THEME_PRIMARY` | Primary colour to use in the UI | Valid CSS colour value | `#007bff` (Bootstrap default primary)
+`CLIENT_THEME_SECONDARY` | Secondary colour to use in the UI | Valid CSS colour value | `#6c757d` (Bootstrap default secondary)
 
 > [!NOTE]
 > It is not used directly used by the application, but be sure to set `NODE_ENV` to `production` when building the application for production use. This will ensure reduced built front-end asset size and more optimal performance by the running server.

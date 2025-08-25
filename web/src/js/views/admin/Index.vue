@@ -14,8 +14,7 @@ const links = [
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
 	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
 	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
-	{ text: 'Seating Plan', to: { name: 'Admin View Seating Plan' } },
-	{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }
+	{ text: 'Seating Plan', to: { name: 'Admin View Seating Plan' } }
 ];
 </script>
 

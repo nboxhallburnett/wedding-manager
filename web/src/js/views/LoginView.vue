@@ -44,7 +44,7 @@ onMounted(() => {
 		<div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-9 align-content-center">
 			<form class="card-text" @submit.prevent.stop="onSubmit">
 				<h4 class="pb-1 text-stroke">
-					Manage your Invitation
+					Manage your RSVP
 				</h4>
 				<p class="text-stroke">
 					Enter the ID included on your invitation below.

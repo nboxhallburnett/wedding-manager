@@ -304,7 +304,7 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<card-header title="Edit Seating Plan" :back="{ name: 'Admin Overview' }" :on-submit />
+	<card-header title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit />
 	<form class="card-text row" @submit.prevent.stop="onSubmit">
 		<input
 			v-model="searchTerm"

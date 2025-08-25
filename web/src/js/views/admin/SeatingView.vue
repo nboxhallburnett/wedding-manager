@@ -82,7 +82,7 @@ function onSearch() {
 </script>
 
 <template>
-	<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" />
+	<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" :action="{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }" />
 	<div class="card-text">
 		<input
 			v-model="searchTerm"

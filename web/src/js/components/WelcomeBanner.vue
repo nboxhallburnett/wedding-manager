@@ -17,15 +17,21 @@ const groom = CONFIG.groom_short;
 #welcome-banner {
 	$artificial-margin: 250px;
 	$banner-border-radius: 45%;
+	$blur-size: 15px;
+	$banner-bg: rgba(var(--bs-secondary-rgb), 100%);
 
 	padding-left: 3.5rem;
 	padding-right: 3.5rem;
 	border-bottom-left-radius: $banner-border-radius;
 	border-bottom-right-radius: $banner-border-radius;
-	box-shadow: 0 0 33px 42px var(--bs-secondary);
-	background-color: var(--bs-secondary);
+	background-color: $banner-bg;
 	overflow: hidden;
 	opacity: 0.9;
+	filter:
+		drop-shadow($blur-size $blur-size $blur-size $banner-bg)
+		drop-shadow($blur-size calc($blur-size * -1) $blur-size $banner-bg)
+		drop-shadow(calc($blur-size * -1) $blur-size $blur-size $banner-bg)
+		drop-shadow(calc($blur-size * -1) calc($blur-size * -1) $blur-size $banner-bg);
 
 	// Add artificial negative top margin to make the border radius to appear to fade into the header
 	/* stylelint-disable-next-line declaration-property-value-no-unknown */

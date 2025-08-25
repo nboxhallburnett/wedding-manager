@@ -16,6 +16,8 @@ const feedback = ref('');
 const $feedbackToggle = useTemplateRef('feedbackToggle');
 const $navbarToggle = useTemplateRef('navbarToggle');
 
+document.body.classList.add('has-header');
+
 const navItems = computed(() => {
 	// If there is no session, only show the login page
 	if (!invitation.value?.id) {

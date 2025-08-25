@@ -25,7 +25,10 @@ body {
 	background-repeat: no-repeat;
 	background-position: center top;
 	background-attachment: fixed;
-	padding-top: $header-height;
+
+	&.has-header {
+		padding-top: $header-height;
+	}
 }
 
 :root {

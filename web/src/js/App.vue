@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onMounted, provide, ref, useTemplateRef } from 'vue';
+import { inject, onMounted, nextTick, provide, ref, useTemplateRef, watch } from 'vue';
 import { RouterView } from 'vue-router';
 
 const invitation = inject('invitation');
@@ -28,76 +28,109 @@ const viewContainer = useTemplateRef('viewContainer');
 
 // Wire up the welcome message fade effect when the app has mounted
 onMounted(() => {
-	// Set an arbitrary 150px window for the fade effect to occur in
-	const scrollSize = 150;
-	// Fetch the height of the header from the css var to use as the ceiling for the scroll
-	const headerHeight = Number(getComputedStyle(document.body)
-		.getPropertyValue('--header-height')
-		.split('px')[0]);
-
-	// Track the current opacity so we only modify the style when it changes
-	let currentOpacity = welcomeBannerContainer.value.style.opacity;
-	// Store a ref to the lower bound height that we'd want for the scroll effect
-	const maxScroll = headerHeight + scrollSize;
-	// Store a ref to the base percentage calculation. One less thing to calculate in the scroll hander
-	const opacityCalcBase = 100 / scrollSize;
-
-	// Wire up a listener on scroll to apply changes to the opacity
-	// I wish we could use IntersectionObserver for this, but the elements aren't ancestors.
-	document.addEventListener('scroll', () => {
-		// Get just the top of the view container for our position calculations
-		const { top: distanceFromViewportTop } = viewContainer.value.getBoundingClientRect();
-		// If the opacity of the welcome banner is already 0 and the container is scrolled "above" the header,
-		// we've got nothing to do here so fall out
-		if (!currentOpacity && distanceFromViewportTop < headerHeight) {
-			return;
-		}
-		// Likewise, if the opacity is 1 and the container is below the lower bound, there's no changes to make
-		if (currentOpacity === 1 && distanceFromViewportTop > maxScroll) {
+	// This can only be wired up when there is a valid session and we're using the authenticated layout,
+	// so watch the invitation ref to check we have a session before attempting to reference anything
+	watch(() => invitation.value, hasSession => {
+		if (!hasSession) {
 			return;
 		}
 
-		// Calculate the percentage of the way through the scroll window the container is
-		const scrollWindowPercent = opacityCalcBase * ((Math.min(distanceFromViewportTop, maxScroll)) - headerHeight);
-		// To reduce how frequently we update the actual styles, round the percentage to 10% increments
-		const opacityStep = Math.max(Math.round(scrollWindowPercent / 10) / 10, 0);
-		// If the calculated step is different to the currently applied style...
-		if (opacityStep !== currentOpacity) {
-			// Store it as the new reference step
-			currentOpacity = opacityStep;
-			// And apply the value to the banner's styles
-			welcomeBannerContainer.value.style.opacity = opacityStep;
-		}
-	});
+		// If we've got a session, wait until the next tick to ensure everything is on the DOM ready for
+		// us to reference.
+		nextTick(() => {
+			// Set an arbitrary 150px window for the fade effect to occur in
+			const scrollSize = 150;
+			// Fetch the height of the header from the css var to use as the ceiling for the scroll
+			const headerHeight = Number(getComputedStyle(document.body)
+				.getPropertyValue('--header-height')
+				.split('px')[0]);
+
+			// Track the current opacity so we only modify the style when it changes
+			let currentOpacity = welcomeBannerContainer.value.style.opacity;
+			// Store a ref to the lower bound height that we'd want for the scroll effect
+			const maxScroll = headerHeight + scrollSize;
+			// Store a ref to the base percentage calculation. One less thing to calculate in the scroll hander
+			const opacityCalcBase = 100 / scrollSize;
+
+			// Wire up a listener on scroll to apply changes to the opacity
+			// I wish we could use IntersectionObserver for this, but the elements aren't ancestors.
+			document.addEventListener('scroll', () => {
+				// Get just the top of the view container for our position calculations
+				const { top: distanceFromViewportTop } = viewContainer.value.getBoundingClientRect();
+				// If the opacity of the welcome banner is already 0 and the container is scrolled "above" the header,
+				// we've got nothing to do here so fall out
+				if (!currentOpacity && distanceFromViewportTop < headerHeight) {
+					return;
+				}
+				// Likewise, if the opacity is 1 and the container is below the lower bound, there's no changes to make
+				if (currentOpacity === 1 && distanceFromViewportTop > maxScroll) {
+					return;
+				}
+
+				// Calculate the percentage of the way through the scroll window the container is
+				const scrollWindowPercent = opacityCalcBase * ((Math.min(distanceFromViewportTop, maxScroll)) - headerHeight);
+				// To reduce how frequently we update the actual styles, round the percentage to 10% increments
+				const opacityStep = Math.max(Math.round(scrollWindowPercent / 10) / 10, 0);
+				// If the calculated step is different to the currently applied style...
+				if (opacityStep !== currentOpacity) {
+					// Store it as the new reference step
+					currentOpacity = opacityStep;
+					// And apply the value to the banner's styles
+					welcomeBannerContainer.value.style.opacity = opacityStep;
+				}
+			});
+		});
+	}, { immediate: true });
 });
 </script>
 
 <template>
-	<welcome-display v-if="!invitation && showWelcome" @finished="welcomeCleanup" />
-
+	<div id="background-overlay" />
 	<ring-loader />
-	<toast-container ref="toastContainerComponent" />
+	<template v-if="invitation">
+		<toast-container ref="toastContainerComponent" />
+		<header>
+			<site-header />
 
-	<header>
-		<site-header />
+			<div id="welcome-banner-container" ref="welcomeBannerContainer">
+				<welcome-banner />
+			</div>
+		</header>
 
-		<div id="welcome-banner-container" ref="welcomeBannerContainer">
-			<welcome-banner />
-		</div>
-	</header>
-
-	<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center">
-		<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
-			<div class="card-body pt-0">
-				<router-view />
+		<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center">
+			<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
+				<div class="card-body pt-0">
+					<router-view />
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<site-footer />
+		<site-footer />
+	</template>
+	<template v-else>
+		<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
+		<div class="d-flex justify-content-center flex-column vh-100">
+			<router-view />
+		</div>
+	</template>
 </template>
 
 <style lang="scss">
+#background-overlay {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	backdrop-filter: blur(.5rem);
+	transition: backdrop-filter 0.35s ease-out;
+	overflow-y: scroll;
+
+	.has-header & {
+		backdrop-filter: blur(0rem);
+	}
+}
+
 header {
 	margin-bottom: 175px;
 }

@@ -17,6 +17,7 @@ let loading;
  * @param {Boolean|{ [prop: keyof T]: (T) => Boolean }} [options.validation] Validation to perform before the request is made
  * @param {(data?: Object, response: Response, U) => void} [options.onSuccess] Function to call on successful request
  * @param {(data?: Object, response: Response, U) => void} [options.onError] Function to call on failed request
+ * @param {Boolean} [options.loader] Whether to trigger the loading indicator
  *
  * @returns {{ errors: Ref<T>, onSubmit: (U) => void, validate: (prop?: keyof T) => Boolean }}
  */
@@ -117,12 +118,16 @@ export function useForm(options) {
 			return;
 		}
 
-		loading.value = true;
+		if (options.loader !== false) {
+			loading.value = true;
+		}
 		const response = await API(typeof options.path === 'function' ? options.path(...args) : options.path, {
 			method: typeof options.method === 'function' ? options.method(...args) : options.method,
 			body: typeof options.body === 'function' ? options.body(...args) : options.body
 		});
-		loading.value = false;
+		if (options.loader !== false) {
+			loading.value = false;
+		}
 		// If a successful response was returned, trigger any onSuccess handler and return
 		if (response.status >= 200 && response.status <= 299) {
 			if (options.onSuccess) {

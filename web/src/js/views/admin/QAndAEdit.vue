@@ -126,7 +126,12 @@ function moveItem(idx, to) {
 			>
 				<template #below>
 					<div class="img-thumbnail p-2 text-body-secondary">
-						<vue-showdown v-if="item.markdown" :markdown="item.answer || 'Preview'" :extensions="[ dateExtension ]" flavor="github" />
+						<vue-showdown
+							v-if="item.markdown"
+							:markdown="item.answer || 'Preview'"
+							:extensions="[ dateExtension ]"
+							flavor="github"
+						/>
 						<div v-else v-text="item.answer || 'Preview'" />
 					</div>
 				</template>

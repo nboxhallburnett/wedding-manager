@@ -16,12 +16,11 @@ const groom = CONFIG.groom_short;
 <style lang="scss">
 #welcome-banner {
 	$blur-size: 25px;
-	$banner-bg: rgba(var(--bs-secondary-rgb), 90%);
+	$banner-bg: rgb(var(--bs-secondary-rgb), 80%);
 
 	padding-left: 3.5rem;
 	padding-right: 3.5rem;
 	overflow: hidden;
-	// opacity: 0.9;
 	filter:
 		drop-shadow($blur-size $blur-size calc($blur-size * 0.75) $banner-bg)
 		drop-shadow($blur-size calc($blur-size * -1) calc($blur-size * 0.75) $banner-bg)

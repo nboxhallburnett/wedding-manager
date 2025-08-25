@@ -372,8 +372,8 @@ $chair-offset: v-bind(chairOffset);
 	// Add a transition to smoothly move the chair around the table when one is added or removed
 	transition: transform 0.2s, background-color 0.2s;
 
-	// And an animation to
-	// Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position fade and slide the chair towards the table
+	// Custom animation to fade the chair in on load, and to slide it in towards the table relative
+	// to its position fade and slide the chair towards the table
 	animation: fade-slide-in 0.35s;
 
 	.rectangle & {

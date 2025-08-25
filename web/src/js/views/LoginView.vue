@@ -35,7 +35,9 @@ onMounted(() => {
 	<div class="text-center d-inline-flex h1 mb-3 w-100">
 		<h1 id="welcome-text" class="mb-3 w-100">
 			{{ bride }}
-			<div id="welcome-and" class="font-script px-1">&</div>
+			<div id="welcome-and" class="font-script px-1">
+				&
+			</div>
 			{{ groom }}
 		</h1>
 	</div>

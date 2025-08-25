@@ -15,6 +15,7 @@
 		"at-rule-no-unknown": null,
 		"color-function-notation": null,
 		"color-hex-length": "long",
+		"declaration-property-value-no-unknown": null,
 		"media-feature-range-notation": "prefix",
 		"no-descending-specificity": null,
 		"no-invalid-position-at-import-rule": null,

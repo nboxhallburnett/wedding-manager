@@ -29,7 +29,12 @@ if (!props.noTitle) {
 				<router-link v-if="action?.to && action?.text" class="btn btn-primary btn-sm" :to="action.to">
 					{{ action.text }}
 				</router-link>
-				<button v-if="onSubmit" class="btn btn-primary btn-sm" type="submit" @click.prevent.stop="onSubmit">
+				<button
+					v-if="onSubmit"
+					class="btn btn-primary btn-sm"
+					type="submit"
+					@click.prevent.stop="onSubmit"
+				>
 					Submit
 				</button>
 			</slot>

@@ -122,12 +122,12 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	z-index: -1;
-	backdrop-filter: blur(.5rem);
+	backdrop-filter: blur(0.5rem);
 	transition: backdrop-filter 0.35s ease-out;
 	overflow-y: scroll;
 
 	.has-header & {
-		backdrop-filter: blur(0rem);
+		backdrop-filter: blur(0);
 	}
 }
 

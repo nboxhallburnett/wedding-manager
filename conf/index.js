@@ -31,7 +31,7 @@ const config = {
 		footer: [],
 		theme: {
 			primary: process.env.CLIENT_THEME_PRIMARY,
-			secondary: process.env.CLIENT_THEME_SECONDARY,
+			secondary: process.env.CLIENT_THEME_SECONDARY
 		}
 	}
 };

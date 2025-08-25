@@ -261,15 +261,11 @@ $qr-code-size: v-bind(qrCodeSizePx);
 	&::after {
 		content: ' ';
 		position: absolute;
-		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		width: 3 * $invitation-border-size;
-		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		height: 3 * $invitation-border-size;
-		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		font-size: 3 * $invitation-border-size;
 		color: var(--bs-primary);
 		border: 2px solid var(--bs-primary);
-		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		line-height: 3 * $invitation-border-size;
 		top: $invitation-border-size;
 		text-align: center;
@@ -292,15 +288,11 @@ $qr-code-size: v-bind(qrCodeSizePx);
 		&::after {
 			content: ' ';
 			position: absolute;
-			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			width: 3 * $invitation-border-size;
-			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			height: 3 * $invitation-border-size;
-			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			font-size: 3 * $invitation-border-size;
 			color: var(--bs-primary);
 			border: 2px solid var(--bs-primary);
-			/* stylelint-disable-next-line declaration-property-value-no-unknown */
 			line-height: 3 * $invitation-border-size;
 			bottom: $invitation-border-size;
 			text-align: center;

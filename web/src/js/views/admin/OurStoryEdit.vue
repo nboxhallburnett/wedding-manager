@@ -74,7 +74,7 @@ function moveItem(idx, to) {
 </script>
 
 <template>
-	<card-header title="Edit Story Items" :back="{ name: 'Admin Overview' }", :on-submit />
+	<card-header title="Edit Story Items" :back="{ name: 'Admin Overview' }" :on-submit />
 	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 		<div v-for="(item, idx) in items" :key="item.id">
 			<div v-if="idx" class="d-flex align-items-center pb-3">

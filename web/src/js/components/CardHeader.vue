@@ -1,12 +1,21 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 
-defineProps({
+const bride = CONFIG.bride_short;
+const groom = CONFIG.groom_short;
+
+const props = defineProps({
 	title: { type: String, default: '' },
 	action: { type: Object, default: null },
 	back: { type: Object, default: null },
-	onSubmit: { type: Function, default: null }
+	onSubmit: { type: Function, default: null },
+	noTitle: { type: Boolean, default: false }
 });
+
+// Unless disabled, set the document title to the card title
+if (!props.noTitle) {
+	document.title = `${props.title} | ${bride} & ${groom} | Wedding`;
+}
 </script>
 
 <template>

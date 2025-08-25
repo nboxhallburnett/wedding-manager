@@ -45,7 +45,7 @@ const { onSubmit } = useForm({
 		<h5 v-text="'Preview'" />
 		<div class="card shadow">
 			<div class="card-body pt-0">
-				<card-header title="Details" class="z-0" />
+				<card-header title="Details" class="z-0" no-title />
 				<div class="card-text">
 					<vue-showdown :markdown="content || placeholder" flavor="github" :extensions="classExtensions" />
 				</div>

@@ -132,7 +132,7 @@ onMounted(() => {
 }
 
 header {
-	margin-bottom: 175px;
+	margin-bottom: 160px;
 }
 
 #view-container {

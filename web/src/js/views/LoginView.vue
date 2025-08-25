@@ -89,14 +89,4 @@ onMounted(() => {
 		z-index: -1;
 	}
 }
-
-.text-stroke {
-	color: var(--bs-white);
-	text-shadow:
-		2px 2px 2px var(--bs-black),
-		-1px -1px 0 var(--bs-black),
-		1px -1px 0 var(--bs-black),
-		-1px 1px 0 var(--bs-black),
-		1px 1px 0 var(--bs-black);
-}
 </style>

@@ -96,117 +96,119 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" :back="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }" :on-submit />
-	<form class="card-text" @submit.prevent.stop="onSubmit">
-		<form-input
-			v-model="item.summary"
-			name="summary"
-			label="Summary"
-			placeholder="Wedding Ceremony"
-		/>
-		<form-textarea
-			v-model="item.description"
-			name="description"
-			label="Description"
-			placeholder="You are cordially invited to attend our wedding ceremony."
-		/>
-		<form-switch v-model="item.allDay" name="allDay" label="All Day" />
-		<form-input
-			v-model="item.start"
-			name="start"
-			label="Start"
-			:type="item.allDay ? 'date' : 'datetime-local'"
-			:max="item.end"
-		/>
-		<form-input
-			v-model="item.end"
-			name="end"
-			label="End"
-			:type="item.allDay ? 'date' : 'datetime-local'"
-			:min="item.start"
-		/>
-		<form-input
-			v-model="item.timezone"
-			name="timezone"
-			label="Timezone"
-			placeholder="Europe/London"
-		/>
-		<form-input
-			v-model="item.organizer.name"
-			name="organizer"
-			label="Organizer"
-			placeholder="Name"
-		>
-			<template #after>
-				<span class="input-group-text" v-text="'<'" />
-				<input
-					id="email"
-					v-model="item.organizer.email"
-					name="email"
-					autocomplete="off"
-					class="form-control"
-					placeholder="email@example.com"
-					type="email"
-				>
-				<span class="input-group-text" v-text="'>'" />
-			</template>
-		</form-input>
-		<form-item name="location" label="Location" group-class="">
-			<div class="input-group mb-2">
-				<span class="input-group-text w-25" v-text="'Name'" />
-				<input
-					id="location"
-					v-model="item.location.title"
-					name="location"
-					class="form-control"
-					placeholder="Location Name"
-				>
-			</div>
-			<div class="input-group mb-2">
-				<span class="input-group-text w-25" v-text="'Address'" />
-				<input
-					id="address"
-					v-model="item.location.address"
-					name="address"
-					autocomplete="off"
-					class="form-control"
-					placeholder="Address"
-				>
-			</div>
-			<div class="input-group mb-2">
-				<span class="input-group-text w-25" v-text="'Radius'" />
-				<input
-					id="radius"
-					v-model="item.location.radius"
-					name="radius"
-					class="form-control"
-					placeholder="Radius"
-					inputmode="numeric"
-					pattern="\d+(.\d*)?"
-				>
-			</div>
-			<div class="input-group">
-				<span class="input-group-text" v-text="'Lat'" />
-				<input
-					id="latitude"
-					v-model="item.location.geo.lat"
-					name="latitude"
-					class="form-control"
-					placeholder="Latitude"
-					inputmode="numeric"
-					pattern="-?\d+(.\d*)?"
-				>
-				<span class="input-group-text" v-text="'Lon'" />
-				<input
-					id="longitude"
-					v-model="item.location.geo.lon"
-					name="longitude"
-					class="form-control"
-					placeholder="Longitude"
-					inputmode="numeric"
-					pattern="-?\d+(.\d*)?"
-				>
-			</div>
-		</form-item>
-	</form>
+	<div class="card-body">
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" :back="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }" :on-submit />
+		<form class="card-text" @submit.prevent.stop="onSubmit">
+			<form-input
+				v-model="item.summary"
+				name="summary"
+				label="Summary"
+				placeholder="Wedding Ceremony"
+			/>
+			<form-textarea
+				v-model="item.description"
+				name="description"
+				label="Description"
+				placeholder="You are cordially invited to attend our wedding ceremony."
+			/>
+			<form-switch v-model="item.allDay" name="allDay" label="All Day" />
+			<form-input
+				v-model="item.start"
+				name="start"
+				label="Start"
+				:type="item.allDay ? 'date' : 'datetime-local'"
+				:max="item.end"
+			/>
+			<form-input
+				v-model="item.end"
+				name="end"
+				label="End"
+				:type="item.allDay ? 'date' : 'datetime-local'"
+				:min="item.start"
+			/>
+			<form-input
+				v-model="item.timezone"
+				name="timezone"
+				label="Timezone"
+				placeholder="Europe/London"
+			/>
+			<form-input
+				v-model="item.organizer.name"
+				name="organizer"
+				label="Organizer"
+				placeholder="Name"
+			>
+				<template #after>
+					<span class="input-group-text" v-text="'<'" />
+					<input
+						id="email"
+						v-model="item.organizer.email"
+						name="email"
+						autocomplete="off"
+						class="form-control"
+						placeholder="email@example.com"
+						type="email"
+					>
+					<span class="input-group-text" v-text="'>'" />
+				</template>
+			</form-input>
+			<form-item name="location" label="Location" group-class="">
+				<div class="input-group mb-2">
+					<span class="input-group-text w-25" v-text="'Name'" />
+					<input
+						id="location"
+						v-model="item.location.title"
+						name="location"
+						class="form-control"
+						placeholder="Location Name"
+					>
+				</div>
+				<div class="input-group mb-2">
+					<span class="input-group-text w-25" v-text="'Address'" />
+					<input
+						id="address"
+						v-model="item.location.address"
+						name="address"
+						autocomplete="off"
+						class="form-control"
+						placeholder="Address"
+					>
+				</div>
+				<div class="input-group mb-2">
+					<span class="input-group-text w-25" v-text="'Radius'" />
+					<input
+						id="radius"
+						v-model="item.location.radius"
+						name="radius"
+						class="form-control"
+						placeholder="Radius"
+						inputmode="numeric"
+						pattern="\d+(.\d*)?"
+					>
+				</div>
+				<div class="input-group">
+					<span class="input-group-text" v-text="'Lat'" />
+					<input
+						id="latitude"
+						v-model="item.location.geo.lat"
+						name="latitude"
+						class="form-control"
+						placeholder="Latitude"
+						inputmode="numeric"
+						pattern="-?\d+(.\d*)?"
+					>
+					<span class="input-group-text" v-text="'Lon'" />
+					<input
+						id="longitude"
+						v-model="item.location.geo.lon"
+						name="longitude"
+						class="form-control"
+						placeholder="Longitude"
+						inputmode="numeric"
+						pattern="-?\d+(.\d*)?"
+					>
+				</div>
+			</form-item>
+		</form>
+	</div>
 </template>

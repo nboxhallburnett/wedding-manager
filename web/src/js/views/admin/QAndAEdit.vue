@@ -74,75 +74,77 @@ function moveItem(idx, to) {
 </script>
 
 <template>
-	<card-header title="Edit Q&A Items" :back="{ name: 'Admin Overview' }" :on-submit />
-	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
-		<div v-for="(item, idx) in items" :key="item.id">
-			<div v-if="idx" class="d-flex align-items-center pb-3">
-				<hr class="fancy-hr w-100">
-				<div class="d-flex flex-column gap-1">
-					<button
-						:id="`item-${item.idx}-up`"
-						class="icon-caret rotate-180 fs-4 p-0"
-						type="button"
-						@click.prevent.stop="moveItem(idx, idx - 1)"
-					/>
-					<button
-						v-if="items[idx + 1]"
-						:id="`item-${item.idx}-down`"
-						class="icon-caret fs-4 p-0"
-						type="button"
-						@click.prevent.stop="moveItem(idx, idx + 1)"
-					/>
-				</div>
-			</div>
-			<form-input
-				v-model="item.title"
-				:name="`question-${item.id}`"
-				label="Question"
-				placeholder="What is the meaning of life?"
-				validation="Can't have an answer without a question"
-				required
-			>
-				<template #after>
-					<button
-						type="button"
-						class="btn btn-sm btn-danger ms-auto"
-						@click="removeItem(idx)"
-					>
-						<div class="btn-close btn-close-white" />
-						<div class="visually-hidden">
-							Remove
-						</div>
-					</button>
-				</template>
-			</form-input>
-			<form-textarea
-				v-model="item.answer"
-				:name="`answer-${item.id}`"
-				label="Answer"
-				placeholder="42"
-				validation="Can't have a question without an answer"
-				required
-			>
-				<template #below>
-					<div class="img-thumbnail p-2 text-body-secondary">
-						<vue-showdown
-							v-if="item.markdown"
-							:markdown="item.answer || 'Preview'"
-							:extensions="[ dateExtension ]"
-							flavor="github"
+	<div class="card-body">
+		<card-header title="Edit Q&A Items" :back="{ name: 'Admin Overview' }" :on-submit />
+		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
+			<div v-for="(item, idx) in items" :key="item.id">
+				<div v-if="idx" class="d-flex align-items-center pb-3">
+					<hr class="fancy-hr w-100">
+					<div class="d-flex flex-column gap-1">
+						<button
+							:id="`item-${item.idx}-up`"
+							class="icon-caret rotate-180 fs-4 p-0"
+							type="button"
+							@click.prevent.stop="moveItem(idx, idx - 1)"
 						/>
-						<div v-else v-text="item.answer || 'Preview'" />
+						<button
+							v-if="items[idx + 1]"
+							:id="`item-${item.idx}-down`"
+							class="icon-caret fs-4 p-0"
+							type="button"
+							@click.prevent.stop="moveItem(idx, idx + 1)"
+						/>
 					</div>
-				</template>
-			</form-textarea>
-			<form-switch v-model="item.markdown" :name="`markdown-${item.id}`" label="Markdown" />
-		</div>
-		<button
-			role="button"
-			class="btn btn-primary"
-			@click.prevent.stop="addItem"
-			v-text="'Add Question'"
-		/>
-	</form>
+				</div>
+				<form-input
+					v-model="item.title"
+					:name="`question-${item.id}`"
+					label="Question"
+					placeholder="What is the meaning of life?"
+					validation="Can't have an answer without a question"
+					required
+				>
+					<template #after>
+						<button
+							type="button"
+							class="btn btn-sm btn-danger ms-auto"
+							@click="removeItem(idx)"
+						>
+							<div class="btn-close btn-close-white" />
+							<div class="visually-hidden">
+								Remove
+							</div>
+						</button>
+					</template>
+				</form-input>
+				<form-textarea
+					v-model="item.answer"
+					:name="`answer-${item.id}`"
+					label="Answer"
+					placeholder="42"
+					validation="Can't have a question without an answer"
+					required
+				>
+					<template #below>
+						<div class="img-thumbnail p-2 text-body-secondary">
+							<vue-showdown
+								v-if="item.markdown"
+								:markdown="item.answer || 'Preview'"
+								:extensions="[ dateExtension ]"
+								flavor="github"
+							/>
+							<div v-else v-text="item.answer || 'Preview'" />
+						</div>
+					</template>
+				</form-textarea>
+				<form-switch v-model="item.markdown" :name="`markdown-${item.id}`" label="Markdown" />
+			</div>
+			<button
+				role="button"
+				class="btn btn-primary"
+				@click.prevent.stop="addItem"
+				v-text="'Add Question'"
+			/>
+		</form>
+	</div>
 </template>

@@ -181,23 +181,25 @@ function invitationStatus(invitation) {
 </script>
 
 <template>
-	<card-header title="Invitations" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
-	<div class="card-text">
-		<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
-			<th scope="row" class="font-monospace">
-				<router-link :to="{ name: 'Admin View Invitation', params: { invitationId: item.id } }">
-					{{ item.id }}
-				</router-link>
-			</th>
-			<td v-text="item.guests?.[0]?.name || '---'" />
-			<td class="text-end" v-text="item.guests?.length || 0" />
-			<td class="text-end" v-text="item.children?.length || 0" />
-			<td class="text-center" :class="invitationStatus(item).class">
-				<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
-					<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
-				</info-popover>
-			</td>
-		</table-component>
+	<div class="card-body">
+		<card-header title="Invitations" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
+		<div class="card-text">
+			<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
+				<th scope="row" class="font-monospace">
+					<router-link :to="{ name: 'Admin View Invitation', params: { invitationId: item.id } }">
+						{{ item.id }}
+					</router-link>
+				</th>
+				<td v-text="item.guests?.[0]?.name || '---'" />
+				<td class="text-end" v-text="item.guests?.length || 0" />
+				<td class="text-end" v-text="item.children?.length || 0" />
+				<td class="text-center" :class="invitationStatus(item).class">
+					<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
+						<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
+					</info-popover>
+				</td>
+			</table-component>
+		</div>
 	</div>
 </template>
 

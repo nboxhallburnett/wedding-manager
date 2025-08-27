@@ -32,24 +32,26 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<card-header title="Edit Details Page" :back="{ name: 'Admin Overview' }" :on-submit />
-	<form class="card-text" @submit.prevent.stop="onSubmit">
-		<h5 v-text="'Content'" />
-		<textarea
-			v-model="content"
-			class="form-control w-100 mb-2 font-monospace"
-			rows="5"
-			:placeholder="placeholder"
-		/>
+	<div class="card-body">
+		<card-header title="Edit Details Page" :back="{ name: 'Admin Overview' }" :on-submit />
+		<form class="card-text" @submit.prevent.stop="onSubmit">
+			<h5 v-text="'Content'" />
+			<textarea
+				v-model="content"
+				class="form-control w-100 mb-2 font-monospace"
+				rows="5"
+				:placeholder="placeholder"
+			/>
 
-		<h5 v-text="'Preview'" />
-		<div class="card shadow">
-			<div class="card-body pt-0">
-				<card-header title="Details" class="z-0" no-title />
-				<div class="card-text">
-					<vue-showdown :markdown="content || placeholder" flavor="github" :extensions="classExtensions" />
+			<h5 v-text="'Preview'" />
+			<div class="card shadow">
+				<div class="card-body">
+					<card-header title="Details" class="z-0" no-title />
+					<div class="card-text">
+						<vue-showdown :markdown="content || placeholder" flavor="github" :extensions="classExtensions" />
+					</div>
 				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </template>

@@ -19,7 +19,7 @@ const links = [
 </script>
 
 <template>
-	<template v-if="$route.name === 'Admin Overview'">
+	<div v-if="$route.name === 'Admin Overview'" class="card-body">
 		<card-header title="Admin Management" />
 		<div class="card-text row g-3">
 			<div v-for="(link, idx) in links" :key="idx" class="col-12 col-sm-6">
@@ -28,6 +28,10 @@ const links = [
 				</router-link>
 			</div>
 		</div>
-	</template>
-	<router-view v-else />
+	</div>
+	<router-view v-else v-slot="{ Component }">
+		<transition name="fade">
+			<component :is="Component" />
+		</transition>
+	</router-view>
 </template>

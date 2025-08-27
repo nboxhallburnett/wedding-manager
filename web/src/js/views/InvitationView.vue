@@ -68,57 +68,35 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 </script>
 
 <template>
-	<card-header
-		title="Invitation"
-		:back="adminView ? { name: 'Admin List Invitations' } : undefined"
-		:action="adminView ? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } } : { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }"
-	/>
-	<div class="card-text">
-		<template v-if="invitation?.guests?.length">
-			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
-				<template v-if="guest.name">
-					<hr v-if="idx">
-					<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
-					<form-text
-						:value="statusMessages[guest.status_ceremony]"
-						label="Ceremony Attendance"
-						:options="statusMessages"
-						:name="`guest-${idx}-ceremony`"
-					/>
-					<form-text
-						:value="statusMessages[guest.status_reception]"
-						label="Reception Attendance"
-						:options="statusMessages"
-						:name="`guest-${idx}-reception`"
-					/>
-					<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
-						<form-item v-if="guest[meal.key] && [ 1, 2 ].includes(guest.status_reception)" :name="`guest-${idx}-${meal.key}`" :label="meal.text">
-							<div v-if="menuItems[guest[meal.key]]" class="form-control-plaintext">
-								<span v-text="menuItems[guest[meal.key]].title" />
-								<diet-indicator class="ms-2" :item="menuItems[guest[meal.key]]" />
-							</div>
-							<div v-else class="form-control-plaintext placeholder-wave">
-								<span class="placeholder rounded-1" :class="[ 'w-33', 'w-50', 'w-25' ][mealIdx]" />
-							</div>
-						</form-item>
-					</template>
-				</template>
-			</div>
-			<hr>
-		</template>
-		<template v-if="invitation?.children?.length">
-			<h5 class="mb-3" v-text="'Children'" />
-			<div class="card-text">
-				<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
-					<template v-if="child.name">
+	<div :class="adminView ? 'card-body pt-0' : ''">
+		<card-header
+			title="Invitation"
+			:back="adminView ? { name: 'Admin List Invitations' } : undefined"
+			:action="adminView ? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } } : { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }"
+		/>
+		<div class="card-text">
+			<template v-if="invitation?.guests?.length">
+				<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
+					<template v-if="guest.name">
 						<hr v-if="idx">
-						<form-text v-model="child.name" label="Name" :name="`child-${idx}-name`" />
-						<form-text v-model="child.age" label="Age" :name="`child-${idx}-age`" />
-						<template v-for="(meal, mealIdx) in mealsMap" :key="`child-${idx}-${mealIdx}`">
-							<form-item v-if="child[meal.key]" :name="`child-${idx}-${meal.key}`" :label="meal.text">
-								<div v-if="menuItems[child[meal.key]]" class="form-control-plaintext">
-									<span v-text="menuItems[child[meal.key]].title" />
-									<diet-indicator class="ms-2" :item="menuItems[child[meal.key]]" />
+						<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
+						<form-text
+							:value="statusMessages[guest.status_ceremony]"
+							label="Ceremony Attendance"
+							:options="statusMessages"
+							:name="`guest-${idx}-ceremony`"
+						/>
+						<form-text
+							:value="statusMessages[guest.status_reception]"
+							label="Reception Attendance"
+							:options="statusMessages"
+							:name="`guest-${idx}-reception`"
+						/>
+						<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+							<form-item v-if="guest[meal.key] && [ 1, 2 ].includes(guest.status_reception)" :name="`guest-${idx}-${meal.key}`" :label="meal.text">
+								<div v-if="menuItems[guest[meal.key]]" class="form-control-plaintext">
+									<span v-text="menuItems[guest[meal.key]].title" />
+									<diet-indicator class="ms-2" :item="menuItems[guest[meal.key]]" />
 								</div>
 								<div v-else class="form-control-plaintext placeholder-wave">
 									<span class="placeholder rounded-1" :class="[ 'w-33', 'w-50', 'w-25' ][mealIdx]" />
@@ -127,20 +105,44 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 						</template>
 					</template>
 				</div>
-			</div>
-			<hr>
-		</template>
-		<form-text
-			v-if="invitation?.message"
-			v-model="invitation.message"
-			label="Message"
-			name="message"
-		/>
-		<form-text
-			v-if="invitation?.songs?.filter(Boolean).length"
-			v-model="invitation.songs"
-			label="Song Suggestions"
-			name="songs"
-		/>
+				<hr>
+			</template>
+			<template v-if="invitation?.children?.length">
+				<h5 class="mb-3" v-text="'Children'" />
+				<div class="card-text">
+					<div v-for="(child, idx) in invitation.children" :key="idx" class="mb-3">
+						<template v-if="child.name">
+							<hr v-if="idx">
+							<form-text v-model="child.name" label="Name" :name="`child-${idx}-name`" />
+							<form-text v-model="child.age" label="Age" :name="`child-${idx}-age`" />
+							<template v-for="(meal, mealIdx) in mealsMap" :key="`child-${idx}-${mealIdx}`">
+								<form-item v-if="child[meal.key]" :name="`child-${idx}-${meal.key}`" :label="meal.text">
+									<div v-if="menuItems[child[meal.key]]" class="form-control-plaintext">
+										<span v-text="menuItems[child[meal.key]].title" />
+										<diet-indicator class="ms-2" :item="menuItems[child[meal.key]]" />
+									</div>
+									<div v-else class="form-control-plaintext placeholder-wave">
+										<span class="placeholder rounded-1" :class="[ 'w-33', 'w-50', 'w-25' ][mealIdx]" />
+									</div>
+								</form-item>
+							</template>
+						</template>
+					</div>
+				</div>
+				<hr>
+			</template>
+			<form-text
+				v-if="invitation?.message"
+				v-model="invitation.message"
+				label="Message"
+				name="message"
+			/>
+			<form-text
+				v-if="invitation?.songs?.filter(Boolean).length"
+				v-model="invitation.songs"
+				label="Song Suggestions"
+				name="songs"
+			/>
+		</div>
 	</div>
 </template>

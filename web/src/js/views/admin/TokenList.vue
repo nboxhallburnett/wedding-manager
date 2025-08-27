@@ -49,14 +49,16 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Auth Tokens" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }" />
-	<div class="card-text">
-		<table-component v-slot="{ item }" :items="tokens" v-bind="tableOpts">
-			<td v-text="item.name" />
-			<td>
-				<relative-date :date="item.created" />
-			</td>
-			<td v-text="item.description || '---'" />
-		</table-component>
+	<div class="card-body">
+		<card-header title="Auth Tokens" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }" />
+		<div class="card-text">
+			<table-component v-slot="{ item }" :items="tokens" v-bind="tableOpts">
+				<td v-text="item.name" />
+				<td>
+					<relative-date :date="item.created" />
+				</td>
+				<td v-text="item.description || '---'" />
+			</table-component>
+		</div>
 	</div>
 </template>

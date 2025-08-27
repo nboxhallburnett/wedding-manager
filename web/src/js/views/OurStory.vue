@@ -14,73 +14,75 @@ useLoader('story', storyItems, StoryLoading, true);
 </script>
 
 <template>
-	<card-header title="Our Story" />
-	<div class="timeline" :class="{ 'placeholder-wave': StoryLoading }">
-		<div
-			v-for="(item, idx) in storyItems"
-			:key="item.id"
-			class="timeline-item"
-			:class="{ left: idx % 2 === 0, right: idx % 2 === 1 }"
-		>
-			<div class="date" v-text="item.date" />
-			<div class="content">
-				<h5 v-text="item.title" />
-				<p class="mb-0" v-text="item.description" />
+	<div class="card-body">
+		<card-header title="Our Story" />
+		<div class="timeline" :class="{ 'placeholder-wave': StoryLoading }">
+			<div
+				v-for="(item, idx) in storyItems"
+				:key="item.id"
+				class="timeline-item"
+				:class="{ left: idx % 2 === 0, right: idx % 2 === 1 }"
+			>
+				<div class="date" v-text="item.date" />
+				<div class="content">
+					<h5 v-text="item.title" />
+					<p class="mb-0" v-text="item.description" />
+				</div>
 			</div>
-		</div>
 
-		<template v-if="StoryLoading">
-			<div class="timeline-item left">
-				<div class="date">
-					<div class="placeholder w-25 rounded-1" />
-				</div>
-				<div class="content">
-					<h5>
-						<div class="placeholder w-75 rounded-1" />
-						<div class="visually-hidden">
-							Loading Placeholder
-						</div>
-					</h5>
-					<span class="placeholder bg-body-secondary w-100 rounded-1" />
-					<span class="placeholder bg-body-secondary w-100 rounded-1" />
-					<span class="placeholder bg-body-secondary w-25 rounded-1" />
-				</div>
-			</div>
-			<div class="timeline-item right">
-				<div class="date">
-					<div class="placeholder w-25 rounded-1" />
-				</div>
-				<div class="content">
-					<h5>
-						<div class="placeholder w-100 rounded-1" />
+			<template v-if="StoryLoading">
+				<div class="timeline-item left">
+					<div class="date">
 						<div class="placeholder w-25 rounded-1" />
-						<div class="visually-hidden">
-							Loading Placeholder
-						</div>
-					</h5>
-					<span class="placeholder bg-body-secondary w-100 rounded-1" />
-					<span class="placeholder bg-body-secondary w-75 rounded-1" />
-					<span class="placeholder bg-body-secondary w-50 rounded-1" />
+					</div>
+					<div class="content">
+						<h5>
+							<div class="placeholder w-75 rounded-1" />
+							<div class="visually-hidden">
+								Loading Placeholder
+							</div>
+						</h5>
+						<span class="placeholder bg-body-secondary w-100 rounded-1" />
+						<span class="placeholder bg-body-secondary w-100 rounded-1" />
+						<span class="placeholder bg-body-secondary w-25 rounded-1" />
+					</div>
 				</div>
-			</div>
-			<div class="timeline-item left">
-				<div class="date">
-					<div class="placeholder w-25 rounded-1" />
+				<div class="timeline-item right">
+					<div class="date">
+						<div class="placeholder w-25 rounded-1" />
+					</div>
+					<div class="content">
+						<h5>
+							<div class="placeholder w-100 rounded-1" />
+							<div class="placeholder w-25 rounded-1" />
+							<div class="visually-hidden">
+								Loading Placeholder
+							</div>
+						</h5>
+						<span class="placeholder bg-body-secondary w-100 rounded-1" />
+						<span class="placeholder bg-body-secondary w-75 rounded-1" />
+						<span class="placeholder bg-body-secondary w-50 rounded-1" />
+					</div>
 				</div>
-				<div class="content">
-					<h5>
-						<div class="placeholder w-100 rounded-1" />
-						<div class="placeholder w-50 rounded-1" />
-						<div class="visually-hidden">
-							Loading Placeholder
-						</div>
-					</h5>
-					<span class="placeholder bg-body-secondary w-100 rounded-1" />
-					<span class="placeholder bg-body-secondary w-100 rounded-1" />
-					<span class="placeholder bg-body-secondary w-50 rounded-1" />
+				<div class="timeline-item left">
+					<div class="date">
+						<div class="placeholder w-25 rounded-1" />
+					</div>
+					<div class="content">
+						<h5>
+							<div class="placeholder w-100 rounded-1" />
+							<div class="placeholder w-50 rounded-1" />
+							<div class="visually-hidden">
+								Loading Placeholder
+							</div>
+						</h5>
+						<span class="placeholder bg-body-secondary w-100 rounded-1" />
+						<span class="placeholder bg-body-secondary w-100 rounded-1" />
+						<span class="placeholder bg-body-secondary w-50 rounded-1" />
+					</div>
 				</div>
-			</div>
-		</template>
+			</template>
+		</div>
 	</div>
 </template>
 

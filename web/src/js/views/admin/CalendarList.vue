@@ -53,15 +53,17 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Calendar Events" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
-	<div class="card-text">
-		<table-component v-slot="{ item }" :items="events" v-bind="tableOpts">
-			<th scope="row">
-				<router-link :to="{ name: 'Admin View Calendar Event', params: { calendarEventId: item.id } }">
-					{{ item.summary }}
-				</router-link>
-			</th>
-			<td v-text="formatEventDate(item)" />
-		</table-component>
+	<div class="card-body">
+		<card-header title="Calendar Events" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
+		<div class="card-text">
+			<table-component v-slot="{ item }" :items="events" v-bind="tableOpts">
+				<th scope="row">
+					<router-link :to="{ name: 'Admin View Calendar Event', params: { calendarEventId: item.id } }">
+						{{ item.summary }}
+					</router-link>
+				</th>
+				<td v-text="formatEventDate(item)" />
+			</table-component>
+		</div>
 	</div>
 </template>

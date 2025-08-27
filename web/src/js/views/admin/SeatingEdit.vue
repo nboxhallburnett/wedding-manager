@@ -304,128 +304,130 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<card-header title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit />
-	<form class="card-text row" @submit.prevent.stop="onSubmit">
-		<input
-			v-model="searchTerm"
-			class="form-control mx-auto w-75 mb-3"
-			placeholder="Search"
-			:list="searchSuggestions.length && 'searchSuggestions' || undefined"
-			@keyup.escape="searchTerm = ''"
-			@keydown.enter.prevent="onSearch"
-		>
-		<datalist v-if="searchSuggestions.length" id="searchSuggestions">
-			<option v-for="item in searchSuggestions" :key="item" :value="item" />
-		</datalist>
-		<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7': unassignedGuests.length }">
-			<div v-for="(table, idx) in tables" :key="table.id">
-				<hr v-if="idx">
-				<dining-table
-					:id="String(idx + 1)"
-					:occupants="table.guests"
-					:search-term
-					:style="idx === 0 ? 'rectangle' : undefined"
-					class="d-inline-block"
-					edit
-					@set-seat="evt => setSeat(idx, evt)"
+	<div class="card-body">
+		<card-header title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit />
+		<form class="card-text row" @submit.prevent.stop="onSubmit">
+			<input
+				v-model="searchTerm"
+				class="form-control mx-auto w-75 mb-3"
+				placeholder="Search"
+				:list="searchSuggestions.length && 'searchSuggestions' || undefined"
+				@keyup.escape="searchTerm = ''"
+				@keydown.enter.prevent="onSearch"
+			>
+			<datalist v-if="searchSuggestions.length" id="searchSuggestions">
+				<option v-for="item in searchSuggestions" :key="item" :value="item" />
+			</datalist>
+			<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7': unassignedGuests.length }">
+				<div v-for="(table, idx) in tables" :key="table.id">
+					<hr v-if="idx">
+					<dining-table
+						:id="String(idx + 1)"
+						:occupants="table.guests"
+						:search-term
+						:style="idx === 0 ? 'rectangle' : undefined"
+						class="d-inline-block"
+						edit
+						@set-seat="evt => setSeat(idx, evt)"
+					/>
+					<ol class="d-inline-block">
+						<li
+							v-for="(guest, guestIdx) in table.guests"
+							:key="guestIdx"
+							:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+						>
+							<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
+								{{ guest.name }}
+							</info-popover>
+							<template v-else>
+								Unassigned
+							</template>
+						</li>
+					</ol>
+					<div class="pb-1 d-flex gap-3 align-items-center">
+						<button
+							type="button"
+							class="btn btn-sm btn-primary"
+							:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
+							@click="table.guests.push({})"
+							v-text="'Add Chair'"
+						/>
+						<button
+							type="button"
+							class="btn btn-sm btn-primary"
+							:disabled="table.guests.length <= 1"
+							@click="table.guests.pop()"
+							v-text="'Remove Chair'"
+						/>
+						<button
+							type="button"
+							class="btn btn-sm btn-danger"
+							@click="removeTable(idx)"
+							v-text="'Remove Table'"
+						/>
+						<button
+							v-if="idx !== 0"
+							class="icon-caret rotate-180 fs-4 p-0"
+							type="button"
+							@click.prevent.stop="moveTable(idx, idx - 1)"
+						>
+							<div class="visually-hidden">
+								Move Up
+							</div>
+						</button>
+						<button
+							v-if="tables[idx + 1]"
+							class="icon-caret fs-4 p-0"
+							type="button"
+							@click.prevent.stop="moveTable(idx, idx + 1)"
+						>
+							<div class="visually-hidden">
+								Move Down
+							</div>
+						</button>
+					</div>
+				</div>
+				<hr v-if="tables.length">
+				<button
+					role="button"
+					class="btn btn-primary"
+					@click.prevent.stop="addTable"
+					v-text="'Add Table'"
 				/>
-				<ol class="d-inline-block">
+			</div>
+			<div
+				id="unassigned-guests"
+				class="col-md-5 col-12 order-md-1 order-0 h-100"
+				@dragenter.prevent.stop="onDragEnter"
+				@dragover.prevent.stop="onDragOver"
+				@dragleave.prevent.stop="onDragLeave"
+				@drop.prevent.stop="onDropped"
+			>
+				<span class="fw-bold">
+					Unassigned Guests
+				</span>
+				<ul>
 					<li
-						v-for="(guest, guestIdx) in table.guests"
-						:key="guestIdx"
-						:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+						v-for="guest in unassignedGuests"
+						:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
+						:class="[
+							{ child: guest?.child, 'fw-bold active': hasSearchMatch(guest) },
+							(guest?.status || '').toLowerCase().replace(' ', '-')
+						]"
+						draggable="true"
+						@dragstart="evt => onDragStart(evt, guest)"
+						@dragend="onDragEnd"
+						@drag="onDragging"
 					>
-						<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
+						<info-popover :hint="popoverHint(guest)" :opts="{ html: true, placement: 'left' }">
 							{{ guest.name }}
 						</info-popover>
-						<template v-else>
-							Unassigned
-						</template>
 					</li>
-				</ol>
-				<div class="pb-1 d-flex gap-3 align-items-center">
-					<button
-						type="button"
-						class="btn btn-sm btn-primary"
-						:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
-						@click="table.guests.push({})"
-						v-text="'Add Chair'"
-					/>
-					<button
-						type="button"
-						class="btn btn-sm btn-primary"
-						:disabled="table.guests.length <= 1"
-						@click="table.guests.pop()"
-						v-text="'Remove Chair'"
-					/>
-					<button
-						type="button"
-						class="btn btn-sm btn-danger"
-						@click="removeTable(idx)"
-						v-text="'Remove Table'"
-					/>
-					<button
-						v-if="idx !== 0"
-						class="icon-caret rotate-180 fs-4 p-0"
-						type="button"
-						@click.prevent.stop="moveTable(idx, idx - 1)"
-					>
-						<div class="visually-hidden">
-							Move Up
-						</div>
-					</button>
-					<button
-						v-if="tables[idx + 1]"
-						class="icon-caret fs-4 p-0"
-						type="button"
-						@click.prevent.stop="moveTable(idx, idx + 1)"
-					>
-						<div class="visually-hidden">
-							Move Down
-						</div>
-					</button>
-				</div>
+				</ul>
+				<hr class="d-md-none">
 			</div>
-			<hr v-if="tables.length">
-			<button
-				role="button"
-				class="btn btn-primary"
-				@click.prevent.stop="addTable"
-				v-text="'Add Table'"
-			/>
-		</div>
-		<div
-			id="unassigned-guests"
-			class="col-md-5 col-12 order-md-1 order-0 h-100"
-			@dragenter.prevent.stop="onDragEnter"
-			@dragover.prevent.stop="onDragOver"
-			@dragleave.prevent.stop="onDragLeave"
-			@drop.prevent.stop="onDropped"
-		>
-			<span class="fw-bold">
-				Unassigned Guests
-			</span>
-			<ul>
-				<li
-					v-for="guest in unassignedGuests"
-					:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
-					:class="[
-						{ child: guest?.child, 'fw-bold active': hasSearchMatch(guest) },
-						(guest?.status || '').toLowerCase().replace(' ', '-')
-					]"
-					draggable="true"
-					@dragstart="evt => onDragStart(evt, guest)"
-					@dragend="onDragEnd"
-					@drag="onDragging"
-				>
-					<info-popover :hint="popoverHint(guest)" :opts="{ html: true, placement: 'left' }">
-						{{ guest.name }}
-					</info-popover>
-				</li>
-			</ul>
-			<hr class="d-md-none">
-		</div>
-	</form>
+		</form>
+	</div>
 </template>
 
 <style lang="scss" scoped>

@@ -32,20 +32,22 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<card-header title="Create Auth Token" :back="{ name: 'Admin List Auth Tokens' }" :on-submit />
-	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
-		<form-input
-			v-model="item.name"
-			name="name"
-			label="Name"
-			placeholder="Brief description of intended use"
-			required
-		/>
-		<form-textarea
-			v-model="item.description"
-			name="description"
-			label="Description"
-			placeholder="A more in depth description of the use of the token"
-		/>
-	</form>
+	<div class="card-body">
+		<card-header title="Create Auth Token" :back="{ name: 'Admin List Auth Tokens' }" :on-submit />
+		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
+			<form-input
+				v-model="item.name"
+				name="name"
+				label="Name"
+				placeholder="Brief description of intended use"
+				required
+			/>
+			<form-textarea
+				v-model="item.description"
+				name="description"
+				label="Description"
+				placeholder="A more in depth description of the use of the token"
+			/>
+		</form>
+	</div>
 </template>

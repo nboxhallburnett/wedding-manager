@@ -67,35 +67,37 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit />
-	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
-		<form-input
-			v-model="item.title"
-			name="title"
-			label="Title"
-			placeholder="Pizza"
-			required
-		/>
-		<form-textarea
-			v-model="item.description"
-			name="description"
-			label="Description"
-			placeholder="Organic milk tossed over seasoned tomato purée on baked whole wheat."
-		/>
-		<form-select
-			v-model="item.course"
-			:options="courseOptions"
-			name="course"
-			label="Course"
-		/>
-		<form-select
-			v-model="item.child"
-			:options="menuOptions"
-			name="child"
-			label="Menu"
-		/>
-		<form-switch v-model="item.vegan" name="vegan" label="Vegan" />
-		<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />
-		<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten Free" />
-	</form>
+	<div class="card-body">
+		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit />
+		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
+			<form-input
+				v-model="item.title"
+				name="title"
+				label="Title"
+				placeholder="Pizza"
+				required
+			/>
+			<form-textarea
+				v-model="item.description"
+				name="description"
+				label="Description"
+				placeholder="Organic milk tossed over seasoned tomato purée on baked whole wheat."
+			/>
+			<form-select
+				v-model="item.course"
+				:options="courseOptions"
+				name="course"
+				label="Course"
+			/>
+			<form-select
+				v-model="item.child"
+				:options="menuOptions"
+				name="child"
+				label="Menu"
+			/>
+			<form-switch v-model="item.vegan" name="vegan" label="Vegan" />
+			<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />
+			<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten Free" />
+		</form>
+	</div>
 </template>

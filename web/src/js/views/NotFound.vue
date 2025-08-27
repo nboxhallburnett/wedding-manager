@@ -10,14 +10,16 @@ const invitation = inject('invitation');
 
 <template>
 	<template v-if="invitation?.id">
-		<card-header title="Uh Oh!" />
-		<div class="card-text">
-			<p>
-				You seem to be lost.
-			</p>
-			<RouterLink class="btn btn-primary w-100" :to="{ name: 'Home' }">
-				Home
-			</RouterLink>
+		<div class="card-body">
+			<card-header title="Uh Oh!" />
+			<div class="card-text">
+				<p>
+					You seem to be lost.
+				</p>
+				<RouterLink class="btn btn-primary w-100" :to="{ name: 'Home' }">
+					Home
+				</RouterLink>
+			</div>
 		</div>
 	</template>
 	<div v-else class="card-text">

@@ -135,51 +135,53 @@ onMounted(() => {
 </script>
 
 <template>
-	<card-header title="Details" />
-	<div v-show="content" class="card-text row">
-		<div
-			ref="markdown-content"
-			class="col-12 col-md-8 scrollspy-container"
-			data-bs-spy="scroll"
-			data-bs-target="#about-navbar"
-			data-bs-smooth-scroll="true"
-			tabindex="0"
-		>
-			<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
-		</div>
-		<div class="d-none d-md-block col-4 border-start">
-			<nav id="about-navbar" class="flex-column align-items-stretch pe-4 border-end">
-				<nav class="nav nav-pills flex-column">
-					<template v-for="section in navItems" :key="section.id">
-						<a class="nav-link" :href="`#${section.id}`" v-text="section.title" />
-						<nav v-if="section.items.length" class="nav nav-pills flex-column">
-							<a
-								v-for="item in section.items"
-								:key="item.id"
-								class="nav-link ms-3 my-1"
-								:href="`#${item.id}`"
-								v-text="item.title"
-							/>
-						</nav>
-					</template>
+	<div class="card-body">
+		<card-header title="Details" />
+		<div v-show="content" class="card-text row">
+			<div
+				ref="markdown-content"
+				class="col-12 col-md-8 scrollspy-container"
+				data-bs-spy="scroll"
+				data-bs-target="#about-navbar"
+				data-bs-smooth-scroll="true"
+				tabindex="0"
+			>
+				<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
+			</div>
+			<div class="d-none d-md-block col-4 border-start">
+				<nav id="about-navbar" class="flex-column align-items-stretch pe-4 border-end">
+					<nav class="nav nav-pills flex-column">
+						<template v-for="section in navItems" :key="section.id">
+							<a class="nav-link" :href="`#${section.id}`" v-text="section.title" />
+							<nav v-if="section.items.length" class="nav nav-pills flex-column">
+								<a
+									v-for="item in section.items"
+									:key="item.id"
+									class="nav-link ms-3 my-1"
+									:href="`#${item.id}`"
+									v-text="item.title"
+								/>
+							</nav>
+						</template>
+					</nav>
 				</nav>
-			</nav>
+			</div>
 		</div>
-	</div>
-	<div v-if="aboutLoading" class="placeholder-wave">
-		<span class="placeholder w-100 rounded-1" />
-		<span class="placeholder w-75 rounded-1" />
-		<span class="placeholder w-100 rounded-1" />
-		<span class="placeholder w-25 rounded-1" />
-		<br>
-		<br>
-		<span class="placeholder w-100 rounded-1" />
-		<span class="placeholder w-100 rounded-1" />
-		<span class="placeholder w-50 rounded-1" />
-		<br>
-		<br>
-		<span class="placeholder w-100 rounded-1" />
-		<span class="placeholder w-25 rounded-1" />
+		<div v-if="aboutLoading" class="placeholder-wave">
+			<span class="placeholder w-100 rounded-1" />
+			<span class="placeholder w-75 rounded-1" />
+			<span class="placeholder w-100 rounded-1" />
+			<span class="placeholder w-25 rounded-1" />
+			<br>
+			<br>
+			<span class="placeholder w-100 rounded-1" />
+			<span class="placeholder w-100 rounded-1" />
+			<span class="placeholder w-50 rounded-1" />
+			<br>
+			<br>
+			<span class="placeholder w-100 rounded-1" />
+			<span class="placeholder w-25 rounded-1" />
+		</div>
 	</div>
 </template>
 
@@ -189,7 +191,8 @@ onMounted(() => {
 	top: calc((var(--card-offset) * -1) + var(--header-height) + 16px);
 	overflow-y: scroll;
 	max-height: fit-content;
+
 	// Set the height to the mozilla max content value to get around firefox not respecting max-height: fit-content;
-	height: -moz-max-content;
+	height: max-content;
 }
 </style>

@@ -82,47 +82,49 @@ function onSearch() {
 </script>
 
 <template>
-	<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" :action="{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }" />
-	<div class="card-text">
-		<input
-			v-model="searchTerm"
-			class="form-control mx-auto w-75 mb-3"
-			placeholder="Search"
-			:list="searchSuggestions.length && 'searchSuggestions' || undefined"
-			@keyup.escape="searchTerm = ''"
-			@keydown.enter.prevent="onSearch"
-		>
-		<datalist v-if="searchSuggestions.length" id="searchSuggestions">
-			<option v-for="item in searchSuggestions" :key="item" :value="item" />
-		</datalist>
-		<div class="row justify-content-center">
-			<div
-				v-for="(table, idx) in tables"
-				:key="table.id"
-				class="d-flex justify-content-center"
-				:class="idx ? 'col-6' : 'col-12'"
+	<div class="card-body">
+		<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" :action="{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }" />
+		<div class="card-text">
+			<input
+				v-model="searchTerm"
+				class="form-control mx-auto w-75 mb-3"
+				placeholder="Search"
+				:list="searchSuggestions.length && 'searchSuggestions' || undefined"
+				@keyup.escape="searchTerm = ''"
+				@keydown.enter.prevent="onSearch"
 			>
-				<dining-table
-					:id="String(idx + 1)"
-					:occupants="table.guests"
-					:search-term
-					:style="idx === 0 ? 'rectangle' : undefined"
-					class="d-inline-block"
-				/>
-			</div>
-		</div>
-		<custom-h-r />
-		<div class="row">
-			<div v-for="(table, idx) in tables" :key="table.id" class="col-6 col-md-4 col-lg-3">
-				<b class="d-block">Table {{ idx + 1 }}</b>
-				<ol class="d-inline-block">
-					<li
-						v-for="(guest, guestIdx) in table.guests"
-						:key="guestIdx"
-						:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
-						v-text="guest?.name || 'Unassigned'"
+			<datalist v-if="searchSuggestions.length" id="searchSuggestions">
+				<option v-for="item in searchSuggestions" :key="item" :value="item" />
+			</datalist>
+			<div class="row justify-content-center">
+				<div
+					v-for="(table, idx) in tables"
+					:key="table.id"
+					class="d-flex justify-content-center"
+					:class="idx ? 'col-6' : 'col-12'"
+				>
+					<dining-table
+						:id="String(idx + 1)"
+						:occupants="table.guests"
+						:search-term
+						:style="idx === 0 ? 'rectangle' : undefined"
+						class="d-inline-block"
 					/>
-				</ol>
+				</div>
+			</div>
+			<custom-h-r />
+			<div class="row">
+				<div v-for="(table, idx) in tables" :key="table.id" class="col-6 col-md-4 col-lg-3">
+					<b class="d-block">Table {{ idx + 1 }}</b>
+					<ol class="d-inline-block">
+						<li
+							v-for="(guest, guestIdx) in table.guests"
+							:key="guestIdx"
+							:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+							v-text="guest?.name || 'Unassigned'"
+						/>
+					</ol>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -172,50 +172,52 @@ async function shareImage() {
 </script>
 
 <template>
-	<card-header title="Invitation">
-		<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
-			Back
-		</router-link>
-		<button class="btn btn-primary btn-sm" @click="downloadImage">
-			Download
-		</button>
-		<button class="btn btn-primary btn-sm ms-2" @click="shareImage">
-			Share
-		</button>
-	</card-header>
-	<div ref="card" class="card shadow ratio ratio-1x1" data-bs-theme="light">
-		<div class="card-body">
-			<div class="card-content text-body-secondary">
-				<div class="card-text h-100">
-					<div id="invitation-header" class="text-center">
-						<div id="title" class="font-script text-body" v-text="'You\'re Invited'" />
-						<div class="mb-4" v-text="'the wedding of'" />
-						<div class="font-script text-body h2" v-text="bride" />
-						<div class="my-2" v-text="'and'" />
-						<div class="font-script text-body h2" v-text="groom" />
-						<custom-h-r class="d-inline-block w-66 mb-1" />
-						<div class="font-script text-body h3" v-text="date" />
-						<div class="mt-4" v-text="where" />
-						<div class="mt-1 text-body-tertiary small" v-text="'Reception to follow'" />
+	<div class="card-body">
+		<card-header title="Invitation">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
+				Back
+			</router-link>
+			<button class="btn btn-primary btn-sm" @click="downloadImage">
+				Download
+			</button>
+			<button class="btn btn-primary btn-sm ms-2" @click="shareImage">
+				Share
+			</button>
+		</card-header>
+		<div ref="card" class="card shadow ratio ratio-1x1" data-bs-theme="light">
+			<div class="card-body">
+				<div class="card-content text-body-secondary">
+					<div class="card-text h-100">
+						<div id="invitation-header" class="text-center">
+							<div id="title" class="font-script text-body" v-text="'You\'re Invited'" />
+							<div class="mb-4" v-text="'the wedding of'" />
+							<div class="font-script text-body h2" v-text="bride" />
+							<div class="my-2" v-text="'and'" />
+							<div class="font-script text-body h2" v-text="groom" />
+							<custom-h-r class="d-inline-block w-66 mb-1" />
+							<div class="font-script text-body h3" v-text="date" />
+							<div class="mt-4" v-text="where" />
+							<div class="mt-1 text-body-tertiary small" v-text="'Reception to follow'" />
+						</div>
+						<div id="invitation-footer">
+							<div>
+								<b class="pe-1">To:</b> {{ guestMsg }}
+							</div>
+							<div class="py-4">
+								<b class="pe-1">RSVP:</b> <span class="text-decoration-underline link-underline-primary" v-text="rsvpLocation" />
+							</div>
+							<div>
+								<b class="pe-1">ID:</b> <span class="font-monospace" v-text="invitation.id" />
+							</div>
+						</div>
 					</div>
-					<div id="invitation-footer">
-						<div>
-							<b class="pe-1">To:</b> {{ guestMsg }}
-						</div>
-						<div class="py-4">
-							<b class="pe-1">RSVP:</b> <span class="text-decoration-underline link-underline-primary" v-text="rsvpLocation" />
-						</div>
-						<div>
-							<b class="pe-1">ID:</b> <span class="font-monospace" v-text="invitation.id" />
-						</div>
-					</div>
-				</div>
 
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div id="decoration-top-left" v-html="borderContent" />
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div id="decoration-top-right" v-html="borderContent" />
-				<div id="qr-code" ref="qrCode" class="pe-2" />
+					<!-- eslint-disable-next-line vue/no-v-html -->
+					<div id="decoration-top-left" v-html="borderContent" />
+					<!-- eslint-disable-next-line vue/no-v-html -->
+					<div id="decoration-top-right" v-html="borderContent" />
+					<div id="qr-code" ref="qrCode" class="pe-2" />
+				</div>
 			</div>
 		</div>
 	</div>

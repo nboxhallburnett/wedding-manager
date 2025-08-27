@@ -34,24 +34,26 @@ useLoader('admin/stats/invitations', stats);
 </script>
 
 <template>
-	<card-header title="Stats" :back="{ name: 'Admin Overview' }" />
-	<div class="row g-3">
-		<div v-for="({ key, title }) in statusMap" :key class="col-12 col-md-6">
-			<div class="card shadow">
-				<h5 class="card-header" v-text="title" />
-				<div class="d-flex flex-wrap gx-3">
-					<div v-for="(status, idx) in statusMessages" :key="idx" class="card-body col-6">
-						<div class="card-text" v-text="status" />
-						<div class="text-primary h2" v-text="stats[key][idx] || 0" />
+	<div class="card-body">
+		<card-header title="Stats" :back="{ name: 'Admin Overview' }" />
+		<div class="row g-3">
+			<div v-for="({ key, title }) in statusMap" :key class="col-12 col-md-6">
+				<div class="card shadow">
+					<h5 class="card-header" v-text="title" />
+					<div class="d-flex flex-wrap gx-3">
+						<div v-for="(status, idx) in statusMessages" :key="idx" class="card-body col-6">
+							<div class="card-text" v-text="status" />
+							<div class="text-primary h2" v-text="stats[key][idx] || 0" />
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div v-for="({ key, title }) in countMap" :key class="col-6 col-md-3">
-			<div class="card shadow">
-				<h5 class="card-header" v-text="title" />
-				<div class="card-body">
-					<div class="text-primary h2" v-text="stats[key] || 0" />
+			<div v-for="({ key, title }) in countMap" :key class="col-6 col-md-3">
+				<div class="card shadow">
+					<h5 class="card-header" v-text="title" />
+					<div class="card-body">
+						<div class="text-primary h2" v-text="stats[key] || 0" />
+					</div>
 				</div>
 			</div>
 		</div>

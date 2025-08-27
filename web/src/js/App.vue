@@ -93,7 +93,7 @@ onMounted(() => {
 		<header>
 			<site-header />
 
-			<div id="fading-names-container" class="mt-3" ref="fadingNamesContainer">
+			<div id="fading-names-container" ref="fadingNamesContainer" class="mt-3">
 				<stylized-names />
 			</div>
 		</header>
@@ -101,9 +101,11 @@ onMounted(() => {
 		<div id="app-container" ref="appContainer">
 			<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center mb-5">
 				<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
-					<div class="card-body pt-0">
-						<router-view />
-					</div>
+					<router-view v-slot="{ Component, route }">
+						<transition :name="route.meta.transition || 'fade'">
+							<component :is="Component" />
+						</transition>
+					</router-view>
 				</div>
 			</div>
 		</div>
@@ -161,5 +163,18 @@ onMounted(() => {
 // Override the stylized names text size base for the login view
 #login-container #stylized-names {
 	--stylized-text-base: max(10vmin, 8vh);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.2s ease-out, filter 0.2s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	position: absolute;
+	width: 100%;
+	opacity: 0;
+	filter: blur(1px);
 }
 </style>

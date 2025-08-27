@@ -51,47 +51,49 @@ function removeGuest(idx) {
 </script>
 
 <template>
-	<card-header title="New Invitation">
-		<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
-			Back
-		</router-link>
-		<div class="btn-group">
-			<button class="btn btn-sm btn-primary w-100" type="submit">
-				Submit
+	<div class="card-body">
+		<card-header title="New Invitation">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
+				Back
+			</router-link>
+			<div class="btn-group">
+				<button class="btn btn-sm btn-primary w-100" type="submit">
+					Submit
+				</button>
+				<button
+					id="save-add-more"
+					type="button"
+					class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+					data-bs-reference="parent"
+				>
+					<span class="visually-hidden">Dropdown</span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="save-add-more">
+					<li>
+						<button class="dropdown-item" @click.prevent="onSubmit(true)">
+							Submit and invite another
+						</button>
+					</li>
+				</ul>
+			</div>
+		</card-header>
+		<form class="card-text" @submit.prevent.stop="onSubmit">
+			<div v-for="(guest, idx) in guests" :key="idx" class="mb-3">
+				<hr v-if="idx">
+				<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
+					<template v-if="idx" #after>
+						<button type="button" class="btn btn-danger" @click="removeGuest(idx)">
+							Remove
+						</button>
+					</template>
+				</form-input>
+			</div>
+			<hr>
+			<button class="btn btn-primary mb-3" type="button" @click="addGuest">
+				Add +1
 			</button>
-			<button
-				id="save-add-more"
-				type="button"
-				class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-				data-bs-toggle="dropdown"
-				aria-expanded="false"
-				data-bs-reference="parent"
-			>
-				<span class="visually-hidden">Dropdown</span>
-			</button>
-			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="save-add-more">
-				<li>
-					<button class="dropdown-item" @click.prevent="onSubmit(true)">
-						Submit and invite another
-					</button>
-				</li>
-			</ul>
-		</div>
-	</card-header>
-	<form class="card-text" @submit.prevent.stop="onSubmit">
-		<div v-for="(guest, idx) in guests" :key="idx" class="mb-3">
-			<hr v-if="idx">
-			<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`">
-				<template v-if="idx" #after>
-					<button type="button" class="btn btn-danger" @click="removeGuest(idx)">
-						Remove
-					</button>
-				</template>
-			</form-input>
-		</div>
-		<hr>
-		<button class="btn btn-primary mb-3" type="button" @click="addGuest">
-			Add +1
-		</button>
-	</form>
+		</form>
+	</div>
 </template>

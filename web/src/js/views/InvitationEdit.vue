@@ -211,203 +211,205 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit />
-	<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
-		<form-text
-			v-if="adminEdit"
-			v-model="invitation.id"
-			name="id"
-			label="ID"
-			text-class="font-monospace"
-		/>
+	<div class="card-body">
+		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit />
+		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
+			<form-text
+				v-if="adminEdit"
+				v-model="invitation.id"
+				name="id"
+				label="ID"
+				text-class="font-monospace"
+			/>
 
-		<div id="guestAccordion" class="accordion">
-			<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">
-				<div class="accordion-header">
-					<button
-						class="accordion-button px-0 bg-body shadow-none pt-0"
-						type="button"
-						data-bs-toggle="collapse"
-						:data-bs-target="`#guest-accordion-${idx}-content`"
-						aria-expanded="true"
-						:aria-controls="`guest-accordion-${idx}-content`"
-					>
-						<h5 class="mb-0 w-100" v-text="guest.name?.trim() || (idx ? '+1' : `Guest ${idx + 1}`)" />
+			<div id="guestAccordion" class="accordion">
+				<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">
+					<div class="accordion-header">
 						<button
-							v-if="idx && session.admin"
+							class="accordion-button px-0 bg-body shadow-none pt-0"
 							type="button"
-							class="btn btn-sm btn-danger ms-auto me-2"
-							@click="removeGuest(idx)"
-							v-text="'Remove'"
-						/>
-					</button>
-				</div>
-				<div
-					:id="`guest-accordion-${idx}-content`"
-					class="accordion-collapse collapse"
-					data-bs-parent="#guestAccordion"
-					:class="{ show: idx === 0 }"
-				>
-					<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
-					<span :id="`guest-${idx}-collapse`" class="collapse">
-						<form-select
-							v-model="guest.status_ceremony"
-							label="Ceremony"
-							:options="statusOptions"
-							:default-option="0"
-							placeholder="Pending Confirmation"
-							:name="`guest-${idx}-ceremony`"
-						/>
-						<form-select
-							v-model="guest.status_reception"
-							label="Reception"
-							:options="statusOptions"
-							:default-option="0"
-							placeholder="Pending Confirmation"
-							:name="`guest-${idx}-reception`"
-						/>
-						<template v-if="[ 1, 2 ].includes(guest.status_reception)">
-							<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+							data-bs-toggle="collapse"
+							:data-bs-target="`#guest-accordion-${idx}-content`"
+							aria-expanded="true"
+							:aria-controls="`guest-accordion-${idx}-content`"
+						>
+							<h5 class="mb-0 w-100" v-text="guest.name?.trim() || (idx ? '+1' : `Guest ${idx + 1}`)" />
+							<button
+								v-if="idx && session.admin"
+								type="button"
+								class="btn btn-sm btn-danger ms-auto me-2"
+								@click="removeGuest(idx)"
+								v-text="'Remove'"
+							/>
+						</button>
+					</div>
+					<div
+						:id="`guest-accordion-${idx}-content`"
+						class="accordion-collapse collapse"
+						data-bs-parent="#guestAccordion"
+						:class="{ show: idx === 0 }"
+					>
+						<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
+						<span :id="`guest-${idx}-collapse`" class="collapse">
+							<form-select
+								v-model="guest.status_ceremony"
+								label="Ceremony"
+								:options="statusOptions"
+								:default-option="0"
+								placeholder="Pending Confirmation"
+								:name="`guest-${idx}-ceremony`"
+							/>
+							<form-select
+								v-model="guest.status_reception"
+								label="Reception"
+								:options="statusOptions"
+								:default-option="0"
+								placeholder="Pending Confirmation"
+								:name="`guest-${idx}-reception`"
+							/>
+							<template v-if="[ 1, 2 ].includes(guest.status_reception)">
+								<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
+									<hr>
+									<form-radio
+										v-model="guest[meal.key]"
+										:label="meal.text"
+										:name="`guest-${idx}-${meal.key}`"
+										:options="getMenuOptions(mealIdx, false)"
+									>
+										<template #after-each="{ item }">
+											<diet-indicator class="ms-2 align-top" :item />
+											<small class="d-block text-muted" v-text="item.description" />
+										</template>
+									</form-radio>
+								</template>
 								<hr>
-								<form-radio
-									v-model="guest[meal.key]"
-									:label="meal.text"
-									:name="`guest-${idx}-${meal.key}`"
-									:options="getMenuOptions(mealIdx, false)"
-								>
-									<template #after-each="{ item }">
-										<diet-indicator class="ms-2 align-top" :item />
-										<small class="d-block text-muted" v-text="item.description" />
-									</template>
-								</form-radio>
+								<form-textarea
+									v-model="guest.diet"
+									:name="`guest-${idx}-diet`"
+									label="Dietary Requirement"
+									hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
+									placeholder="Allergies, health conditions, ethical choices, etc."
+									validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
+									:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
+								/>
 							</template>
 							<hr>
+						</span>
+					</div>
+				</div>
+			</div>
+			<button
+				v-if="session.admin"
+				class="btn btn-primary"
+				type="button"
+				@click="addGuest"
+				v-text="'Add +1'"
+			/>
+
+			<hr>
+
+			<div id="childAccordion" class="accordion">
+				<h5 class="mb-3">
+					Children
+					<info-popover hint="Even if your child is young enough to not require a meal, please still let us know so we can accommodate them at the table." />
+				</h5>
+				<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
+					<div class="accordion-header">
+						<button
+							class="accordion-button px-0 bg-body shadow-none pt-0"
+							type="button"
+							data-bs-toggle="collapse"
+							:data-bs-target="`#child-accordion-${idx}-content`"
+							aria-expanded="true"
+							:aria-controls="`child-accordion-${idx}-content`"
+						>
+							<h5 class="mb-0 w-100" v-text="child.name?.trim() || `Child ${idx + 1}`" />
+							<button
+								v-if="true"
+								type="button"
+								class="btn btn-sm btn-danger ms-auto me-2"
+								@click="removeChild(idx)"
+								v-text="'Remove'"
+							/>
+						</button>
+					</div>
+					<div
+						:id="`child-accordion-${idx}-content`"
+						class="accordion-collapse collapse show"
+						data-bs-parent="#childAccordion"
+					>
+						<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`" />
+						<form-input
+							v-model="child.age"
+							label="Age"
+							type="number"
+							min="0"
+							max="17"
+							:name="`child-${idx}-age`"
+						/>
+						<template v-if="child.age">
+							<form-radio
+								v-for="(meal, mealIdx) in mealsMap"
+								:key="`child-${idx}-${mealIdx}`"
+								v-model="child[meal.key]"
+								:label="meal.text"
+								:name="`child-${idx}-${meal.key}`"
+								:options="getMenuOptions(mealIdx, child.age <= 12)"
+							>
+								<template #after-each="{ item }">
+									<diet-indicator class="ms-2 align-top" :item />
+									<small class="d-block text-muted" v-text="item.description" />
+								</template>
+							</form-radio>
 							<form-textarea
-								v-model="guest.diet"
-								:name="`guest-${idx}-diet`"
+								v-model="child.diet"
+								name="diet"
 								label="Dietary Requirement"
 								hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 								placeholder="Allergies, health conditions, ethical choices, etc."
-								validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
-								:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
+								validation
+								:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
 							/>
 						</template>
-						<hr>
-					</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<button
-			v-if="session.admin"
-			class="btn btn-primary"
-			type="button"
-			@click="addGuest"
-			v-text="'Add +1'"
-		/>
+			<button
+				v-if="invitation.children?.length < 5"
+				class="btn btn-primary"
+				type="button"
+				@click="addChild"
+				v-text="'Add Child'"
+			/>
 
-		<hr>
+			<hr>
 
-		<div id="childAccordion" class="accordion">
-			<h5 class="mb-3">
-				Children
-				<info-popover hint="Even if your child is young enough to not require a meal, please still let us know so we can accommodate them at the table." />
-			</h5>
-			<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
-				<div class="accordion-header">
+			<form-array
+				ref="songList"
+				v-model="invitation.songs"
+				name="song-suggestions"
+				label="Song Suggestions"
+				hint="Suggest songs you would like to hear play during the reception"
+				placeholder="Rick Astley - Never Gonna Give You Up"
+			>
+				<template #after>
 					<button
-						class="accordion-button px-0 bg-body shadow-none pt-0"
+						class="btn btn-primary"
+						:class="{ disabled: invitation.songs?.length === 5 }"
+						:disabled="invitation.songs?.length === 5"
 						type="button"
-						data-bs-toggle="collapse"
-						:data-bs-target="`#child-accordion-${idx}-content`"
-						aria-expanded="true"
-						:aria-controls="`child-accordion-${idx}-content`"
-					>
-						<h5 class="mb-0 w-100" v-text="child.name?.trim() || `Child ${idx + 1}`" />
-						<button
-							v-if="true"
-							type="button"
-							class="btn btn-sm btn-danger ms-auto me-2"
-							@click="removeChild(idx)"
-							v-text="'Remove'"
-						/>
-					</button>
-				</div>
-				<div
-					:id="`child-accordion-${idx}-content`"
-					class="accordion-collapse collapse show"
-					data-bs-parent="#childAccordion"
-				>
-					<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`" />
-					<form-input
-						v-model="child.age"
-						label="Age"
-						type="number"
-						min="0"
-						max="17"
-						:name="`child-${idx}-age`"
+						@click="addSong"
+						v-text="'Add Suggestion'"
 					/>
-					<template v-if="child.age">
-						<form-radio
-							v-for="(meal, mealIdx) in mealsMap"
-							:key="`child-${idx}-${mealIdx}`"
-							v-model="child[meal.key]"
-							:label="meal.text"
-							:name="`child-${idx}-${meal.key}`"
-							:options="getMenuOptions(mealIdx, child.age <= 12)"
-						>
-							<template #after-each="{ item }">
-								<diet-indicator class="ms-2 align-top" :item />
-								<small class="d-block text-muted" v-text="item.description" />
-							</template>
-						</form-radio>
-						<form-textarea
-							v-model="child.diet"
-							name="diet"
-							label="Dietary Requirement"
-							hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
-							placeholder="Allergies, health conditions, ethical choices, etc."
-							validation
-							:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
-						/>
-					</template>
-				</div>
-			</div>
-		</div>
-		<button
-			v-if="invitation.children?.length < 5"
-			class="btn btn-primary"
-			type="button"
-			@click="addChild"
-			v-text="'Add Child'"
-		/>
-
-		<hr>
-
-		<form-array
-			ref="songList"
-			v-model="invitation.songs"
-			name="song-suggestions"
-			label="Song Suggestions"
-			hint="Suggest songs you would like to hear play during the reception"
-			placeholder="Rick Astley - Never Gonna Give You Up"
-		>
-			<template #after>
-				<button
-					class="btn btn-primary"
-					:class="{ disabled: invitation.songs?.length === 5 }"
-					:disabled="invitation.songs?.length === 5"
-					type="button"
-					@click="addSong"
-					v-text="'Add Suggestion'"
-				/>
-			</template>
-		</form-array>
-		<hr>
-		<form-textarea
-			v-model="invitation.message"
-			name="message"
-			label="Message"
-			placeholder="Leave us a message!"
-		/>
-	</form>
+				</template>
+			</form-array>
+			<hr>
+			<form-textarea
+				v-model="invitation.message"
+				name="message"
+				label="Message"
+				placeholder="Leave us a message!"
+			/>
+		</form>
+	</div>
 </template>

@@ -101,19 +101,21 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-header title="Feedback" :back="{ name: 'Admin Overview' }" />
-	<div class="card-text">
-		<table-component v-slot="{ item }" :items="items" v-bind="tableOpts">
-			<th scope="row">
-				<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.invitation } }" :class="!item.read ? 'link-warning' : ''">
-					{{ item.invitation }}
-				</router-link>
-			</th>
-			<td v-text="item.read ? 'Read' : 'Unread'" />
-			<td>
-				<relative-date :date="item.created" />
-			</td>
-			<td v-text="item.message" />
-		</table-component>
+	<div class="card-body">
+		<card-header title="Feedback" :back="{ name: 'Admin Overview' }" />
+		<div class="card-text">
+			<table-component v-slot="{ item }" :items="items" v-bind="tableOpts">
+				<th scope="row">
+					<router-link :to="{ name: 'Admin Edit Invitation', params: { invitationId: item.invitation } }" :class="!item.read ? 'link-warning' : ''">
+						{{ item.invitation }}
+					</router-link>
+				</th>
+				<td v-text="item.read ? 'Read' : 'Unread'" />
+				<td>
+					<relative-date :date="item.created" />
+				</td>
+				<td v-text="item.message" />
+			</table-component>
+		</div>
 	</div>
 </template>

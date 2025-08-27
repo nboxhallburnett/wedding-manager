@@ -4,3 +4,7 @@ h4.card-title {
 	top: calc($card-offset * -1);
 	padding-top: 1rem;
 }
+
+.card-body {
+	padding-top: 0;
+}

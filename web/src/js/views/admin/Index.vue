@@ -7,14 +7,14 @@ const links = [
 	{ text: 'Stats', to: { name: 'Admin Stats' } },
 	{ text: 'Invitations', to: { name: 'Admin List Invitations' } },
 	{ text: 'Menu', to: { name: 'Admin List Menu Items' } },
-	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
-	{ text: 'About', to: { name: 'Admin Edit About Content' } },
+	{ text: 'Seating Plan', to: { name: 'Admin View Seating Plan' } },
+	{ text: 'Details', to: { name: 'Admin Edit About Content' } },
 	{ text: 'Q&A', to: { name: 'Admin Q&A Content' } },
 	{ text: 'Our Story', to: { name: 'Admin Our Story Content' } },
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
-	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
+	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
 	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
-	{ text: 'Seating Plan', to: { name: 'Admin View Seating Plan' } }
+	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } }
 ];
 </script>
 

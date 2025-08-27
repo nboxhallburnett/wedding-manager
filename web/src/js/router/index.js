@@ -1,5 +1,5 @@
 import { inject } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router';
 
 const router = createRouter({
 	history: createWebHistory(),
@@ -190,6 +190,28 @@ router.beforeEach(to => {
 	}
 	if (to.meta?.admin && !invitation.value?.admin) {
 		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
+	}
+});
+
+// Add a global error handler for navigation failures
+router.onError((error, to) => {
+	if (isNavigationFailure(error)) {
+		// Fall through on navigation guard failures
+		return;
+	}
+
+	// Check for chunk load errors and force a page reload to ensure we've got the latest assets
+	if (error.name === 'ChunkLoadError') {
+		console.error('Failed to load chunk. Refreshing...');
+		// If we're navigating to somewhere other than the current path,
+		// perform a direct page load rather than using the router
+		if (to.fullPath !== window.location.pathname) {
+			return window.location = to.fullPath;
+		}
+		// Otherwise force a page reload
+		window.location.reload();
+	} else {
+		console.error('Routing error:', error);
 	}
 });
 

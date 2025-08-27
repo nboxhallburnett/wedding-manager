@@ -8,7 +8,7 @@ import RingLoader from 'components/RingLoader.vue';
 import SiteFooter from 'components/SiteFooter.vue';
 import SiteHeader from 'components/SiteHeader.vue';
 import ToastContainer from 'components/ToastContainer.vue';
-import WelcomeBanner from 'components/WelcomeBanner.vue';
+import StylizedNames from 'components/StylizedNames.vue';
 import WelcomeDisplay from 'components/WelcomeDisplay.vue';
 
 const toastContainerComponent = ref(null);
@@ -23,8 +23,9 @@ function welcomeCleanup() {
 	showWelcome.value = false;
 }
 
-const welcomeBannerContainer = useTemplateRef('welcomeBannerContainer');
+const fadingNamesContainer = useTemplateRef('fadingNamesContainer');
 const viewContainer = useTemplateRef('viewContainer');
+const appContainer = useTemplateRef('appContainer');
 
 // Wire up the welcome message fade effect when the app has mounted
 onMounted(() => {
@@ -46,7 +47,7 @@ onMounted(() => {
 				.split('px')[0]);
 
 			// Track the current opacity so we only modify the style when it changes
-			let currentOpacity = welcomeBannerContainer.value.style.opacity;
+			let currentOpacity = fadingNamesContainer.value.style.opacity;
 			// Store a ref to the lower bound height that we'd want for the scroll effect
 			const maxScroll = headerHeight + scrollSize;
 			// Store a ref to the base percentage calculation. One less thing to calculate in the scroll hander
@@ -54,10 +55,10 @@ onMounted(() => {
 
 			// Wire up a listener on scroll to apply changes to the opacity
 			// I wish we could use IntersectionObserver for this, but the elements aren't ancestors.
-			document.addEventListener('scroll', () => {
+			appContainer.value.addEventListener('scroll', () => {
 				// Get just the top of the view container for our position calculations
 				const { top: distanceFromViewportTop } = viewContainer.value.getBoundingClientRect();
-				// If the opacity of the welcome banner is already 0 and the container is scrolled "above" the header,
+				// If the opacity of the names is already 0 and the container is scrolled "above" the header,
 				// we've got nothing to do here so fall out
 				if (!currentOpacity && distanceFromViewportTop < headerHeight) {
 					return;
@@ -75,8 +76,8 @@ onMounted(() => {
 				if (opacityStep !== currentOpacity) {
 					// Store it as the new reference step
 					currentOpacity = opacityStep;
-					// And apply the value to the banner's styles
-					welcomeBannerContainer.value.style.opacity = opacityStep;
+					// And apply the value to the container's styles
+					fadingNamesContainer.value.style.opacity = opacityStep;
 				}
 			});
 		});
@@ -85,22 +86,24 @@ onMounted(() => {
 </script>
 
 <template>
-	<div id="background-overlay" />
+	<div id="background-overlay" class="bg-blur" />
 	<ring-loader />
 	<template v-if="invitation">
 		<toast-container ref="toastContainerComponent" />
 		<header>
 			<site-header />
 
-			<div id="welcome-banner-container" ref="welcomeBannerContainer">
-				<welcome-banner />
+			<div id="fading-names-container" class="mt-3" ref="fadingNamesContainer">
+				<stylized-names />
 			</div>
 		</header>
 
-		<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center">
-			<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
-				<div class="card-body pt-0">
-					<router-view />
+		<div id="app-container" ref="appContainer">
+			<div id="view-container" ref="viewContainer" class="container-fluid d-flex justify-content-center mb-5">
+				<div class="col-xxl-7 col-xl-8 col-lg-9 col-md-10 col-sm-11 col-12 card shadow">
+					<div class="card-body pt-0">
+						<router-view />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -109,8 +112,14 @@ onMounted(() => {
 	</template>
 	<template v-else>
 		<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
-		<div class="d-flex justify-content-center flex-column vh-100">
-			<router-view />
+		<div id="login-container" class="d-flex justify-content-center flex-column vh-100">
+			<stylized-names />
+
+			<div class="container d-flex justify-content-center">
+				<div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-9 align-content-center">
+					<router-view />
+				</div>
+			</div>
 		</div>
 	</template>
 </template>
@@ -122,24 +131,24 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	z-index: -1;
-	backdrop-filter: blur(0.5rem);
-	transition: backdrop-filter 0.35s ease-out;
 	overflow-y: scroll;
 
-	.has-header & {
-		backdrop-filter: blur(0);
+	// If there is a modal open, render the overlay on top of the page content
+	.modal-open & {
+		z-index: 15;
 	}
 }
 
-header {
-	margin-bottom: 160px;
+#app-container {
+	position: absolute;
+	padding-top: var(--card-offset);
+	top: var(--header-height);
+	overflow: auto;
+	max-height: calc(100vh - var(--header-height) - var(--footer-height));
+	width: 100%;
 }
 
-#view-container {
-	margin-bottom: 5rem;
-}
-
-#welcome-banner-container {
+#fading-names-container {
 	position: fixed;
 	top: var(--header-height);
 	width: 100%;
@@ -147,5 +156,10 @@ header {
 	justify-self: center;
 	opacity: 1;
 	transition: opacity 0.2s;
+}
+
+// Override the stylized names text size base for the login view
+#login-container #stylized-names {
+	--stylized-text-base: max(10vmin, 8vh);
 }
 </style>

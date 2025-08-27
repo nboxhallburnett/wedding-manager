@@ -1,6 +1,6 @@
 h4.card-title {
 	z-index: 7;
 	position: sticky;
-	top: var(--header-height);
+	top: calc($card-offset * -1);
 	padding-top: 1rem;
 }

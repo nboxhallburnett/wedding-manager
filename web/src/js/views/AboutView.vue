@@ -13,10 +13,7 @@ const content = ref('');
 const navItems = ref([]);
 const $markdownContent = useTemplateRef('markdown-content');
 const aboutLoading = ref(true);
-
-// Create refs for the bootstrap scrollspy container height (used for the styling)
-const scrollContainerHeight = ref(window.innerHeight + 'px');
-// And the scrollspy instance itself.
+// Create a ref for the scrollspy instance itself.
 const scrollSpyInstance = ref(null);
 
 // Fetch the about content from the API
@@ -132,18 +129,8 @@ watch(content, () => {
 });
 
 onMounted(() => {
-	// Get the header height css var to use as reference to calculate the offset we need to get an appropriately sized
-	// scrollable container to allow the scrollspy nav to function
-	const headerHeight = Number(getComputedStyle(document.body)
-		.getPropertyValue('--header-height')
-		.split('px')[0]);
-
-	// Update the container height ref to the current window height minus twice the header height.
-	// Twice the height as we need to account for both the navigation header and the card headers
-	scrollContainerHeight.value = window.innerHeight - (headerHeight * 2) + 'px';
 	// Finally create a new bootstrap scrollspy instance now that the target element exists on the DOM
-	scrollSpyInstance.value = new ScrollSpy($markdownContent.value, { target: '#about-navbar' });
-
+	scrollSpyInstance.value = new ScrollSpy(document.getElementById('app-container'), { target: '#about-navbar' });
 });
 </script>
 
@@ -161,7 +148,7 @@ onMounted(() => {
 			<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
 		</div>
 		<div class="d-none d-md-block col-4 border-start">
-			<nav id="about-navbar" class="h-100 flex-column align-items-stretch pe-4 border-end">
+			<nav id="about-navbar" class="flex-column align-items-stretch pe-4 border-end">
 				<nav class="nav nav-pills flex-column">
 					<template v-for="section in navItems" :key="section.id">
 						<a class="nav-link" :href="`#${section.id}`" v-text="section.title" />
@@ -197,10 +184,12 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@media (min-width: 768px) {
-	.scrollspy-container {
-		max-height: calc(v-bind(scrollContainerHeight) - 5rem - 28px);
-		overflow-y: scroll;
-	}
+#about-navbar {
+	position: sticky;
+	top: calc((var(--card-offset) * -1) + var(--header-height) + 16px);
+	overflow-y: scroll;
+	max-height: fit-content;
+	// Set the height to the mozilla max content value to get around firefox not respecting max-height: fit-content;
+	height: -moz-max-content;
 }
 </style>

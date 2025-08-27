@@ -9,7 +9,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 </script>
 
 <template>
-	<nav id="footer" class="navbar navbar-expand navbar-light bg-body px-3 mt-auto">
+	<nav id="footer" class="navbar navbar-expand navbar-light px-3 mt-auto bg-blur">
 		<div id="navbarFooter" class="collapse navbar-collapse">
 			<div class="navbar-nav w-100 justify-content-between">
 				<div class="d-flex">
@@ -17,19 +17,19 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 						<template v-if="idx">
 							|
 						</template>
-						<a :href="item.url" class="nav-item nav-link" target="_blank">
+						<a :href="item.url" class="nav-item nav-link text-stroke" target="_blank">
 							{{ item.text }}
 						</a>
 					</template>
 				</div>
-				<div class="d-flex">
-					<div v-if="daysToGo > 0" class="nav-item nav-link pointer">
-						{{ daysToGo }} Days
-					</div>
+				<div class="d-flex text-stroke">
 					<template v-if="daysToGo > 0">
+						<div class="nav-item nav-link text-stroke pointer">
+							{{ daysToGo }} Days
+						</div>
 						|
 					</template>
-					<div class="nav-item nav-link pointer" v-text="date" />
+					<div class="nav-item nav-link pointer text-stroke" v-text="date" />
 				</div>
 			</div>
 		</div>
@@ -40,6 +40,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 #footer {
 	z-index: 10;
 	position: fixed;
+	height: var(--footer-height);
 	bottom: 0;
 	width: 100%;
 

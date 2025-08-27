@@ -33,4 +33,6 @@ body {
 
 :root {
 	--header-height: #{$header-height};
+	--footer-height: #{$footer-height};
+	--card-offset: #{$card-offset};
 }

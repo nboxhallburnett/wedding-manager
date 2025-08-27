@@ -30,7 +30,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 			aria-label="Close"
 			@click="emit('finished')"
 		/>
-		<div id="welcome-text" class="font-script">
+		<div id="save-the-date" class="font-script">
 			Save the Date
 		</div>
 		<div id="welcome-date" v-text="date" />
@@ -82,7 +82,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	}
 }
 
-#welcome-text {
+#save-the-date {
 	margin-top: 25vh;
 	line-height: 1;
 	font-size: calc(2rem + 7vmin);

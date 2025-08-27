@@ -93,10 +93,10 @@ async function submitFeedback() {
 </script>
 
 <template>
-	<nav id="header" class="navbar navbar-expand-sm bg-body shadow px-3 w-100 position-fixed top-0">
+	<nav id="header" class="navbar navbar-expand-sm shadow px-3 w-100 position-fixed top-0 bg-blur">
 		<button
 			ref="navbarToggle"
-			class="navbar-toggler"
+			class="navbar-toggler bg-primary"
 			type="button"
 			data-bs-toggle="collapse"
 			data-bs-target="#navbar-header"
@@ -108,12 +108,12 @@ async function submitFeedback() {
 		</button>
 		<div id="navbar-header" class="collapse navbar-collapse">
 			<div class="navbar-nav w-100">
-				<div class="ring-loader d-none d-sm-block" />
+				<div class="ring-loader d-none d-sm-block" data-bs-theme="dark" />
 				<router-link
 					v-for="item in navItems"
 					:key="item.text"
 					:to="item.to"
-					class="nav-item nav-link"
+					class="nav-item nav-link text-stroke"
 					:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
 					@click="collapseNavbar"
 				>
@@ -124,7 +124,7 @@ async function submitFeedback() {
 					<div class="ms-sm-auto nav-item dropdown">
 						<button
 							ref="feedbackToggle"
-							class="text-start dropdown-toggle nav-link h-100"
+							class="text-start dropdown-toggle nav-link h-100 text-stroke"
 							type="button"
 							data-bs-auto-close="outside"
 							data-bs-toggle="dropdown"
@@ -155,7 +155,7 @@ async function submitFeedback() {
 						</div>
 					</div>
 
-					<button class="text-start nav-item nav-link" @click="logout">
+					<button class="text-start nav-item nav-link text-stroke" @click="logout">
 						Sign out
 					</button>
 				</template>

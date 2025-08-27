@@ -59,6 +59,10 @@ $loader-stroke-width: 3 !default;
 		animation: spin 2s linear infinite;
 	}
 
+	&[data-bs-theme='dark'] {
+		@include ring-icon($primary, $black);
+	}
+
 	@media (prefers-color-scheme: dark) {
 		@include ring-icon($primary, $black);
 	}

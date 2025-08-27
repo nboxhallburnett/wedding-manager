@@ -9,12 +9,25 @@ const invitation = inject('invitation');
 </script>
 
 <template>
-	<card-header title="Uh Oh!" />
-	<div class="card-text">
-		<p>
+	<template v-if="invitation?.id">
+		<card-header title="Uh Oh!" />
+		<div class="card-text">
+			<p>
+				You seem to be lost.
+			</p>
+			<RouterLink class="btn btn-primary w-100" :to="{ name: 'Home' }">
+				Home
+			</RouterLink>
+		</div>
+	</template>
+	<div v-else class="card-text">
+		<h4 class="pb-1 text-stroke">
+			Uh oh!
+		</h4>
+		<p class="pb-1 text-stroke">
 			You seem to be lost.
 		</p>
-		<RouterLink class="btn btn-primary w-100" :to="invitation?.id ? { name: 'Home' } : { name: 'Login' }">
+		<RouterLink class="btn btn-primary w-100" :to="{ name: 'Login' }">
 			Home
 		</RouterLink>
 	</div>

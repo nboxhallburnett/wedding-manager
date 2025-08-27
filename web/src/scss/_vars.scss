@@ -13,6 +13,13 @@ $font-family-monospace: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Libera
 // Nav
 $navbar-toggler-border-radius: 1px;
 $header-height: 50px;
+$card-offset: 160px;
+$footer-height: 36px;
 
 // Accordion
 $accordion-border-width: 0;
+
+// Modals
+$modal-backdrop-opacity: 0;
+$modal-fade-transform: scale(0.7);
+$modal-content-box-shadow-sm-up: 0;

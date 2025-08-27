@@ -431,7 +431,7 @@ function onDropped(evt) {
 <style lang="scss" scoped>
 #unassigned-guests {
 	position: sticky;
-	top: calc((var(--header-height) * 2) + 16px);
+	top: calc((var(--card-offset) * -1) + var(--header-height) + 16px);
 	max-height: v-bind(maxGuestHeight);
 	overflow-y: scroll;
 

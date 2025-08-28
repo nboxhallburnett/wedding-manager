@@ -4,6 +4,7 @@ import Router from 'router';
 
 import { useForm } from 'composables/form';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 
@@ -51,7 +52,7 @@ function removeGuest(idx) {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="New Invitation">
 			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
 				Back
@@ -95,5 +96,5 @@ function removeGuest(idx) {
 				Add +1
 			</button>
 		</form>
-	</div>
+	</card-body>
 </template>

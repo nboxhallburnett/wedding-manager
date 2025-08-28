@@ -23,10 +23,10 @@ const groom = CONFIG.groom_short;
 	color: var(--bs-white);
 	text-shadow:
 		2px 2px 1rem var(--bs-black),
-		-1px -1px 0 var(--bs-black),
-		1px -1px 0 var(--bs-black),
-		-1px 1px 0 var(--bs-black),
-		1px 1px 0 var(--bs-black);
+		-1px -1px 1px var(--bs-black),
+		1px -1px 1px var(--bs-black),
+		-1px 1px 1px var(--bs-black),
+		1px 1px 1px var(--bs-black);
 
 	#stylized-ampersand {
 		position: relative;

@@ -6,6 +6,7 @@ import { useLoader } from 'composables/loader';
 import { useForm } from 'composables/form';
 import { statusMessages } from 'lib/formatter';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import DiningTable from 'components/DiningTable.vue';
 import InfoPopover from 'components/InfoPopover.vue';
@@ -304,12 +305,12 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit />
 		<form class="card-text row" @submit.prevent.stop="onSubmit">
 			<input
 				v-model="searchTerm"
-				class="form-control mx-auto w-75 mb-3"
+				class="form-control mx-auto w-75"
 				placeholder="Search"
 				:list="searchSuggestions.length && 'searchSuggestions' || undefined"
 				@keyup.escape="searchTerm = ''"
@@ -318,75 +319,77 @@ function onDropped(evt) {
 			<datalist v-if="searchSuggestions.length" id="searchSuggestions">
 				<option v-for="item in searchSuggestions" :key="item" :value="item" />
 			</datalist>
-			<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7': unassignedGuests.length }">
-				<div v-for="(table, idx) in tables" :key="table.id">
-					<hr v-if="idx">
-					<dining-table
-						:id="String(idx + 1)"
-						:occupants="table.guests"
-						:search-term
-						:style="idx === 0 ? 'rectangle' : undefined"
-						class="d-inline-block"
-						edit
-						@set-seat="evt => setSeat(idx, evt)"
-					/>
-					<ol class="d-inline-block">
-						<li
-							v-for="(guest, guestIdx) in table.guests"
-							:key="guestIdx"
-							:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
-						>
-							<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
-								{{ guest.name }}
-							</info-popover>
-							<template v-else>
-								Unassigned
-							</template>
-						</li>
-					</ol>
-					<div class="pb-1 d-flex gap-3 align-items-center">
-						<button
-							type="button"
-							class="btn btn-sm btn-primary"
-							:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
-							@click="table.guests.push({})"
-							v-text="'Add Chair'"
+			<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7 mt-3': unassignedGuests.length }">
+				<transition-group name="list" tag="div">
+					<div v-for="(table, idx) in tables" :key="table.id">
+						<hr v-if="idx">
+						<dining-table
+							:id="String(idx + 1)"
+							:occupants="table.guests"
+							:search-term
+							:style="idx === 0 ? 'rectangle' : undefined"
+							class="d-inline-block"
+							edit
+							@set-seat="evt => setSeat(idx, evt)"
 						/>
-						<button
-							type="button"
-							class="btn btn-sm btn-primary"
-							:disabled="table.guests.length <= 1"
-							@click="table.guests.pop()"
-							v-text="'Remove Chair'"
-						/>
-						<button
-							type="button"
-							class="btn btn-sm btn-danger"
-							@click="removeTable(idx)"
-							v-text="'Remove Table'"
-						/>
-						<button
-							v-if="idx !== 0"
-							class="icon-caret rotate-180 fs-4 p-0"
-							type="button"
-							@click.prevent.stop="moveTable(idx, idx - 1)"
-						>
-							<div class="visually-hidden">
-								Move Up
-							</div>
-						</button>
-						<button
-							v-if="tables[idx + 1]"
-							class="icon-caret fs-4 p-0"
-							type="button"
-							@click.prevent.stop="moveTable(idx, idx + 1)"
-						>
-							<div class="visually-hidden">
-								Move Down
-							</div>
-						</button>
+						<ol class="d-inline-block">
+							<li
+								v-for="(guest, guestIdx) in table.guests"
+								:key="guestIdx"
+								:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+							>
+								<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
+									{{ guest.name }}
+								</info-popover>
+								<template v-else>
+									Unassigned
+								</template>
+							</li>
+						</ol>
+						<div class="pb-1 d-flex gap-3 align-items-center">
+							<button
+								type="button"
+								class="btn btn-sm btn-primary"
+								:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
+								@click="table.guests.push({})"
+								v-text="'Add Chair'"
+							/>
+							<button
+								type="button"
+								class="btn btn-sm btn-primary"
+								:disabled="table.guests.length <= 1"
+								@click="table.guests.pop()"
+								v-text="'Remove Chair'"
+							/>
+							<button
+								type="button"
+								class="btn btn-sm btn-danger"
+								@click="removeTable(idx)"
+								v-text="'Remove Table'"
+							/>
+							<button
+								v-if="idx !== 0"
+								class="icon-caret rotate-180 fs-4 p-0"
+								type="button"
+								@click.prevent.stop="moveTable(idx, idx - 1)"
+							>
+								<div class="visually-hidden">
+									Move Up
+								</div>
+							</button>
+							<button
+								v-if="tables[idx + 1]"
+								class="icon-caret fs-4 p-0"
+								type="button"
+								@click.prevent.stop="moveTable(idx, idx + 1)"
+							>
+								<div class="visually-hidden">
+									Move Down
+								</div>
+							</button>
+						</div>
 					</div>
-				</div>
+				</transition-group>
 				<hr v-if="tables.length">
 				<button
 					role="button"
@@ -397,7 +400,7 @@ function onDropped(evt) {
 			</div>
 			<div
 				id="unassigned-guests"
-				class="col-md-5 col-12 order-md-1 order-0 h-100"
+				class="col-md-5 col-12 order-md-1 order-0 pt-2 h-100 bg-body"
 				@dragenter.prevent.stop="onDragEnter"
 				@dragover.prevent.stop="onDragOver"
 				@dragleave.prevent.stop="onDragLeave"
@@ -406,7 +409,7 @@ function onDropped(evt) {
 				<span class="fw-bold">
 					Unassigned Guests
 				</span>
-				<ul>
+				<transition-group name="list" tag="ul" class="mb-2">
 					<li
 						v-for="guest in unassignedGuests"
 						:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
@@ -423,17 +426,17 @@ function onDropped(evt) {
 							{{ guest.name }}
 						</info-popover>
 					</li>
-				</ul>
-				<hr class="d-md-none">
+				</transition-group>
+				<hr class="d-md-none my-0">
 			</div>
 		</form>
-	</div>
+	</card-body>
 </template>
 
 <style lang="scss" scoped>
 #unassigned-guests {
 	position: sticky;
-	top: calc((var(--card-offset) * -1) + var(--header-height) + 16px);
+	top: calc((var(--card-offset) * -1) + var(--header-height) + 8px);
 	max-height: v-bind(maxGuestHeight);
 	overflow-y: scroll;
 

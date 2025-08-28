@@ -7,6 +7,7 @@ import { toBlob, toPng } from 'html-to-image';
 
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import CustomHR from 'components/CustomHR.vue';
 
@@ -172,7 +173,7 @@ async function shareImage() {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Invitation">
 			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
 				Back
@@ -220,7 +221,7 @@ async function shareImage() {
 				</div>
 			</div>
 		</div>
-	</div>
+	</card-body>
 </template>
 
 <style lang="scss" scoped>

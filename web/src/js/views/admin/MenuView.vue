@@ -4,6 +4,7 @@ import Router from 'router';
 
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
@@ -48,7 +49,7 @@ function invitationDisplay(invitation) {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Menu Item" :back="{ name: 'Admin List Menu Items' }" :action="{ text: 'Update Menu Item', to: { name: 'Admin Edit Menu Item' } }" />
 		<div class="card-text">
 			<form-item name="title" label="Title">
@@ -93,5 +94,5 @@ function invitationDisplay(invitation) {
 				</div>
 			</form-item>
 		</div>
-	</div>
+	</card-body>
 </template>

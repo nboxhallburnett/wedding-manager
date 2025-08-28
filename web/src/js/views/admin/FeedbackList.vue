@@ -5,6 +5,7 @@ import { RouterLink } from 'vue-router';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import RelativeDate from 'components/RelativeDate.vue';
 import TableComponent from 'components/TableComponent.vue';
@@ -101,7 +102,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Feedback" :back="{ name: 'Admin Overview' }" />
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="items" v-bind="tableOpts">
@@ -117,5 +118,5 @@ const tableOpts = {
 				<td v-text="item.message" />
 			</table-component>
 		</div>
-	</div>
+	</card-body>
 </template>

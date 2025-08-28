@@ -1,11 +1,12 @@
 <script setup>
+import CardBody from 'components/CardBody.vue';
 import InvitationView from './InvitationView.vue';
 
 const calendarLink = `webcal://${document.location.host}/api/calendar.ics`;
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<invitation-view />
 
 		<a class="btn btn-primary" href="/api/calendar.ics">
@@ -14,5 +15,5 @@ const calendarLink = `webcal://${document.location.host}/api/calendar.ics`;
 		<a class="btn btn-primary ms-2" :href="calendarLink">
 			Subscribe to calendar
 		</a>
-	</div>
+	</card-body>
 </template>

@@ -6,6 +6,7 @@ import API from 'lib/api';
 import { useLoader } from 'composables/loader';
 import { statusMessages } from 'lib/formatter';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import FormText from 'components/form/FormText.vue';
@@ -68,7 +69,7 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 </script>
 
 <template>
-	<div :class="adminView ? 'card-body pt-0' : ''">
+	<component :is="adminView ? CardBody : 'div'">
 		<card-header
 			title="Invitation"
 			:back="adminView ? { name: 'Admin List Invitations' } : undefined"
@@ -144,5 +145,5 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 				name="songs"
 			/>
 		</div>
-	</div>
+	</component>
 </template>

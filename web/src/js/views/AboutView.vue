@@ -7,6 +7,7 @@ import { VueShowdown } from 'vue-showdown';
 import { classExtensions } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 const content = ref('');
@@ -135,7 +136,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Details" />
 		<div v-show="content" class="card-text row">
 			<div
@@ -182,7 +183,7 @@ onMounted(() => {
 			<span class="placeholder w-100 rounded-1" />
 			<span class="placeholder w-25 rounded-1" />
 		</div>
-	</div>
+	</card-body>
 </template>
 
 <style lang="scss" scoped>

@@ -5,6 +5,7 @@ import { RouterLink } from 'vue-router';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import TableComponent from 'components/TableComponent.vue';
 
@@ -53,7 +54,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Calendar Events" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Item', to: { name: 'Admin Create Calendar Event' } }" />
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="events" v-bind="tableOpts">
@@ -65,5 +66,5 @@ const tableOpts = {
 				<td v-text="formatEventDate(item)" />
 			</table-component>
 		</div>
-	</div>
+	</card-body>
 </template>

@@ -5,6 +5,7 @@ import Router from 'router';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormInput from 'components/form/FormInput.vue';
@@ -96,7 +97,7 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header :title="`${isNew ? 'Create' : 'Update'} Calendar Event`" :back="{ name: isNew ? 'Admin List Calendar Events' : 'Admin View Calendar Event' }" :on-submit />
 		<form class="card-text" @submit.prevent.stop="onSubmit">
 			<form-input
@@ -210,5 +211,5 @@ const { onSubmit } = useForm({
 				</div>
 			</form-item>
 		</form>
-	</div>
+	</card-body>
 </template>

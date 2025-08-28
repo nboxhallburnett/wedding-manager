@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { useLoader } from 'composables/loader';
 import { statusMessages } from 'lib/formatter';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 const stats = ref({
@@ -34,7 +35,7 @@ useLoader('admin/stats/invitations', stats);
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Stats" :back="{ name: 'Admin Overview' }" />
 		<div class="row g-3">
 			<div v-for="({ key, title }) in statusMap" :key class="col-12 col-md-6">
@@ -57,5 +58,5 @@ useLoader('admin/stats/invitations', stats);
 				</div>
 			</div>
 		</div>
-	</div>
+	</card-body>
 </template>

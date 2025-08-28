@@ -6,12 +6,14 @@ import Modal from 'bootstrap/js/dist/modal';
 
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<Image[]>} */
 const items = ref([]);
 const galleryLoading = ref(true);
 const showModal = ref(false);
+const preferredType = ref(null);
 
 // Fetch the gallery content from the API
 useLoader('gallery', items, galleryLoading, true);
@@ -24,19 +26,49 @@ onMounted(() => {
 	$modal.value.addEventListener('show.bs.modal', () => showModal.value = true);
 	$modal.value.addEventListener('hidden.bs.modal', () => showModal.value = false);
 });
+
+/**
+ * Check whether the current browser supports the image format defined in a given data url
+ *
+ * @param {String} dataUrl image date url to check
+ * @returns {Boolean}
+ */
+async function supportsFormat(dataUrl) {
+	if (!window.createImageBitmap) {
+		return Promise.reject(false);
+	}
+
+	try {
+		const blob = await fetch(dataUrl).then(response => response.blob());
+		await createImageBitmap(blob);
+		return true;
+	} catch (err) {
+		console.warn('Error checking image format support:', err);
+		return Promise.reject(false);
+	}
+}
+
+// Check support for AVIF or WebP formats to determine the most optimal format to use on initial render, falling back to jpeg.
+// This determines which images are used on the zoomed out initial render, with the raw images being used in place when zoomed in.
+const avifData = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUEAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABYAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgSAAAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB5tZGF0EgAKBzgADlAgIGkyCR/wAABAAACvcA==';
+const webpData = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAAQAcJaQAA3AA/v3AgAA=';
+supportsFormat(avifData).then(() => 'avif')
+	.catch(() => supportsFormat(webpData).then(() => 'webp'))
+	.catch(() => 'jpeg')
+	.then(value => preferredType.value = value);
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Gallery" />
 		<div class="card-text">
-			<div v-if="galleryLoading || showModal" class="img-thumbnail placeholder-glow">
+			<div v-if="galleryLoading || showModal || preferredType === null" class="img-thumbnail placeholder-glow">
 				<div class="ratio ratio-4x3 placeholder" />
 			</div>
 
 			<teleport defer to="#modal-content" :disabled="!showModal">
 				<div
-					v-if="!galleryLoading"
+					v-if="!galleryLoading && preferredType"
 					id="gallery-carousel"
 					class="carousel slide"
 					:class="{ 'img-thumbnail': !showModal, 'carousel-fade': showModal }"
@@ -61,10 +93,10 @@ onMounted(() => {
 							:class="{ active: idx === 0 }"
 						>
 							<img
-								:src="item.path"
+								:src="showModal ? item.path : `/api/gallery${item.path}?type=${preferredType}`"
 								:class="{ 'modal-image mx-auto': showModal }"
 								class="d-block img-fluid"
-								alt="..."
+								:alt="item.caption || 'Gallery Image'"
 								@click="bsModal.toggle()"
 							>
 							<div v-if="item.caption" class="carousel-caption bg-dark bg-opacity-50 pb-0 mb-3 pt-3" :class="{ 'd-none': showModal }">
@@ -117,10 +149,16 @@ onMounted(() => {
 				</div>
 			</div>
 		</div>
-	</div>
+	</card-body>
 </template>
 
 <style lang="scss" scoped>
+.img-thumbnail {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 768px;
+}
+
 .carousel-item {
 	img:not(.modal-image) {
 		object-fit: cover;

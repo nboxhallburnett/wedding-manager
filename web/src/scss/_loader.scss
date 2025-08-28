@@ -55,6 +55,11 @@ $loader-stroke-width: 3 !default;
 	height: 120px;
 	margin: -60px 0 0 -60px;
 
+	.loader-overlay:not(.position-fixed) & {
+		position: sticky;
+		width: 100%;
+	}
+
 	&.loading {
 		animation: spin 2s linear infinite;
 	}

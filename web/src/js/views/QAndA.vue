@@ -5,6 +5,7 @@ import { VueShowdown } from 'vue-showdown';
 import { dateExtension } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import CustomHR from 'components/CustomHR.vue';
 
@@ -17,7 +18,7 @@ useLoader('question', questions, QAndALoading, true);
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header>
 			Q<span class="font-script h2 lh-0 px-1">&</span>A
 		</card-header>
@@ -64,5 +65,5 @@ useLoader('question', questions, QAndALoading, true);
 			<span class="placeholder bg-body-secondary w-100 rounded-1" />
 			<span class="placeholder bg-body-secondary w-75 rounded-1" />
 		</div>
-	</div>
+	</card-body>
 </template>

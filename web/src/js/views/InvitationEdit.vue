@@ -6,6 +6,7 @@ import Router from 'router';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import InfoPopover from 'components/InfoPopover.vue';
@@ -211,7 +212,7 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit />
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-text
@@ -395,7 +396,7 @@ function getMenuOptions(course, child) {
 				<template #after>
 					<button
 						class="btn btn-primary"
-						:class="{ disabled: invitation.songs?.length === 5 }"
+						:class="{ disabled: invitation.songs?.length === 5, 'mt-2': invitation.songs?.length }"
 						:disabled="invitation.songs?.length === 5"
 						type="button"
 						@click="addSong"
@@ -411,5 +412,5 @@ function getMenuOptions(course, child) {
 				placeholder="Leave us a message!"
 			/>
 		</form>
-	</div>
+	</card-body>
 </template>

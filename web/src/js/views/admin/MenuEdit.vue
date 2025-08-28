@@ -5,6 +5,7 @@ import Router from 'router';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
@@ -67,7 +68,7 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit />
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-input
@@ -99,5 +100,5 @@ watch(() => item.value.vegan, value => {
 			<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />
 			<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten Free" />
 		</form>
-	</div>
+	</card-body>
 </template>

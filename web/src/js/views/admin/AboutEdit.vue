@@ -6,6 +6,7 @@ import { classExtensions } from 'lib/showdown';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 /** @type {AddToast} */
@@ -32,7 +33,7 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Edit Details Page" :back="{ name: 'Admin Overview' }" :on-submit />
 		<form class="card-text" @submit.prevent.stop="onSubmit">
 			<h5 v-text="'Content'" />
@@ -53,5 +54,5 @@ const { onSubmit } = useForm({
 				</div>
 			</div>
 		</form>
-	</div>
+	</card-body>
 </template>

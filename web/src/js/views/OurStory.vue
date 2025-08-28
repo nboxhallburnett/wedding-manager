@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<StoryItem[]>} */
@@ -14,7 +15,7 @@ useLoader('story', storyItems, StoryLoading, true);
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Our Story" />
 		<div class="timeline" :class="{ 'placeholder-wave': StoryLoading }">
 			<div
@@ -83,7 +84,7 @@ useLoader('story', storyItems, StoryLoading, true);
 				</div>
 			</template>
 		</div>
-	</div>
+	</card-body>
 </template>
 
 <style lang="scss" scoped>

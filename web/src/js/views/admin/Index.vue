@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 
 const links = [
@@ -19,7 +20,7 @@ const links = [
 </script>
 
 <template>
-	<div v-if="$route.name === 'Admin Overview'" class="card-body">
+	<card-body v-if="$route.name === 'Admin Overview'">
 		<card-header title="Admin Management" />
 		<div class="card-text row g-3">
 			<div v-for="(link, idx) in links" :key="idx" class="col-12 col-sm-6">
@@ -28,7 +29,7 @@ const links = [
 				</router-link>
 			</div>
 		</div>
-	</div>
+	</card-body>
 	<router-view v-else v-slot="{ Component }">
 		<transition name="fade">
 			<component :is="Component" />

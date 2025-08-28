@@ -73,7 +73,6 @@ app.use(function (req, res, next) {
 app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'), {
 	maxAge,
 	setHeaders: res => {
-		res.setHeader('Access-Control-Allow-Origin', '*');
 		res.setHeader('Expires', new Date(Date.now() + maxAge).toUTCString());
 		res.setHeader('X-Content-Type-Options', 'nosniff');
 	}

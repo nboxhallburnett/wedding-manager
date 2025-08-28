@@ -87,7 +87,6 @@ onMounted(() => {
 
 <template>
 	<div id="background-overlay" class="bg-blur" />
-	<ring-loader />
 	<template v-if="invitation">
 		<toast-container ref="toastContainerComponent" />
 		<header>
@@ -113,6 +112,7 @@ onMounted(() => {
 		<site-footer />
 	</template>
 	<template v-else>
+		<ring-loader overlay />
 		<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
 		<div id="login-container" class="d-flex justify-content-center flex-column vh-100">
 			<stylized-names />
@@ -176,5 +176,20 @@ onMounted(() => {
 	width: 100%;
 	opacity: 0;
 	filter: blur(1px);
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.2s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.list-leave-active {
+  position: absolute;
 }
 </style>

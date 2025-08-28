@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
+import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
@@ -74,62 +75,64 @@ function moveItem(idx, to) {
 </script>
 
 <template>
-	<div class="card-body">
+	<card-body>
 		<card-header title="Edit Story Items" :back="{ name: 'Admin Overview' }" :on-submit />
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
-			<div v-for="(item, idx) in items" :key="item.id">
-				<div v-if="idx" class="d-flex align-items-center pb-3">
-					<hr class="fancy-hr w-100">
-					<div class="d-flex flex-column gap-1">
-						<button
-							:id="`item-${item.idx}-up`"
-							class="icon-caret rotate-180 fs-4 p-0"
-							type="button"
-							@click.prevent.stop="moveItem(idx, idx - 1)"
-						/>
-						<button
-							v-if="items[idx + 1]"
-							:id="`item-${item.idx}-down`"
-							class="icon-caret fs-4 p-0"
-							type="button"
-							@click.prevent.stop="moveItem(idx, idx + 1)"
-						/>
+			<transition-group name="list" tag="div">
+				<div v-for="(item, idx) in items" :key="item.id">
+					<div v-if="idx" class="d-flex align-items-center pb-3">
+						<hr class="fancy-hr w-100">
+						<div class="d-flex flex-column gap-1">
+							<button
+								:id="`item-${item.idx}-up`"
+								class="icon-caret rotate-180 fs-4 p-0"
+								type="button"
+								@click.prevent.stop="moveItem(idx, idx - 1)"
+							/>
+							<button
+								v-if="items[idx + 1]"
+								:id="`item-${item.idx}-down`"
+								class="icon-caret fs-4 p-0"
+								type="button"
+								@click.prevent.stop="moveItem(idx, idx + 1)"
+							/>
+						</div>
 					</div>
+					<form-input
+						v-model="item.date"
+						:name="`date-${item.id}`"
+						label="Date"
+						required
+					>
+						<template #after>
+							<button
+								type="button"
+								class="btn btn-sm btn-danger ms-auto"
+								@click="removeItem(idx)"
+							>
+								<div class="btn-close btn-close-white" />
+								<div class="visually-hidden">
+									Remove
+								</div>
+							</button>
+						</template>
+					</form-input>
+					<form-input
+						v-model="item.title"
+						:name="`title-${item.id}`"
+						label="Title"
+						placeholder="The happy couple did something cute"
+						required
+					/>
+					<form-textarea
+						v-model="item.description"
+						:name="`description-${item.id}`"
+						label="Description"
+						placeholder="Some more info about what the happy couple did that made it cute"
+						required
+					/>
 				</div>
-				<form-input
-					v-model="item.date"
-					:name="`date-${item.id}`"
-					label="Date"
-					required
-				>
-					<template #after>
-						<button
-							type="button"
-							class="btn btn-sm btn-danger ms-auto"
-							@click="removeItem(idx)"
-						>
-							<div class="btn-close btn-close-white" />
-							<div class="visually-hidden">
-								Remove
-							</div>
-						</button>
-					</template>
-				</form-input>
-				<form-input
-					v-model="item.title"
-					:name="`title-${item.id}`"
-					label="Title"
-					placeholder="The happy couple did something cute"
-					required
-				/>
-				<form-textarea
-					v-model="item.description"
-					:name="`description-${item.id}`"
-					label="Description"
-					placeholder="Some more info about what the happy couple did that made it cute"
-					required
-				/>
-			</div>
+			</transition-group>
 			<button
 				role="button"
 				class="btn btn-primary"
@@ -137,5 +140,5 @@ function moveItem(idx, to) {
 				v-text="'Add Item'"
 			/>
 		</form>
-	</div>
+	</card-body>
 </template>

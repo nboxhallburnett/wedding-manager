@@ -5,7 +5,6 @@ import Router from 'router';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 import DietIndicator from 'components/DietIndicator.vue';
@@ -49,8 +48,7 @@ function invitationDisplay(invitation) {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Menu Item" :back="{ name: 'Admin List Menu Items' }" :action="{ text: 'Update Menu Item', to: { name: 'Admin Edit Menu Item' } }" />
+	<card-body title="Menu Item" :back="{ name: 'Admin List Menu Items' }" :action="{ text: 'Update Menu Item', to: { name: 'Admin Edit Menu Item' } }">
 		<div class="card-text">
 			<form-item name="title" label="Title">
 				<div class="form-control-plaintext">

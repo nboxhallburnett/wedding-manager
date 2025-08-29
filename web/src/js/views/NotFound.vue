@@ -3,7 +3,6 @@ import { RouterLink } from 'vue-router';
 import { inject } from 'vue';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<Invitation>} */
 const invitation = inject('invitation');
@@ -11,8 +10,7 @@ const invitation = inject('invitation');
 
 <template>
 	<template v-if="invitation?.id">
-		<card-body>
-			<card-header title="Uh Oh!" />
+		<card-body title="Uh Oh!">
 			<div class="card-text">
 				<p>
 					You seem to be lost.

@@ -7,7 +7,6 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 import FormArray from 'components/form/FormArray.vue';
@@ -212,8 +211,7 @@ function getMenuOptions(course, child) {
 </script>
 
 <template>
-	<card-body>
-		<card-header :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit />
+	<card-body :title="adminEdit ? 'Edit Invitation' : 'Manage RSVP'" :back="{ name: adminEdit ? 'Admin View Invitation' : 'Home' }" :on-submit>
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-text
 				v-if="adminEdit"

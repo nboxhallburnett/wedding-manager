@@ -7,7 +7,6 @@ import { useForm } from 'composables/form';
 import { statusMessages } from 'lib/formatter';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import DiningTable from 'components/DiningTable.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 
@@ -305,8 +304,7 @@ function onDropped(evt) {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit />
+	<card-body title="Edit Seating Plan" :back="{ name: 'Admin View Seating Plan' }" :on-submit>
 		<form class="card-text row" @submit.prevent.stop="onSubmit">
 			<input
 				v-model="searchTerm"

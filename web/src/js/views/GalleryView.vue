@@ -7,7 +7,6 @@ import Modal from 'bootstrap/js/dist/modal';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<Image[]>} */
 const items = ref([]);
@@ -59,8 +58,7 @@ supportsFormat(avifData).then(() => 'avif')
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Gallery" />
+	<card-body title="Gallery">
 		<div class="card-text">
 			<div v-if="galleryLoading || showModal || preferredType === null" class="img-thumbnail placeholder-glow">
 				<div class="ratio ratio-4x3 placeholder" />

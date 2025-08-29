@@ -6,7 +6,6 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormSelect from 'components/form/FormSelect.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
@@ -68,8 +67,7 @@ watch(() => item.value.vegan, value => {
 </script>
 
 <template>
-	<card-body>
-		<card-header :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit />
+	<card-body :title="`${isNew ? 'Create' : 'Update'} Menu Item`" :back="{ name: isNew ? 'Admin List Menu Items' : 'Admin View Menu Item' }" :on-submit>
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-input
 				v-model="item.title"

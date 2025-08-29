@@ -6,7 +6,6 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import RelativeDate from 'components/RelativeDate.vue';
 import TableComponent from 'components/TableComponent.vue';
 
@@ -102,8 +101,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Feedback" :back="{ name: 'Admin Overview' }" />
+	<card-body title="Feedback" :back="{ name: 'Admin Overview' }">
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="items" v-bind="tableOpts">
 				<th scope="row">

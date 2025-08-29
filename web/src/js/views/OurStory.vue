@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 
 /** @type {Ref<StoryItem[]>} */
 const storyItems = ref([]);
@@ -15,8 +14,7 @@ useLoader('story', storyItems, StoryLoading, true);
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Our Story" />
+	<card-body title="Our Story">
 		<div class="timeline" :class="{ 'placeholder-wave': StoryLoading }">
 			<div
 				v-for="(item, idx) in storyItems"

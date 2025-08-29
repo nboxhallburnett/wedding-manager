@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import CustomHR from 'components/CustomHR.vue';
 import DiningTable from 'components/DiningTable.vue';
 
@@ -83,8 +82,7 @@ function onSearch() {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Seating Plan" :back="{ name: 'Admin Overview' }" :action="{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }" />
+	<card-body title="Seating Plan" :back="{ name: 'Admin Overview' }" :action="{ text: 'Edit Seating Plan', to: { name: 'Admin Edit Seating Plan' } }">
 		<div class="card-text">
 			<input
 				v-model="searchTerm"

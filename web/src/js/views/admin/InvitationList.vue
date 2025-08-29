@@ -7,7 +7,6 @@ import { useLoader } from 'composables/loader';
 import { statusMessages } from 'lib/formatter';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 import TableComponent from 'components/TableComponent.vue';
 
@@ -182,8 +181,7 @@ function invitationStatus(invitation) {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Invitations" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }" />
+	<card-body title="Invitations" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Invitation', to: { name: 'Admin Create Invitation' } }">
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="invitations" v-bind="tableOpts">
 				<th scope="row" class="font-monospace">

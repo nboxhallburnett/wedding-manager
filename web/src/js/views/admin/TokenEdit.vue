@@ -5,7 +5,6 @@ import Router from 'router';
 import { useForm } from 'composables/form';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import FormInput from 'components/form/FormInput.vue';
 import FormTextarea from 'components/form/FormTextarea.vue';
 
@@ -33,8 +32,7 @@ const { onSubmit } = useForm({
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Create Auth Token" :back="{ name: 'Admin List Auth Tokens' }" :on-submit />
+	<card-body title="Create Auth Token" :back="{ name: 'Admin List Auth Tokens' }" :on-submit>
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-input
 				v-model="item.name"

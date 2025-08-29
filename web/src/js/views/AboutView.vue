@@ -8,7 +8,6 @@ import { classExtensions } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 
 const content = ref('');
 const navItems = ref([]);
@@ -136,8 +135,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Details" />
+	<card-body title="Details">
 		<div v-show="content" class="card-text row">
 			<div
 				ref="markdown-content"

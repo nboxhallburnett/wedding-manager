@@ -6,7 +6,6 @@ import { dateExtension } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import CustomHR from 'components/CustomHR.vue';
 
 /** @type {Ref<Calendar[]>} */
@@ -18,10 +17,7 @@ useLoader('question', questions, QAndALoading, true);
 </script>
 
 <template>
-	<card-body>
-		<card-header>
-			Q<span class="font-script h2 lh-0 px-1">&</span>A
-		</card-header>
+	<card-body title="Q&A">
 		<div v-for="(item, idx) in questions" :key="idx" :class="{ 'pt-2': !idx }">
 			<hr v-if="idx && idx % 2 === 0" class="fancy-hr">
 			<custom-h-r v-else-if="idx" />

@@ -5,7 +5,6 @@ import Router from 'router';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 
@@ -18,8 +17,7 @@ useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Calendar Event" :action="{ text: 'Update Calendar Event', to: { name: 'Admin Edit Calendar Event', params: $route.params } }" />
+	<card-body title="Calendar Event" :action="{ text: 'Update Calendar Event', to: { name: 'Admin Edit Calendar Event', params: $route.params } }">
 		<div class="card-text">
 			<form-text v-model="item.summary" name="summary" label="Summary" />
 			<form-text v-model="item.description" name="description" label="Description" />

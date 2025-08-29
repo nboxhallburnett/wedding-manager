@@ -5,7 +5,6 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
-import CardHeader from 'components/CardHeader.vue';
 import RelativeDate from 'components/RelativeDate.vue';
 import TableComponent from 'components/TableComponent.vue';
 
@@ -50,8 +49,7 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-body>
-		<card-header title="Auth Tokens" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }" />
+	<card-body title="Auth Tokens" :back="{ name: 'Admin Overview' }" :action="{ text: 'New Token', to: { name: 'Admin Create Auth Token' } }">
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="tokens" v-bind="tableOpts">
 				<td v-text="item.name" />

@@ -17,7 +17,7 @@ useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
 </script>
 
 <template>
-	<card-body title="Calendar Event" :action="{ text: 'Update Calendar Event', to: { name: 'Admin Edit Calendar Event', params: $route.params } }">
+	<card-body title="Calendar Event" :back="{ name: 'Admin List Calendar Events' }" :action="{ text: 'Edit Calendar Event', to: { name: 'Admin Edit Calendar Event', params: $route.params } }">
 		<div class="card-text">
 			<form-text v-model="item.summary" name="summary" label="Summary" />
 			<form-text v-model="item.description" name="description" label="Description" />

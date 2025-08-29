@@ -23,7 +23,12 @@ if (!props.noTitle) {
 		<span v-if="title" v-text="title" />
 		<span>
 			<slot>
-				<router-link v-if="back" class="btn btn-link btn-sm me-2" :to="back">
+				<router-link
+					v-if="back"
+					class="btn btn-link btn-sm"
+					:class="{ 'me-2': action?.to || onSubmit }"
+					:to="back"
+				>
 					Back
 				</router-link>
 				<router-link v-if="action?.to && action?.text" class="btn btn-primary btn-sm" :to="action.to">

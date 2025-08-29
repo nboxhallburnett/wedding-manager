@@ -148,7 +148,7 @@ onMounted(() => {
 				<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
 			</div>
 			<div class="d-none d-md-block col-4 border-start">
-				<nav id="about-navbar" class="flex-column align-items-stretch pe-4 border-end">
+				<nav id="about-navbar" class="flex-column align-items-stretch">
 					<nav class="nav nav-pills flex-column">
 						<template v-for="section in navItems" :key="section.id">
 							<a class="nav-link" :href="`#${section.id}`" v-text="section.title" />

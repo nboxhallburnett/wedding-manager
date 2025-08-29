@@ -167,13 +167,12 @@ onMounted(() => {
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.2s ease-out, filter 0.2s ease-out;
+	transition: all 0.15s ease-out;
 }
 
 .fade-enter-from,
 .fade-leave-to {
 	position: absolute;
-	width: 100%;
 	opacity: 0;
 	filter: blur(1px);
 }

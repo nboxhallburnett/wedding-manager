@@ -20,7 +20,7 @@ useLoader('gallery', items, galleryLoading, true);
 const $modal = useTemplateRef('modal');
 const bsModal = ref(null);
 onMounted(() => {
-	bsModal.value = new Modal($modal.value);
+	bsModal.value = new Modal($modal.value, { backdrop: false });
 	// Toggle the showModal ref value when the bootstrap modal changes visibility state
 	$modal.value.addEventListener('show.bs.modal', () => showModal.value = true);
 	$modal.value.addEventListener('hidden.bs.modal', () => showModal.value = false);
@@ -125,27 +125,29 @@ supportsFormat(avifData).then(() => 'avif')
 				</div>
 			</teleport>
 
-			<div
-				id="imageModal"
-				ref="modal"
-				class="modal fade"
-				tabindex="-1"
-				aria-hidden="true"
-			>
-				<div class="modal-dialog modal-fullscreen">
-					<div class="modal-content bg-transparent">
-						<div class="modal-body text-center align-content-center">
-							<div id="modal-content" />
-							<button
-								type="button"
-								class="btn-close btn-close-white position-absolute top-0 end-0 bg-opacity-75 rounded-3 m-2 p-2 z-2 pointer"
-								data-bs-dismiss="modal"
-								aria-label="Close"
-							/>
+			<teleport to="body">
+				<div
+					id="image-modal"
+					ref="modal"
+					class="modal fade"
+					tabindex="-1"
+					aria-hidden="true"
+				>
+					<div class="modal-dialog modal-fullscreen">
+						<div class="modal-content bg-transparent">
+							<div class="modal-body text-center align-content-center">
+								<div id="modal-content" />
+								<button
+									type="button"
+									class="btn-close btn-close-white position-absolute top-0 end-0 bg-opacity-75 rounded-3 m-2 p-2 z-2 pointer"
+									data-bs-dismiss="modal"
+									aria-label="Close"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</teleport>
 		</div>
 	</card-body>
 </template>

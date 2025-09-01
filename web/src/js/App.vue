@@ -114,8 +114,8 @@ onMounted(() => {
 	<template v-else>
 		<ring-loader overlay />
 		<welcome-display v-if="showWelcome" @finished="welcomeCleanup" />
-		<div id="login-container" class="d-flex justify-content-center flex-column vh-100">
-			<stylized-names />
+		<div id="login-container" class="d-flex flex-column">
+			<stylized-names :class="{ 'opacity-0': showWelcome }" />
 
 			<div class="container d-flex justify-content-center">
 				<div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-9 align-content-center">
@@ -146,8 +146,18 @@ onMounted(() => {
 	padding-top: var(--card-offset);
 	top: var(--header-height);
 	overflow: auto;
-	max-height: calc(100vh - var(--header-height) - var(--footer-height));
+	max-height: calc(100vh - var(--header-height));
 	width: 100%;
+
+	// Adjust the container height to account for the footer on smaller viewports
+	@media (max-width: 768px) {
+		max-height: calc(100vh - var(--header-height) - var(--footer-height));
+	}
+}
+
+// Render the page content above the footer elements
+#view-container > div {
+	z-index: 1;
 }
 
 #fading-names-container {
@@ -160,10 +170,16 @@ onMounted(() => {
 	transition: opacity 0.2s;
 }
 
-// Override the stylized names text size base for the login view
-#login-container #stylized-names {
-	--stylized-text-base: max(10vmin, 8vh);
+#login-container {
+	margin-top: 25vh;
+
+	// Override the stylized names text size base for the login view
+	#stylized-names {
+		--stylized-text-base: max(10vmin, 8vh);
+	}
 }
+
+// Vue transition component styling
 
 .fade-enter-active,
 .fade-leave-active {

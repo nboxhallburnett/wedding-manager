@@ -2,10 +2,9 @@
 import { onMounted, onUnmounted } from 'vue';
 import { dateFormatter } from 'lib/formatter';
 
-const date = dateFormatter.format(CONFIG.date);
+import StylizedNames from './StylizedNames.vue';
 
-const bride = CONFIG.bride_short;
-const groom = CONFIG.groom_short;
+const date = dateFormatter.format(CONFIG.date);
 
 const emit = defineEmits([ 'finished' ]);
 
@@ -34,34 +33,52 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 			Save the Date
 		</div>
 		<div id="welcome-date" v-text="date" />
-		<div id="welcome-names" class="gap-1">
-			<span v-text="groom" />
-			<span class="font-script pt-3 px-2" v-text="'&'" />
-			<span v-text="bride" />
-		</div>
+	</div>
+	<div id="welcome-names" class="gap-1">
+		<stylized-names />
 	</div>
 </template>
 
-<style lang="scss" scoped>
-@keyframes fade-in {
+<style lang="scss">
+// Animation for the welcome items staggered fade in
+@keyframes welcome-fade-in {
 	0% { opacity: 0; }
 	100% { opacity: 1; }
 }
-@keyframes fade-out {
+
+// And the entire components fade out effect before the login page is shown
+@keyframes welcome-fade-out {
 	0% {
 		opacity: 1;
-		background-color: var(--bs-secondary);
+		background-color: var(--bs-primary);
 	}
 
 	100% {
 		opacity: 0;
-		background-color: var(--bs-primary);
+		background-color: var(--bs-secondary);
 	}
 }
 
+// Animation for the stylized names component transitioning to where and how it displays on the login page
+@keyframes welcome-slide-up {
+	0% {
+		--stylized-ampersand-color: var(--bs-secondary);
+
+		transform: scale(0.75);
+		color: var(--bs-body);
+		text-shadow: none;
+		margin-top: 62vh;
+	}
+
+	100% {
+		margin-top: 25vh;
+	}
+}
+
+// Define the styling for the main overlay container
 #welcome-overlay {
 	z-index: 1000;
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	height: 100%;
@@ -71,17 +88,25 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	animation-delay: 6.5s;
 	animation-duration: 2s;
 	animation-fill-mode: both;
-	animation-name: fade-out;
+	animation-name: welcome-fade-out;
 
 	// Apply the same animation to each welcome section,
 	// Each one will have its own delay where necessary
 	> div {
 		animation-duration: 1.5s;
 		animation-fill-mode: both;
-		animation-name: fade-in;
+		animation-name: welcome-fade-in;
+	}
+
+	.btn-close {
+		z-index: 1001;
+		position: absolute;
+		right: 0;
+		font-size: large;
 	}
 }
 
+// Position and set the deferred render time for the "Save the Date" text
 #save-the-date {
 	margin-top: 25vh;
 	line-height: 1;
@@ -89,6 +114,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	animation-delay: 0.5s;
 }
 
+// Position and set the deferred render time for the wedding date text
 #welcome-date {
 	position: absolute;
 	top: 0;
@@ -101,29 +127,26 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	animation-delay: 2.5s;
 }
 
+// Position and set the deferred render time for the stylized names text
 #welcome-names {
+	z-index: 1000;
 	position: absolute;
 	min-width: 100%;
-	bottom: 0;
-	margin-bottom: 25vh;
-	font-size: calc(2rem + 4vmin);
+	top: 0;
 	display: flex;
-	flex-wrap: wrap;
-	line-height: 1;
 	justify-content: center;
+	animation: 1.5s linear welcome-fade-in;
+	animation-fill-mode: both;
 	animation-delay: 4.5s;
 
-	.font-script {
-		font-size: calc(3rem + 8vmin);
-		line-height: 0;
-		align-self: center;
-	}
-}
+	// Define the components content to match the use on the login page
+	#stylized-names {
+		--stylized-text-base: max(10vmin, 8vh);
 
-.btn-close {
-	z-index: 1001;
-	font-size: large;
-	position: absolute;
-	right: 0;
+		margin-top: 62vh;
+		animation: 1.5s ease-in-out welcome-slide-up;
+		animation-delay: 6.5s;
+		animation-fill-mode: both;
+	}
 }
 </style>

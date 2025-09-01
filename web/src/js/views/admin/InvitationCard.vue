@@ -1,7 +1,6 @@
 <script setup>
 import { computed, inject, ref, onMounted, useTemplateRef } from 'vue';
 import Router from 'router';
-
 import QRCodeStyling from 'qr-code-styling';
 import { toBlob, toPng } from 'html-to-image';
 
@@ -185,7 +184,12 @@ async function shareImage() {
 				Share
 			</button>
 		</card-header>
-		<div ref="card" class="card shadow ratio ratio-1x1" data-bs-theme="light">
+		<div
+			id="invitation-card"
+			ref="card"
+			class="card shadow ratio ratio-1x1"
+			data-bs-theme="light"
+		>
 			<div class="card-body">
 				<div class="card-content text-body-secondary">
 					<div class="card-text h-100">
@@ -241,7 +245,7 @@ $qr-code-size: v-bind(qrCodeSizePx);
 	height: $qr-code-size;
 }
 
-.card {
+#invitation-card {
 	width: 600px;
 	left: 0;
 	margin-left: calc(50% - 300px);
@@ -253,39 +257,11 @@ $qr-code-size: v-bind(qrCodeSizePx);
 		color: var(--bs-primary);
 		opacity: 1;
 	}
-}
 
-.card-body {
-	width: 100%;
-	padding: $invitation-border-size;
-	border: 2px solid var(--bs-primary);
-
-	&::before,
-	&::after {
-		content: ' ';
-		position: absolute;
-		width: 3 * $invitation-border-size;
-		height: 3 * $invitation-border-size;
-		font-size: 3 * $invitation-border-size;
-		color: var(--bs-primary);
+	.card-body {
+		width: 100%;
+		padding: $invitation-border-size;
 		border: 2px solid var(--bs-primary);
-		line-height: 3 * $invitation-border-size;
-		top: $invitation-border-size;
-		text-align: center;
-	}
-
-	&::before {
-		left: $invitation-border-size;
-	}
-
-	&::after {
-		right: $invitation-border-size;
-	}
-
-	.card-content {
-		border: 2px solid var(--bs-primary);
-		height: 100%;
-		padding: 1rem;
 
 		&::before,
 		&::after {
@@ -297,7 +273,7 @@ $qr-code-size: v-bind(qrCodeSizePx);
 			color: var(--bs-primary);
 			border: 2px solid var(--bs-primary);
 			line-height: 3 * $invitation-border-size;
-			bottom: $invitation-border-size;
+			top: $invitation-border-size;
 			text-align: center;
 		}
 
@@ -308,11 +284,39 @@ $qr-code-size: v-bind(qrCodeSizePx);
 		&::after {
 			right: $invitation-border-size;
 		}
-	}
-}
 
-.card-text {
-	font-size: medium;
+		.card-content {
+			border: 2px solid var(--bs-primary);
+			height: 100%;
+			padding: 1rem;
+
+			&::before,
+			&::after {
+				content: ' ';
+				position: absolute;
+				width: 3 * $invitation-border-size;
+				height: 3 * $invitation-border-size;
+				font-size: 3 * $invitation-border-size;
+				color: var(--bs-primary);
+				border: 2px solid var(--bs-primary);
+				line-height: 3 * $invitation-border-size;
+				bottom: $invitation-border-size;
+				text-align: center;
+			}
+
+			&::before {
+				left: $invitation-border-size;
+			}
+
+			&::after {
+				right: $invitation-border-size;
+			}
+		}
+	}
+
+	.card-text {
+		font-size: medium;
+	}
 }
 
 #decoration-top-left,

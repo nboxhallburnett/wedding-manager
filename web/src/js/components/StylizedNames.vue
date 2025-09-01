@@ -18,7 +18,9 @@ const groom = CONFIG.groom_short;
 <style lang="scss">
 #stylized-names {
 	--stylized-text-base: 3.5rem;
+	--stylized-ampersand-color: var(--bs-primary);
 
+	pointer-events: none;
 	font-size: var(--stylized-text-base);
 	color: var(--bs-white);
 	text-shadow:
@@ -32,7 +34,7 @@ const groom = CONFIG.groom_short;
 		position: relative;
 		font-size: calc(var(--stylized-text-base) * 2);
 		font-weight: bold;
-		color: var(--bs-primary);
+		color: var(--stylized-ampersand-color);
 		line-height: 0.3;
 		margin-bottom: calc(var(--stylized-text-base) * -0.5);
 		z-index: -1;

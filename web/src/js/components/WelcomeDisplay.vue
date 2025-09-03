@@ -25,7 +25,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	<div id="welcome-overlay" class="text-center text-dark">
 		<button
 			type="button"
-			class="btn-close p-3"
+			class="btn-close btn-close-white p-3"
 			aria-label="Close"
 			@click="emit('finished')"
 		/>
@@ -43,13 +43,11 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 // Animation for the welcome items staggered fade in
 @keyframes welcome-fade-in {
 	0% { opacity: 0; }
-	100% { opacity: 1; }
 }
 
 // And the entire components fade out effect before the login page is shown
 @keyframes welcome-fade-out {
 	0% {
-		opacity: 1;
 		background-color: var(--bs-primary);
 	}
 
@@ -62,10 +60,8 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 // Animation for the stylized names component transitioning to where and how it displays on the login page
 @keyframes welcome-slide-up {
 	0% {
-		--stylized-ampersand-color: var(--bs-secondary);
-
 		transform: scale(0.75);
-		color: var(--bs-body);
+		color: var(--bs-white);
 		text-shadow: none;
 		margin-top: 62vh;
 	}
@@ -73,6 +69,9 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	100% {
 		margin-top: 25vh;
 	}
+}
+@keyframes welcome-ampersand-color {
+	0% { color: var(--accent-color); }
 }
 
 // Define the styling for the main overlay container
@@ -85,6 +84,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	width: 100%;
 	overflow: auto;
 	user-select: none;
+	color: var(--bs-white) !important;
 	animation-delay: 6.5s;
 	animation-duration: 2s;
 	animation-fill-mode: both;
@@ -147,6 +147,12 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 		animation: 1.5s ease-in-out welcome-slide-up;
 		animation-delay: 6.5s;
 		animation-fill-mode: both;
+
+		#stylized-ampersand {
+			animation: 1.5s linear welcome-ampersand-color;
+			animation-fill-mode: both;
+			animation-delay: 6.5s;
+		}
 	}
 }
 </style>

@@ -39,7 +39,7 @@ function removeItem(idx) {
 					aria-label="Remove Item"
 					@click="removeItem(idx)"
 				>
-					<div class="btn-close btn-close-white" />
+					<div class="btn-close btn-close" />
 					<div class="visually-hidden">
 						Remove
 					</div>

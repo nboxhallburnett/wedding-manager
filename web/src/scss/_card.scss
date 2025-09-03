@@ -1,10 +1,14 @@
-h4.card-title {
-	z-index: 7;
-	position: sticky;
-	top: calc($card-offset * -1);
-	padding-top: 1rem;
-}
+.card {
+	border-color: var(--bs-border-color);
 
-.card-body {
-	padding-top: 0;
+	h4.card-title {
+		z-index: 7;
+		position: sticky;
+		top: calc($card-offset * -1);
+		padding-top: 1rem;
+	}
+
+	.card-body {
+		padding-top: 0;
+	}
 }

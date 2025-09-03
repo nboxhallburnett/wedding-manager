@@ -88,7 +88,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 		text-align: center;
 		padding: 0.5rem 0.25rem;
 		backdrop-filter: blur(10px) saturate(150%);
-		background-color: rgb(var(--bs-primary-rgb), 20%);
+		background-color: rgb(var(--accent-color-rgb), 30%);
 	}
 
 	#footer-date {
@@ -112,6 +112,8 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 	#col-right {
 		position: relative;
 		font-size: small;
+		display: flex;
+		flex-direction: column;
 
 		&::before {
 			content: '';
@@ -121,7 +123,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 			height: 100%;
 			width: 2px;
 			backdrop-filter: blur(10px) saturate(150%);
-			background-color: rgb(var(--bs-primary-rgb), 20%);
+			background-color: rgb(var(--accent-color-rgb), 30%);
 		}
 	}
 }

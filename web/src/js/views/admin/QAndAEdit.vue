@@ -110,7 +110,7 @@ function moveItem(idx, to) {
 								class="btn btn-sm btn-danger ms-auto"
 								@click="removeItem(idx)"
 							>
-								<div class="btn-close btn-close-white" />
+								<div class="btn-close" />
 								<div class="visually-hidden">
 									Remove
 								</div>

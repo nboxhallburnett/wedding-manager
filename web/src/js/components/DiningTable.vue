@@ -328,7 +328,7 @@ $chair-offset: v-bind(chairOffset);
 	height: $table-size;
 
 	// Which uses a simple border to mark its position
-	border: 0.3vmin solid var(--bs-primary);
+	border: 0.25vmin solid var(--bs-primary);
 
 	// Rendered as a circle
 	border-radius: 50%;
@@ -394,10 +394,10 @@ $chair-offset: v-bind(chairOffset);
 	&.active {
 		background-color: var(--bs-primary);
 		border-color: var(--bs-primary-text-emphasis);
-		color: var(--bs-dark);
+		color: var(--bs-primary-border-subtle);
 
 		&::after {
-			background-color: var(--bs-primary-border-subtle);
+			background-color: var(--bs-primary);
 			border-color: var(--bs-primary-text-emphasis);
 		}
 	}
@@ -451,7 +451,7 @@ $chair-offset: v-bind(chairOffset);
 	position: absolute;
 
 	// Use a double border for the plates to add the illusion of depth
-	border: 0.6vmin double var(--bs-primary);
+	border: 0.6vmin double var(--bs-secondary);
 
 	// Add a background colour matching the body so they render over the table during animation
 	background-color: var(--bs-body-bg);
@@ -466,14 +466,14 @@ $chair-offset: v-bind(chairOffset);
 	transform: rotate(27deg);
 
 	.active > & {
-		background-color: var(--bs-primary-bg-subtle);
+		background-color: var(--bs-secondary-bg-subtle);
 	}
 
 	// Creates the glass that appears next to the plate on the table
 	&::before {
 		content: '';
 		position: absolute;
-		border: 0.4vmin double var(--bs-primary);
+		border: 0.4vmin double var(--bs-secondary);
 		border-radius: 50%;
 		width: 60%;
 		height: 60%;
@@ -486,7 +486,7 @@ $chair-offset: v-bind(chairOffset);
 		position: absolute;
 
 		// Use a double border for the cutlery to give the impression of multiple courses worth
-		border: 0.4vmin double var(--bs-primary);
+		border: 0.4vmin double var(--bs-secondary);
 
 		// Making the top/bottom borders transparent, coupled with the doubled border, gives the
 		// impression of different sizing to the cutlery while using a single element
@@ -510,9 +510,6 @@ $chair-offset: v-bind(chairOffset);
 	width: $chair-size;
 	height: $chair-size;
 
-	// And make it opaque to make it not draw as much attention
-	opacity: 0.5;
-
 	.petal {
 		// Scale the petals relative to the chairs
 		$petal-height: calc($chair-size * 0.3);
@@ -524,8 +521,8 @@ $chair-offset: v-bind(chairOffset);
 		left: calc(50% - calc($petal-width * 0.5));
 		width: $petal-width;
 
-		// Theme them with the primary colour
-		background-color: var(--bs-primary);
+		// Theme them with the accent colour
+		background-color: var(--accent-color);
 
 		// Use an elliptical shape for the petals
 		border-radius: 50% / 100%;

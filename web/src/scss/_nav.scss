@@ -11,16 +11,14 @@
 		}
 	}
 
-	// Disable bootstrap's dark theme override of the nav toggler icon
-	@media (prefers-color-scheme: dark) {
+	.navbar-toggler {
+		z-index: 10;
+		border-color: rgb(var(--bs-white-rgb), 50%);
+
 		.navbar-toggler-icon {
-			--bs-navbar-toggler-icon-bg: inherit;
+			--bs-navbar-toggler-icon-bg: #{escape-svg($navbar-dark-toggler-icon-bg)};
 		}
 	}
-}
-
-.navbar-toggler {
-	z-index: 10;
 }
 
 .nav-item {

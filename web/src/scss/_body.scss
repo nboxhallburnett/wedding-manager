@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 * {
 	box-sizing: border-box;
 	font-optical-sizing: auto;
@@ -31,8 +33,20 @@ body {
 	}
 }
 
+hr {
+	color: var(--bs-border-color);
+	opacity: 1;
+}
+
 :root {
 	--header-height: #{$header-height};
 	--footer-height: #{$footer-height};
 	--card-offset: #{$card-offset};
+	--accent-color: #{$accent};
+	--accent-color-rgb:
+		#{
+		color.channel($accent, 'red', $space: rgb),
+		color.channel($accent, 'green', $space: rgb),
+		color.channel($accent, 'blue', $space: rgb)
+		};
 }

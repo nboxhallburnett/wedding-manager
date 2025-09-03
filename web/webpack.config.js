@@ -49,11 +49,8 @@ module.exports = function ({ WEBPACK_SERVE }) {
 									// Add theme overrides from conf to scss imports
 									if (resourcePath.endsWith('scss')) {
 										let overrides = '';
-										if (config.client.theme.primary) {
-											overrides += `$primary: ${config.client.theme.primary}; `;
-										}
-										if (config.client.theme.secondary) {
-											overrides += `$secondary: ${config.client.theme.secondary}; `;
+										for (const [ key, val ] of Object.entries(config.client.theme)) {
+											overrides += `$${key}: ${val}; `;
 										}
 										return `${overrides}${content}`;
 									}

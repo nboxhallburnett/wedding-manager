@@ -15,7 +15,7 @@ const groom = CONFIG.groom;
 const date = new Date(CONFIG.date).toDateString();
 const where = CONFIG.client.footer[0].text;
 
-const reFill = / fill="(\w+)"/;
+const reFill = / fill="(#?\w+)"/;
 const reViewbox = / viewBox="([\d ]+)"/;
 
 /** @type {AddToast} */
@@ -58,7 +58,8 @@ onMounted(async () => {
 
 	// Fetch the themed colours to use for the QR code content
 	const primaryColour = getComputedStyle($card.value).getPropertyValue('--bs-primary');
-	const dotColour = getComputedStyle($card.value).getPropertyValue('--bs-secondary-color');
+	const whiteColour = getComputedStyle($card.value).getPropertyValue('--bs-white');
+	const accentColour = getComputedStyle($card.value).getPropertyValue('--accent-color');
 
 	// Fetch the ring and border svg content from the server
 	const [ ringSvg, borderSvg ] = await Promise.all([
@@ -72,7 +73,7 @@ onMounted(async () => {
 	]);
 	const themedRingSvg = ringSvgContent
 		// Replace the ring svg fill colour with the themed primary colour
-		.replace(reFill, ` fill="${primaryColour}"`)
+		.replace(reFill, ` fill="${accentColour}"`)
 		// And its view box to be square to better fit the QR code instead of its use as a loading spinner
 		.replace(reViewbox, ' viewBox="377 256 300 300"');
 
@@ -86,34 +87,40 @@ onMounted(async () => {
 		height: qrCodeSize,
 		data: `${window.location.origin}/?id=${Router.currentRoute.value.params.invitationId}`,
 		image: 'data:image/svg+xml,' + encodeURIComponent(themedRingSvg),
+		backgroundOptions: {
+			color: whiteColour
+		},
 		dotsOptions: {
-			color: dotColour,
 			type: 'rounded',
 			gradient: {
 				type: 'radial',
 				rotation: 0,
 				colorStops: [
-					{ offset: 0.3, color: primaryColour },
-					{ offset: 1, color: dotColour }
+					{ offset: 0.25, color: accentColour },
+					{ offset: 0.75, color: primaryColour }
 				]
 			}
 		},
 		cornersSquareOptions: {
-			color: dotColour,
 			type: 'rounded',
 			gradient: {
 				type: 'linear',
 				rotation: 180,
-				colorStops: [ { offset: 0, color: primaryColour }, { offset: 0.7, color: dotColour } ]
+				colorStops: [
+					{ offset: 0, color: accentColour },
+					{ offset: 0.3, color: primaryColour }
+				]
 			}
 		},
 		cornersDotOptions: {
-			color: dotColour,
 			type: 'extra-rounded',
 			gradient: {
 				type: 'linear',
 				rotation: 180,
-				colorStops: [ { offset: 0, color: primaryColour }, { offset: 0.7, color: dotColour } ]
+				colorStops: [
+					{ offset: 0, color: accentColour },
+					{ offset: 0.3, color: primaryColour }
+				]
 			}
 		}
 	});
@@ -250,6 +257,7 @@ $qr-code-size: v-bind(qrCodeSizePx);
 	left: 0;
 	margin-left: calc(50% - 300px);
 	z-index: 12;
+	border: none;
 	user-select: none;
 
 	hr {

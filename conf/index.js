@@ -71,6 +71,22 @@ for (const item of process.env.CLIENT_FOOTER?.split('|') || []) {
 	}
 }
 
+// Process any defined style overrides
+if (process.env.CLIENT_THEME) {
+	// Split the provided scss vars on ,
+	const vars = process.env.CLIENT_THEME.split(',');
+	for (const scssVar of vars) {
+		// The associated value will be defined as a concatenated upper case string of the var name
+		const key = `CLIENT_THEME_${scssVar.toUpperCase().replaceAll('-', '')}`;
+		const val = process.env[key];
+		if (!val) {
+			console.warn(`Ignoring scss var "$${scssVar}", no associated value defined in env (expecting ${key})`);
+		} else {
+			config.client.theme[scssVar] = val;
+		}
+	}
+}
+
 // If there are any errors, log them and exit
 if (errors.length) {
 	console.error('Error: Missing required configuration item(s):', required);
@@ -107,7 +123,5 @@ module.exports = Object.freeze(config);
  * @property {String} server.session.secret Secret used to sign the session.
  * @property {Object} client Configuration for the front-end client.
  * @property {FooterItem[]} client.footer Data to include in the UI footer.
- * @property {Object} client.theme Values to use for default theme overrides.
- * @property {String} [client.theme.primary] Value to use for the primary theme colour.
- * @property {String} [client.theme.secondary] Value to use for the secondary theme colour.
+ * @property {{ primary: String, [key: String]: String }} client.theme Values to use for default theme overrides
  */

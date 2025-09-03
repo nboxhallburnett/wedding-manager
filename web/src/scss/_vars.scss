@@ -1,6 +1,9 @@
 // Theming
 $color-mode-type: media-query;
 
+// Ensure that there is a value for the accent var
+$accent: $secondary !default;
+
 // Shadows
 $enable-shadows: true;
 

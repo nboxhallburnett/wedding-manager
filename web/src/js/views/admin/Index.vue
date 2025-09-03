@@ -16,6 +16,10 @@ const links = [
 	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
 	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } }
 ];
+// Only link to the colour palette view if there is a palette defined
+if (CONFIG.client.palette.length) {
+	links.push({ text: 'Colour Palette', to: { name: 'Admin View Colour Palette' } });
+}
 </script>
 
 <template>

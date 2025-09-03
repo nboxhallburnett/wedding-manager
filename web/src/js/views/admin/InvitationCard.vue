@@ -16,6 +16,7 @@ const date = new Date(CONFIG.date).toDateString();
 const where = CONFIG.client.footer[0].text;
 
 const reFill = / fill="(#?\w+)"/;
+const reStroke = / stroke="(#?\w+)"/;
 const reViewbox = / viewBox="([\d ]+)"/;
 
 /** @type {AddToast} */
@@ -74,6 +75,7 @@ onMounted(async () => {
 	const themedRingSvg = ringSvgContent
 		// Replace the ring svg fill colour with the themed primary colour
 		.replace(reFill, ` fill="${accentColour}"`)
+		.replace(reStroke, ` stroke="${whiteColour}"`)
 		// And its view box to be square to better fit the QR code instead of its use as a loading spinner
 		.replace(reViewbox, ' viewBox="377 256 300 300"');
 
@@ -88,7 +90,7 @@ onMounted(async () => {
 		data: `${window.location.origin}/?id=${Router.currentRoute.value.params.invitationId}`,
 		image: 'data:image/svg+xml,' + encodeURIComponent(themedRingSvg),
 		backgroundOptions: {
-			color: whiteColour
+			color: 'transparent'
 		},
 		dotsOptions: {
 			type: 'rounded',

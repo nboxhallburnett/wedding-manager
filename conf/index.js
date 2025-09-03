@@ -29,6 +29,7 @@ const config = {
 	},
 	client: {
 		footer: [],
+		palette: [],
 		theme: {
 			primary: process.env.CLIENT_THEME_PRIMARY,
 			secondary: process.env.CLIENT_THEME_SECONDARY
@@ -68,6 +69,15 @@ for (const item of process.env.CLIENT_FOOTER?.split('|') || []) {
 		config.client.footer.push({ text, url });
 	} else {
 		console.warn('Ignoring configured footer item:', item, '- Does not match required format');
+	}
+}
+
+for (const item of process.env.CLIENT_PALETTE?.split('|') || []) {
+	const [ name, value ] = item.split(',');
+	if (name && value) {
+		config.client.palette.push({ name, value });
+	} else {
+		console.warn('Invalid palette value', item);
 	}
 }
 

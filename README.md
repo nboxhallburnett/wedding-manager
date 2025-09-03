@@ -121,6 +121,7 @@ Name | Description | Type | Default
 `SERVER_SESSION_NAME` | Name to use for the browser session cookie | String | `'invitation'`
 `SERVER_SESSION_SECRET` | The secret used to sign the session ID cookie | String value that is supported by the key param of the Node.js [`crypto.createHmac()`](https://nodejs.org/api/crypto.html#cryptocreatehmacalgorithm-key-options) | N/A
 `CLIENT_FOOTER` | Content to include in the footer of the front-end client | An individual footer item is defined in markdown link syntax `[text](url)`, and multiple items split by `\|` | N/A
+`CLIENT_PALETTE` | Colour palette to show on the admin colour palette view. Note this does not apply to any stylesheets | An individual palette item is defined in as comma-separated text and value, with multiple items split by `\|` | N/A
 `CLIENT_THEME` | Names of scss variables to overload the base styles with | comma-separated list of variable names (character set `a-zA-Z-`) | N/A
 `CLIENT_THEME_*` | Value of the scss variable defined in `CLIENT_THEME`, where `*` is an all-caps equivalent of the variable name | Valid scss variable value | N/A
 
@@ -149,6 +150,7 @@ SERVER_DB_PASSWORD=hunter2
 SERVER_SESSION_SECRET=sOm35ECretV4lUE
 
 CLIENT_FOOTER="[Example Venue](https://venue.example.com/)"
+CLIENT_PALETTE="Blue,#0000ff|White,#ffffff|Gold,#ffd700"
 CLIENT_THEME=primary,secondary,border-color
 CLIENT_THEME_PRIMARY=#4f7942
 CLIENT_THEME_SECONDARY=darkslateblue

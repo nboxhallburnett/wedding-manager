@@ -37,7 +37,8 @@ const csp = {
 	'font-src': '\'self\' https://fonts.gstatic.com',
 	// Don't allow the site to be framed
 	'frame-ancestors': '\'none\'',
-	'frame-src': '\'none\'',
+	// Add google.com as the only frame source to allow an iframe of google maps for the location on the details page
+	'frame-src': 'https://www.google.com',
 	// Allow images from ourself and as data blobs (such as .svg loaded as data urls)
 	'img-src': '\'self\' data:',
 	// Don't allow objects

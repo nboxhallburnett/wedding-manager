@@ -1,7 +1,7 @@
 <script setup>
 import ScrollSpy from 'bootstrap/js/dist/scrollspy';
 
-import { ref, useTemplateRef, watch, nextTick, onMounted } from 'vue';
+import { ref, useTemplateRef, watch, nextTick } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 
 import { classExtensions } from 'lib/showdown';
@@ -122,16 +122,22 @@ watch(content, () => {
 		$generatedContainer.replaceChildren($replacementContainer);
 		// Allow vue to propagate our changes onto the DOM
 		nextTick(() => {
-			// And finally tell the bootstrap scrollspy instance to refresh the items that it is tracking
-			scrollSpyInstance.value.refresh();
+			// Get the calculated scroll margin offset to pass through to the scrollSpy instance
+			const scrollMargin = Number(window.getComputedStyle(domSection).scrollMarginTop.split('px')[0]);
+			// Finally create the bootstrap scrollspy instance now that the target element exists on the DOM
+			scrollSpyInstance.value = new ScrollSpy(document.getElementById('app-container'), {
+				target: '#about-navbar',
+				offset: scrollMargin * -1
+			});
 		});
 	});
 });
 
-onMounted(() => {
-	// Finally create a new bootstrap scrollspy instance now that the target element exists on the DOM
-	scrollSpyInstance.value = new ScrollSpy(document.getElementById('app-container'), { target: '#about-navbar' });
-});
+function scrollToItem(id) {
+	document.getElementById(id).scrollIntoView({
+		behavior: 'smooth'
+	});
+}
 </script>
 
 <template>
@@ -142,7 +148,6 @@ onMounted(() => {
 				class="col-12 col-md-8 scrollspy-container"
 				data-bs-spy="scroll"
 				data-bs-target="#about-navbar"
-				data-bs-smooth-scroll="true"
 				tabindex="0"
 			>
 				<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
@@ -151,13 +156,19 @@ onMounted(() => {
 				<nav id="about-navbar" class="flex-column align-items-stretch">
 					<nav class="nav nav-pills flex-column">
 						<template v-for="section in navItems" :key="section.id">
-							<a class="nav-link" :href="`#${section.id}`" v-text="section.title" />
+							<a
+								class="nav-link"
+								:href="`#${section.id}`"
+								@click.prevent="scrollToItem(section.id)"
+								v-text="section.title"
+							/>
 							<nav v-if="section.items.length" class="nav nav-pills flex-column">
 								<a
 									v-for="item in section.items"
 									:key="item.id"
 									class="nav-link ms-3 my-1"
 									:href="`#${item.id}`"
+									@click.prevent="scrollToItem(item.id)"
 									v-text="item.title"
 								/>
 							</nav>
@@ -193,5 +204,11 @@ onMounted(() => {
 
 	// Set the height to the mozilla max content value to get around firefox not respecting max-height: fit-content;
 	height: max-content;
+}
+</style>
+
+<style lang="scss">
+.scrollspy-container div {
+	scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 </style>

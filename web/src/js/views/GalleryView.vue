@@ -69,15 +69,15 @@ supportsFormat(avifData).then(() => 'avif')
 					v-if="!galleryLoading && preferredType"
 					id="gallery-carousel"
 					class="carousel slide"
-					:class="{ 'img-thumbnail': !showModal, 'carousel-fade': showModal }"
+					:class="{ 'img-thumbnail': !showModal }"
 				>
-					<div class="carousel-indicators">
+					<div v-show="!showModal" class="carousel-indicators">
 						<button
 							v-for="(_src, idx) in items"
 							:key="idx"
 							type="button"
 							data-bs-target="#gallery-carousel"
-							:class="{ active: idx === 0, 'd-none': showModal }"
+							:class="{ active: idx === 0 }"
 							:data-bs-slide-to="idx"
 							aria-current="true"
 							:aria-label="`Image ${idx + 1}`"
@@ -135,7 +135,7 @@ supportsFormat(avifData).then(() => 'avif')
 				>
 					<div class="modal-dialog modal-fullscreen">
 						<div class="modal-content bg-transparent">
-							<div class="modal-body text-center align-content-center">
+							<div class="modal-body text-center">
 								<div id="modal-content" />
 								<button
 									type="button"
@@ -161,13 +161,21 @@ supportsFormat(avifData).then(() => 'avif')
 
 .carousel-item {
 	img:not(.modal-image) {
-		object-fit: cover;
+		max-width: 100%;
+		height: 100%;
+		margin-left: auto;
+		margin-right: auto;
 		cursor: zoom-in;
 	}
 
 	.carousel-caption {
 		inset: 0 0 auto;
 	}
+}
+
+.modal-body div {
+	height: 100%;
+	align-content: center;
 }
 
 .modal-image {

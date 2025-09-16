@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 
 import InfoPopover from './InfoPopover.vue';
 import { escapeHtml } from 'lib/formatter';
@@ -11,7 +11,8 @@ const props = defineProps({
 	id: { type: String, default: '' },
 	occupants: { type: Array, default: () => [] },
 	searchTerm: { type: String, default: '' },
-	style: { type: String, default: 'circle' }
+	style: { type: String, default: 'circle' },
+	rotation: { type: Number, default: 0 }
 });
 
 const emit = defineEmits([ 'setSeat' ]);
@@ -23,6 +24,7 @@ const tableSize = ref(`${tableSizeVMin}vmin`);
 const chairSize = ref(`${chairSizeVMin}vmin`);
 const chairOffset = ref(`${(tableSizeVMin - (chairSizeVMin * 1.4)) * -1}vmin`);
 const diameter = ref(`${tableSizeVMin + (3 * chairSizeVMin)}vmin`);
+const rotationDeg = computed(() => `${props.rotation || 0}deg`);
 
 /**
  * Calculates the appropriate transform for a chair around the table at a given index
@@ -47,7 +49,7 @@ function hintText(occupant) {
 		return 'Unassigned';
 	}
 
-	if (!Object.prototype.hasOwnProperty.call(occupant, 'id')) {
+	if (!Object.prototype.hasOwnProperty.call(occupant, 'status')) {
 		return escapeHtml(occupant.name);
 	}
 
@@ -82,13 +84,26 @@ function hasSearchMatch(guest) {
  * @returns {'top'|'right'|'bottom'|'left'} Placement to use for the popover
  */
 function chairPopoverPlacement(idx) {
-	// For rectangular tables, always put the popover above the chair
+	// For rectangular tables, always put the popover "above" the chair
 	if (props.style === 'rectangle') {
-		return 'top';
+		// If the chair is in the top quarter of the table, put it above
+		if (props.rotation < 45 || props.rotation > 315) {
+			return 'top';
+		}
+		// Likewise, in the right quarter put it to the right
+		if (props.rotation >= 45 && props.rotation <= 135) {
+			return 'right';
+		}
+		// Same for the bottom
+		if (props.rotation > 135 && props.rotation < 225) {
+			return 'bottom';
+		}
+		// Which leaves the left quarter
+		return 'left';
 	}
 	// Otherwise, for circular tables calculate the position dependant on the chairs position around it.
 	const incr = 360 / props.occupants.length;
-	const rotation = idx * incr;
+	const rotation = (props.rotation + (idx * incr)) % 360;
 	// If the chair is in the top quarter of the table, put it above
 	if (rotation < 45 || rotation > 315) {
 		return 'top';
@@ -247,10 +262,10 @@ function onDropped(evt, chairIdx) {
 						@dragend="onDragEnd"
 						@drag="onDragging"
 
-						@dragenter.prevent="onDragEnter"
-						@dragover.prevent="onDragOver"
-						@dragleave.prevent="evt => onDragLeave(evt, idx)"
-						@drop.prevent="evt => onDropped(evt, idx)"
+						@dragenter.prevent="evt => edit && onDragEnter(evt)"
+						@dragover.prevent="evt => edit && onDragOver(evt)"
+						@dragleave.prevent="evt => edit && onDragLeave(evt, idx)"
+						@drop.prevent="evt => edit && onDropped(evt, idx)"
 					>
 						<span class="drag-text" v-text="idx + 1" />
 						<div class="plate" />
@@ -265,6 +280,8 @@ function onDropped(evt, chairIdx) {
 $table-size: v-bind(tableSize);
 $chair-size: v-bind(chairSize);
 $chair-offset: v-bind(chairOffset);
+$diameter: v-bind(diameter);
+$rotation: v-bind(rotationDeg);
 
 // Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position
 @keyframes fade-slide-in {
@@ -294,8 +311,8 @@ $chair-offset: v-bind(chairOffset);
 
 .dining-container {
 	// Set a width and height that is large enough to contain the table and chairs
-	width: v-bind(diameter);
-	height: v-bind(diameter);
+	width: $diameter;
+	height: $diameter;
 
 	// Add padding around the table with enough room to fit the chairs around the table
 	padding: calc(1.5 * v-bind(chairSize));
@@ -303,7 +320,6 @@ $chair-offset: v-bind(chairOffset);
 	&.rectangle {
 		padding-left: 0;
 		padding-right: 0;
-		height: calc(v-bind(diameter) * 0.5);
 	}
 }
 
@@ -313,6 +329,8 @@ $chair-offset: v-bind(chairOffset);
 	top: 50%;
 	text-align: center;
 	width: 100%;
+	transform: rotate(calc($rotation * -1));
+	color: var(--bs-dark);
 
 	.rectangle & {
 		top: 80%;
@@ -333,11 +351,15 @@ $chair-offset: v-bind(chairOffset);
 	// Rendered as a circle
 	border-radius: 50%;
 
+	// Apply rotation from layout control
+	transform: rotate($rotation);
+
 	.rectangle & {
 		height: calc($table-size * 0.5);
 		width: v-bind(diameter);
 		border-radius: 0.4vmin;
 		text-align: center;
+		margin-top: calc($table-size * 0.25);
 	}
 }
 
@@ -388,6 +410,11 @@ $chair-offset: v-bind(chairOffset);
 
 	.drag-text {
 		z-index: 2;
+		transform: rotate(calc(calc($rotation + var(--chair-rotation)) * -1));
+
+		.rectangle & {
+			transform: rotate(calc($rotation * -1));
+		}
 	}
 
 	// If the chair is selected then highlight it with a fill

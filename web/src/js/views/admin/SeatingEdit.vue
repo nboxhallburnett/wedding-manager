@@ -18,7 +18,11 @@ const headerHeight = Number(getComputedStyle(document.body)
 	.split('px')[0]);
 
 const guests = ref([]);
-const tables = ref([]);
+const seating = ref({
+	ratio: 1,
+	scale: 1,
+	tables: []
+});
 const searchTerm = ref('');
 const searchSuggestions = ref([]);
 const maxGuestHeight = ref(`${window.innerHeight - (2 * headerHeight)}px`);
@@ -67,28 +71,35 @@ useLoader([
 	// Map the stored table structure to the enriched version we use for the form.
 	// This includes adding an id for vue to track each item with, and using the above
 	// defined name/status enriched object in the place of the stored occupant
-	tables.value = (seatingResponse.result.data || []).map(table => ({
-		id: nanoid(),
-		guests: table.map(occupant => {
-			return guests.value.find(guest => guest.id === occupant.id
-				&& guest.idx === occupant.idx
-				&& guest.child === occupant.child
-			) || {};
-		})
-	}));
+	seating.value = {
+		...seatingResponse.result.data,
+		tables: (seatingResponse.result.data.tables || seatingResponse.result.data || []).map(table => ({
+			...table,
+			guests: (table.guests || []).map(occupant => {
+				return guests.value.find(guest => guest.id === occupant.id
+					&& guest.idx === occupant.idx
+					&& guest.child === occupant.child
+				) || {};
+			})
+		}))
+	};
 });
 
 const { onSubmit } = useForm({
 	path: 'seating',
 	method: 'PUT',
 	body() {
-		// Flatten the table to the base array of arrays, and return the supplementary data from the table guest store
+		// Remove the enriching we added in the loader and return only what we store in the db
 		return {
-			items: tables.value.map(table => table.guests.map(guest => ({
-				'id': guest.id,
-				'idx': guest.idx,
-				'child': guest.child
-			})))
+			...seating.value,
+			tables: seating.value.tables.map(table => ({
+				...table,
+				guests: table.guests.map(guest => ({
+					id: guest.id,
+					idx: guest.idx,
+					child: guest.child
+				}))
+			}))
 		};
 	},
 	onSuccess() {
@@ -104,7 +115,7 @@ const { onSubmit } = useForm({
  */
 const unassignedGuests = computed(() => {
 	return guests.value.filter(guest => {
-		return !tables.value.some(table => table.guests.some(tableGuest => {
+		return !seating.value.tables.some(table => table.guests.some(tableGuest => {
 			return tableGuest.id === guest.id && tableGuest.idx === guest.idx && tableGuest.child === guest.child;
 		}));
 	});
@@ -114,7 +125,7 @@ const unassignedGuests = computed(() => {
  * Add a new table to the array
  */
 function addTable() {
-	tables.value.push({
+	seating.value.tables.push({
 		id: nanoid(),
 		guests: [ {} ]
 	});
@@ -125,7 +136,7 @@ function addTable() {
  * @param {Number} idx Index of the table to remove
  */
 function removeTable(idx) {
-	tables.value.splice(idx, 1);
+	seating.value.tables.splice(idx, 1);
 }
 /**
  * Move a table order in the list
@@ -134,7 +145,7 @@ function removeTable(idx) {
  * @param {Number} to Index to move the table to
  */
 function moveTable(idx, to) {
-	[ tables.value[idx], tables.value[to] ] = [ tables.value[to], tables.value[idx] ];
+	[ seating.value.tables[idx], seating.value.tables[to] ] = [ seating.value.tables[to], seating.value.tables[idx] ];
 }
 
 /**
@@ -153,16 +164,16 @@ function setSeat(tableIdx, { occupant, chairIdx }) {
 	// If they were already in a chair, swap them with any existing occupant in the target chair
 	if (sourceChairIdx !== undefined && sourceTableIdx !== undefined) {
 		[
-			tables.value[tableIdx].guests[chairIdx],
-			tables.value[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)]
+			seating.value.tables[tableIdx].guests[chairIdx],
+			seating.value.tables[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)]
 		] = [
-			tables.value[Number(sourceTableIdx) - 1]?.guests?.[Number(sourceChairIdx)] || {},
-			tables.value[tableIdx].guests[chairIdx]
+			seating.value.tables[Number(sourceTableIdx) - 1]?.guests?.[Number(sourceChairIdx)] || {},
+			seating.value.tables[tableIdx].guests[chairIdx]
 		];
 
 	// Otherwise, just set them in the seat
 	} else {
-		tables.value[tableIdx].guests[chairIdx] = occupant;
+		seating.value.tables[tableIdx].guests[chairIdx] = occupant;
 	}
 }
 
@@ -298,7 +309,7 @@ function onDropped(evt) {
 	const sourceChairIdx = occupant.chairIdx;
 	const sourceTableIdx = occupant.tableIdx;
 	if (sourceChairIdx !== undefined && sourceTableIdx !== undefined) {
-		tables.value[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)] = {};
+		seating.value.tables[Number(sourceTableIdx) - 1].guests[Number(sourceChairIdx)] = {};
 	}
 }
 </script>
@@ -319,7 +330,7 @@ function onDropped(evt) {
 			</datalist>
 			<div class="col-12 order-md-0 order-1" :class="{ 'col-md-7 mt-3': unassignedGuests.length }">
 				<transition-group name="list" tag="div">
-					<div v-for="(table, idx) in tables" :key="table.id">
+					<div v-for="(table, idx) in seating.tables" :key="table.id">
 						<hr v-if="idx">
 						<dining-table
 							:id="String(idx + 1)"
@@ -376,7 +387,7 @@ function onDropped(evt) {
 								</div>
 							</button>
 							<button
-								v-if="tables[idx + 1]"
+								v-if="seating.tables[idx + 1]"
 								class="icon-caret fs-4 p-0"
 								type="button"
 								@click.prevent.stop="moveTable(idx, idx + 1)"
@@ -388,7 +399,7 @@ function onDropped(evt) {
 						</div>
 					</div>
 				</transition-group>
-				<hr v-if="tables.length">
+				<hr v-if="seating.tables.length">
 				<button
 					role="button"
 					class="btn btn-primary"

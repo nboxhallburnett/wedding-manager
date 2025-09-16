@@ -35,13 +35,13 @@ module.exports = {
 		}
 
 		// Fetch the seating plan record
-		const doc = await seatingDb.findOne({}, { projection: { _id: 0 } });
+		const data = await seatingDb.findOne({}, { projection: { _id: 0 } });
 
 		if (String(req.query.enrich) === 'true') {
 			// If we're enriching the response, loop over each table
-			for (const table of doc.items) {
+			for (const table of data.tables) {
 				// And each set of that table
-				for (const seat of table) {
+				for (const seat of table.guests) {
 					// And add the occupants name from the associated record of the stored invitation ID
 					seat.name = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.name;
 					if (req.ctx.admin) {
@@ -49,23 +49,25 @@ module.exports = {
 						seat.main_id = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.main_id;
 						seat.dessert_id = guestMap[seat.id]?.[seat.child ? 'children' : 'guests']?.[seat.idx]?.dessert_id;
 					}
-					// We no longer need the invitation ID or index in the record, so remove that now
-					delete seat.id;
-					delete seat.idx;
+					if (!req.ctx.admin) {
+						// We no longer need the invitation ID or index in the record, so remove that now for non-admin users
+						delete seat.id;
+						delete seat.idx;
+					}
 				}
 			}
 		}
 
 		// Omit invitation id and idx from the response for non-elevated users.
 		// No need to do it for enriched queries either as it is already sanitized above
-		if (!req.ctx.admin && doc?.items?.length && !req.query.enrich) {
-			for (const table of doc.items) {
-				for (const seat of table) {
+		if (!req.ctx.admin && data?.tables?.length && !req.query.enrich) {
+			for (const table of data.tables) {
+				for (const seat of table.guests) {
 					delete seat.id;
 					delete seat.idx;
 				}
 			}
 		}
-		return res.json({ success: true, data: doc?.items || [] });
+		return res.json({ success: true, data });
 	}
 };

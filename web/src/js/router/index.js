@@ -174,6 +174,11 @@ const router = createRouter({
 					component: () => import('../views/admin/SeatingEdit.vue')
 				},
 				{
+					path: 'seating/layout',
+					name: 'Admin Edit Seating Layout',
+					component: () => import('../views/admin/SeatingLayoutEdit.vue')
+				},
+				{
 					path: 'palette',
 					name: 'Admin View Colour Palette',
 					component: () => import('../views/admin/PaletteView.vue')

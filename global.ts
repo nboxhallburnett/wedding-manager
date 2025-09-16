@@ -185,5 +185,24 @@ type DiningTableSeat = {
 	child: Boolean
 }
 
-/** Definition of the seating arrangement of a specific dining table */
-type DiningTable = DiningTableSeat[]
+type DiningRoom = {
+	/** Date the room was last updated */
+	updated: Date,
+	/** Ratio of height to width of the dining room */
+	ratio: Number,
+	/** Scale to apply to the tables in the dining room */
+	scale: Number,
+	/** The set of dining tables in the room */
+	tables: {
+		/** ID of the dining table */
+		id: String,
+		/** Position (in percent) of the table in the room on the X axis */
+		x: Number,
+		/** Position (in percent) of the table in the room on the Y axis */
+		y: Number,
+		/** Rotation of the table in the room in degrees */
+		rotation: Number,
+		/** The list of occupants of the dining table */
+		guests: DiningTableSeat[]
+	}[]
+}

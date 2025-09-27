@@ -76,7 +76,7 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 }
 
 @keyframes close-fade-out {
-	100% { opacity: 0% }
+	100% { opacity: 0%; }
 }
 
 #welcome-close {

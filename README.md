@@ -186,7 +186,7 @@ The only data that needs to be created in the database manually before it can be
 db.invitations.insertOne({ id: '<your_id>', admin: true })
 ```
 
-The running service has no ways of adding its own administrative users by design, so this is the only way of created elevated access.
+Once the initial administrative user has been created and the service is up and running, additional administrators can be created by navigating to the Administrators view on the admin home page.
 
 > [!IMPORTANT]
 > One thing to note around elevated users, due to the deliberately simple authentication nature of the application, by default sessions for invitation records with elevated access will only ever be granted by requests made within the local network of the running server. See [src/lib/admin.js](./src/lib/admin.js) for more details on which addresses that includes.
@@ -206,7 +206,7 @@ Once you have the client configured, you will need to create an admin user which
 db.invitations.insertOne({ id: '<your_google_email>', admin: true, email: true })
 ```
 
-This may change in a future version to allow configuration of admin users via the applications UI/API, but for now it can be done manually.
+External OAuth administrators can also be created via the Administrators administrative view on the running service once the Client ID has been configured.
 
 ## Deployment
 

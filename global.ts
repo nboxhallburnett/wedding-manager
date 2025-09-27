@@ -17,6 +17,8 @@ type Invitation = {
 	login_count: Number,
 	/** Whether the Invitation holder has elevated access to the system */
 	admin?: Boolean,
+	/** Whether the Invitation ID is an email address to have its access verified via external OAuth */
+	email?: Boolean,
 	/** Guests the Invitation relates to */
 	guests: {
 		/** Name of the guest */

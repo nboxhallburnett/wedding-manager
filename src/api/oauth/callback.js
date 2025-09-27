@@ -45,7 +45,15 @@ module.exports = {
 			throw new Error('"credential" contained an invalid value');
 		}
 
-		const invitation = await invitationDb.findOne({ id: req.session.invitationId }, { projection: { _id: 0 } });
+		// Fetch the invitation record and increment the login count
+		const invitation = await invitationDb.findOneAndUpdate({
+			id: req.session.invitationId
+		}, {
+			$inc: { login_count: 1 }
+		}, {
+			projection: { _id: 0 },
+			returnDocument: 'after'
+		});
 
 		// Remove the pending values from the session record
 		delete req.session.pending;

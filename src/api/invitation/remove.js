@@ -16,7 +16,7 @@ module.exports = {
 			throw new Error('"invitationId" contained an invalid value');
 		}
 
-		req.ctx.log('Removing invitation for "%s" with %d total guests. Invitation ID: %s', invitation.guests[0].name, invitation.guests.length, invitation.id);
+		req.ctx.log('Removing invitation for "%s" with %d total guests. Invitation ID: %s', invitation.guests?.[0]?.name || invitation.id, invitation.guests?.length, invitation.id);
 
 		// Remove the record from the collection
 		await invitationDb.deleteOne({ id: invitation.id });

@@ -13,8 +13,9 @@ const links = [
 	{ text: 'Our Story', to: { name: 'Admin Our Story Content' } },
 	{ text: 'Gallery', to: { name: 'Admin Gallery Content' } },
 	{ text: 'Calendar', to: { name: 'Admin List Calendar Events' } },
-	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
-	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } }
+	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
+	{ text: 'Administrators', to: { name: 'Admin View Administrators' } },
+	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } }
 ];
 // Only link to the colour palette view if there is a palette defined
 if (CONFIG.client.palette.length) {

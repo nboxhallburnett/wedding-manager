@@ -182,6 +182,16 @@ const router = createRouter({
 					path: 'palette',
 					name: 'Admin View Colour Palette',
 					component: () => import('../views/admin/PaletteView.vue')
+				},
+				{
+					path: 'admin',
+					name: 'Admin View Administrators',
+					component: () => import('../views/admin/AdminList.vue')
+				},
+				{
+					path: 'admin/new',
+					name: 'Admin Create Administrator',
+					component: () => import('../views/admin/AdminCreate.vue')
 				}
 			]
 		},

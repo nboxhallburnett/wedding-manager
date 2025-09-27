@@ -184,6 +184,7 @@ function nextPage() {
 					<slot :item />
 					<td v-if="actions" class="text-end py-1 align-middle">
 						<button
+							v-if="actions(item).length"
 							:id="`table-${item.id}-actions`"
 							class="icon-caret fs-4 p-0"
 							type="button"

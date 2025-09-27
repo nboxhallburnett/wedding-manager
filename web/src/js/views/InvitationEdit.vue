@@ -1,6 +1,8 @@
 <script setup>
-import { inject, ref, nextTick, useTemplateRef, watch } from 'vue';
+import { inject, ref, nextTick, useTemplateRef, watch, onMounted } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import Collapse from 'bootstrap/js/dist/collapse';
+import Modal from 'bootstrap/js/dist/modal';
 import Router from 'router';
 
 import { useForm } from 'composables/form';
@@ -24,12 +26,17 @@ const addToast = inject('addToast');
 
 /** @type {Ref<Invitation>} */
 const invitation = ref({});
+const initialValue = ref(null);
 
 /** @type {Ref<MenuItem[]>} */
 const menu = ref([]);
 
 const songList = useTemplateRef('songList');
 const guestCollapses = ref([]);
+
+const $modal = useTemplateRef('modal');
+const navWarningModal = ref(null);
+const guardModalResolve = ref(null);
 
 // Define available attendance status'
 const statusOptions = [
@@ -70,6 +77,8 @@ const { onSubmit } = useForm({
 		if (!adminEdit) {
 			session.value = invitation.value;
 		}
+		// Update the stored initial value so the navigation guard doesn't falsely prompt for unsaved changes
+		initialValue.value = JSON.stringify(invitation.value);
 		Router.push({ name: adminEdit ? 'Admin List Invitations' : 'Home' });
 	},
 	onError(data) {
@@ -99,6 +108,9 @@ useLoader([
 		invitation.value.children = [];
 	}
 
+	// Track the initial value of the form to determine if there were any modifications in the exit guard
+	initialValue.value = JSON.stringify(invitation.value);
+
 	nextTick(() => {
 		guestCollapses.value = [];
 		for (let i = 0; i < invitation.value.guests.length; i++) {
@@ -122,6 +134,33 @@ watch(() => invitation.value.guests?.map(g => Boolean(g.name)), (nameExists, pre
 			guestCollapses.value[i].hide();
 		}
 	}
+});
+
+onMounted(() => {
+	// Instantiate the navigation guard warning modal when the DOM is loaded with the page content
+	navWarningModal.value = new Modal($modal.value, { backdrop: false });
+});
+
+onBeforeRouteLeave(async () => {
+	// If the form content is unchanged from initial load, continue on our way
+	if (initialValue.value === JSON.stringify(invitation.value)) {
+		return true;
+	}
+
+	// The form has unsaved changes, so show the warning modal
+	navWarningModal.value.show();
+
+	// Wait for the modal to either be dismissed or navigation is confirmed
+	const result = await new Promise(resolve => {
+		guardModalResolve.value = resolve;
+		$modal.value.addEventListener('hidden.bs.modal', () => resolve(false), { once: true });
+	});
+
+	// Unset the resolve promise
+	guardModalResolve.value = null;
+
+	// And return based on whether stay or leave was selected
+	return result;
 });
 
 /**
@@ -432,5 +471,48 @@ function getMenuOptions(course, child) {
 				placeholder="Leave us a message!"
 			/>
 		</form>
+
+		<teleport to="body">
+			<div
+				ref="modal"
+				class="modal fade"
+				tabindex="-1"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog pt-5">
+					<div class="modal-content">
+						<div class="modal-header border-0">
+							<h5 class="modal-title">
+								You Have Unsaved Changes
+							</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Close"
+							/>
+						</div>
+						<div class="modal-body">
+							<div id="modal-content">
+								Are you sure you want to leave the page?
+							</div>
+						</div>
+						<div class="modal-footer border-0">
+							<button type="button" class="btn btn-link" data-bs-dismiss="modal">
+								Stay
+							</button>
+							<button
+								type="button"
+								class="btn btn-primary"
+								data-bs-dismiss="modal"
+								@click="() => guardModalResolve(true)"
+							>
+								Leave
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</teleport>
 	</card-body>
 </template>

@@ -195,8 +195,7 @@ Once the initial administrative user has been created and the service is up and 
 
 ### External Administrative Access
 
-External administrative access to the application can optionally be enabled via integration with Google's OAuth 2.0 sign in. To enable this functionality, follow step 1 and optionally step 2 on Google's [
-Sign in with Google for Web Setup Guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
+External administrative access to the application can optionally be enabled via integration with Google's OAuth 2.0 sign in. To enable this functionality, follow step 1 and optionally step 2 on Google's [Sign in with Google for Web Setup Guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
 
 Once you have the Client ID from your Google Cloud account, set it in your configuration file as `OAUTH_CLIENTID` and rebuild the application.
 

@@ -3,7 +3,11 @@ type WeddingManagerRequest<P={}, B={}, Q=import('qs').ParsedQs> = import('expres
 		/** Authorized Invitation identifier */
 		invitationId?: Invitation['id'],
 		/** Whether the session is for an admin */
-		admin?: Boolean
+		admin?: Boolean,
+		/** Whether the session is pending an OAuth flow to confirm its validity */
+		pending?: Boolean,
+		/** The associated state value to validate an OAuth flow */
+		state?: String
 	},
 	/** Data contextual to the request */
 	ctx: {

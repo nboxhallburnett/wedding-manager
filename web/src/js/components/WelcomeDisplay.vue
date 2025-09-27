@@ -22,13 +22,14 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 </script>
 
 <template>
+	<button
+		id="welcome-close"
+		type="button"
+		class="btn-close btn-close-white p-3"
+		aria-label="Close"
+		@click="emit('finished')"
+	/>
 	<div id="welcome-overlay" class="text-center text-dark">
-		<button
-			type="button"
-			class="btn-close btn-close-white p-3"
-			aria-label="Close"
-			@click="emit('finished')"
-		/>
 		<div id="save-the-date" class="font-script">
 			Save the Date
 		</div>
@@ -74,6 +75,21 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 	0% { color: var(--accent-color); }
 }
 
+@keyframes close-fade-out {
+	100% { opacity: 0% }
+}
+
+#welcome-close {
+	z-index: 1001;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: large;
+	animation-delay: 6.5s;
+	animation-duration: 2s;
+	animation-name: close-fade-out;
+}
+
 // Define the styling for the main overlay container
 #welcome-overlay {
 	z-index: 1000;
@@ -96,13 +112,6 @@ onUnmounted(() => window.removeEventListener('keyup', escapeListener));
 		animation-duration: 1.5s;
 		animation-fill-mode: both;
 		animation-name: welcome-fade-in;
-	}
-
-	.btn-close {
-		z-index: 1001;
-		position: absolute;
-		right: 0;
-		font-size: large;
 	}
 }
 

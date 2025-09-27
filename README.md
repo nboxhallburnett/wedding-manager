@@ -16,6 +16,7 @@
   - [Building Assets](#building-assets)
   - [Running the Server](#running-the-server)
   - [First Use](#first-use)
+  - [External Administrative Access](#external-administrative-access)
 - [Deployment](#deployment)
   - [Build](#build)
   - [Running the Service](#running-the-service)
@@ -112,6 +113,7 @@ Name | Description | Type | Default
 `GROOM` | Full name of the groom | String | N/A
 `GROOM_SHORT` | First name or nickname of the groom | String | N/A
 `DATE` | Date of the wedding | Timestamp, or String that is accepted by JS [`Date.parse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse) | N/A
+`OAUTH_CLIENTID` | The Client ID of a Google OAuth 2.0 Client to facilitate external administrative access | String | N/A
 `SERVER_PORT` | Port the running server will listen for requests on | Number | N/A
 `SERVER_EXTERNALPORT` | Port the server will expect to have requests served from, assuming it is being run behind a reverse proxy | Number | `443`
 `SERVER_DB_HOST` | Hostname/IP and optionally port of the MongoDB database the service will connect to | String | N/A
@@ -187,7 +189,24 @@ db.invitations.insertOne({ id: '<your_id>', admin: true })
 The running service has no ways of adding its own administrative users by design, so this is the only way of created elevated access.
 
 > [!IMPORTANT]
-> One thing to note around elevated users, due to the deliberately simple authentication nature of the application, sessions for invitation records with elevated access will only ever be granted by requests made within the local network of the running server. See [src/lib/admin.js](./src/lib/admin.js) for more details on which addresses that includes.
+> One thing to note around elevated users, due to the deliberately simple authentication nature of the application, by default sessions for invitation records with elevated access will only ever be granted by requests made within the local network of the running server. See [src/lib/admin.js](./src/lib/admin.js) for more details on which addresses that includes.
+>
+> If you wish for external administrative access to the application, that can be facilitated by the use of Google's OAuth 2.0 sign in. To enable this, follow the steps below.
+
+### External Administrative Access
+
+External administrative access to the application can optionally be enabled via integration with Google's OAuth 2.0 sign in. To enable this functionality, follow step 1 and optionally step 2 on Google's [
+Sign in with Google for Web Setup Guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
+
+Once you have the Client ID from your Google Cloud account, set it in your configuration file as `OAUTH_CLIENTID` and rebuild the application.
+
+Once you have the client configured, you will need to create an admin user which is specifically configured to integrate with the OAuth provider. This functionality is separate to the base admin account we created earlier, in that it has an additional property and restriction applied to the record in the database. Specifically, the record will need its `id` value to be the email address you are expecting to be returned from the OAuth provider, as well as an additional `email` property which should be set to `true`. E.g.:
+
+```javascript
+db.invitations.insertOne({ id: '<your_google_email>', admin: true, email: true })
+```
+
+This may change in a future version to allow configuration of admin users via the applications UI/API, but for now it can be done manually.
 
 ## Deployment
 

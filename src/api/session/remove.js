@@ -1,3 +1,5 @@
+const config = require('../../../conf');
+
 /** @type {API} */
 module.exports = {
 	method: 'delete',
@@ -6,7 +8,14 @@ module.exports = {
 		// Wrap the callback
 		// await promisify(req.session.destroy)();
 		await new Promise((resolve, reject) => {
-			req.session.destroy(err => err ? reject(err) : resolve());
+			req.session.destroy(err => {
+				if (err) {
+					return reject(err);
+				}
+				// Clear the session cookie on successful signout
+				res.clearCookie(config.server.session.name);
+				resolve();
+			});
 		});
 		// No need to return any data on successful logout
 		return res.status(204).send();

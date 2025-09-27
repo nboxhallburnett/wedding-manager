@@ -11,6 +11,10 @@ const config = {
 	groom_short: process.env.GROOM_SHORT,
 	date: new Date(process.env.DATE).valueOf(),
 
+	oauth: {
+		client_id: process.env.OAUTH_CLIENTID
+	},
+
 	server: {
 		port: Number(process.env.SERVER_PORT),
 		external_port: Number(process.env.SERVER_EXTERNALPORT) || 443,
@@ -120,6 +124,8 @@ module.exports = Object.freeze(config);
  * @property {String} groom_short First name, nickname, or shortened name of the groom.
  * @property {Date} date Date of the wedding
  * @property {String[]} gallery_text Text to display on the gallery page, split by `|`
+ * @property {Object} oauth Configuration for the OAuth 2.0 client to use for external admin access.
+ * @property {String} oauth.client_id `client_id` for the application on the OAuth 2.0 service.
  * @property {Object} server Configuration for the running server.
  * @property {Number} server.port Port the server is listening on.
  * @property {Number} server.external_port Port the server is accessible on. Used when running behind a reverse proxy. Defaults to `443`

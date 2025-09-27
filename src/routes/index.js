@@ -31,30 +31,34 @@ const csp = {
 	// Set ourselves as the only allowed base uri
 	'base-uri': '\'self\'',
 	// Set ourselves, data blobs, and google fonts for connect-src.
-	// data: is used for the generation of themed qr codes, and google fonts in the sharing of the invitation card
-	'connect-src': '\'self\' data: https://fonts.gstatic.com',
+	// data: is used for the generation of themed qr codes, google fonts in the sharing of the invitation card,
+	// and google accounts for the sign in with google button
+	'connect-src': '\'self\' data: https://fonts.gstatic.com https://accounts.google.com/gsi/',
 	// Allow fonts from ourselves and google fonts
 	'font-src': '\'self\' https://fonts.gstatic.com',
 	// Don't allow the site to be framed
 	'frame-ancestors': '\'none\'',
-	// Add google.com as the only frame source to allow an iframe of google maps for the location on the details page
-	'frame-src': 'https://www.google.com',
+	// Add google.com as a frame source to allow an iframe of google maps for the location on the details page,
+	// and google accounts to allow the interactive oauth signin behaviour
+	'frame-src': 'https://www.google.com https://accounts.google.com/gsi/',
 	// Allow images from ourself and as data blobs (such as .svg loaded as data urls)
 	'img-src': '\'self\' data:',
 	// Don't allow objects
 	'object-src': '\'none\'',
-	// Allow styles from ourself and google fonts
-	'style-src': '\'self\' https://fonts.googleapis.com'
+	// Allow the Google accounts oauth script source
+	'script-src': 'https://accounts.google.com/gsi/client',
+	// Allow styles from ourself, google fonts, and google accounts
+	'style-src': '\'self\' https://fonts.googleapis.com https://accounts.google.com/gsi/style'
 };
 
 // When using hot reload we'll want to add a few extra options to the base policy
 if (config.hot) {
-	csp['script-src'] = `'self' 'unsafe-eval' http://${config.host}:8468`;
+	csp['script-src'] += ` 'self' 'unsafe-eval' http://${config.host}:8468`;
 	csp['connect-src'] += ` http://${config.host}:8468 ws://${config.host}:8468/ws`;
 	csp['style-src'] += ` 'unsafe-inline' http://${config.host}:8468`;
 } else {
 	// Otherwise, add a nonce value to the script and style sources
-	csp['script-src'] = '\'nonce-NONCE\'';
+	csp['script-src'] += ' \'nonce-NONCE\'';
 	csp['style-src'] += ' \'nonce-NONCE\'';
 }
 
@@ -97,7 +101,7 @@ async function handle(req, res, next) {
 	// Add HSTS and COOP/CORP headers if running on port 443
 	if (config.server.external_port === 443) {
 		headers['Strict-Transport-Security'] = 'max-age=63072000; includeSubDomains; preload';
-		headers['Cross-Origin-Opener-Policy'] = 'same-origin';
+		headers['Cross-Origin-Opener-Policy'] = 'same-origin-allow-popups';
 		headers['Cross-Origin-Resource-Policy'] = 'same-origin';
 	}
 

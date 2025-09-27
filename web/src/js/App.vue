@@ -18,7 +18,7 @@ function addToast(toast, options) {
 }
 
 // We only want the welcome display to be on the DOM until it's finished as it's an overlay
-let showWelcome = ref(true);
+let showWelcome = ref(!invitation.value?.id && !invitation.value?.pending);
 function welcomeCleanup() {
 	showWelcome.value = false;
 }
@@ -31,8 +31,8 @@ const appContainer = useTemplateRef('appContainer');
 onMounted(() => {
 	// This can only be wired up when there is a valid session and we're using the authenticated layout,
 	// so watch the invitation ref to check we have a session before attempting to reference anything
-	watch(() => invitation.value, hasSession => {
-		if (!hasSession) {
+	watch(() => invitation.value, session => {
+		if (!session || session.pending) {
 			return;
 		}
 
@@ -81,14 +81,14 @@ onMounted(() => {
 				}
 			});
 		});
-	}, { immediate: true });
+	}, { immediate: true, deep: true });
 });
 </script>
 
 <template>
 	<div id="background-overlay" class="bg-blur" />
-	<template v-if="invitation">
-		<toast-container ref="toastContainerComponent" />
+	<toast-container ref="toastContainerComponent" />
+	<template v-if="invitation && !invitation.pending">
 		<header>
 			<site-header />
 

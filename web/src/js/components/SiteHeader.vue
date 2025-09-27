@@ -25,16 +25,19 @@ const navItems = computed(() => {
 	}
 
 	const items = [
-		{ text: 'Home', to: { name: 'Home' }, pathMatch: /^\/(?:edit)?$/ },
 		{ text: 'Details', to: { name: 'About' } },
 		{ text: 'Q&A', to: { name: 'Q&A' } },
 		{ text: 'Our Story', to: { name: 'Our Story' } },
 		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];
 
-	// Only show the admin link if there is an admin session
+	// Use the admin page as home if there is an admin session
 	if (invitation.value?.admin) {
-		items.push({ text: 'Admin', to: { name: 'Admin Overview' }, pathMatch: /^\/admin/ });
+		items.unshift({ text: 'Home', to: { name: 'Admin Overview' }, pathMatch: /^\/admin/ });
+
+	// Otherwise use the actual home page
+	} else {
+		items.unshift({ text: 'Home', to: { name: 'Home' }, pathMatch: /^\/(?:edit)?$/ });
 	}
 
 	return items;

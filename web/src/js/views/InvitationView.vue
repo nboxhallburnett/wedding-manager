@@ -73,7 +73,11 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 		<card-header
 			title="Invitation"
 			:back="adminView ? { name: 'Admin List Invitations' } : undefined"
-			:action="adminView ? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } } : { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }"
+			:action="adminView
+				? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } }
+				: !invitation.admin
+					? { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }
+					: undefined"
 		/>
 		<div class="card-text">
 			<template v-if="invitation?.guests?.length">

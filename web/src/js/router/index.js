@@ -11,7 +11,7 @@ const router = createRouter({
 			beforeEnter: () => {
 				// If the user has already signed in, redirect them to the home page instead
 				const invitation = inject('invitation');
-				if (invitation.value) {
+				if (invitation.value && !invitation.value.pending) {
 					return { name: 'Home' };
 				}
 			}

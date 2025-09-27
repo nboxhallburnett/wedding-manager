@@ -11,6 +11,13 @@
 		}
 	}
 
+	@include media-breakpoint-down(sm) {
+		// Darken the nav bar when expanded for smaller devices
+		&:has([aria-expanded='true']) {
+			backdrop-filter: blur($backdrop-blur) brightness(69%) !important;
+		}
+	}
+
 	.navbar-toggler {
 		z-index: 10;
 		border-color: rgb(var(--bs-white-rgb), 50%);

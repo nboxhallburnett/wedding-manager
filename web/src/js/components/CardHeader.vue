@@ -40,7 +40,7 @@ if (!props.noTitle) {
 					type="submit"
 					@click.prevent.stop="onSubmit"
 				>
-					Submit
+					Save
 				</button>
 			</slot>
 		</span>

@@ -59,7 +59,7 @@ function removeGuest(idx) {
 			</router-link>
 			<div class="btn-group">
 				<button class="btn btn-sm btn-primary w-100" type="submit">
-					Submit
+					Save
 				</button>
 				<button
 					id="save-add-more"
@@ -74,7 +74,7 @@ function removeGuest(idx) {
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="save-add-more">
 					<li>
 						<button class="dropdown-item" @click.prevent="onSubmit(true)">
-							Submit and invite another
+							Save and invite another
 						</button>
 					</li>
 				</ul>

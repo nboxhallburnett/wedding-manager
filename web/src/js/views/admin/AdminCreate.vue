@@ -46,8 +46,8 @@ const { onSubmit } = useForm({
 				v-if="oauthEnabled"
 				v-model="admin.email"
 				name="email"
-				label="Email"
-				hint="Whether the admin can access externally via OAuth verification. If enabled, the ID should be a valid and verified email address with the configured OAuth provider."
+				label="OAuth"
+				hint="Whether the administrator can authenticate externally via OAuth verification. If enabled, the ID should be a valid and verified email address with the configured OAuth provider."
 			/>
 		</form>
 	</card-body>

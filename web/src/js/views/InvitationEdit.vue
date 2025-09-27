@@ -128,14 +128,26 @@ watch(() => invitation.value.guests?.map(g => Boolean(g.name)), (nameExists, pre
  * Add a new guest to the invitation
  */
 function addGuest() {
+	// Add a base guest definition to the array
 	invitation.value.guests.push({
 		name: '',
 		status_ceremony: 0,
 		status_reception: 0
 	});
+
+	// Once the new guest's entry has been added to the DOM...
 	nextTick(() => {
+		// Define the collapse instance for its content
 		const collapse = new Collapse(`#guest-${invitation.value.guests.length - 1}-collapse`, { toggle: false });
 		guestCollapses.value.push(collapse);
+
+		// Toggle the new guest's accordion open
+		const $guestContainer = document.getElementById('guest-accordion');
+		$guestContainer.querySelector(`[data-bs-target="#guest-accordion-${invitation.value.guests.length - 1}-content"]`).click();
+		nextTick(() => {
+			// And focus their name input
+			document.getElementById(`guest-${invitation.value.guests.length - 1}-name`)?.focus();
+		});
 	});
 }
 /**
@@ -153,11 +165,20 @@ function removeGuest(idx) {
  * Add a child to the invitation
  */
 function addChild() {
+	// Add a base child definition to the array
 	invitation.value.children.push({
 		name: ''
 	});
+
+	// Once the new child's entry has been added to the DOM...
 	nextTick(() => {
-		document.getElementById(`child-${invitation.value.children.length - 1}-name`)?.focus();
+		// Toggle the child's accordion open
+		const $childrenContainer = document.getElementById('child-accordion');
+		$childrenContainer.querySelector(`[data-bs-target="#child-accordion-${invitation.value.children.length - 1}-content"]`).click();
+		nextTick(() => {
+			// And focus their name input
+			document.getElementById(`child-${invitation.value.children.length - 1}-name`)?.focus();
+		});
 	});
 }
 /**
@@ -221,11 +242,12 @@ function getMenuOptions(course, child) {
 				text-class="font-monospace"
 			/>
 
-			<div id="guestAccordion" class="accordion">
+			<div id="guest-accordion" class="accordion">
 				<div v-for="(guest, idx) in invitation.guests" :key="idx" class="accordion-item border-0">
 					<div class="accordion-header">
 						<button
 							class="accordion-button px-0 bg-body shadow-none pt-0"
+							:class="{ collapsed: idx !== 0 }"
 							type="button"
 							data-bs-toggle="collapse"
 							:data-bs-target="`#guest-accordion-${idx}-content`"
@@ -245,7 +267,7 @@ function getMenuOptions(course, child) {
 					<div
 						:id="`guest-accordion-${idx}-content`"
 						class="accordion-collapse collapse"
-						data-bs-parent="#guestAccordion"
+						data-bs-parent="#guest-accordion"
 						:class="{ show: idx === 0 }"
 					>
 						<form-input v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
@@ -307,7 +329,7 @@ function getMenuOptions(course, child) {
 
 			<hr>
 
-			<div id="childAccordion" class="accordion">
+			<div id="child-accordion" class="accordion">
 				<h5 class="mb-3">
 					Children
 					<info-popover hint="Even if your child is young enough to not require a meal, please still let us know so we can accommodate them at the table." />
@@ -315,7 +337,7 @@ function getMenuOptions(course, child) {
 				<div v-for="(child, idx) in invitation.children" :key="idx" class="accordion-item border-0">
 					<div class="accordion-header">
 						<button
-							class="accordion-button px-0 bg-body shadow-none pt-0"
+							class="accordion-button px-0 bg-body shadow-none pt-0 collapsed"
 							type="button"
 							data-bs-toggle="collapse"
 							:data-bs-target="`#child-accordion-${idx}-content`"
@@ -334,8 +356,8 @@ function getMenuOptions(course, child) {
 					</div>
 					<div
 						:id="`child-accordion-${idx}-content`"
-						class="accordion-collapse collapse show"
-						data-bs-parent="#childAccordion"
+						class="accordion-collapse collapse"
+						data-bs-parent="#child-accordion"
 					>
 						<form-input v-model="child.name" label="Name" :name="`child-${idx}-name`" />
 						<form-input

@@ -14,18 +14,19 @@ $font-family-base: 'Roboto Serif', system-ui, -apple-system, 'Segoe UI', roboto,
 $font-family-monospace: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
 
 // Nav
-$navbar-toggler-border-radius: 1px;
-$header-height: 50px;
 $card-offset: 160px;
 $footer-height: 36px;
+$header-height: 50px;
+$navbar-toggler-border-radius: 1px;
 
 // Accordion
 $accordion-border-width: 0;
 
 // Modals
 $modal-backdrop-opacity: 0;
-$modal-fade-transform: scale(0.7);
+$modal-content-border-color: $border-color;
 $modal-content-box-shadow-sm-up: 0;
+$modal-fade-transform: scale(0.7);
 
 // Blurs
 $backdrop-blur: 0.5rem;

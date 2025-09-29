@@ -246,7 +246,7 @@ $signin-button-width: v-bind(googleSigninButtonWidth);
 
 		// Hide the placeholder sign in buttton that does not render correctly.
 		// This element is removed once the iframed button is loaded
-		> div > div {
+		> div > div:first-of-type {
 			display: none !important;
 		}
 

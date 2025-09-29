@@ -47,19 +47,19 @@ const csp = {
 	'object-src': '\'none\'',
 	// Allow the Google accounts oauth script source
 	'script-src': 'https://accounts.google.com/gsi/client',
-	// Allow styles from ourself, google fonts, and google accounts
-	'style-src': '\'self\' https://fonts.googleapis.com https://accounts.google.com/gsi/style'
+	// Allow styles from ourself, google fonts, and google accounts. Google signin also requires unsafe-inline (annoyingly)
+	'style-src': '\'self\' \'unsafe-inline\' https://fonts.googleapis.com https://accounts.google.com/gsi/style'
 };
 
 // When using hot reload we'll want to add a few extra options to the base policy
 if (config.hot) {
 	csp['script-src'] += ` 'self' 'unsafe-eval' http://${config.host}:8468`;
 	csp['connect-src'] += ` http://${config.host}:8468 ws://${config.host}:8468/ws`;
-	csp['style-src'] += ` 'unsafe-inline' http://${config.host}:8468`;
+	csp['style-src'] += ` http://${config.host}:8468`;
 } else {
-	// Otherwise, add a nonce value to the script and style sources
+	// Otherwise, add a nonce value to the script source. We can't add it to style sources because
+	// of the 'unsafe-inline' requirement from Google signin which is ignored if a nonce is defined
 	csp['script-src'] += ' \'nonce-NONCE\'';
-	csp['style-src'] += ' \'nonce-NONCE\'';
 }
 
 module.exports = {

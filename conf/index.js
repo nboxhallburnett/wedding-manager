@@ -10,6 +10,7 @@ const config = {
 	groom: process.env.GROOM,
 	groom_short: process.env.GROOM_SHORT,
 	date: new Date(process.env.DATE).valueOf(),
+	time: process.env.TIME || '',
 
 	oauth: {
 		client_id: process.env.OAUTH_CLIENTID
@@ -123,6 +124,7 @@ module.exports = Object.freeze(config);
  * @property {String} groom Full name of the groom.
  * @property {String} groom_short First name, nickname, or shortened name of the groom.
  * @property {Date} date Date of the wedding
+ * @property {String} time Time of the start of the wedding
  * @property {String[]} gallery_text Text to display on the gallery page, split by `|`
  * @property {Object} oauth Configuration for the OAuth 2.0 client to use for external admin access.
  * @property {String} oauth.client_id `client_id` for the application on the OAuth 2.0 service.

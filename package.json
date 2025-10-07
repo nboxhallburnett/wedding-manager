@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.36.0",
+    "@jpinsonneau/html-to-image": "^1.11.13",
     "@popperjs/core": "2.11.8",
     "@stylistic/stylelint-config": "3.0.1",
     "@stylistic/stylelint-plugin": "4.0.0",
@@ -47,7 +48,6 @@
     "eslint": "9.36.0",
     "eslint-plugin-vue": "10.5.0",
     "globals": "16.4.0",
-    "html-to-image": "1.11.13",
     "mini-css-extract-plugin": "2.9.4",
     "postcss-loader": "8.2.0",
     "purgecss-webpack-plugin": "7.0.2",

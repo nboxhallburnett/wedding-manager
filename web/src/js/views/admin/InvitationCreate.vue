@@ -58,7 +58,7 @@ function removeGuest(idx) {
 				Back
 			</router-link>
 			<div class="btn-group">
-				<button class="btn btn-sm btn-primary w-100" type="submit">
+				<button class="btn btn-sm btn-primary w-100" type="submit" @click.prevent="onSubmit()">
 					Save
 				</button>
 				<button

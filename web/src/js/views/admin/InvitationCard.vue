@@ -2,7 +2,10 @@
 import { computed, inject, ref, onMounted, useTemplateRef } from 'vue';
 import Router from 'router';
 import QRCodeStyling from 'qr-code-styling';
-import { toBlob, toPng } from 'html-to-image';
+// TODO: Replace this back once (if) html-to-image is updated with this merged:
+// https://github.com/bubkoo/html-to-image/pull/547
+import { toBlob, toPng } from '@jpinsonneau/html-to-image';
+// import { toBlob, toPng } from 'html-to-image';
 
 import { useLoader } from 'composables/loader';
 
@@ -13,6 +16,7 @@ import CustomHR from 'components/CustomHR.vue';
 const bride = CONFIG.bride;
 const groom = CONFIG.groom;
 const date = new Date(CONFIG.date).toDateString();
+const time = CONFIG.time;
 const where = CONFIG.client.footer[0].text;
 
 const reFill = / fill="(#?\w+)"/;
@@ -210,7 +214,8 @@ async function shareImage() {
 							<div class="font-script text-body h2" v-text="groom" />
 							<custom-h-r class="d-inline-block w-66 mb-1" />
 							<div class="font-script text-body h3" v-text="date" />
-							<div class="mt-4" v-text="where" />
+							<div v-if="time" class="font-script text-body h4" v-text="time" />
+							<div class="mt-3" v-text="where" />
 							<div class="mt-1 text-body-tertiary small" v-text="'Reception to follow'" />
 						</div>
 						<div id="invitation-footer">

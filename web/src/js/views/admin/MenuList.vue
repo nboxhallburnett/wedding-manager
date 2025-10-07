@@ -6,6 +6,7 @@ import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
+import CardHeader from 'components/CardHeader.vue';
 import DietIndicator from 'components/DietIndicator.vue';
 import TableComponent from 'components/TableComponent.vue';
 
@@ -103,7 +104,18 @@ const tableOpts = {
 </script>
 
 <template>
-	<card-body title="Menu Items" :action="{ text: 'New Item', to: { name: 'Admin Create Menu Item' } }" :back="{ name: 'Admin Overview' }">
+	<card-body>
+		<card-header title="Menu Items">
+			<router-link class="btn btn-link btn-sm me-2" :to="{ name: 'Admin Overview' }">
+				Back
+			</router-link>
+			<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin View Menu Card' }">
+				Export
+			</router-link>
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Create Menu Item' }">
+				New Item
+			</router-link>
+		</card-header>
 		<div class="card-text">
 			<table-component v-slot="{ item }" :items="menu" v-bind="tableOpts">
 				<th scope="row">

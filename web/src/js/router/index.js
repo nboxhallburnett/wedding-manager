@@ -114,6 +114,11 @@ const router = createRouter({
 					component: () => import('../views/admin/MenuList.vue')
 				},
 				{
+					path: 'menu/card',
+					name: 'Admin View Menu Card',
+					component: () => import('../views/admin/MenuCard.vue')
+				},
+				{
 					path: 'menu/:menuItemId',
 					name: 'Admin View Menu Item',
 					component: () => import('../views/admin/MenuView.vue')

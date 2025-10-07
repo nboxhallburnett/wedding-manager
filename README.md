@@ -57,7 +57,7 @@ Management/Administration capabilities:
 - Dynamic management of the "Our Story" timeline content
 - Dynamic management of the Gallery page content
 - Ability to view and manage provided feedback
-- Ability to create and manage adminstrative auth tokens for headless service management
+- Ability to create and manage administrative auth tokens for headless service management
 
 ## Dependencies
 
@@ -113,6 +113,7 @@ Name | Description | Type | Default
 `GROOM` | Full name of the groom | String | N/A
 `GROOM_SHORT` | First name or nickname of the groom | String | N/A
 `DATE` | Date of the wedding | Timestamp, or String that is accepted by JS [`Date.parse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse) | N/A
+`TIKE` | Time of the wedding ceremony. Used for the generated invitation cards | String | N/A
 `OAUTH_CLIENTID` | The Client ID of a Google OAuth 2.0 Client to facilitate external administrative access | String | N/A
 `SERVER_PORT` | Port the running server will listen for requests on | Number | N/A
 `SERVER_EXTERNALPORT` | Port the server will expect to have requests served from, assuming it is being run behind a reverse proxy | Number | `443`
@@ -136,6 +137,7 @@ These environment variables can either be set manually when running the various 
 # ./.env
 HOT=true
 DATE=2025/12/31
+TIME="1:37 PM"
 HOST=127.0.0.1
 
 BRIDE="Jane Doe"

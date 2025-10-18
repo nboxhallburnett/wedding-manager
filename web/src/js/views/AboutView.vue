@@ -3,6 +3,7 @@ import ScrollSpy from 'bootstrap/js/dist/scrollspy';
 
 import { ref, useTemplateRef, watch, nextTick } from 'vue';
 import { VueShowdown } from 'vue-showdown';
+import Router from 'router';
 
 import { classExtensions } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
@@ -129,6 +130,28 @@ watch(content, () => {
 				target: '#about-navbar',
 				offset: scrollMargin * -1
 			});
+
+			// Check generated links to ensure we're handling internal navigation efficiently
+			const $anchors = $replacementContainer.getElementsByTagName('a');
+			for (let i = 0; i < $anchors.length; i++) {
+				const $anchor = $anchors[i];
+				// If it's an external link, leave it as-is
+				if (!$anchor.href.startsWith('/') && !$anchor.href.startsWith(window.location.origin)) {
+					return;
+				}
+				// Otherwise, override its click handler to go through vue-router
+				$anchor.addEventListener('click', evt => {
+					// If either ctrl or meta was held, let the browser handle it natively
+					if (evt.ctrlKey || evt.metaKey) {
+						return;
+					}
+					// Otherwise, prevent the default handling
+					evt.preventDefault();
+					evt.stopPropagation();
+					// And perform the navigation using the router
+					Router.push($anchor.href.replace(window.location.origin, ''));
+				});
+			}
 		});
 	});
 });

@@ -10,7 +10,7 @@ module.exports = {
 	method: 'post',
 	path: 'session',
 	auth: async req => {
-		const invitation = await invitationDb.findOne({ id: req.body.invitationId }, { projection: { _id: 0 } });
+		const invitation = await invitationDb.findOne({ id: String(req.body.invitationId).toLowerCase() }, { projection: { _id: 0 } });
 		if (invitation) {
 			if (invitation.admin) {
 				// If the Invitation record includes elevated rights and the request originated from an external network,

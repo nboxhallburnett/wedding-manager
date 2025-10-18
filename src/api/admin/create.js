@@ -27,6 +27,9 @@ module.exports = {
 			throw new Error('"id" contained an invalid value: "id" must be a string');
 		}
 
+		// Ensure the ID is stored lowercase
+		invitation.id = invitation.id.toLowerCase();
+
 		// Set email value if supplied
 		if (Boolean(req.body.email) === true) {
 			// But verify the id is a valid email address

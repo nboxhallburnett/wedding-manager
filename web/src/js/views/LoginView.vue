@@ -179,7 +179,7 @@ async function logout() {
 const input = useTemplateRef('invitationInput');
 onMounted(() => {
 	if (showOauth.value) {
-		initOauth(invitation.value.id, invitation.value.state);
+		initOauth(String(invitation.value.id).toLowerCase(), invitation.value.state);
 	} else {
 		input.value?.focus();
 	}

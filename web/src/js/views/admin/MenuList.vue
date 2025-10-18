@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
+import { normaliseString } from 'lib/formatter';
+
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
 
@@ -72,17 +74,18 @@ const tableOpts = {
 		} }
 	],
 	search(item, term) {
+		const normalisedTerm = normaliseString(term).toLowerCase();
 		// Match on the menu item ID
-		if (item.id === term) {
+		if (normaliseString(item.id) === normalisedTerm) {
 			return true;
 		}
-		if (item.title.toLowerCase().includes(term.toLowerCase())) {
+		if (normaliseString(item.title).toLowerCase().includes(normalisedTerm)) {
 			return true;
 		}
-		if (item.description.toLowerCase().includes(term.toLowerCase())) {
+		if (normaliseString(item.description).toLowerCase().includes(normalisedTerm)) {
 			return true;
 		}
-		if (courseText[item.course].toLowerCase().includes(term.toLowerCase())) {
+		if (courseText[item.course].toLowerCase().includes(normalisedTerm)) {
 			return true;
 		}
 		// Otherwise, no match

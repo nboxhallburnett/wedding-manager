@@ -106,6 +106,16 @@ export function fromNow(_date) {
 	return relativeTimeFormatter.format(value * -1, unit);
 }
 
+/**
+ * Normalises a string to remove diacritics. Usefor for search or string comparisons.
+ *
+ * @param {String} str Candidate string
+ * @returns {String} Normalised string
+ */
+export function normaliseString(str) {
+	return String(str).normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
 /** Map of display status messages for the stored `status_ceremony` and `status_reception` enum values */
 export const statusMessages = [
 	'Pending',

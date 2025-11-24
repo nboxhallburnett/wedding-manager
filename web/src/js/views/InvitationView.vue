@@ -98,7 +98,7 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 							:name="`guest-${idx}-reception`"
 						/>
 						<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
-							<form-item v-if="guest[meal.key] && [ 1, 2 ].includes(guest.status_reception)" :name="`guest-${idx}-${meal.key}`" :label="meal.text">
+							<form-item v-if="guest[meal.key] && [ 1, 2 ].includes(guest.status_ceremony)" :name="`guest-${idx}-${meal.key}`" :label="meal.text">
 								<div v-if="menuItems[guest[meal.key]]" class="form-control-plaintext">
 									<span v-text="menuItems[guest[meal.key]].title" />
 									<diet-indicator class="ms-2" :item="menuItems[guest[meal.key]]" />

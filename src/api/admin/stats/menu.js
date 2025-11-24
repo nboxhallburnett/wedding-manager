@@ -14,8 +14,8 @@ module.exports = {
 				{ $project: { _id: 0, guests: 1 } },
 				// Split each guest into its own item in the aggregation
 				{ $unwind: '$guests' },
-				// We only care about guests who are confirmed or tentative for the reception
-				{ $match: { 'guests.status_reception': { $in: [ 1, 2 ] } } },
+				// We only care about guests who are confirmed or tentative for the ceremony
+				{ $match: { 'guests.status_ceremony': { $in: [ 1, 2 ] } } },
 				// Merge the values of the three meal items into a single collection of meal IDs
 				{ $addFields: { meal: [ '$guests.starter_id', '$guests.main_id', '$guests.dessert_id' ] } },
 				// And split each guests meal into its own item in the aggregation

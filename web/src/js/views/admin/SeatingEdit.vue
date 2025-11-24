@@ -34,8 +34,8 @@ useLoader([
 	const suggestions = new Set();
 	guests.value = invitationResponse.result.data.reduce((arr, invitation) => {
 		for (const [ idx, guest ] of invitation.guests?.entries() || []) {
-			// Skip the guest if they are marked as not attending the reception
-			if (guest.status_reception === 3) {
+			// Skip the guest if they are marked as not attending the ceremony
+			if (guest.status_ceremony === 3) {
 				continue;
 			}
 			// Add their name to the search suggestion list
@@ -45,7 +45,7 @@ useLoader([
 				id: invitation.id,
 				idx,
 				name: guest.name || '(+1)',
-				status: statusMessages[guest.status_reception],
+				status: statusMessages[guest.status_ceremony],
 				child: false
 			});
 		}

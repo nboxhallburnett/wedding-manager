@@ -327,7 +327,7 @@ function getMenuOptions(course, child) {
 								placeholder="Pending Confirmation"
 								:name="`guest-${idx}-reception`"
 							/>
-							<template v-if="[ 1, 2 ].includes(guest.status_reception)">
+							<template v-if="[ 1, 2 ].includes(guest.status_ceremony)">
 								<template v-for="(meal, mealIdx) in mealsMap" :key="`guest-${idx}-${mealIdx}`">
 									<hr>
 									<form-radio

@@ -197,14 +197,15 @@ onMounted(() => {
 			</p>
 			<div class="form-floating mb-3">
 				<input
-					id="invitationId"
+					id="username"
 					ref="invitationInput"
 					v-model="invitationId"
+					autocomplete="username"
 					type="text"
 					class="form-control"
 					placeholder="Invitation ID"
 				>
-				<label for="invitationId">Invitation ID</label>
+				<label for="username">Invitation ID</label>
 			</div>
 			<button :disabled="!invitationId" class="btn btn-primary w-100" type="submit">
 				Submit

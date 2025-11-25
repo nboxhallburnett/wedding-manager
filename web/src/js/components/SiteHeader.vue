@@ -16,6 +16,8 @@ const feedback = ref('');
 const $feedbackToggle = useTemplateRef('feedbackToggle');
 const $navbarToggle = useTemplateRef('navbarToggle');
 
+const registryUrl = CONFIG.registry_url || '';
+
 document.body.classList.add('has-header');
 
 const navItems = computed(() => {
@@ -30,6 +32,10 @@ const navItems = computed(() => {
 		{ text: 'Our Story', to: { name: 'Our Story' } },
 		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];
+
+	if (registryUrl) {
+		items.push({ text: 'Registry', url: registryUrl });
+	}
 
 	// Use the admin page as home if there is an admin session
 	if (invitation.value?.admin) {
@@ -112,16 +118,24 @@ async function submitFeedback() {
 		<div id="navbar-header" class="collapse navbar-collapse">
 			<div class="navbar-nav w-100">
 				<div class="ring-loader d-none d-sm-block" data-bs-theme="dark" />
-				<router-link
-					v-for="item in navItems"
-					:key="item.text"
-					:to="item.to"
-					class="nav-item nav-link text-stroke"
-					:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
-					@click="collapseNavbar"
-				>
-					{{ item.text }}
-				</router-link>
+				<template v-for="item in navItems" :key="item.text">
+					<router-link
+						v-if="item.to"
+						:to="item.to"
+						class="nav-item nav-link text-stroke"
+						:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
+						@click="collapseNavbar"
+					>
+						{{ item.text }}
+					</router-link>
+					<a
+						v-else-if="item.url"
+						class="nav-item nav-link text-stroke"
+						target="_blank"
+						:href="item.url"
+						v-text="item.text"
+					/>
+				</template>
 
 				<template v-if="invitation">
 					<div class="ms-sm-auto nav-item dropdown">

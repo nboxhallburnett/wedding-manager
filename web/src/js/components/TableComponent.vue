@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+import Router from 'router';
+
 const props = defineProps({
 	caption: { type: String, default: '' },
 	columns: { type: Array, required: true },
@@ -15,8 +17,11 @@ const displayedPage = ref(0);
 const perPage = ref(10);
 const perPageOptions = [ 5, 10, 25, 50, 100 ];
 
-const searchTerm = ref('');
+const searchTerm = ref(Router.currentRoute.value.query?.term || '');
 const currentSort = ref({ col: '', dir: 1, fn: null });
+
+// Clear any term that was supplied on load
+Router.replace({ query: { ...Router.currentRoute.value.query, term: undefined } });
 
 // Constructs a copy of the provided data after applying any requested filters
 const filteredItems = computed(() => {

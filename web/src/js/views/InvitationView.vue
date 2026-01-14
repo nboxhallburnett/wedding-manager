@@ -64,7 +64,7 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 	menuItems.value = menuRequest.result.data.reduce((items, item) => {
 		items[item.id] = item;
 		return items;
-	}, { other: 'Other' });
+	}, { other: { title: 'Other' } });
 });
 </script>
 
@@ -108,6 +108,12 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 								</div>
 							</form-item>
 						</template>
+						<form-text
+							v-if="guest.diet"
+							:value="guest.diet"
+							label="Dietary Requirement"
+							:name="`guest-${idx}-diet`"
+						/>
 					</template>
 				</div>
 				<hr>
@@ -131,6 +137,12 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 									</div>
 								</form-item>
 							</template>
+							<form-text
+								v-if="child.diet"
+								:value="child.diet"
+								label="Dietary Requirement"
+								:name="`child-${idx}-diet`"
+							/>
 						</template>
 					</div>
 				</div>
@@ -147,6 +159,12 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 				v-model="invitation.songs"
 				label="Song Suggestions"
 				name="songs"
+			/>
+			<form-text
+				v-if="adminView"
+				v-model="invitation.login_count"
+				label="Login Count"
+				name="login_count"
 			/>
 		</div>
 	</component>

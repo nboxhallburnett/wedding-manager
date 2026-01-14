@@ -10,6 +10,11 @@ export const dateFormatter = new Intl.DateTimeFormat(undefined, {
 	timeZone: 'UTC'
 });
 
+export const listFormatter = new Intl.ListFormat('en', {
+	style: 'long',
+	type: 'conjunction'
+});
+
 /**
  * Escapes a string to ensure it is safe from XSS when used directly in html
  *
@@ -44,6 +49,28 @@ export function formatEventDate(event) {
 
 	// Otherwise show the start and end as full datetime strings
 	return `${start.toLocaleString()} - ${end.toLocaleString()}`;
+}
+
+/**
+ * Returns a formatted string of an invitations guests
+ *
+ * @param {Invitation} invitation Invitations whose guest names should be returned
+ * @returns {String}
+ */
+export function formatGuestNames(invitation) {
+	if (!invitation.guests?.length) {
+		return '';
+	}
+	// Get the set of defined names from the invitation
+	const names = invitation.guests?.map(guest => guest.name).filter(Boolean);
+	// Check how many additional guests are part of the invitation without a name defined
+	const additionalGuests = invitation.guests.length - names.length;
+	// If there are any unnamed guests, add a final section just as that count
+	if (additionalGuests) {
+		names.push(`${additionalGuests} Guest${additionalGuests > 1 ? 's' : ''}`);
+	}
+	// And output the formatted list string
+	return listFormatter.format(names);
 }
 
 /**

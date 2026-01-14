@@ -6,6 +6,8 @@ import CardBody from 'components/CardBody.vue';
 const links = [
 	{ text: 'Stats', to: { name: 'Admin Stats' } },
 	{ text: 'Invitations', to: { name: 'Admin List Invitations' } },
+	{ text: 'Song Requests', to: { name: 'Admin List Invitation Songs' } },
+	{ text: 'Messages', to: { name: 'Admin List Invitation Messages' } },
 	{ text: 'Menu', to: { name: 'Admin List Menu Items' } },
 	{ text: 'Seating Plan', to: { name: 'Admin View Seating Plan' } },
 	{ text: 'Details', to: { name: 'Admin Edit About Content' } },

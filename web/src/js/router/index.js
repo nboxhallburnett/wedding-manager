@@ -109,6 +109,16 @@ const router = createRouter({
 					component: () => import('../views/InvitationEdit.vue')
 				},
 				{
+					path: 'songs',
+					name: 'Admin List Invitation Songs',
+					component: () => import('../views/admin/InvitationSongList.vue')
+				},
+				{
+					path: 'messages',
+					name: 'Admin List Invitation Messages',
+					component: () => import('../views/admin/InvitationMessageList.vue')
+				},
+				{
 					path: 'menu',
 					name: 'Admin List Menu Items',
 					component: () => import('../views/admin/MenuList.vue')

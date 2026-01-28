@@ -1,6 +1,12 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import Popover from 'bootstrap/js/dist/popover';
 
+// Add table elements to the html content allowlist
+Popover.Default.allowList.table = [];
+Popover.Default.allowList.tbody = [];
+Popover.Default.allowList.tr = [];
+Popover.Default.allowList.td = [];
+
 /**
  * Composable to handle instantiation and disposal of bootstrap popovers.
  *

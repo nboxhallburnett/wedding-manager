@@ -1,6 +1,8 @@
 import { inject } from 'vue';
 import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router';
 
+import API from 'lib/api';
+
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [
@@ -207,6 +209,11 @@ const router = createRouter({
 					path: 'admin/new',
 					name: 'Admin Create Administrator',
 					component: () => import('../views/admin/AdminCreate.vue')
+				},
+				{
+					path: 'telemetry',
+					name: 'Admin List Telemetry',
+					component: () => import('../views/admin/TelemetryList.vue')
 				}
 			]
 		},
@@ -225,6 +232,20 @@ router.beforeEach(to => {
 	}
 	if (to.meta?.admin && !invitation.value?.admin) {
 		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
+	}
+});
+
+router.afterEach(to => {
+	// Publish telemetry for non-admin navigation requests
+	const invitation = inject('invitation');
+	if (!invitation.value?.admin) {
+		const event = {
+			path: to.path,
+			path_match: to.matched?.at(-1)?.path || null,
+			path_name: to.name,
+			viewport: getCurrentViewportSize()
+		};
+		API('telemetry', { method: 'POST', body: event });
 	}
 });
 
@@ -251,3 +272,30 @@ router.onError((error, to) => {
 });
 
 export default router;
+
+// Named bootstrap breakpoints in pixels
+const breakpoints = {
+	sm: 576,
+	md: 768,
+	lg: 992,
+	xl: 1200,
+	xxl: 1400
+};
+
+/**
+ * Determine the matching bootstrap breakpoint size of the current viewport
+ *
+ * @returns {String}
+ */
+function getCurrentViewportSize() {
+	let currentBreakpoint = 'xs';
+
+	for (const breakpoint in breakpoints) {
+		const minWidth = breakpoints[breakpoint];
+		if (window.matchMedia(`(min-width: ${minWidth}px)`).matches) {
+			currentBreakpoint = breakpoint;
+		}
+	}
+
+	return currentBreakpoint;
+}

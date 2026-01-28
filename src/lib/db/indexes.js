@@ -20,6 +20,9 @@ module.exports = {
 	sessions: [
 		[ { expires: 1 }, { name: 'session_expire', expireAfterSeconds: 0, background: true } ]
 	],
+	telemetry: [
+		[ { id: 1 }, { name: 'telemetry_id', unique: true } ]
+	],
 	tokens: [
 		[ { id: 1 }, { name: 'token_id', unique: true } ]
 	]

@@ -70,15 +70,25 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 
 <template>
 	<component :is="adminView ? CardBody : 'div'">
-		<card-header
-			title="Invitation"
-			:back="adminView ? { name: 'Admin List Invitations' } : undefined"
-			:action="adminView
-				? { text: 'Edit Invitation', to: { name: 'Admin Edit Invitation' } }
-				: !invitation.admin
-					? { text: 'Manage RSVP', to: { name: 'Edit Invitation' } }
-					: undefined"
-		/>
+		<card-header title="Invitation">
+			<router-link v-if="adminView" class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
+				Back
+			</router-link>
+			<div v-if="adminView" class="d-inline-flex flex-wrap">
+				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin List Telemetry', query: { term: invitation.id } }">
+					Telemetry
+				</router-link>
+				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin View Invitation Card' }">
+					Share
+				</router-link>
+				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin Edit Invitation' }">
+					Edit Invitation
+				</router-link>
+			</div>
+			<router-link v-else-if="!invitation.admin" class="btn btn-primary btn-sm me-2" :to="{ name: 'Edit Invitation' }">
+				Manage RSVP
+			</router-link>
+		</card-header>
 		<div class="card-text">
 			<template v-if="invitation?.guests?.length">
 				<div v-for="(guest, idx) in invitation.guests" :key="idx" class="mb-3">
@@ -86,14 +96,14 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 						<hr v-if="idx">
 						<form-text v-model="guest.name" label="Name" :name="`guest-${idx}-name`" />
 						<form-text
-							:value="statusMessages[guest.status_ceremony]"
 							label="Ceremony Attendance"
+							:value="statusMessages[guest.status_ceremony]"
 							:options="statusMessages"
 							:name="`guest-${idx}-ceremony`"
 						/>
 						<form-text
-							:value="statusMessages[guest.status_reception]"
 							label="Reception Attendance"
+							:value="statusMessages[guest.status_reception]"
 							:options="statusMessages"
 							:name="`guest-${idx}-reception`"
 						/>
@@ -110,8 +120,8 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 						</template>
 						<form-text
 							v-if="guest.diet"
-							:value="guest.diet"
 							label="Dietary Requirement"
+							:value="guest.diet"
 							:name="`guest-${idx}-diet`"
 						/>
 					</template>
@@ -139,8 +149,8 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 							</template>
 							<form-text
 								v-if="child.diet"
-								:value="child.diet"
 								label="Dietary Requirement"
+								:value="child.diet"
 								:name="`child-${idx}-diet`"
 							/>
 						</template>

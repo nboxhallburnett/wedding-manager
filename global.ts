@@ -208,3 +208,21 @@ type DiningRoom = {
 		guests: DiningTableSeat[]
 	}[]
 }
+
+/** Definition of a UI telemetry event */
+type Telemetry = {
+	/** Telemetry Identifier */
+	id: String,
+	/** Identifier of the invitation that performed the action */
+	invitation: String | null,
+	/** Date the item was created */
+	created: Date,
+	/** Exact path that the event was triggered for */
+	path: String,
+	/** Path definition that the event was triggered for */
+	path_match: String,
+	/** Name of the path that the event was triggered for */
+	path_name: String,
+	/** Size of the browser that the event was triggered by */
+	viewport: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+}

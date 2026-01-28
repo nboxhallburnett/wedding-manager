@@ -1,4 +1,5 @@
 const invitationDb = require('../../../lib/db/invitations');
+const telemetryDb = require('../../../lib/db/telemetry');
 
 /** @type {API} */
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
 		// Auth success is determined by whether there is a valid admin session
 		return Boolean(req.ctx.admin);
 	},
-	action: async (_req, res) => {
+	action: async (req, res) => {
 		const [
 			ceremonyStatusesCursor,
 			receptionStatusesCursor,
@@ -15,7 +16,8 @@ module.exports = {
 			childrenCount,
 			loginCount,
 			songRequestCount,
-			messageCount
+			messageCount,
+			telemetryPathCursor
 		] = await Promise.all([
 			invitationDb.aggregate([
 				{ $project: { _id: 0, 'guests.name': 1, 'guests.status_ceremony': 1 } },
@@ -47,31 +49,51 @@ module.exports = {
 			]).toArray(),
 			invitationDb.aggregate([
 				{ $match: { admin: { $ne: true } } },
-				{ $project: { _id: 0, 'login_count': 1 } },
+				{ $project: { _id: 0, login_count: 1 } },
 				{ $group: { _id: null, count: { $sum: '$login_count' } } }
 			]).toArray(),
 			invitationDb.aggregate([
-				{ $project: { _id: 0, 'songs': 1 } },
+				{ $project: { _id: 0, songs: 1 } },
 				{ $unwind: '$songs' },
-				{ $match: { 'songs': { $nin: [ '', null ] } } },
+				{ $match: { songs: { $nin: [ '', null ] } } },
 				{ $group: { _id: null, count: { $sum: 1 } } }
 			]).toArray(),
 			invitationDb.aggregate([
-				{ $match: { 'message': { $nin: [ '', null ] } } },
-				{ $project: { _id: 0, 'message': 1 } },
+				{ $match: { message: { $nin: [ '', null ] } } },
+				{ $project: { _id: 0, message: 1 } },
 				{ $group: { _id: null, count: { $sum: 1 } } }
-			]).toArray()
+			]).toArray(),
+			req.query.telemetry && telemetryDb.aggregate([
+				{ $project: { _id: 0, path_name: 1, viewport: 1 } },
+				{ $group: { _id: { path: '$path_name', viewport: '$viewport' }, count: { $sum: 1 } } },
+				{
+					$group: {
+						_id: '$_id.path',
+						count: { $sum: '$count' }, // Sum the total count for the path
+						viewports: {
+							$push: { // Push viewport-level details into an array
+								k: { $toString: '$_id.viewport' },
+								v: '$count'
+							}
+						}
+					}
+				},
+				{ $group: { _id: null, counts: { $push: { k: { $toString: '$_id' }, v: { count: '$count', viewports: { $arrayToObject: '$viewports' } } } } } },
+				{ $replaceRoot: { newRoot: { $arrayToObject: '$counts' } } }
+			])
 		]);
-		// There is only ever one result from each of the status aggregations, so use the first result from the cursor
-		const [ statusCeremony, statusReception ] = await Promise.all([
+		// There is only ever one result from each of the status and telemetry aggregations, so use the first result from their cursors
+		const [ statusCeremony, statusReception, telemetryCounts ] = await Promise.all([
 			ceremonyStatusesCursor.next(),
-			receptionStatusesCursor.next()
+			receptionStatusesCursor.next(),
+			telemetryPathCursor?.next()
 		]);
-		// Then close them both
+		// Then close them
 		ceremonyStatusesCursor.close();
 		receptionStatusesCursor.close();
+		telemetryPathCursor?.close();
 
-		return res.json({ success: true, data: {
+		const data = {
 			status_ceremony: statusCeremony,
 			status_reception: statusReception,
 			unused_plus_one: unusedPlusOne[0]?.count || 0,
@@ -79,6 +101,11 @@ module.exports = {
 			total_logins: loginCount[0]?.count || 0,
 			total_song_requests: songRequestCount[0]?.count || 0,
 			total_messages: messageCount[0]?.count || 0
-		} });
+		};
+		if (req.query.telemetry) {
+			data.telemetry = telemetryCounts;
+		}
+
+		return res.json({ success: true, data });
 	}
 };

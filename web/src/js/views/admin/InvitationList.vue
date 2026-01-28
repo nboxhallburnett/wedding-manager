@@ -67,6 +67,16 @@ const tableOpts = {
 		{ id: 'children', text: 'Children', sort(a, b, dir) {
 			return ((a?.children?.length || 0) - (b?.children?.length || 0)) * dir;
 		} },
+		{ id: 'created', text: 'Created', sort(a, b, dir) {
+			const _a = new Date(a.created);
+			const _b = new Date(b.created);
+			return (_a - _b) * dir * -1;
+		} },
+		{ id: 'updated', text: 'Updated', sort(a, b, dir) {
+			const _a = new Date(a.created);
+			const _b = new Date(b.created);
+			return (_a - _b) * dir * -1;
+		} },
 		{ id: 'status', text: 'Status' }
 	],
 	search(item, term) {
@@ -178,6 +188,14 @@ function invitationStatus(invitation) {
 
 	return out;
 }
+
+function guestCount(item) {
+	const namedGuestCount = (item.guests || []).filter(guest => guest.name)?.length || 0;
+	if (namedGuestCount !== item.guests?.length) {
+		return `${namedGuestCount} (+${item.guests.length - namedGuestCount})`;
+	}
+	return String(namedGuestCount);
+}
 </script>
 
 <template>
@@ -190,10 +208,12 @@ function invitationStatus(invitation) {
 					</router-link>
 				</th>
 				<td v-text="item.guests?.[0]?.name || '---'" />
-				<td class="text-end" v-text="item.guests?.length || 0" />
-				<td class="text-end" v-text="item.children?.length || 0" />
+				<td v-text="guestCount(item)" />
+				<td v-text="item.children?.length || 0" />
+				<td v-text="new Date(item.created).toLocaleDateString()" />
+				<td v-text="new Date(item.updated).toLocaleDateString()" />
 				<td class="text-center" :class="invitationStatus(item).class">
-					<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }" title="Invitation Status">
+					<info-popover title="Invitation Status" :hint="invitationStatus(item).message" :opts="{ html: true }">
 						<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
 					</info-popover>
 				</td>

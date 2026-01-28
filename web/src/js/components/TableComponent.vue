@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import Router from 'router';
 
@@ -13,8 +13,10 @@ const props = defineProps({
 	rowClass: { type: [ Function, String ], default: null }
 });
 
-const displayedPage = ref(0);
-const perPage = ref(10);
+const defaultPerPage = 10;
+
+const displayedPage = ref(Number(Router.currentRoute.value.query?.page || 1) - 1);
+const perPage = ref(Number(Router.currentRoute.value.query?.per_page) || defaultPerPage);
 const perPageOptions = [ 5, 10, 25, 50, 100 ];
 
 const searchTerm = ref(Router.currentRoute.value.query?.term || '');
@@ -52,6 +54,17 @@ const displayedItems = computed(() => {
 // Keeps track of the total number of pages
 const pages = computed(() => Math.ceil(sortedItems.value.length / perPage.value));
 
+const displayedPages = computed(() => {
+	const out = [];
+	for (let i = 1; i <= pages.value; i++) {
+		out.push(i);
+	}
+	if (out.length <= 5) {
+		return out;
+	}
+	return out.filter(page => page >= (displayedPage.value - 2) && page <= (displayedPage.value + 4));
+});
+
 // Constructs the displayed table's caption text
 const captionText = computed(() => {
 	const itemText = `${props.caption}${props.items.length !== 1 ? 's' : ''}`;
@@ -85,6 +98,16 @@ function sort(col) {
 }
 
 /**
+ * Navigate to the first page
+ */
+function firstPage() {
+	// Don't attempt to go to an earlier page if we're on the first page already
+	if (displayedPage.value <= 0) {
+		return;
+	}
+	displayedPage.value = 0;
+}
+/**
  * Navigate to the page prior to the one currently displayed
  */
 function previousPage() {
@@ -92,7 +115,7 @@ function previousPage() {
 	if (displayedPage.value <= 0) {
 		return;
 	}
-	displayedPage.value = displayedPage.value - 1;
+	displayedPage.value -= 1;
 }
 
 /**
@@ -103,12 +126,33 @@ function nextPage() {
 	if (displayedPage.value >= pages.value - 1) {
 		return;
 	}
-	displayedPage.value = displayedPage.value + 1;
+	displayedPage.value += 1;
 }
+
+/**
+ * Navigate to the last available page
+ */
+function lastPage() {
+	// Don't attempt to go to an earlier page if we're on the first page already
+	if (displayedPage.value >= pages.value - 1) {
+		return;
+	}
+	displayedPage.value = pages.value - 1;
+}
+
+// Maintain the current page and per_page values as query params so it's persisted when navigating history
+watch(displayedPage, page => Router.replace({ query: { ...Router.currentRoute.value.query, page: page === 0 ? undefined : page + 1 } }));
+watch(perPage, per_page => {
+	// If we're not on the initial page, reset the page value
+	if (displayedPage.value) {
+		displayedPage.value = 0;
+	}
+	Router.replace({ query: { ...Router.currentRoute.value.query, per_page: per_page === defaultPerPage ? undefined : per_page } });
+});
 </script>
 
 <template>
-	<div v-if="search" class="">
+	<div v-if="search">
 		<input
 			v-model="searchTerm"
 			class="form-control mx-auto w-75"
@@ -128,22 +172,32 @@ function nextPage() {
 				<div class="float-end">
 					<nav v-if="pages > 1" class="d-inline-flex" aria-label="Table pagination controls">
 						<ul class="pagination pagination-sm">
-							<li class="page-item" :class="{ disabled: displayedPage === 0 }" @click.prevent.stop="previousPage">
-								<a class="page-link" href="#" aria-label="Previous">
+							<li v-if="!displayedPages.includes(1)" class="page-item" :class="{ disabled: displayedPage === 0 }" @click.prevent.stop="firstPage">
+								<a class="page-link" href="#" aria-label="First Page">
 									<span aria-hidden="true">&laquo;</span>
 								</a>
 							</li>
-							<li v-for="idx in pages" :key="idx" class="page-item">
+							<li class="page-item" :class="{ disabled: displayedPage === 0 }" @click.prevent.stop="previousPage">
+								<a class="page-link" href="#" aria-label="Previous Page">
+									<span aria-hidden="true">&lsaquo;</span>
+								</a>
+							</li>
+							<li v-for="idx in displayedPages" :key="idx" class="page-item">
 								<a
 									class="page-link"
-									:class="{ active: displayedPage === idx - 1 }"
 									href="#"
-									@click.prevent.stop="displayedPage = idx - 1"
+									:class="{ active: displayedPage === idx - 1 }"
 									v-text="idx"
+									@click.prevent.stop="displayedPage = idx - 1"
 								/>
 							</li>
 							<li class="page-item" :class="{ disabled: displayedPage === pages - 1 }" @click.prevent.stop="nextPage">
-								<a class="page-link" href="#" aria-label="Next">
+								<a class="page-link" href="#" aria-label="Next Page">
+									<span aria-hidden="true">&rsaquo;</span>
+								</a>
+							</li>
+							<li v-if="!displayedPages.includes(pages - 1)" class="page-item" :class="{ disabled: displayedPage === pages - 1 }" @click.prevent.stop="lastPage">
+								<a class="page-link" href="#" aria-label="Last Page">
 									<span aria-hidden="true">&raquo;</span>
 								</a>
 							</li>
@@ -214,8 +268,8 @@ function nextPage() {
 									v-else-if="action.onClick"
 									class="dropdown-item"
 									:class="action.class"
-									@click.prevent="action.onClick"
 									v-text="action.text"
+									@click.prevent="action.onClick"
 								/>
 								<hr v-else-if="action.divider" class="dropdown-divider">
 							</li>

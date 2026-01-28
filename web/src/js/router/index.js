@@ -220,7 +220,15 @@ const router = createRouter({
 		{
 			path: '/:pathMatch(.*)+',
 			name: '404',
-			component: () => import('../views/NotFound.vue')
+			component: () => import('../views/NotFound.vue'),
+			beforeEnter: to => {
+				const invitation = inject('invitation');
+				// If we're navigating to the 404 page without a valid session, redirect instead to the login page
+				// with the requested path as a redirect.
+				if (!invitation.value?.id) {
+					return { name: 'Login', query: { redirect: to.fullPath } };
+				}
+			}
 		}
 	]
 });

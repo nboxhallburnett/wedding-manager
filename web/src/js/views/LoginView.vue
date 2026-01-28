@@ -24,10 +24,10 @@ const { onSubmit } = useForm({
 		// If a regular non-external-admin login, proceed to the application
 		if (!data.oauth) {
 			invitation.value = data;
-			Router.replace(invitation.value.admin
-				? { name: 'Admin Overview' }
-				: { name: 'Home' }
-			);
+			const redirect = Router.currentRoute.value.query?.redirect;
+			const destination = redirect && Router.resolve(Router.currentRoute.value.query?.redirect)
+				|| (invitation.value.admin ? { name: 'Admin Overview' } : { name: 'Home' });
+			Router.replace(destination);
 		}
 
 		// Otherwise, trigger the wire-up of the OAuth sign in flow
@@ -61,7 +61,7 @@ function initOauth(email, state) {
 	// Set the source to the expected script location
 	script.src = 'https://accounts.google.com/gsi/client';
 	// Wire up the initialization and rendering to be done once the script loads
-	script.onload = function() {
+	script.onload = function () {
 		// Wire up the OAuth sign in library
 		window.google.accounts.id.initialize({
 			// Give it the configured client_id
@@ -106,8 +106,11 @@ function initOauth(email, state) {
 					loading.value = false;
 					// Update the invitation in the shared store
 					invitation.value = response.result.data;
-					// And navigate to the admin overview. The OAuth flow is only used for external admin access.
-					Router.replace({ name: 'Admin Overview' });
+					// And navigate to the login destination. The OAuth flow is only used for external admin access.
+					const redirect = Router.currentRoute.value.query?.redirect;
+					const destination = redirect && Router.resolve(Router.currentRoute.value.query?.redirect)
+						|| { name: 'Admin Overview' };
+					Router.replace(destination);
 				} else {
 					addToast({
 						title: 'An Error Occurred',
@@ -154,7 +157,7 @@ function renderOauthButton(state) {
 function decodeJwtResponse(token) {
 	const base64Url = token.split('.')[1];
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 	}).join(''));
 
@@ -207,7 +210,7 @@ onMounted(() => {
 				>
 				<label for="username">Invitation ID</label>
 			</div>
-			<button :disabled="!invitationId" class="btn btn-primary w-100" type="submit">
+			<button class="btn btn-primary w-100" type="submit" :disabled="!invitationId">
 				Submit
 			</button>
 		</template>

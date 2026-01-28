@@ -28,7 +28,7 @@ const invitation = inject('invitation');
 		<p class="pb-1 text-stroke">
 			You seem to be lost.
 		</p>
-		<RouterLink class="btn btn-primary w-100" :to="{ name: 'Login' }">
+		<RouterLink class="btn btn-primary w-100" :to="{ name: 'Login', query: { redirect: $router.currentRoute.value.href } }">
 			Home
 		</RouterLink>
 	</div>

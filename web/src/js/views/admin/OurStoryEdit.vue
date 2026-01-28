@@ -98,8 +98,8 @@ function moveItem(idx, to) {
 					</div>
 					<form-input
 						v-model="item.date"
-						:name="`date-${item.id}`"
 						label="Date"
+						:name="`date-${item.id}`"
 						required
 					>
 						<template #after>
@@ -117,16 +117,16 @@ function moveItem(idx, to) {
 					</form-input>
 					<form-input
 						v-model="item.title"
-						:name="`title-${item.id}`"
 						label="Title"
 						placeholder="The happy couple did something cute"
+						:name="`title-${item.id}`"
 						required
 					/>
 					<form-textarea
 						v-model="item.description"
-						:name="`description-${item.id}`"
 						label="Description"
 						placeholder="Some more info about what the happy couple did that made it cute"
+						:name="`description-${item.id}`"
 						required
 					/>
 				</div>
@@ -134,8 +134,8 @@ function moveItem(idx, to) {
 			<button
 				role="button"
 				class="btn btn-primary"
-				@click.prevent.stop="addItem"
 				v-text="'Add Item'"
+				@click.prevent.stop="addItem"
 			/>
 		</form>
 	</card-body>

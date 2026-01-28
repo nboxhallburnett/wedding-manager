@@ -17,7 +17,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 						<template v-if="idx">
 							|
 						</template>
-						<a :href="item.url" class="nav-item nav-link text-stroke" target="_blank">
+						<a class="nav-item nav-link text-stroke" target="_blank" :href="item.url">
 							{{ item.text }}
 						</a>
 					</template>
@@ -37,7 +37,7 @@ const daysToGo = Math.floor((CONFIG.date - Date.now()) / (1000 * 60 * 60 * 24));
 	<div id="footer-md" class="d-none d-md-flex container-fluid">
 		<div id="col-left" class="col">
 			<div v-for="item in navItems" :key="item.text" class="v-footer-item mb-4">
-				<a :href="item.url" class="nav-item nav-link text-stroke" target="_blank">
+				<a class="nav-item nav-link text-stroke" target="_blank" :href="item.url">
 					{{ item.text }}
 				</a>
 			</div>

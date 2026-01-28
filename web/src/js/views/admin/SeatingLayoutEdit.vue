@@ -250,11 +250,11 @@ function onDropped(evt) {
 				>
 					<dining-table
 						:id="String(idx + 1)"
+						class="d-inline-block layout-table"
 						:occupants="table.guests"
 						:search-term
 						:style="idx === 0 ? 'rectangle' : undefined"
 						:rotation="Number(table.rotation || 0)"
-						class="d-inline-block layout-table"
 						:draggable="true"
 						@dragstart="evt => onDragStart(evt, table, idx)"
 						@dragend="onDragEnd"

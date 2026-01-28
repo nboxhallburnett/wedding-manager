@@ -79,7 +79,7 @@ app.use(Express.static(path.resolve(import.meta.dirname, '..', 'web', 'public'),
 }));
 
 // Add request context store and define an id for the request
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	req.ctx = {};
 	req.id = nanoid();
 	next();
@@ -169,7 +169,7 @@ const server = app.listen(config.server.port, '0.0.0.0', function () {
 });
 
 // Listen for SIGTERM events to gracefully close the server
-process.on('SIGTERM', async() => {
+process.on('SIGTERM', async () => {
 	log('SIGTERM signal received, shutting down server');
 	await new Promise(resolve => {
 		server.close(() => {

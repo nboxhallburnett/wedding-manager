@@ -27,8 +27,8 @@ if (props.focus) {
 				v-bind="$attrs"
 				ref="input"
 				v-model="model"
-				:name="props.name"
 				class="form-control"
+				:name="props.name"
 				:placeholder="placeholder"
 			/>
 			<slot name="after" />

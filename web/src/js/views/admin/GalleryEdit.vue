@@ -97,9 +97,9 @@ function moveItem(idx, to) {
 					</div>
 					<form-input
 						v-model="item.path"
-						:name="`question-${item.id}`"
 						label="Path"
 						placeholder="/img/gallery/1.jpg"
+						:name="`question-${item.id}`"
 						required
 					>
 						<template #after>
@@ -115,22 +115,22 @@ function moveItem(idx, to) {
 							</button>
 						</template>
 						<template v-if="item.path" #below>
-							<img class="img-thumbnail" :src="item.path" alt="Preview">
+							<img class="img-thumbnail" alt="Preview" :src="item.path">
 						</template>
 					</form-input>
 					<form-input
 						v-model="item.caption"
-						:name="`caption-${item.id}`"
 						label="Caption"
 						placeholder="The happy couple enjoying life"
+						:name="`caption-${item.id}`"
 					/>
 				</div>
 			</transition-group>
 			<button
 				role="button"
 				class="btn btn-primary"
-				@click.prevent.stop="addItem"
 				v-text="'Add Item'"
+				@click.prevent.stop="addItem"
 			/>
 		</form>
 	</card-body>

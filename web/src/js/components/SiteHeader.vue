@@ -121,8 +121,8 @@ async function submitFeedback() {
 				<template v-for="item in navItems" :key="item.text">
 					<router-link
 						v-if="item.to"
-						:to="item.to"
 						class="nav-item nav-link text-stroke"
+						:to="item.to"
 						:class="{ active: $route.name === item.to.name || item.pathMatch?.test($route.path) }"
 						@click="collapseNavbar"
 					>

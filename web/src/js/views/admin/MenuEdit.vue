@@ -43,8 +43,8 @@ if (!isNew) {
 }
 
 const { onSubmit } = useForm({
-	method: () => isNew ? 'POST' : 'PUT',
-	path: () => isNew ? 'menu' : `menu/${item.value.id}`,
+	method: () => (isNew ? 'POST' : 'PUT'),
+	path: () => (isNew ? 'menu' : `menu/${item.value.id}`),
 	validation: true,
 	body: item,
 	onSuccess() {
@@ -84,15 +84,15 @@ watch(() => item.value.vegan, value => {
 			/>
 			<form-select
 				v-model="item.course"
-				:options="courseOptions"
 				name="course"
 				label="Course"
+				:options="courseOptions"
 			/>
 			<form-select
 				v-model="item.child"
-				:options="menuOptions"
 				name="child"
 				label="Menu"
+				:options="menuOptions"
 			/>
 			<form-switch v-model="item.vegan" name="vegan" label="Vegan" />
 			<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />

@@ -5,4 +5,4 @@ __webpack_nonce__ = '__NONCE__';
 import '../scss/index.scss';
 
 // Load the actual app code in a separate bundle.
-import('./app.js').then(app => app.init());
+import('./app.js').then(app => app.init()).catch(console.error);

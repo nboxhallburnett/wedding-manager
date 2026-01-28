@@ -11,16 +11,16 @@ const props = defineProps({
 </script>
 
 <template>
-	<form-item :label :name group-class="form-check form-switch">
+	<form-item group-class="form-check form-switch" :label :name>
 		<input
 			:id="props.name"
 			v-bind="$attrs"
 			ref="input"
 			v-model="model"
-			:name="props.name"
 			type="checkbox"
 			role="switch"
 			class="form-check-input"
+			:name="props.name"
 		>
 		<slot name="after" />
 	</form-item>

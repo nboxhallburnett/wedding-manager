@@ -34,7 +34,7 @@ onMounted(() => {
  */
 async function supportsFormat(dataUrl) {
 	if (!window.createImageBitmap) {
-		return Promise.reject(false);
+		return false;
 	}
 
 	try {
@@ -43,18 +43,29 @@ async function supportsFormat(dataUrl) {
 		return true;
 	} catch (err) {
 		console.warn('Error checking image format support:', err);
-		return Promise.reject(false);
+		return false;
 	}
 }
 
-// Check support for AVIF or WebP formats to determine the most optimal format to use on initial render, falling back to jpeg.
-// This determines which images are used on the zoomed out initial render, with the raw images being used in place when zoomed in.
-const avifData = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUEAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABYAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgSAAAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB5tZGF0EgAKBzgADlAgIGkyCR/wAABAAACvcA==';
-const webpData = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAAQAcJaQAA3AA/v3AgAA=';
-supportsFormat(avifData).then(() => 'avif')
-	.catch(() => supportsFormat(webpData).then(() => 'webp'))
-	.catch(() => 'jpeg')
-	.then(value => preferredType.value = value);
+/**
+ * Check support for AVIF or WebP formats to determine the most optimal format to use on initial render, falling back to jpeg.
+ * This determines which images are used on the zoomed out initial render, with the raw images being used in place when zoomed in.
+ */
+async function getSupportedFormat() {
+	const avifData = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUEAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABYAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgSAAAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB5tZGF0EgAKBzgADlAgIGkyCR/wAABAAACvcA==';
+	if (await supportsFormat(avifData)) {
+		return 'avif';
+	}
+	const webpData = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAAQAcJaQAA3AA/v3AgAA=';
+	if (await supportsFormat(webpData)) {
+		return 'webp';
+	}
+	return 'jpeg';
+}
+
+getSupportedFormat()
+	.then(value => preferredType.value = value)
+	.catch(console.error);
 </script>
 
 <template>
@@ -64,7 +75,7 @@ supportsFormat(avifData).then(() => 'avif')
 				<div class="ratio ratio-4x3 placeholder" />
 			</div>
 
-			<teleport defer to="#modal-content" :disabled="!showModal">
+			<teleport to="#modal-content" :disabled="!showModal" defer>
 				<div
 					v-if="!galleryLoading && preferredType"
 					id="gallery-carousel"
@@ -77,9 +88,9 @@ supportsFormat(avifData).then(() => 'avif')
 							:key="idx"
 							type="button"
 							data-bs-target="#gallery-carousel"
+							aria-current="true"
 							:class="{ active: idx === 0 }"
 							:data-bs-slide-to="idx"
-							aria-current="true"
 							:aria-label="`Image ${idx + 1}`"
 						/>
 					</div>
@@ -91,9 +102,9 @@ supportsFormat(avifData).then(() => 'avif')
 							:class="{ active: idx === 0 }"
 						>
 							<img
+								class="d-block img-fluid"
 								:src="showModal ? item.path : `/api/gallery${item.path}?type=${preferredType}`"
 								:class="{ 'modal-image mx-auto': showModal }"
-								class="d-block img-fluid"
 								:alt="item.caption || 'Gallery Image'"
 								@click="bsModal.toggle()"
 							>
@@ -105,9 +116,9 @@ supportsFormat(avifData).then(() => 'avif')
 					<button
 						class="carousel-control-prev"
 						type="button"
-						:class="{ 'position-fixed': showModal }"
 						data-bs-target="#gallery-carousel"
 						data-bs-slide="prev"
+						:class="{ 'position-fixed': showModal }"
 					>
 						<span class="carousel-control-prev-icon bg-dark bg-opacity-75 rounded-3 py-4" aria-hidden="true" />
 						<span class="visually-hidden">Previous</span>
@@ -115,9 +126,9 @@ supportsFormat(avifData).then(() => 'avif')
 					<button
 						class="carousel-control-next"
 						type="button"
-						:class="{ 'position-fixed': showModal }"
 						data-bs-target="#gallery-carousel"
 						data-bs-slide="next"
+						:class="{ 'position-fixed': showModal }"
 					>
 						<span class="carousel-control-next-icon bg-dark bg-opacity-75 rounded-3 py-4" aria-hidden="true" />
 						<span class="visually-hidden">Next</span>

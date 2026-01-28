@@ -29,7 +29,7 @@ async function init(app) {
 		if (file.endsWith('.js') && !file.endsWith('index.js')) {
 			try {
 				/** @type {API} */
-				const api = require(join(__dirname, file));
+				const api = require(join(__dirname, file)); // eslint-disable-line security/detect-non-literal-require
 
 				// If it has the expected exports of an API definition, wire it up
 				if (typeof api.path === 'string' && typeof api.action === 'function') {

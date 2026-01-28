@@ -48,7 +48,7 @@ const { onSubmit } = useForm({
 				<div class="card-body">
 					<card-header title="Details" class="z-0" no-title />
 					<div class="card-text">
-						<vue-showdown :markdown="content || placeholder" flavor="github" :extensions="classExtensions" />
+						<vue-showdown flavor="github" :markdown="content || placeholder" :extensions="classExtensions" />
 					</div>
 				</div>
 			</div>

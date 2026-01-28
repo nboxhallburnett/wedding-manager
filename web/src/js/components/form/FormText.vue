@@ -26,8 +26,8 @@ watchEffect(() => {
 			:id="props.name"
 			v-bind="$attrs"
 			ref="input"
-			:name="props.name"
 			class="form-control-plaintext ws-pre-wrap"
+			:name="props.name"
 			:class="textClass"
 			v-text="displayValue"
 		/>

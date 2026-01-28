@@ -20,7 +20,7 @@ function removeItem(idx) {
 </script>
 
 <template>
-	<form-item :label :name group-class="d-flex flex-wrap gap-2">
+	<form-item group-class="d-flex flex-wrap gap-2" :label :name>
 		<template v-for="(_item, idx) in model" :key="idx">
 			<div class="input-group">
 				<input
@@ -28,9 +28,9 @@ function removeItem(idx) {
 					v-bind="$attrs"
 					:ref="$el => $items[idx] = $el"
 					v-model="model[idx]"
-					:name="idx === 0 ? props.name : undefined"
 					class="form-control"
 					type="text"
+					:name="idx === 0 ? props.name : undefined"
 					:placeholder="placeholder"
 				>
 				<button

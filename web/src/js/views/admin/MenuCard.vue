@@ -22,7 +22,7 @@ const borderContent = ref('');
 
 useLoader('menu', menu);
 
-onMounted(async() => {
+onMounted(async () => {
 	// Fetch the themed colours to use for the border content
 	const primaryColour = getComputedStyle($card.value).getPropertyValue('--bs-primary');
 

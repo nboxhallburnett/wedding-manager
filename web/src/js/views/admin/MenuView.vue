@@ -62,14 +62,14 @@ function invitationDisplay(invitation) {
 				label="Description"
 			/>
 			<form-text
-				:value="courseOptions[item.course]"
 				name="course"
 				label="Course"
+				:value="courseOptions[item.course]"
 			/>
 			<form-text
-				:value="menuOptions[Number(item.child)]"
 				name="child"
 				label="Menu"
+				:value="menuOptions[Number(item.child)]"
 			/>
 			<form-item
 				name="invitations"
@@ -79,8 +79,8 @@ function invitationDisplay(invitation) {
 				<template v-for="invitation in invitations" :key="invitation.id">
 					<div class="form-control-plaintext">
 						<router-link
-							:to="{ name: 'Admin View Invitation', params: { invitationId: invitation.id } }"
 							class="link-primary font-monospace"
+							:to="{ name: 'Admin View Invitation', params: { invitationId: invitation.id } }"
 						>
 							{{ invitation.id }}
 						</router-link>

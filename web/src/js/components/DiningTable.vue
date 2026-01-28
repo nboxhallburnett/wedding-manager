@@ -166,11 +166,11 @@ function onDragEnd() {
  */
 function onDragging(evt) {
 	// If the cursor is near the top of the viewport, scroll up
-	if (evt.clientY <= 75){
+	if (evt.clientY <= 75) {
 		window.scrollBy(0, -33);
 	}
 	// Likewise, if the cursor is near the bottom then scroll down
-	if(evt.clientY >= window.innerHeight - 75){
+	if (evt.clientY >= window.innerHeight - 75) {
 		window.scrollBy(0, 33);
 	}
 }

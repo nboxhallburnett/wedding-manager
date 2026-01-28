@@ -81,7 +81,7 @@ module.exports = {
 					// Verify the status contained a valid value
 					if (typeof guest.diet !== 'string') {
 						res.status(400);
-						throw new Error(`"guests[${idx}].diet" contained an invalid value: Unsupported value: "${guest.name}"`);
+						throw new Error(`"guests[${idx}].diet" contained an invalid value: Unsupported value: "${guest.diet}"`);
 					}
 
 					// Update the verified updated dietary requirement value
@@ -166,7 +166,7 @@ module.exports = {
 				for (const prop of menuItemProps) {
 					if (child[prop]) {
 						// Verify the menu item contained a valid value
-						const isValidMenuItem = child[prop] === 'other'|| await menuItemDb
+						const isValidMenuItem = child[prop] === 'other' || await menuItemDb
 							.find({ id: child[prop] })
 							.limit(-1)
 							.batchSize(1)

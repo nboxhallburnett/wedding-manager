@@ -68,8 +68,8 @@ if (!isNew) {
 }
 
 const { onSubmit } = useForm({
-	method: () => isNew ? 'POST' : 'PUT',
-	path: () => isNew ? 'calendar' : `calendar/${item.value.id}`,
+	method: () => (isNew ? 'POST' : 'PUT'),
+	path: () => (isNew ? 'calendar' : `calendar/${item.value.id}`),
 	body() {
 		// ical files are specific about radius/lat/lon values so ensure we only send valid values for them
 		item.value.location.radius = Number(item.value.location.radius) >= 0

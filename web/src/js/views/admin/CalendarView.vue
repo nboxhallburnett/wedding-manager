@@ -14,6 +14,10 @@ import { formatEventDate } from 'lib/formatter';
 const item = ref({});
 
 useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
+
+function geoLink(item) {
+	return `geo:${item.location.geo.lat},${item.location.geo.lon};u=${item.location.radius}?q=${item.location.geo.lat},${item.location.geo.lon}(${encodeURIComponent(`${item.location.title}, ${item.location.address}`)})`;
+}
 </script>
 
 <template>
@@ -35,7 +39,7 @@ useLoader(`calendar/${Router.currentRoute.value.params.calendarEventId}`, item);
 				<a
 					v-if="item.location?.geo?.lat && item.location?.geo?.lon"
 					class="form-control-plaintext link-primary"
-					:href="`geo:${item.location.geo.lat},${item.location.geo.lon};u=${item.location.radius}?q=${item.location.geo.lat},${item.location.geo.lon}(${encodeURIComponent(item.location.title + ', ' + item.location.address)})`"
+					:href="geoLink(item)"
 					v-text="item.location.title + ', ' + item.location.address"
 				/>
 				<span v-else class="form-control-plaintext" v-text="item.location.title + ', ' + item.location.address" />

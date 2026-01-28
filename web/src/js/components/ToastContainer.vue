@@ -39,7 +39,6 @@ function addToast(toast, options = { animation: true, autohide: true }) {
 			>
 				<div class="toast-header">
 					<strong class="me-auto" v-text="toast.title" />
-					<!-- <small class="text-muted">just now</small> -->
 					<button
 						type="button"
 						class="btn-close"

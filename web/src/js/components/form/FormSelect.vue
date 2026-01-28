@@ -14,6 +14,7 @@ const props = defineProps({
 					console.error('Options must include a value');
 					return true;
 				}
+				return false;
 			});
 		}
 	},
@@ -36,9 +37,9 @@ const props = defineProps({
 			<option
 				v-if="placeholder"
 				:value="defaultOption"
+				v-text="placeholder"
 				selected
 				disabled
-				v-text="placeholder"
 			/>
 			<template v-for="option in options" :key="option.value">
 				<option :value="option.value" v-text="option.text || option.value" />

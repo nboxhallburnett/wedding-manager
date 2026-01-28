@@ -173,7 +173,7 @@ function scrollToItem(id) {
 				data-bs-target="#about-navbar"
 				tabindex="0"
 			>
-				<vue-showdown :markdown="content" flavor="github" :extensions="classExtensions" />
+				<vue-showdown flavor="github" :markdown="content" :extensions="classExtensions" />
 			</div>
 			<div class="d-none d-md-block col-4 border-start">
 				<nav id="about-navbar" class="flex-column align-items-stretch">
@@ -182,8 +182,8 @@ function scrollToItem(id) {
 							<a
 								class="nav-link"
 								:href="`#${section.id}`"
-								@click.prevent="scrollToItem(section.id)"
 								v-text="section.title"
+								@click.prevent="scrollToItem(section.id)"
 							/>
 							<nav v-if="section.items.length" class="nav nav-pills flex-column">
 								<a
@@ -191,8 +191,8 @@ function scrollToItem(id) {
 									:key="item.id"
 									class="nav-link ms-3 my-1"
 									:href="`#${item.id}`"
-									@click.prevent="scrollToItem(item.id)"
 									v-text="item.title"
+									@click.prevent="scrollToItem(item.id)"
 								/>
 							</nav>
 						</template>

@@ -13,8 +13,8 @@ const loading = inject('loading');
 	<div
 		v-if="loading"
 		class="loader-overlay"
-		:class="{ 'position-fixed': overlay }"
 		role="status"
+		:class="{ 'position-fixed': overlay }"
 	>
 		<div class="ring-loader loading">
 			<span class="visually-hidden">Loading...</span>

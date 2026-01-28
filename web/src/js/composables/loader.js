@@ -106,5 +106,6 @@ export async function useLoader(toLoad, onLoad, loadingRef, cacheable) {
 		if (typeof onLoad === 'function') {
 			return onLoad(Array.isArray(toLoad) ? response : response[0]);
 		}
+		return;
 	});
 }

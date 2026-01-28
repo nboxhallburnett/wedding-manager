@@ -9,7 +9,7 @@ const classMap = {
  */
 export const classExtensions = Object.keys(classMap).map(key => ({
 	type: 'output',
-	regex: new RegExp(`<${key}(.*)>`, 'g'),
+	regex: new RegExp(`<${key}(.*)>`, 'g'), // eslint-disable-line security/detect-non-literal-regexp
 	replace: `<${key} class="${classMap[key]}" $1>`
 }));
 
@@ -20,7 +20,7 @@ export const classExtensions = Object.keys(classMap).map(key => ({
 export const dateExtension = {
 	type: 'lang',
 	regex: /\^\^date \d{4}-\d{2}-\d{2}/g,
-	replace: function(match) {
+	replace: function (match) {
 		// Get the date string from the match
 		const date = new Date(match.substring(7));
 		// If doesn't get a valid date, just return what was defined

@@ -14,6 +14,7 @@ const props = defineProps({
 					console.error('Options must include a value');
 					return true;
 				}
+				return false;
 			});
 		}
 	}
@@ -23,10 +24,10 @@ const props = defineProps({
 
 <template>
 	<form-item
-		:label
-		:name
 		label-class="pt-0"
 		group-class=""
+		:label
+		:name
 	>
 		<div v-for="option in options" :key="option.value" class="form-check mb-2">
 			<input

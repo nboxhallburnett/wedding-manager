@@ -257,11 +257,11 @@ function onDragEnd() {
  */
 function onDragging(evt) {
 	// If the cursor is near the top of the viewport, scroll up
-	if (evt.clientY <= 75){
+	if (evt.clientY <= 75) {
 		window.scrollBy(0, -33);
 	}
 	// Likewise, if the cursor is near the bottom then scroll down
-	if(evt.clientY >= window.innerHeight - 75){
+	if (evt.clientY >= window.innerHeight - 75) {
 		window.scrollBy(0, 33);
 	}
 }
@@ -334,10 +334,10 @@ function onDropped(evt) {
 						<hr v-if="idx">
 						<dining-table
 							:id="String(idx + 1)"
+							class="d-inline-block"
 							:occupants="table.guests"
 							:search-term
 							:style="idx === 0 ? 'rectangle' : undefined"
-							class="d-inline-block"
 							edit
 							@set-seat="evt => setSeat(idx, evt)"
 						/>
@@ -360,21 +360,21 @@ function onDropped(evt) {
 								type="button"
 								class="btn btn-sm btn-primary"
 								:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
-								@click="table.guests.push({})"
 								v-text="'Add Chair'"
+								@click="table.guests.push({})"
 							/>
 							<button
 								type="button"
 								class="btn btn-sm btn-primary"
 								:disabled="table.guests.length <= 1"
-								@click="table.guests.pop()"
 								v-text="'Remove Chair'"
+								@click="table.guests.pop()"
 							/>
 							<button
 								type="button"
 								class="btn btn-sm btn-danger"
-								@click="removeTable(idx)"
 								v-text="'Remove Table'"
+								@click="removeTable(idx)"
 							/>
 							<button
 								v-if="idx !== 0"
@@ -403,8 +403,8 @@ function onDropped(evt) {
 				<button
 					role="button"
 					class="btn btn-primary"
-					@click.prevent.stop="addTable"
 					v-text="'Add Table'"
+					@click.prevent.stop="addTable"
 				/>
 			</div>
 			<div
@@ -422,11 +422,11 @@ function onDropped(evt) {
 					<li
 						v-for="guest in unassignedGuests"
 						:key="`${guest.id}-${Number(guest.child)}-${guest.idx}`"
+						draggable="true"
 						:class="[
 							{ child: guest?.child, 'fw-bold active': hasSearchMatch(guest) },
 							(guest?.status || '').toLowerCase().replace(' ', '-')
 						]"
-						draggable="true"
 						@dragstart="evt => onDragStart(evt, guest)"
 						@dragend="onDragEnd"
 						@drag="onDragging"

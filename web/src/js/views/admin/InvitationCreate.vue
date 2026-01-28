@@ -47,7 +47,7 @@ function addGuest() {
  * @param {Number} idx Index of the guest to remove
  */
 function removeGuest(idx) {
-  	guests.value.splice(idx, 1);
+	guests.value.splice(idx, 1);
 }
 </script>
 

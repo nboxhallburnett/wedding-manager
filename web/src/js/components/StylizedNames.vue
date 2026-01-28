@@ -34,6 +34,7 @@ const groom = CONFIG.groom_short;
 		font-size: calc(var(--stylized-text-base) * 2);
 		font-weight: bold;
 		color: var(--bs-primary);
+		margin-top: calc(var(--stylized-text-base) * -0.1);
 		line-height: 0.3;
 		margin-bottom: calc(var(--stylized-text-base) * -0.5);
 		z-index: -1;

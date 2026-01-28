@@ -133,11 +133,11 @@ async function onSearch(term) {
 				>
 					<dining-table
 						:id="String(idx + 1)"
+						class="d-inline-block"
 						:occupants="table.guests"
 						:search-term
 						:style="idx === 0 ? 'rectangle' : undefined"
 						:rotation="Number(table.rotation || 0)"
-						class="d-inline-block"
 					/>
 				</div>
 			</div>
@@ -155,8 +155,8 @@ async function onSearch(term) {
 								v-if="guest?.name"
 								href="#"
 								class="text-body text-decoration-none"
-								@click.prevent="() => onSearch(guest.name)"
 								v-text="guest.name"
+								@click.prevent="() => onSearch(guest.name)"
 							/>
 							<span v-else v-text="'Unassigned'" />
 						</li>

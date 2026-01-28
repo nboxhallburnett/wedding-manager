@@ -25,9 +25,9 @@ useLoader('question', questions, QAndALoading, true);
 			<vue-showdown
 				v-if="item.markdown"
 				class="text-body-secondary"
+				flavor="github"
 				:extensions="[ dateExtension ]"
 				:markdown="item.answer || 'Preview'"
-				flavor="github"
 			/>
 			<div v-else class="text-body-secondary" v-text="item.answer" />
 		</div>

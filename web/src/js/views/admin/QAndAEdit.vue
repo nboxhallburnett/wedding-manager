@@ -98,10 +98,10 @@ function moveItem(idx, to) {
 					</div>
 					<form-input
 						v-model="item.title"
-						:name="`question-${item.id}`"
 						label="Question"
 						placeholder="What is the meaning of life?"
 						validation="Can't have an answer without a question"
+						:name="`question-${item.id}`"
 						required
 					>
 						<template #after>
@@ -119,32 +119,32 @@ function moveItem(idx, to) {
 					</form-input>
 					<form-textarea
 						v-model="item.answer"
-						:name="`answer-${item.id}`"
 						label="Answer"
 						placeholder="42"
 						validation="Can't have a question without an answer"
+						:name="`answer-${item.id}`"
 						required
 					>
 						<template #below>
 							<div class="img-thumbnail p-2 text-body-secondary">
 								<vue-showdown
 									v-if="item.markdown"
+									flavor="github"
 									:markdown="item.answer || 'Preview'"
 									:extensions="[ dateExtension ]"
-									flavor="github"
 								/>
 								<div v-else v-text="item.answer || 'Preview'" />
 							</div>
 						</template>
 					</form-textarea>
-					<form-switch v-model="item.markdown" :name="`markdown-${item.id}`" label="Markdown" />
+					<form-switch v-model="item.markdown" label="Markdown" :name="`markdown-${item.id}`" />
 				</div>
 			</transition-group>
 			<button
 				role="button"
 				class="btn btn-primary"
-				@click.prevent.stop="addItem"
 				v-text="'Add Question'"
+				@click.prevent.stop="addItem"
 			/>
 		</form>
 	</card-body>

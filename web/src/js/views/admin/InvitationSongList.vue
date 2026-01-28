@@ -67,9 +67,9 @@ const tableOpts = {
 				</th>
 				<td>
 					<a
-						:href="`https://music.youtube.com/search?q=${encodeURIComponent(item.song)}`"
 						class="text-decoration-none"
 						target="_blank"
+						:href="`https://music.youtube.com/search?q=${encodeURIComponent(item.song)}`"
 						v-text="item.song"
 					/>
 				</td>

@@ -36,9 +36,9 @@ const { onSubmit } = useForm({
 		<form class="card-text needs-validation" novalidate @submit.prevent.stop="onSubmit">
 			<form-input
 				v-model="admin.id"
-				:type="admin.email ? 'email' : 'text'"
 				name="id"
 				label="ID"
+				:type="admin.email ? 'email' : 'text'"
 				:placeholder="admin.email ? 'administrator@example.com' : 'administrator'"
 				required
 			/>

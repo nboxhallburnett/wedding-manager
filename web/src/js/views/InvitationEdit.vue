@@ -107,6 +107,14 @@ useLoader([
 	if (!invitation.value.children?.length) {
 		invitation.value.children = [];
 	}
+	for (const guest of invitation.value.guests) {
+		if (!guest.name) {
+			guest.name = '';
+		}
+		if (!guest.diet) {
+			guest.diet = '';
+		}
+	}
 
 	// Track the initial value of the form to determine if there were any modifications in the exit guard
 	initialValue.value = JSON.stringify(invitation.value);
@@ -286,11 +294,11 @@ function getMenuOptions(course, child) {
 					<div class="accordion-header">
 						<button
 							class="accordion-button px-0 bg-body shadow-none pt-0"
-							:class="{ collapsed: idx !== 0 }"
 							type="button"
 							data-bs-toggle="collapse"
-							:data-bs-target="`#guest-accordion-${idx}-content`"
 							aria-expanded="true"
+							:class="{ collapsed: idx !== 0 }"
+							:data-bs-target="`#guest-accordion-${idx}-content`"
 							:aria-controls="`guest-accordion-${idx}-content`"
 						>
 							<h5 class="mb-0 w-100" v-text="guest.name?.trim() || (idx ? '+1' : `Guest ${idx + 1}`)" />
@@ -298,8 +306,8 @@ function getMenuOptions(course, child) {
 								v-if="idx && session.admin"
 								type="button"
 								class="btn btn-sm btn-danger ms-auto me-2"
-								@click="removeGuest(idx)"
 								v-text="'Remove'"
+								@click="removeGuest(idx)"
 							/>
 						</button>
 					</div>
@@ -314,17 +322,17 @@ function getMenuOptions(course, child) {
 							<form-select
 								v-model="guest.status_ceremony"
 								label="Ceremony"
+								placeholder="Pending Confirmation"
 								:options="statusOptions"
 								:default-option="0"
-								placeholder="Pending Confirmation"
 								:name="`guest-${idx}-ceremony`"
 							/>
 							<form-select
 								v-model="guest.status_reception"
 								label="Reception"
+								placeholder="Pending Confirmation"
 								:options="statusOptions"
 								:default-option="0"
-								placeholder="Pending Confirmation"
 								:name="`guest-${idx}-reception`"
 							/>
 							<template v-if="[ 1, 2 ].includes(guest.status_ceremony)">
@@ -345,11 +353,11 @@ function getMenuOptions(course, child) {
 								<hr>
 								<form-textarea
 									v-model="guest.diet"
-									:name="`guest-${idx}-diet`"
 									label="Dietary Requirement"
 									hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 									placeholder="Allergies, health conditions, ethical choices, etc."
 									validation="Please let us know what dietary requirements you have so we can contact you with the available meal options"
+									:name="`guest-${idx}-diet`"
 									:required="guest.name && [ guest.starter_id, guest.main_id, guest.dessert_id ].includes('other') || undefined"
 								/>
 							</template>
@@ -362,8 +370,8 @@ function getMenuOptions(course, child) {
 				v-if="session.admin"
 				class="btn btn-primary"
 				type="button"
-				@click="addGuest"
 				v-text="'Add +1'"
+				@click="addGuest"
 			/>
 
 			<hr>
@@ -379,8 +387,8 @@ function getMenuOptions(course, child) {
 							class="accordion-button px-0 bg-body shadow-none pt-0 collapsed"
 							type="button"
 							data-bs-toggle="collapse"
-							:data-bs-target="`#child-accordion-${idx}-content`"
 							aria-expanded="true"
+							:data-bs-target="`#child-accordion-${idx}-content`"
 							:aria-controls="`child-accordion-${idx}-content`"
 						>
 							<h5 class="mb-0 w-100" v-text="child.name?.trim() || `Child ${idx + 1}`" />
@@ -388,8 +396,8 @@ function getMenuOptions(course, child) {
 								v-if="true"
 								type="button"
 								class="btn btn-sm btn-danger ms-auto me-2"
-								@click="removeChild(idx)"
 								v-text="'Remove'"
+								@click="removeChild(idx)"
 							/>
 						</button>
 					</div>
@@ -427,8 +435,8 @@ function getMenuOptions(course, child) {
 								label="Dietary Requirement"
 								hint="Please let us know of any dietary requirements not covered by the menu and we will be in contact to provide you with additional meal options."
 								placeholder="Allergies, health conditions, ethical choices, etc."
-								validation
 								:required="child.name && [ child.starter_id, child.main_id, child.dessert_id ].includes('other') || undefined"
+								validation
 							/>
 						</template>
 					</div>
@@ -438,8 +446,8 @@ function getMenuOptions(course, child) {
 				v-if="invitation.children?.length < 5"
 				class="btn btn-primary"
 				type="button"
-				@click="addChild"
 				v-text="'Add Child'"
+				@click="addChild"
 			/>
 
 			<hr>
@@ -455,11 +463,11 @@ function getMenuOptions(course, child) {
 				<template #after>
 					<button
 						class="btn btn-primary"
+						type="button"
 						:class="{ disabled: invitation.songs?.length === 5, 'mt-2': invitation.songs?.length }"
 						:disabled="invitation.songs?.length === 5"
-						type="button"
-						@click="addSong"
 						v-text="'Add Suggestion'"
+						@click="addSong"
 					/>
 				</template>
 			</form-array>

@@ -1,7 +1,7 @@
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 /** @type {API<InvitationPath} */
-module.exports = {
+export default {
 	method: 'delete',
 	path: 'invitation/:invitationId',
 	auth: async req => {

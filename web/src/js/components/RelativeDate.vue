@@ -1,5 +1,5 @@
 <script setup>
-import { fromNow } from 'lib/formatter';
+import { fromNow } from 'lib/formatter.js';
 import { usePopover } from 'composables/popover';
 
 const props = defineProps({

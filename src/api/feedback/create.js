@@ -1,9 +1,9 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const feedbackDb = require('../../lib/db/feedback');
+import feedbackDb from '../../lib/db/feedback.js';
 
 /** @type {API<{}, { message: String }} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'feedback',
 	auth: async req => {

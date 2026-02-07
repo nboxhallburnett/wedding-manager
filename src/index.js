@@ -1,18 +1,18 @@
 import path from 'node:path';
 import { STATUS_CODES } from 'node:http';
 
-import MongoStore from 'connect-mongo';
-import Session from 'express-session';
 import Compression from 'compression';
 import CookieParser from 'cookie-parser';
 import Express from 'express';
+import MongoStore from 'connect-mongo';
+import Session from 'express-session';
 import { nanoid } from 'nanoid';
 import { rateLimit } from 'express-rate-limit';
 
-import API from './api/index.js';
-import Admin from './lib/admin.js';
-import DB from './lib/db/index.js';
-import Logger from './lib/logger.js';
+import * as DB from './lib/db/index.js';
+import Logger, { middleware as LoggerMiddleware } from './lib/logger.js';
+import * as API from './api/index.js';
+import { middleware as AdminMiddleware } from './lib/admin.js';
 
 import IndexRoute from './routes/index.js';
 
@@ -86,7 +86,7 @@ app.use(function (req, res, next) {
 });
 
 // Request logging middleware
-app.use(Logger.middleware);
+app.use(LoggerMiddleware);
 
 // Add cookie parsing
 app.use(CookieParser());
@@ -115,7 +115,7 @@ app.use(Session({
 }));
 
 // Add admin middleware
-app.use(Admin.middleware);
+app.use(AdminMiddleware);
 
 // API-wide middlewares
 app.use('/api', ...[
@@ -147,7 +147,7 @@ app.use('/api', ...[
 await API.init(app);
 
 // Serve the UI
-app.get('*splat', IndexRoute.handle);
+app.get('*splat', IndexRoute);
 
 // Return 404 for any other requests
 app.use('*splat', (req, res) => {

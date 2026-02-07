@@ -1,4 +1,4 @@
-const db = require('./index');
+import db from './index.js';
 
 /** @type {import('mongodb').Collection<CalendarEvent>} */
-module.exports = db.collection('calendar_events');
+export default db.collection('calendar_events');

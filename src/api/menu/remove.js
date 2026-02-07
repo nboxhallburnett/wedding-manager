@@ -1,5 +1,5 @@
-const invitationDb = require('../../lib/db/invitations');
-const menuItemDb = require('../../lib/db/menu-items');
+import invitationDb from '../../lib/db/invitations.js';
+import menuItemDb from '../../lib/db/menu-items.js';
 
 const fieldMap = [
 	'starter_id',
@@ -8,7 +8,7 @@ const fieldMap = [
 ];
 
 /** @type {API<InvitationPath} */
-module.exports = {
+export default {
 	method: 'delete',
 	path: 'menu/:menuItemId',
 	auth: async req => {

@@ -2,9 +2,9 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 import { useLoader } from 'composables/loader';
-import { statusMessages } from 'lib/formatter';
+import { statusMessages } from 'lib/formatter.js';
 
 import CardBody from 'components/CardBody.vue';
 import CardHeader from 'components/CardHeader.vue';
@@ -74,18 +74,18 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 			<router-link v-if="adminView" class="btn btn-link btn-sm me-2" :to="{ name: 'Admin List Invitations' }">
 				Back
 			</router-link>
-			<div v-if="adminView" class="d-inline-flex flex-wrap">
-				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin List Telemetry', query: { term: invitation.id } }">
+			<div v-if="adminView" class="d-inline-flex flex-wrap gap-2">
+				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin List Telemetry', query: { term: invitation.id } }">
 					Telemetry
 				</router-link>
-				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin View Invitation Card' }">
+				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin View Invitation Card' }">
 					Share
 				</router-link>
-				<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin Edit Invitation' }">
+				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Invitation' }">
 					Edit Invitation
 				</router-link>
 			</div>
-			<router-link v-else-if="!invitation.admin" class="btn btn-primary btn-sm me-2" :to="{ name: 'Edit Invitation' }">
+			<router-link v-else-if="!invitation.admin" class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
 				Manage RSVP
 			</router-link>
 		</card-header>

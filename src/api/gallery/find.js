@@ -1,7 +1,7 @@
-const galleryDb = require('../../lib/db/gallery');
+import galleryDb from '../../lib/db/gallery.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'gallery',
 	auth: async req => {
 		// The gallery content can be fetched by anyone with a session

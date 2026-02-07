@@ -1,9 +1,9 @@
-const { STATUS_CODES } = require('http');
+import { STATUS_CODES } from 'http';
 
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 /** @type {API<InvitationPath>} */
-module.exports = {
+export default {
 	path: 'invitation/:invitationId',
 	auth: async req => {
 		// An Invitation record can only be fetched by itself or by an admin

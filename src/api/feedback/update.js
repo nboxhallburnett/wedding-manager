@@ -1,7 +1,7 @@
-const feedbackDb = require('../../lib/db/feedback');
+import feedbackDb from '../../lib/db/feedback.js';
 
 /** @type {API<FeedbackPath, { read: FeedbackItem['read'] }} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'feedback/:feedbackId',
 	auth: async req => {

@@ -1,10 +1,10 @@
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 // An extremely basic email regex.
 const reEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 /** @type {API<{}, { id: String, email: Boolean }} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'admin',
 	auth: async req => {

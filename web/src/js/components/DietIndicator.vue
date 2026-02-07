@@ -1,5 +1,5 @@
 <script setup>
-import { useTooltip } from 'composables/tooltip';
+import { useTooltip } from 'composables/tooltip.js';
 
 const { $els } = useTooltip();
 

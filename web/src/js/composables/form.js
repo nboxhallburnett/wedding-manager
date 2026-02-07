@@ -1,6 +1,6 @@
 import { inject, provide, ref, nextTick, onMounted } from 'vue';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 
 /** @type {AddToast} */
 let addToast;

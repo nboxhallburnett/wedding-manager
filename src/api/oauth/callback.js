@@ -1,12 +1,12 @@
-const { OAuth2Client } = require('google-auth-library');
+import { OAuth2Client } from 'google-auth-library';
+
+import config from '../../../conf/index.js';
+import invitationDb from '../../lib/db/invitations.js';
+
 const client = new OAuth2Client();
 
-const invitationDb = require('../../lib/db/invitations');
-
-const config = require('../../../conf');
-
 /** @type {API<{}, { state: String, credential: String }>} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'oauth/callback',
 	auth: async req => {

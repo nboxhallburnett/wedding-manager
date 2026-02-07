@@ -1,6 +1,6 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const telemetryDb = require('../../lib/db/telemetry');
+import telemetryDb from '../../lib/db/telemetry.js';
 
 const viewportSizes = [
 	'xs',
@@ -12,7 +12,7 @@ const viewportSizes = [
 ];
 
 /** @type {API<{}, Telemetry} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'telemetry',
 	action: async (req, res) => {

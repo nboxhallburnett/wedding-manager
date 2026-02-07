@@ -1,7 +1,11 @@
-const { resolve } = require('path');
-const { STATUS_CODES } = require('http');
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { STATUS_CODES } from 'http';
 
-const sharp = require('sharp');
+import sharp from 'sharp';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const imgCache = {};
 const allowedTypes = [ 'avif', 'webp', 'jpeg' ];
@@ -10,7 +14,7 @@ const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in seconds
 // TODO: Define API param types
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'gallery/*item_path',
 	auth: async req => {
 		// The encoded gallery item can be fetched by anyone with a session

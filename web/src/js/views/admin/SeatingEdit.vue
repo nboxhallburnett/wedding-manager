@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 import { useLoader } from 'composables/loader';
 import { useForm } from 'composables/form';
-import { statusMessages } from 'lib/formatter';
+import { statusMessages } from 'lib/formatter.js';
 
 import CardBody from 'components/CardBody.vue';
 import DiningTable from 'components/DiningTable.vue';

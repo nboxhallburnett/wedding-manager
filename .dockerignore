@@ -27,7 +27,7 @@
 **/compose.y*ml
 **/dist
 **/docker-compose*
-**/eslint.config.mjs
+**/eslint.config.js
 **/jsconfig.json
 **/node_modules
 **/npm-debug.log

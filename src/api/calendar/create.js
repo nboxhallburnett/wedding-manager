@@ -1,9 +1,9 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const calendarEventsDb = require('../../lib/db/calendar-events');
+import calendarEventsDb from '../../lib/db/calendar-events.js';
 
 /** @type {API<{}, CalendarEvent} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'calendar',
 	auth: async req => {

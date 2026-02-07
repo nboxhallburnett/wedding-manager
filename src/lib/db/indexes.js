@@ -1,7 +1,7 @@
 /**
  * @type {{ [key: String]: [ import('mongodb').IndexSpecification, import('mongodb').CreateIndexesOptions ][] }}
  */
-module.exports = {
+export default {
 	calendar_events: [
 		[ { id: 1 }, { name: 'event_id', unique: true } ]
 	],

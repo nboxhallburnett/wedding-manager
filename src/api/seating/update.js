@@ -1,7 +1,7 @@
-const seatingDb = require('../../lib/db/seating');
+import seatingDb from '../../lib/db/seating.js';
 
 /** @type {API<{}, DiningRoom>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'seating',
 	auth: async req => {

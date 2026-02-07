@@ -1,6 +1,6 @@
-const { default: ical } = require('ical-generator');
+import ical from 'ical-generator';
 
-const calendarEventsDb = require('../../lib/db/calendar-events');
+import calendarEventsDb from '../../lib/db/calendar-events.js';
 
 const propTypes = {
 	string: [ 'summary', 'description', 'timezone' ],
@@ -8,7 +8,7 @@ const propTypes = {
 };
 
 /** @type {API<CalendarEventPath, CalendarEvent>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'calendar/:calendarEventId',
 	auth: async req => {

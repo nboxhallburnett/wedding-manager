@@ -1,7 +1,7 @@
-const tokenDb = require('../../../lib/db/tokens');
+import tokenDb from '../../../lib/db/tokens.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'admin/token',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

@@ -1,4 +1,4 @@
-const menuItemDb = require('../../lib/db/menu-items');
+import menuItemDb from '../../lib/db/menu-items.js';
 
 const propTypes = {
 	string: [ 'title', 'description' ],
@@ -7,7 +7,7 @@ const propTypes = {
 };
 
 /** @type {API<{}, MenuItem} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'menu/:menuItemId',
 	auth: async req => {

@@ -1,4 +1,4 @@
-const menuItemDb = require('../../lib/db/menu-items');
+import menuItemDb from '../../lib/db/menu-items.js';
 
 /**
  * @typedef MenuItemQuery
@@ -6,7 +6,7 @@ const menuItemDb = require('../../lib/db/menu-items');
  */
 
 /** @type {API<{}, {}, MenuItemQuery>} */
-module.exports = {
+export default {
 	path: 'menu',
 	auth: async req => {
 		// The menu can be fetched by anyone with a session

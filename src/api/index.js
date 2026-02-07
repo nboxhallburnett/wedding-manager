@@ -1,11 +1,13 @@
-const { STATUS_CODES } = require('http');
-const { join } = require('path');
-const { readdir } = require('fs').promises;
-const log = require('../lib/logger')('api');
+import { STATUS_CODES } from 'http';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { readdir } from 'fs/promises';
 
-module.exports = {
-	init
-};
+import Logger from '../lib/logger.js';
+const log = Logger('api');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Wires up API file definitions to the express app
@@ -13,7 +15,7 @@ module.exports = {
  * @param {import('express').Application} app
  * @returns {Promise<void>}
  */
-async function init(app) {
+export async function init(app) {
 	app.use('/api/*splat', (req, res, next) => {
 		// Add cache control headers to API responses
 		res.set({
@@ -29,7 +31,7 @@ async function init(app) {
 		if (file.endsWith('.js') && !file.endsWith('index.js')) {
 			try {
 				/** @type {API} */
-				const api = require(join(__dirname, file)); // eslint-disable-line security/detect-non-literal-require
+				const { default: api = {} } = await import(join(__dirname, file));
 
 				// If it has the expected exports of an API definition, wire it up
 				if (typeof api.path === 'string' && typeof api.action === 'function') {

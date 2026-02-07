@@ -1,7 +1,7 @@
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	method: 'get',
 	path: 'session',
 	action: async (req, res) => {

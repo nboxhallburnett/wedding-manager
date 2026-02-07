@@ -2,7 +2,7 @@
 import { computed, inject, ref } from 'vue';
 
 import InfoPopover from './InfoPopover.vue';
-import { escapeHtml } from 'lib/formatter';
+import { escapeHtml } from 'lib/formatter.js';
 
 const invitation = inject('invitation');
 

@@ -2,14 +2,15 @@
   "name": "wedding-manager",
   "version": "1.0.0",
   "description": "Wedding invitation & guest management service",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "build": "rm -rf web/public/js/*; rm -rf web/public/css/*; set -a; . .env && NODE_ENV=production npx webpack-cli build --config web/webpack.config.js",
     "build-hot": "set -a; . .env && npx webpack serve --config web/webpack.config.js --progress",
     "lint": "eslint ./ && stylelint \"./web/src/**/*.{scss,vue}\"",
-    "start": "node --dns-result-order ipv4first src/index.mjs",
+    "start": "node --dns-result-order ipv4first src/index.js",
     "test": "npm run lint",
-    "watch": "set -a; . .env && DEBUG=wedding-manager:* node --dns-result-order ipv4first --watch-path=./src --watch-path=./conf --watch-preserve-output src/index.mjs"
+    "watch": "set -a; . .env && DEBUG=wedding-manager:* node --dns-result-order ipv4first --watch-path=./src --watch-path=./conf --watch-preserve-output src/index.js"
   },
   "repository": {
     "type": "git",

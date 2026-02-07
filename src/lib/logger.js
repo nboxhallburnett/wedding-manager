@@ -1,17 +1,16 @@
-const Debug = require('debug');
+import Debug from 'debug';
 
-const { name } = require('../../package.json');
+import pkg from '../../package.json' with { type: 'json' };
+const { name } = pkg;
 
 /**
  * Returns a wrapper for `debug` which automatically prefixes logs with the request context ID if one exists
  *
  * @param {String} namespace Namespace of the custom debug instance
  */
-function logger(namespace) {
+export default function logger(namespace) {
 	return Debug(`${name}:${namespace}`);
 }
-
-module.exports = logger;
 
 /**
  * Middleware to wire up a request scoped logger instance, and to log the
@@ -21,7 +20,7 @@ module.exports = logger;
  * @param {import('express').Response} res Response
  * @param {import('express').NextFunction} next Next callback
  */
-module.exports.middleware = function (req, res, next) {
+export function middleware (req, res, next) {
 	// Store a reference of a logger using the request id in its namespace
 	req.ctx.log = logger(`req:${req.id}`);
 	// Track the start time of the request to calculate its response time

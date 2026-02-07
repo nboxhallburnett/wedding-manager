@@ -2,7 +2,7 @@
 import { inject, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { normaliseString } from 'lib/formatter';
+import { normaliseString } from 'lib/formatter.js';
 
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';

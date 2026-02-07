@@ -1,6 +1,6 @@
 import { inject, isRef } from 'vue';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 
 /** @type {AddToast} */
 let addToast;

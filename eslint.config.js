@@ -5,11 +5,9 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
 	{
-		ignores: [ 'node_modules/', 'web/public/', 'jsconfig.json' ],
-		files: [ 'src/**/*.{js,mjs}','web/src/**/*.{js,vue}' ],
+		files: [ 'src/**/*.js' ],
 		extends: [ axwayNode ]
 	},
-	{ files: [ 'src/**/*.js', 'web/src/**/*.js' ], languageOptions: { sourceType: 'commonjs' } },
 	{
 		files: [ 'web/src/**/*.{js,vue}' ],
 		extends: [ axwayBrowser, axwayVue ],

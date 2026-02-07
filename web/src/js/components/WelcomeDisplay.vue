@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import { dateFormatter } from 'lib/formatter';
+import { dateFormatter } from 'lib/formatter.js';
 
 import StylizedNames from './StylizedNames.vue';
 

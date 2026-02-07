@@ -2,7 +2,7 @@
 import { inject, ref, useTemplateRef, nextTick, onMounted } from 'vue';
 import Router from 'router';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 import { useForm } from 'composables/form';
 
 /** @type {AddToast} */

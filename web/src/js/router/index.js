@@ -1,7 +1,7 @@
 import { inject } from 'vue';
 import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 
 const router = createRouter({
 	history: createWebHistory(),
@@ -248,7 +248,7 @@ router.afterEach(to => {
 	const invitation = inject('invitation');
 	if (!invitation.value?.admin) {
 		const event = {
-			path: to.path,
+			path: to.fullPath,
 			path_match: to.matched?.at(-1)?.path || null,
 			path_name: to.name,
 			viewport: getCurrentViewportSize()

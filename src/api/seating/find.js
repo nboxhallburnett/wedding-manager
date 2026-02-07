@@ -1,8 +1,8 @@
-const seatingDb = require('../../lib/db/seating');
-const invitationDb = require('../../lib/db/invitations');
+import seatingDb from '../../lib/db/seating.js';
+import invitationDb from '../../lib/db/invitations.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'seating',
 	auth: async req => {
 		// The seating plan can be fetched by anyone with a session

@@ -1,7 +1,7 @@
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'admin',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

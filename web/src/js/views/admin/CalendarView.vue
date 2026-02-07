@@ -8,7 +8,7 @@ import CardBody from 'components/CardBody.vue';
 import FormItem from 'components/form/FormItem.vue';
 import FormText from 'components/form/FormText.vue';
 
-import { formatEventDate } from 'lib/formatter';
+import { formatEventDate } from 'lib/formatter.js';
 
 /** @type {Ref<CalendarEvent>} */
 const item = ref({});

@@ -1,7 +1,7 @@
-const storyDb = require('../../lib/db/story');
+import storyDb from '../../lib/db/story.js';
 
 /** @type {API<{}, { items: StoryItem[] }>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'story',
 	auth: async req => {

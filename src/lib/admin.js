@@ -1,9 +1,11 @@
-const dns = require('dns');
-const { BlockList } = require('net');
+import dns from 'dns';
+import { BlockList } from 'net';
 
-const config = require('../../conf');
-const log = require('../lib/logger')('admin');
-const tokenDb = require('./db/tokens');
+import config from '../../conf/index.js';
+import Logger from '../lib/logger.js';
+import tokenDb from './db/tokens.js';
+
+const log = Logger('admin');
 
 // Yes, we're using "BlockList" as an allow list
 const localAddressList = new BlockList();
@@ -27,18 +29,13 @@ dns.resolve4(config.host, (err, addresses) => {
 	}
 });
 
-module.exports = {
-	isPrivateIp,
-	middleware
-};
-
 /**
  * Returns whether a specified IP address is within the local network or on a private subnet
  *
  * @param {String} ip IP address to check
  * @returns {Boolean}
  */
-function isPrivateIp(ip) {
+export function isPrivateIp(ip) {
 	return localAddressList.check(ip);
 }
 
@@ -49,7 +46,7 @@ function isPrivateIp(ip) {
  * @param {import('express').Response} res Express response
  * @param {import('express').NextFunction} next Express next callback
  */
-async function middleware(req, _res, next) {
+export async function middleware(req, _res, next) {
 	// If there is an admin session, mark the request as having admin access
 	if (req.session.admin) {
 		req.ctx.admin = true;

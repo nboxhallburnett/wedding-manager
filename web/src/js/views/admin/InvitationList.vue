@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router';
 
 import { useForm } from 'composables/form';
 import { useLoader } from 'composables/loader';
-import { statusMessages } from 'lib/formatter';
+import { formatGuestNames, statusMessages } from 'lib/formatter.js';
 
 import CardBody from 'components/CardBody.vue';
 import InfoPopover from 'components/InfoPopover.vue';
@@ -207,7 +207,11 @@ function guestCount(item) {
 						{{ item.id }}
 					</router-link>
 				</th>
-				<td v-text="item.guests?.[0]?.name || '---'" />
+				<td>
+					<info-popover :hint="formatGuestNames(item)">
+						{{ item.guests?.[0]?.name || '---' }}
+					</info-popover>
+				</td>
 				<td v-text="guestCount(item)" />
 				<td v-text="item.children?.length || 0" />
 				<td v-text="new Date(item.created).toLocaleDateString()" />

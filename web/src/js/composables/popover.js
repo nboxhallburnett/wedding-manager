@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import Popover from 'bootstrap/js/dist/popover';
+import Popover from 'bootstrap/js/dist/popover.js';
 
 // Add table elements to the html content allowlist
 Popover.Default.allowList.table = [];

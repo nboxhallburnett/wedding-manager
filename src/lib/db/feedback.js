@@ -1,4 +1,4 @@
-const db = require('./index');
+import db from './index.js';
 
 /** @type {import('mongodb').Collection<FeedbackItem>} */
-module.exports = db.collection('feedback');
+export default db.collection('feedback');

@@ -1,4 +1,4 @@
-const db = require('./index');
+import db from './index.js';
 
 /** @type {import('mongodb').Collection<MenuItem>} */
-module.exports = db.collection('menu_items');
+export default db.collection('menu_items');

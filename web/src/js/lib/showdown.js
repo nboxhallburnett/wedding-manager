@@ -1,4 +1,4 @@
-import { dateFormatter } from './formatter';
+import { dateFormatter } from 'lib/formatter.js';
 
 const classMap = {
 	table: 'table table-hover'

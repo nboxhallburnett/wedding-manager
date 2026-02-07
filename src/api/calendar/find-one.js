@@ -1,9 +1,9 @@
-const { STATUS_CODES } = require('http');
+import { STATUS_CODES } from 'http';
 
-const calendarEventsDb = require('../../lib/db/calendar-events');
+import calendarEventsDb from '../../lib/db/calendar-events.js';
 
 /** @type {API<CalendarEventPath>} */
-module.exports = {
+export default {
 	path: 'calendar/:calendarEventId',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

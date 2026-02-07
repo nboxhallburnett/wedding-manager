@@ -1,7 +1,7 @@
-const calendarEventsDb = require('../../lib/db/calendar-events');
+import calendarEventsDb from '../../lib/db/calendar-events.js';
 
 /** @type {API<CalendarEventPath} */
-module.exports = {
+export default {
 	method: 'delete',
 	path: 'calendar/:calendarEventId',
 	auth: async req => {

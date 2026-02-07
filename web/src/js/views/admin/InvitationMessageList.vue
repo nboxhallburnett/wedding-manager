@@ -8,7 +8,7 @@ import CardBody from 'components/CardBody.vue';
 import InfoPopover from 'components/InfoPopover.vue';
 import TableComponent from 'components/TableComponent.vue';
 
-import { formatGuestNames } from 'lib/formatter';
+import { formatGuestNames } from 'lib/formatter.js';
 
 /** @type {Ref<Invitation[]>} */
 const invitations = ref([]);

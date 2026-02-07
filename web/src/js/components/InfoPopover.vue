@@ -1,5 +1,5 @@
 <script setup>
-import { usePopover } from 'composables/popover';
+import { usePopover } from 'composables/popover.js';
 
 const props = defineProps({
 	hint: { type: String, default: '' },

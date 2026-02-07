@@ -1,12 +1,12 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const invitationDb = require('../../lib/db/invitations');
-const { isPrivateIp } = require('../../lib/admin');
+import invitationDb from '../../lib/db/invitations.js';
+import { isPrivateIp } from '../../lib/admin.js';
 
-const config = require('../../../conf');
+import config from '../../../conf/index.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'session',
 	auth: async req => {

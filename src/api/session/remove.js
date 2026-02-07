@@ -1,7 +1,7 @@
-const config = require('../../../conf');
+import config from '../../../conf/index.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	method: 'delete',
 	path: 'session',
 	action: async (req, res) => {

@@ -1,22 +1,28 @@
-const path = require('path');
-const { readFileSync } = require('fs');
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const config = require('../../conf');
-const log = require('../lib/logger')('route:index');
+import config from '../../conf/index.js';
+import Logger from '../lib/logger.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const log = Logger('route:index');
 
 let assetManifest;
 let indexJs;
 try {
 	// Load the asset manifest that was output from the webpack build
-	assetManifest = JSON.parse(readFileSync(path.resolve(__dirname, '..', '..', 'web', 'public', 'manifest.json')));
+	assetManifest = JSON.parse(readFileSync(resolve(__dirname, '..', '..', 'web', 'public', 'manifest.json')));
 	if (!config.hot) {
 		// When not using the dev server, we'll include the minimal content of the index javascript file
 		// with the index html response to allow us to provide webpack with the nonce value to use for its
 		// subsequent requests
 		const indexJsFilename = assetManifest['index.js'].split('/js/')[1];
-		indexJs = String(readFileSync(path.resolve(__dirname, '..', '..', 'web', 'public', 'js', indexJsFilename)));
+		indexJs = String(readFileSync(resolve(__dirname, '..', '..', 'web', 'public', 'js', indexJsFilename)));
 	}
 } catch (err) {
 	// If we failed to load the asset manifest, then we won't be able to serve the UI, so fall out
@@ -62,10 +68,6 @@ if (config.hot) {
 	csp['script-src'] += ' \'nonce-NONCE\'';
 }
 
-module.exports = {
-	handle
-};
-
 /**
  * Catch-all html handler to load the front-end assets.
  * No specific route matching is performed here, we rely on the front-end
@@ -75,7 +77,7 @@ module.exports = {
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
-async function handle(req, res, next) {
+export default async function handle(req, res, next) {
 	// If the request does not accept html response, fall out and continue to the generic 404 handler
 	if (!req.accepts('html')) {
 		return next();

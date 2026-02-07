@@ -1,7 +1,7 @@
-const aboutDb = require('../../lib/db/about');
+import aboutDb from '../../lib/db/about.js';
 
 /** @type {API<{}, { content: String }>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'about',
 	auth: async req => {

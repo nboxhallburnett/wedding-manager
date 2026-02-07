@@ -1,19 +1,24 @@
-const MongoDB = require('mongodb');
+import MongoDB from 'mongodb';
 
-const indexDefinitions = require('./indexes');
-const config = require('../../../conf');
-const log = require('../logger')('db');
+import indexDefinitions from './indexes.js';
+import config from '../../../conf/index.js';
+import Logger from '../../lib/logger.js';
+const log = Logger('db');
 
 // Instance the mongo client
 const url = `mongodb://${config.server.db.username}:${config.server.db.password}@${config.server.db.host}/${config.server.db.db}`;
-const MongoClient = new MongoDB.MongoClient(url);
 
-module.exports = MongoClient.db();
+/**
+ * Expose the base MongoClient instance for things that require it, such as `connect-mongo`.
+ */
+export const MongoClient = new MongoDB.MongoClient(url);
+
+export default MongoClient.db();
 
 /**
  * Connect to the database.
  */
-module.exports.connect = async () => {
+export async function connect() {
 	await MongoClient.connect();
 	log('Database connected');
 
@@ -53,12 +58,7 @@ module.exports.connect = async () => {
 /**
  * Close the database connection.
  */
-module.exports.close = async () => {
+export async function close () {
 	await MongoClient.close();
 	log('Database connection closed');
 };
-
-/**
- * Expose the base MongoClient instance for things that require it, such as `connect-mongo`.
- */
-module.exports.MongoClient = MongoClient;

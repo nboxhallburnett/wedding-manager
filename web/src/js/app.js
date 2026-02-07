@@ -1,10 +1,10 @@
 // Import the bootstrap js used commonly accross the UI
 import '@popperjs/core';
-import 'bootstrap/js/dist/dropdown';
+import 'bootstrap/js/dist/dropdown.js';
 
 import { createApp, ref } from 'vue';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 import App from 'App.vue';
 import Router from 'router';
 

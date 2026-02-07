@@ -1,7 +1,7 @@
-const questionsDb = require('../../lib/db/questions');
+import questionsDb from '../../lib/db/questions.js';
 
 /** @type {API<{}, { items: Question[] }>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'question',
 	auth: async req => {

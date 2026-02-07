@@ -108,7 +108,7 @@ async function onSearch(term) {
 			<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin Edit Seating Plan' }">
 				Edit Seating Plan
 			</router-link>
-			<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin Edit Seating Layout' }">
+			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Seating Layout' }">
 				Edit Seating Layout
 			</router-link>
 		</card-header>

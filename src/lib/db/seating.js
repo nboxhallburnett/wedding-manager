@@ -1,4 +1,4 @@
-const db = require('./index');
+import db from './index.js';
 
 /** @type {import('mongodb').Collection<DiningRoom>} */
-module.exports = db.collection('seating');
+export default db.collection('seating');

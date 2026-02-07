@@ -1,7 +1,7 @@
 <script setup>
 import 'bootstrap/js/dist/collapse';
 
-import API from 'lib/api';
+import API from 'lib/api.js';
 import { computed, inject, ref, useTemplateRef } from 'vue';
 import { RouterLink } from 'vue-router';
 

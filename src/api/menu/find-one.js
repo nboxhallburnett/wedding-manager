@@ -1,9 +1,9 @@
-const { STATUS_CODES } = require('http');
+import { STATUS_CODES } from 'http';
 
-const menuItemDb = require('../../lib/db/menu-items');
+import menuItemDb from '../../lib/db/menu-items.js';
 
 /** @type {API<MenuItemPath>} */
-module.exports = {
+export default {
 	path: 'menu/:menuItemId',
 	auth: async req => {
 		// A menu item can be fetched by anyone with a session

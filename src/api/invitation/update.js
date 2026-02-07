@@ -1,10 +1,10 @@
-const invitationDb = require('../../lib/db/invitations');
-const menuItemDb = require('../../lib/db/menu-items');
+import invitationDb from '../../lib/db/invitations.js';
+import menuItemDb from '../../lib/db/menu-items.js';
 
 const menuItemProps = [ 'starter_id', 'main_id', 'dessert_id' ];
 
 /** @type {API<InvitationPath, Invitation>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'invitation/:invitationId',
 	auth: async req => {

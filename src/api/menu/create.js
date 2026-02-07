@@ -1,9 +1,9 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const menuItemDb = require('../../lib/db/menu-items');
+import menuItemDb from '../../lib/db/menu-items.js';
 
 /** @type {API<{}, MenuItem} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'menu',
 	auth: async req => {

@@ -1,8 +1,8 @@
-const invitationDb = require('../../../lib/db/invitations');
-const telemetryDb = require('../../../lib/db/telemetry');
+import invitationDb from '../../../lib/db/invitations.js';
+import telemetryDb from '../../../lib/db/telemetry.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'admin/stats/invitations',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

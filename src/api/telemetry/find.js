@@ -1,7 +1,7 @@
-const telemetryDb = require('../../lib/db/telemetry');
+import telemetryDb from '../../lib/db/telemetry.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'telemetry',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

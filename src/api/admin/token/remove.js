@@ -1,9 +1,9 @@
-const { ObjectId } = require('mongodb');
+import { ObjectId } from 'mongodb';
 
-const tokenDb = require('../../../lib/db/tokens');
+import tokenDb from '../../../lib/db/tokens.js';
 
 /** @type {API<TokenPath} */
-module.exports = {
+export default {
 	method: 'delete',
 	path: 'admin/token/:tokenId',
 	auth: async req => {

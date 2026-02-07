@@ -8,7 +8,7 @@ import { useLoader } from 'composables/loader';
 import CardBody from 'components/CardBody.vue';
 import TableComponent from 'components/TableComponent.vue';
 
-import { formatEventDate } from 'lib/formatter';
+import { formatEventDate } from 'lib/formatter.js';
 
 /** @type {Ref<CalendarEvent[]>} */
 const events = ref([]);

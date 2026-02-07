@@ -1,7 +1,7 @@
-const aboutDb = require('../../lib/db/about');
+import aboutDb from '../../lib/db/about.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'about',
 	auth: async req => {
 		// The about content can be fetched by anyone with a session

@@ -1,7 +1,7 @@
-const storyDb = require('../../lib/db/story');
+import storyDb from '../../lib/db/story.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'story',
 	auth: async req => {
 		// The story content can be fetched by anyone with a session

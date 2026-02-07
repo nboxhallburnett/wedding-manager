@@ -1,9 +1,9 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-const tokenDb = require('../../../lib/db/tokens');
+import tokenDb from '../../../lib/db/tokens.js';
 
 /** @type {API<{}, Token} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'admin/token',
 	auth: async req => {

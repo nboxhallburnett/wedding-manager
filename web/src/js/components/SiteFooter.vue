@@ -1,5 +1,5 @@
 <script setup>
-import { dateFormatter } from 'lib/formatter';
+import { dateFormatter } from 'lib/formatter.js';
 
 const navItems = CONFIG.client.footer;
 

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { useLoader } from 'composables/loader';
-import { statusMessages } from 'lib/formatter';
+import { statusMessages } from 'lib/formatter.js';
 
 import CardBody from 'components/CardBody.vue';
 import InfoPopover from 'components/InfoPopover.vue';

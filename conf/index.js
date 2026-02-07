@@ -110,7 +110,7 @@ if (errors.length) {
 }
 
 /** @type {Config} */
-module.exports = Object.freeze(config);
+export default Object.freeze(config);
 
 /**
  * @typedef FooterItem

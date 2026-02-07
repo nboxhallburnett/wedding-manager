@@ -1,6 +1,6 @@
-const { customAlphabet } = require('nanoid');
+import { customAlphabet } from 'nanoid';
 
-const invitationDb = require('../../lib/db/invitations');
+import invitationDb from '../../lib/db/invitations.js';
 
 // Use a custom alphabet and size to make the generated identifiers more user friendly.
 // This lowers the entropy a fair bit, but should still be acceptible for its use case.
@@ -8,7 +8,7 @@ const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 10);
 
 /** @type {API<{}, Invitation} */
-module.exports = {
+export default {
 	method: 'post',
 	path: 'invitation',
 	auth: async req => {

@@ -1,4 +1,4 @@
-const db = require('./index');
+import db from './index.js';
 
 /** @type {import('mongodb').Collection<Telemetry>} */
-module.exports = db.collection('telemetry');
+export default db.collection('telemetry');

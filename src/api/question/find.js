@@ -1,7 +1,7 @@
-const questionsDb = require('../../lib/db/questions');
+import questionsDb from '../../lib/db/questions.js';
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'question',
 	auth: async req => {
 		// The Q&A content can be fetched by anyone with a session

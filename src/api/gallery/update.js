@@ -1,7 +1,7 @@
-const galleryDb = require('../../lib/db/gallery');
+import galleryDb from '../../lib/db/gallery.js';
 
 /** @type {API<{}, { items: Image[] }>} */
-module.exports = {
+export default {
 	method: 'put',
 	path: 'gallery',
 	auth: async req => {

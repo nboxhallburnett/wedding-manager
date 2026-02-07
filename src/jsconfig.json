@@ -1,6 +1,3 @@
 {
-	"include": [ "api", "conf", "lib", "routes", "views", "server.ts", "../global.ts" ],
-	"compilerOptions": {
-		"module": "commonJS"
-	}
+	"include": [ "api", "conf", "lib", "routes", "views", "server.ts", "../global.ts" ]
 }

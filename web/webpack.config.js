@@ -1,18 +1,22 @@
-const glob = require('glob');
-const path = require('path');
+import * as glob from 'glob';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const miniCssExtractPlugin = require('mini-css-extract-plugin');
-const { DefinePlugin } = require('webpack');
-const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
-const { VueLoaderPlugin } = require('vue-loader');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+import miniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack from 'webpack';
+import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
+import { VueLoaderPlugin } from 'vue-loader';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
-const config = require('../conf');
+import config from '../conf/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const secure = config.server.external_port === 443;
 const devServerPort = 8468;
 
-module.exports = function ({ WEBPACK_SERVE }) {
+export default function ({ WEBPACK_SERVE }) {
 	const conf = {
 		mode: 'production',
 		context: __dirname,
@@ -69,7 +73,7 @@ module.exports = function ({ WEBPACK_SERVE }) {
 		},
 		plugins: [
 			new VueLoaderPlugin(),
-			new DefinePlugin({
+			new webpack.DefinePlugin({
 				CONFIG: JSON.stringify(config),
 				// Vue ESM builds require these options to be defined, even if they are the default values
 				__VUE_OPTIONS_API__: true,

@@ -1,9 +1,9 @@
-const { default: ical } = require('ical-generator');
+import ical from 'ical-generator';
 
-const calendarEventsDb = require('../../lib/db/calendar-events');
+import calendarEventsDb from '../../lib/db/calendar-events.js';
 
-const pkg = require('../../../package.json');
-const config = require('../../../conf');
+import config from '../../../conf/index.js';
+import pkg from '../../../package.json' with { type: 'json' };
 
 const calendarData = {
 	name: 'Wedding Invitation',
@@ -15,7 +15,7 @@ const calendarData = {
 };
 
 /** @type {API} */
-module.exports = {
+export default {
 	path: 'calendar.ics',
 	// TODO: Auth on calendar, or open to allow source?
 	action: async (req, res) => {

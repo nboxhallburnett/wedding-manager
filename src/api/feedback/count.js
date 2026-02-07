@@ -1,4 +1,4 @@
-const feedbackDb = require('../../lib/db/feedback');
+import feedbackDb from '../../lib/db/feedback.js';
 
 /**
  * @typedef FeedbackQuery
@@ -6,7 +6,7 @@ const feedbackDb = require('../../lib/db/feedback');
  */
 
 /** @type {API<{}, {}, FeedbackQuery>} */
-module.exports = {
+export default {
 	path: 'feedback/count',
 	auth: async req => {
 		// Auth success is determined by whether there is a valid admin session

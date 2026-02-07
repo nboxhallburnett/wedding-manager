@@ -5,6 +5,20 @@ const classMap = {
 };
 
 /**
+ * Wraps table elements in a div with bootstrap's `table-responsive` class
+ */
+export const responsiveTableExtension = {
+	type: 'output',
+	regex: /<(\/ ?)?table(.*)>/g,
+	replace: function (match, isClosing, props) {
+		if (isClosing) {
+			return '</table></div>';
+		}
+		return `<div class="table-responsive"><table ${props}>`;
+	}
+};
+
+/**
  * A set of extensions that apply classes to specific element node types
  */
 export const classExtensions = Object.keys(classMap).map(key => ({

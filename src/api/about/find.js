@@ -8,7 +8,7 @@ module.exports = {
 		return Boolean(req.session.invitationId);
 	},
 	action: async (req, res) => {
-		const document = await aboutDb.findOne({}, { projection: { _id: 0 } });
-		return res.json({ success: true, data: document?.content || '' });
+		const data = await aboutDb.findOne({}, { projection: { _id: 0 } });
+		return res.json({ success: true, data });
 	}
 };

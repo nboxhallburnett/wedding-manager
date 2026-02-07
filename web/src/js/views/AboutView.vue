@@ -5,12 +5,13 @@ import { ref, useTemplateRef, watch, nextTick } from 'vue';
 import { VueShowdown } from 'vue-showdown';
 import Router from 'router';
 
-import { classExtensions } from 'lib/showdown';
+import { dateFormatter } from 'lib/formatter';
+import { classExtensions, responsiveTableExtension } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
 
-const content = ref('');
+const data = ref({});
 const navItems = ref([]);
 const $markdownContent = useTemplateRef('markdown-content');
 const aboutLoading = ref(true);
@@ -18,11 +19,11 @@ const aboutLoading = ref(true);
 const scrollSpyInstance = ref(null);
 
 // Fetch the about content from the API
-useLoader('about', content, aboutLoading, true);
+useLoader('about', data, aboutLoading, true);
 
 // Because showdown doesn't generate elements in the structure that bootstrap's scrollspy likes nested navigation to be defined in,
 // we're going to have to do a bit of DOM manipulation to get the two to play nicely.
-watch(content, () => {
+watch(data, () => {
 	// To start, we need to wait until the next tick so we give vue time to propagate the content changes into showdown
 	// and for it to apply its generated content onto the DOM
 	nextTick(() => {
@@ -165,15 +166,20 @@ function scrollToItem(id) {
 
 <template>
 	<card-body title="Details">
-		<div v-show="content" class="card-text row">
-			<div
-				ref="markdown-content"
-				class="col-12 col-md-8 scrollspy-container"
-				data-bs-spy="scroll"
-				data-bs-target="#about-navbar"
-				tabindex="0"
-			>
-				<vue-showdown flavor="github" :markdown="content" :extensions="classExtensions" />
+		<div v-show="data.content" class="card-text row">
+			<div class="col-12 col-md-8">
+				<div v-if="data.updated" class="text-muted mb-3 fst-italic">
+					Last updated: {{ dateFormatter.format(new Date(data.updated)) }}
+				</div>
+				<div
+					ref="markdown-content"
+					class="scrollspy-container"
+					data-bs-spy="scroll"
+					data-bs-target="#about-navbar"
+					tabindex="0"
+				>
+					<vue-showdown flavor="github" :markdown="data.content" :extensions="[ responsiveTableExtension, ...classExtensions ]" />
+				</div>
 			</div>
 			<div class="d-none d-md-block col-4 border-start">
 				<nav id="about-navbar" class="flex-column align-items-stretch">

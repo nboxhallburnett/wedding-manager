@@ -12,17 +12,17 @@ import CardHeader from 'components/CardHeader.vue';
 /** @type {AddToast} */
 const addToast = inject('addToast');
 /** @type {Ref<String>} */
-const content = ref('');
+const data = ref('');
 
 const placeholder = 'Add About page content here.';
 
 // Fetch the about content from the API
-useLoader('about', content);
+useLoader('about', data);
 
 const { onSubmit } = useForm({
 	path: 'about',
 	method: 'PUT',
-	body: { content },
+	body: { content: data.value.content },
 	onSuccess() {
 		addToast({
 			title: 'Details content Updated',
@@ -37,7 +37,7 @@ const { onSubmit } = useForm({
 		<form class="card-text" @submit.prevent.stop="onSubmit">
 			<h5 v-text="'Content'" />
 			<textarea
-				v-model="content"
+				v-model="data.content"
 				class="form-control w-100 mb-2 font-monospace"
 				rows="5"
 				:placeholder="placeholder"
@@ -48,7 +48,7 @@ const { onSubmit } = useForm({
 				<div class="card-body">
 					<card-header title="Details" class="z-0" no-title />
 					<div class="card-text">
-						<vue-showdown flavor="github" :markdown="content || placeholder" :extensions="classExtensions" />
+						<vue-showdown flavor="github" :markdown="data.content || placeholder" :extensions="classExtensions" />
 					</div>
 				</div>
 			</div>

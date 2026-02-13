@@ -1,13 +1,11 @@
 import aboutDb from '../../lib/db/about.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<{}, { content: String }>} */
 export default {
 	method: 'put',
 	path: 'about',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		if (req.body.content && typeof req.body.content === 'string') {
 			req.ctx.log('Updating about content');

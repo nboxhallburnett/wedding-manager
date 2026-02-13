@@ -71,6 +71,9 @@ export async function init(app) {
 					});
 
 					log('Registered API: %s %s', method.toUpperCase(), path);
+					if (!Object.prototype.hasOwnProperty.call(api, 'auth')) {
+						log('  WARN: No auth defined');
+					}
 				} else {
 					log('Ignoring file: %s', file);
 				}

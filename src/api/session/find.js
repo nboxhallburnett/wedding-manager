@@ -6,7 +6,7 @@ export default {
 	path: 'session',
 	action: async (req, res) => {
 		// If the session is pending OAuth verification, return just enough data to prompt
-		// its wireup, but exclude everything else.
+		// its wire-up, but exclude everything else.
 		if (req.session.pending) {
 			return res.json({ success: true, data: {
 				id: req.session.invitationId,

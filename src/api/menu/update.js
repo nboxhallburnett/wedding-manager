@@ -1,4 +1,5 @@
 import menuItemDb from '../../lib/db/menu-items.js';
+import { adminAuth } from '../auth.js';
 
 const propTypes = {
 	string: [ 'title', 'description' ],
@@ -10,10 +11,7 @@ const propTypes = {
 export default {
 	method: 'put',
 	path: 'menu/:menuItemId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		const existingItem = await menuItemDb.findOne({ id: req.params.menuItemId });
 

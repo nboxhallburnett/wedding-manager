@@ -1,15 +1,13 @@
 import { nanoid } from 'nanoid';
 
 import tokenDb from '../../../lib/db/tokens.js';
+import { adminAuth } from '../../auth.js';
 
 /** @type {API<{}, Token} */
 export default {
 	method: 'post',
 	path: 'admin/token',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		/** @type {Token} */
 		const token = {

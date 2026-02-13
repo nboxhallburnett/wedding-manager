@@ -1,13 +1,11 @@
 import feedbackDb from '../../lib/db/feedback.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<FeedbackPath} */
 export default {
 	method: 'delete',
 	path: 'feedback/:feedbackId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		// Validate the record exists
 		const item = await feedbackDb.findOne({ id: req.params.feedbackId });

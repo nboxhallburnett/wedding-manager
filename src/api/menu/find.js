@@ -1,4 +1,5 @@
 import menuItemDb from '../../lib/db/menu-items.js';
+import { sessionAuth } from '../auth.js';
 
 /**
  * @typedef MenuItemQuery
@@ -8,10 +9,7 @@ import menuItemDb from '../../lib/db/menu-items.js';
 /** @type {API<{}, {}, MenuItemQuery>} */
 export default {
 	path: 'menu',
-	auth: async req => {
-		// The menu can be fetched by anyone with a session
-		return Boolean(req.session.invitationId);
-	},
+	auth: sessionAuth,
 	action: async (req, res) => {
 		const filter = {};
 		const projection = { _id: 0 };

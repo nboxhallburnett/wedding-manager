@@ -1,15 +1,13 @@
 import { nanoid } from 'nanoid';
 
 import calendarEventsDb from '../../lib/db/calendar-events.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<{}, CalendarEvent} */
 export default {
 	method: 'post',
 	path: 'calendar',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		/** @type {CalendarEvent} */
 		const event = {

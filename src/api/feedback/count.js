@@ -1,4 +1,5 @@
 import feedbackDb from '../../lib/db/feedback.js';
+import { adminAuth } from '../auth.js';
 
 /**
  * @typedef FeedbackQuery
@@ -8,10 +9,7 @@ import feedbackDb from '../../lib/db/feedback.js';
 /** @type {API<{}, {}, FeedbackQuery>} */
 export default {
 	path: 'feedback/count',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		const filter = {};
 		// If the call was made with the `read` query param, add it to the filter

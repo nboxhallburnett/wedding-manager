@@ -1,15 +1,13 @@
 import { ObjectId } from 'mongodb';
 
 import tokenDb from '../../../lib/db/tokens.js';
+import { adminAuth } from '../../auth.js';
 
 /** @type {API<TokenPath} */
 export default {
 	method: 'delete',
 	path: 'admin/token/:tokenId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		// Validate the token exists. We use the mongo document ID here rather than the token `id` value.
 		const token = await tokenDb.findOne({ _id: new ObjectId(req.params.tokenId) });

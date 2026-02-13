@@ -1,15 +1,13 @@
 import { nanoid } from 'nanoid';
 
 import menuItemDb from '../../lib/db/menu-items.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<{}, MenuItem} */
 export default {
 	method: 'post',
 	path: 'menu',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		/** @type {MenuItem} */
 		const item = {

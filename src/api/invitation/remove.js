@@ -1,13 +1,11 @@
 import invitationDb from '../../lib/db/invitations.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<InvitationPath} */
 export default {
 	method: 'delete',
 	path: 'invitation/:invitationId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		// Validate the record exists
 		const invitation = await invitationDb.findOne({ id: req.params.invitationId });

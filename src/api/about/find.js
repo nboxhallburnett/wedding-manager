@@ -1,13 +1,11 @@
 import aboutDb from '../../lib/db/about.js';
+import { sessionAuth } from '../auth.js';
 
 /** @type {API} */
 export default {
 	path: 'about',
-	auth: async req => {
-		// The about content can be fetched by anyone with a session
-		return Boolean(req.session.invitationId);
-	},
-	action: async (req, res) => {
+	auth: sessionAuth,
+	action: async (_req, res) => {
 		const data = await aboutDb.findOne({}, { projection: { _id: 0 } });
 		return res.json({ success: true, data });
 	}

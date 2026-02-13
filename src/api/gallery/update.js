@@ -1,13 +1,11 @@
 import galleryDb from '../../lib/db/gallery.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<{}, { items: Image[] }>} */
 export default {
 	method: 'put',
 	path: 'gallery',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		if (req.body.items
 			&& Array.isArray(req.body.items)

@@ -1,13 +1,11 @@
 import seatingDb from '../../lib/db/seating.js';
 import invitationDb from '../../lib/db/invitations.js';
+import { sessionAuth } from '../auth.js';
 
 /** @type {API} */
 export default {
 	path: 'seating',
-	auth: async req => {
-		// The seating plan can be fetched by anyone with a session
-		return Boolean(req.session.invitationId);
-	},
+	auth: sessionAuth,
 	action: async (req, res) => {
 		const guestMap = {};
 		// If the request is for the enriched seating plan, fetch all invitations so

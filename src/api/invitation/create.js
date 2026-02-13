@@ -1,6 +1,7 @@
 import { customAlphabet } from 'nanoid';
 
 import invitationDb from '../../lib/db/invitations.js';
+import { adminAuth } from '../auth.js';
 
 // Use a custom alphabet and size to make the generated identifiers more user friendly.
 // This lowers the entropy a fair bit, but should still be acceptible for its use case.
@@ -11,10 +12,7 @@ const nanoid = customAlphabet(alphabet, 10);
 export default {
 	method: 'post',
 	path: 'invitation',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		/** @type {Invitation} */
 		const invitation = {

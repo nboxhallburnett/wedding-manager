@@ -1,4 +1,5 @@
 import invitationDb from '../../lib/db/invitations.js';
+import { adminAuth } from '../auth.js';
 
 /**
  * @typedef InvitationQuery
@@ -8,10 +9,7 @@ import invitationDb from '../../lib/db/invitations.js';
 /** @type {API<{}, {}, InvitationQuery>} */
 export default {
 	path: 'invitation',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		const filter = { admin: { $ne: true } };
 		const projection = { _id: 0 };

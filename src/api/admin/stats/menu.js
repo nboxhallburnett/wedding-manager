@@ -1,12 +1,10 @@
 import invitationDb from '../../../lib/db/invitations.js';
+import { adminAuth } from '../../auth.js';
 
 /** @type {API} */
 export default {
 	path: 'admin/stats/menu',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (_req, res) => {
 		const [ adultCursor, childCursor ] = await Promise.all([
 			invitationDb.aggregate([

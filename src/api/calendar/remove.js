@@ -1,13 +1,11 @@
 import calendarEventsDb from '../../lib/db/calendar-events.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<CalendarEventPath} */
 export default {
 	method: 'delete',
 	path: 'calendar/:calendarEventId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		// Validate the record exists
 		const event = await calendarEventsDb.findOne({ id: req.params.calendarEventId });

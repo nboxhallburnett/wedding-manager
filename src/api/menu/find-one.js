@@ -1,14 +1,12 @@
 import { STATUS_CODES } from 'http';
 
 import menuItemDb from '../../lib/db/menu-items.js';
+import { sessionAuth } from '../auth.js';
 
 /** @type {API<MenuItemPath>} */
 export default {
 	path: 'menu/:menuItemId',
-	auth: async req => {
-		// A menu item can be fetched by anyone with a session
-		return Boolean(req.session.invitationId);
-	},
+	auth: sessionAuth,
 	action: async (req, res) => {
 		const item = await menuItemDb.findOne({ id: req.params.menuItemId }, { projection: { _id: 0 } });
 		if (!item) {

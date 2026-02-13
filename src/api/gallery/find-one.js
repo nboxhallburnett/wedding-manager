@@ -4,6 +4,8 @@ import { STATUS_CODES } from 'http';
 
 import sharp from 'sharp';
 
+import { sessionAuth } from '../auth.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -16,10 +18,7 @@ const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in seconds
 /** @type {API} */
 export default {
 	path: 'gallery/*item_path',
-	auth: async req => {
-		// The encoded gallery item can be fetched by anyone with a session
-		return Boolean(req.session.invitationId);
-	},
+	auth: sessionAuth,
 	action: async (req, res) => {
 		if (!req.params.item_path?.length || req.params.item_path.includes('..')) {
 			res.status(404);

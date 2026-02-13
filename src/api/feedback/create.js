@@ -1,15 +1,13 @@
 import { nanoid } from 'nanoid';
 
 import feedbackDb from '../../lib/db/feedback.js';
+import { sessionAuth } from '../auth.js';
 
 /** @type {API<{}, { message: String }} */
 export default {
 	method: 'post',
 	path: 'feedback',
-	auth: async req => {
-		// Anyone with a session can send feedback
-		return Boolean(req.session.invitationId);
-	},
+	auth: sessionAuth,
 	action: async (req, res) => {
 		/** @type {FeedbackItem} */
 		const item = {

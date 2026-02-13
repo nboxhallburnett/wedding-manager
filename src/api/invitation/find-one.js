@@ -1,14 +1,12 @@
 import { STATUS_CODES } from 'http';
 
 import invitationDb from '../../lib/db/invitations.js';
+import { selfAuth } from '../auth.js';
 
 /** @type {API<InvitationPath>} */
 export default {
 	path: 'invitation/:invitationId',
-	auth: async req => {
-		// An Invitation record can only be fetched by itself or by an admin
-		return Boolean(req.params.invitationId === req.session.invitationId || req.ctx.admin);
-	},
+	auth: selfAuth,
 	action: async (req, res) => {
 		const invitation = await invitationDb.findOne({ id: req.params.invitationId }, { projection: { _id: 0 } });
 		if (!invitation) {

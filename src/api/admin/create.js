@@ -1,4 +1,5 @@
 import invitationDb from '../../lib/db/invitations.js';
+import { adminAuth } from '../auth.js';
 
 // An extremely basic email regex.
 const reEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -7,10 +8,7 @@ const reEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export default {
 	method: 'post',
 	path: 'admin',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		/** @type {Invitation} */
 		const invitation = {

@@ -6,7 +6,6 @@ export default {
 	path: 'session',
 	action: async (req, res) => {
 		// Wrap the callback
-		// await promisify(req.session.destroy)();
 		await new Promise((resolve, reject) => {
 			req.session.destroy(err => {
 				if (err) {

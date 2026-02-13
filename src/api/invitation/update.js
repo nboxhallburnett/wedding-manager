@@ -1,5 +1,6 @@
 import invitationDb from '../../lib/db/invitations.js';
 import menuItemDb from '../../lib/db/menu-items.js';
+import { selfAuth } from '../auth.js';
 
 const menuItemProps = [ 'starter_id', 'main_id', 'dessert_id' ];
 
@@ -7,10 +8,7 @@ const menuItemProps = [ 'starter_id', 'main_id', 'dessert_id' ];
 export default {
 	method: 'put',
 	path: 'invitation/:invitationId',
-	auth: async req => {
-		// An Invitation record can only be modified by itself or by an admin
-		return Boolean(req.params.invitationId === req.session.invitationId || req.ctx.admin);
-	},
+	auth: selfAuth,
 	action: async (req, res) => {
 		const existingInvitation = await invitationDb.findOne({ id: req.params.invitationId });
 

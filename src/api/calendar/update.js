@@ -1,6 +1,7 @@
 import ical from 'ical-generator';
 
 import calendarEventsDb from '../../lib/db/calendar-events.js';
+import { adminAuth } from '../auth.js';
 
 const propTypes = {
 	string: [ 'summary', 'description', 'timezone' ],
@@ -11,10 +12,7 @@ const propTypes = {
 export default {
 	method: 'put',
 	path: 'calendar/:calendarEventId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		const existingEvent = await calendarEventsDb.findOne({ id: req.params.calendarEventId });
 

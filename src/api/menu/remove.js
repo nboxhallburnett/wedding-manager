@@ -1,5 +1,6 @@
 import invitationDb from '../../lib/db/invitations.js';
 import menuItemDb from '../../lib/db/menu-items.js';
+import { adminAuth } from '../auth.js';
 
 const fieldMap = [
 	'starter_id',
@@ -11,10 +12,7 @@ const fieldMap = [
 export default {
 	method: 'delete',
 	path: 'menu/:menuItemId',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		// Validate the record exists
 		const item = await menuItemDb.findOne({ id: req.params.menuItemId });

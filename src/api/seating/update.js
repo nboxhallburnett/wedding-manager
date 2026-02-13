@@ -1,13 +1,11 @@
 import seatingDb from '../../lib/db/seating.js';
+import { adminAuth } from '../auth.js';
 
 /** @type {API<{}, DiningRoom>} */
 export default {
 	method: 'put',
 	path: 'seating',
-	auth: async req => {
-		// Auth success is determined by whether there is a valid admin session
-		return Boolean(req.ctx.admin);
-	},
+	auth: adminAuth,
 	action: async (req, res) => {
 		const tables = req.body.tables;
 		if (!Array.isArray(tables)) {

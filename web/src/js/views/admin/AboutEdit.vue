@@ -12,7 +12,7 @@ import CardHeader from 'components/CardHeader.vue';
 /** @type {AddToast} */
 const addToast = inject('addToast');
 /** @type {Ref<String>} */
-const data = ref('');
+const data = ref({});
 
 const placeholder = 'Add About page content here.';
 
@@ -22,7 +22,7 @@ useLoader('about', data);
 const { onSubmit } = useForm({
 	path: 'about',
 	method: 'PUT',
-	body: { content: data.value.content },
+	body: data,
 	onSuccess() {
 		addToast({
 			title: 'Details content Updated',

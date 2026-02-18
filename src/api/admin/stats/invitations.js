@@ -40,9 +40,9 @@ export default {
 				{ $group: { _id: null, count: { $sum: 1 } } }
 			]).toArray(),
 			invitationDb.aggregate([
-				{ $project: { _id: 0, 'children.name': 1, 'children.age': 1 } },
+				{ $project: { _id: 0, 'children.name': 1 } },
 				{ $unwind: '$children' },
-				{ $match: { 'children.name': { $ne: '' }, 'children.age': { $gt: 0 } } },
+				{ $match: { 'children.name': { $ne: '' } } },
 				{ $group: { _id: null, count: { $sum: 1 } } }
 			]).toArray(),
 			invitationDb.aggregate([

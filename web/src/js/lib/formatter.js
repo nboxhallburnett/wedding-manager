@@ -7,7 +7,7 @@ export const dateFormatter = new Intl.DateTimeFormat(undefined, {
 	month: 'long',
 	day: 'numeric',
 	year: 'numeric',
-	timeZone: 'UTC'
+	timeZone: String(CONFIG.timezone) || 'UTC'
 });
 
 export const listFormatter = new Intl.ListFormat('en', {

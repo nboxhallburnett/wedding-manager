@@ -114,6 +114,7 @@ Name | Description | Type | Default
 `GROOM_SHORT` | First name or nickname of the groom | String | N/A
 `DATE` | Date of the wedding | Timestamp, or String that is accepted by JS [`Date.parse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse) | N/A
 `TIME` | Time of the wedding ceremony. Used for the generated invitation cards | String | N/A
+`TIMEZONE` | Timezone the wedding location uses (E.g. `'Europe/London'`) | String | `'UTC'`
 `REGISTRY_URL` | URL of an external wedding registry | String | N/A
 `OAUTH_CLIENTID` | The Client ID of a Google OAuth 2.0 Client to facilitate external administrative access | String | N/A
 `SERVER_PORT` | Port the running server will listen for requests on | Number | N/A

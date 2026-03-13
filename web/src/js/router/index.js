@@ -55,6 +55,12 @@ const router = createRouter({
 			meta: { session: true }
 		},
 		{
+			path: '/palette',
+			name: 'View Colour Palette',
+			component: () => import('../views/PaletteView.vue'),
+			meta: { session: true }
+		},
+		{
 			path: '/admin',
 			name: 'Admin Overview',
 			component: () => import('../views/admin/Index.vue'),
@@ -194,11 +200,6 @@ const router = createRouter({
 					path: 'seating/layout',
 					name: 'Admin Edit Seating Layout',
 					component: () => import('../views/admin/SeatingLayoutEdit.vue')
-				},
-				{
-					path: 'palette',
-					name: 'Admin View Colour Palette',
-					component: () => import('../views/admin/PaletteView.vue')
 				},
 				{
 					path: 'admin',

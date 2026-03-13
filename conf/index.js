@@ -36,7 +36,12 @@ const config = {
 	},
 	client: {
 		footer: [],
-		palette: [],
+		palette: {
+			primary: [],
+			secondary: [],
+			tertiary: [],
+			accent: []
+		},
 		theme: {
 			primary: process.env.CLIENT_THEME_PRIMARY,
 			secondary: process.env.CLIENT_THEME_SECONDARY
@@ -79,12 +84,18 @@ for (const item of process.env.CLIENT_FOOTER?.split('|') || []) {
 	}
 }
 
-for (const item of process.env.CLIENT_PALETTE?.split('|') || []) {
-	const [ name, value ] = item.split(',');
-	if (name && value) {
-		config.client.palette.push({ name, value });
-	} else {
-		console.warn('Invalid palette value', item);
+const palettes = [ 'primary', 'secondary', 'tertiary', 'accent' ];
+for (const palette of palettes) {
+	for (const item of process.env[`CLIENT_PALETTE_${palette.toUpperCase()}`]?.split('|') || []) {
+		const [ name, value ] = item.split(',');
+		if (name && value) {
+			config.client.palette[palette].push({ name, value });
+		} else {
+			console.warn(`Invalid ${palette} palette value`, item);
+		}
+	}
+	if (!config.client.palette[palette].length) {
+		console.warn(`No ${palette} palette values defined`);
 	}
 }
 
@@ -144,5 +155,10 @@ export default Object.freeze(config);
  * @property {String} server.session.secret Secret used to sign the session.
  * @property {Object} client Configuration for the front-end client.
  * @property {FooterItem[]} client.footer Data to include in the UI footer.
- * @property {{ primary: String, [key: String]: String }} client.theme Values to use for default theme overrides
+ * @property {Object} client.palette Colour palette to expose in the UI.
+ * @property {String[]} client.palette.primary Primary colour(s) of the wedding's colour palette.
+ * @property {String[]} client.palette.secondary Secondary colour(s) of the wedding's colour palette.
+ * @property {String[]} client.palette.tertiary Tertiary colour(s) of the wedding's colour palette.
+ * @property {String[]} client.palette.accent Accent colour(s) of the wedding's colour palette.
+ * @property {{ primary: String, [key: String]: String }} client.theme Values to use for default theme overrides.
  */

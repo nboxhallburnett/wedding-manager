@@ -21,8 +21,8 @@ const links = [
 	{ text: 'Telemetry', to: { name: 'Admin List Telemetry' } }
 ];
 // Only link to the colour palette view if there is a palette defined
-if (CONFIG.client.palette.length) {
-	links.push({ text: 'Colour Palette', to: { name: 'Admin View Colour Palette' } });
+if (CONFIG.client.palette.primary.length) {
+	links.push({ text: 'Colour Scheme', to: { name: 'View Colour Palette' } });
 }
 </script>
 

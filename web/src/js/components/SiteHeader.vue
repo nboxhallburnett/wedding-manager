@@ -28,7 +28,7 @@ const navItems = computed(() => {
 
 	const items = [
 		{ text: 'Details', to: { name: 'About' } },
-		{ text: 'Q&A', to: { name: 'Q&A' } },
+		{ text: 'Q&A', to: { name: 'Q&A' }, pathMatch: /^\/(?:question|palette)/ },
 		{ text: 'Our Story', to: { name: 'Our Story' } },
 		{ text: 'Gallery', to: { name: 'Gallery' } }
 	];

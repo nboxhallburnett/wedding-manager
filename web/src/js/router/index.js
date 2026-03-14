@@ -56,7 +56,7 @@ const router = createRouter({
 		},
 		{
 			path: '/palette',
-			name: 'View Colour Palette',
+			name: 'Colour Palette',
 			component: () => import('../views/PaletteView.vue'),
 			meta: { session: true }
 		},

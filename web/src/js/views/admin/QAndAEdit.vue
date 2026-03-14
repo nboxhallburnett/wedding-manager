@@ -19,7 +19,7 @@ const items = ref([]);
 
 // Fetch the Q&A content from the API
 useLoader('question', response => {
-	items.value = response.result.data.map(i => ({ id: nanoid(), ...i }));
+	items.value = response.result.data.items.map(i => ({ id: nanoid(), ...i }));
 });
 
 const { onSubmit } = useForm({

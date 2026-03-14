@@ -4,20 +4,22 @@ import { VueShowdown } from 'vue-showdown';
 import Router from 'router';
 
 import { dateExtension } from 'lib/showdown';
+import { dateFormatter } from 'lib/formatter';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
+import CardHeader from 'components/CardHeader.vue';
 import CustomHR from 'components/CustomHR.vue';
 
-/** @type {Ref<Question[]>} */
-const questions = ref([]);
+/** @type {Ref<{ updated: Date, items: Question[] }>} */
+const data = ref({ items: [] });
 const QAndALoading = ref(true);
 const $markdownContent = useTemplateRef('markdown-content');
 
 // Fetch the Q&A content from the API
-useLoader('question', questions, QAndALoading, true);
+useLoader('question', data, QAndALoading, true);
 
-watch(questions, () => {
+watch(data, () => {
 	// Allow vue to propagate our changes onto the DOM
 	nextTick(() => {
 		// Check generated links to ensure we're handling internal navigation efficiently
@@ -47,9 +49,14 @@ watch(questions, () => {
 </script>
 
 <template>
-	<card-body title="Q&A">
+	<card-body>
+		<card-header title="Q&A">
+			<div v-if="data.updated" class="align-items-center d-flex fs-6 fst-italic fw-normal h-100 text-muted text-end ps-3">
+				Last updated: {{ dateFormatter.format(new Date(data.updated)) }}
+			</div>
+		</card-header>
 		<div v-if="!QAndALoading" ref="markdown-content">
-			<div v-for="(item, idx) in questions" :key="idx" :class="{ 'pt-2': !idx }">
+			<div v-for="(item, idx) in data.items" :key="idx" :class="{ 'pt-2': !idx }">
 				<hr v-if="idx && idx % 2 === 0" class="fancy-hr">
 				<custom-h-r v-else-if="idx" />
 				<h5 v-text="item.title" />

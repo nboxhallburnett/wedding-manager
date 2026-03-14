@@ -11,7 +11,7 @@ import CardHeader from 'components/CardHeader.vue';
 
 /** @type {AddToast} */
 const addToast = inject('addToast');
-/** @type {Ref<String>} */
+/** @type {Ref<{ updated: Date, content: String }>} */
 const data = ref({});
 
 const placeholder = 'Add About page content here.';

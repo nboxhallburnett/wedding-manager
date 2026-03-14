@@ -10,6 +10,7 @@ import { classExtensions, responsiveTableExtension } from 'lib/showdown';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
+import CardHeader from 'components/CardHeader.vue';
 
 const data = ref({});
 const navItems = ref([]);
@@ -165,12 +166,14 @@ function scrollToItem(id) {
 </script>
 
 <template>
-	<card-body title="Details">
+	<card-body>
+		<card-header title="Details">
+			<div v-if="data.updated" class="align-items-center d-flex fs-6 fst-italic fw-normal h-100 text-muted text-end ps-3">
+				Last updated: {{ dateFormatter.format(new Date(data.updated)) }}
+			</div>
+		</card-header>
 		<div v-show="data.content" class="card-text row">
 			<div class="col-12 col-md-8">
-				<div v-if="data.updated" class="text-muted mb-3 fst-italic">
-					Last updated: {{ dateFormatter.format(new Date(data.updated)) }}
-				</div>
 				<div
 					ref="markdown-content"
 					class="scrollspy-container"
@@ -227,7 +230,7 @@ function scrollToItem(id) {
 <style lang="scss" scoped>
 #about-navbar {
 	position: sticky;
-	top: calc((var(--card-offset) * -1) + var(--header-height) + 16px);
+	top: calc((var(--card-offset) * -1) + var(--header-height) + 12px);
 	overflow-y: scroll;
 	max-height: fit-content;
 

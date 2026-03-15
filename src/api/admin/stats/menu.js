@@ -30,8 +30,6 @@ export default {
 				// Repeat the above aggregation, but replacing guests with children
 				{ $project: { _id: 0, children: 1 } },
 				{ $unwind: '$children' },
-				// And instead of validating their attendance, validate their ages.
-				{ $match: { 'children.age': { $gt: 2 } } },
 				// TODO: Make grouping splitting children < 8, < 12, >=12
 				{ $addFields: { meal: [ '$children.starter_id', '$children.main_id', '$children.dessert_id' ] } },
 				{ $unwind: '$meal' },

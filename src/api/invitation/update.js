@@ -50,7 +50,7 @@ export default {
 					}
 
 					// Update the verified updated name value
-					updatedGuest.name = guest.name;
+					updatedGuest.name = guest.name.trim();
 				}
 
 				if (Object.prototype.hasOwnProperty.call(guest, 'status_ceremony')) {
@@ -76,14 +76,14 @@ export default {
 				}
 
 				if (Object.prototype.hasOwnProperty.call(guest, 'diet')) {
-					// Verify the status contained a valid value
+					// Verify the diet contained a valid value
 					if (typeof guest.diet !== 'string') {
 						res.status(400);
 						throw new Error(`"guests[${idx}].diet" contained an invalid value: Unsupported value: "${guest.diet}"`);
 					}
 
 					// Update the verified updated dietary requirement value
-					updatedGuest.diet = guest.diet;
+					updatedGuest.diet = guest.diet.trim();
 				}
 
 				for (const prop of menuItemProps) {
@@ -147,7 +147,7 @@ export default {
 					}
 
 					// Update the verified updated name value
-					updatedChild.name = child.name;
+					updatedChild.name = child.name.trim();
 				}
 
 				if (Object.prototype.hasOwnProperty.call(child, 'age')) {
@@ -159,6 +159,17 @@ export default {
 
 					// Update the verified age value
 					updatedChild.age = child.age;
+				}
+
+				if (Object.prototype.hasOwnProperty.call(child, 'diet')) {
+					// Verify the diet contained a valid value
+					if (typeof child.diet !== 'string') {
+						res.status(400);
+						throw new Error(`"children[${idx}].diet" contained an invalid value: Unsupported value: "${child.diet}"`);
+					}
+
+					// Update the verified updated dietary requirement value
+					updatedChild.diet = child.diet.trim();
 				}
 
 				for (const prop of menuItemProps) {
@@ -189,7 +200,7 @@ export default {
 				children.push(updatedChild);
 			}
 
-			// If the set of posted guests is valid, mark it as an update candidate
+			// If the set of posted children is valid, mark it as an update candidate
 			if (children.length) {
 				update.$set.children = children;
 			}

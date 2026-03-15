@@ -26,7 +26,10 @@ export default {
 			projection.gluten_free = 1;
 		}
 
-		const menuItems = await menuItemDb.find(filter, { projection }).toArray();
+		const menuItems = await menuItemDb
+			.find(filter, { projection })
+			.sort({ child: 1, course: 1 })
+			.toArray();
 		return res.json({ success: true, data: menuItems });
 	}
 };

@@ -15,7 +15,8 @@ export default {
 		[ { admin: 1 }, { name: 'is_admin' } ]
 	],
 	menu_items: [
-		[ { id: 1 }, { name: 'item_id', unique: true } ]
+		[ { id: 1 }, { name: 'item_id', unique: true } ],
+		[ { child: 1, course: 1 }, { name: 'item_sort' } ]
 	],
 	sessions: [
 		[ { expires: 1 }, { name: 'session_expire', expireAfterSeconds: 0, background: true } ]

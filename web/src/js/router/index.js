@@ -127,6 +127,11 @@ const router = createRouter({
 					component: () => import('../views/admin/InvitationMessageList.vue')
 				},
 				{
+					path: 'diets',
+					name: 'Admin List Invitation Dietary Requirements',
+					component: () => import('../views/admin/InvitationDietList.vue')
+				},
+				{
 					path: 'menu',
 					name: 'Admin List Menu Items',
 					component: () => import('../views/admin/MenuList.vue')

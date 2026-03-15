@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import Router from 'router';
 
+import { listFormatter } from 'lib/formatter';
 import { useLoader } from 'composables/loader';
 
 import CardBody from 'components/CardBody.vue';
@@ -32,18 +33,30 @@ useLoader([
  * @returns {String}
  */
 function invitationDisplay(invitation) {
-	let out = invitation.guests?.[0].name || '';
-	if (invitation.guests?.length > 1) {
-		if (out) {
-			out += `, ${invitation.guests.length - 1} other guest${invitation.guests.length > 2 ? 's' : ''}`;
-		} else {
-			out += `${invitation.guests.length} guest${invitation.guests.length > 1 ? 's' : ''}`;
+	const menuId = Router.currentRoute.value.params.menuItemId;
+	const guests = [];
+	for (const guest of invitation.guests || []) {
+		if (guest.dessert_id === menuId || guest.main_id === menuId || guest.starter_id === menuId) {
+			guests.push(guest.name.trim());
 		}
 	}
-	if (invitation.children?.length) {
-		out += `, ${invitation.children.length} children`;
+	const children = [];
+	for (const child of invitation.children || []) {
+		if (child.dessert_id === menuId || child.main_id === menuId || child.starter_id === menuId) {
+			children.push(child.name.trim());
+		}
 	}
-	return out;
+	let out = '';
+	if (guests.length) {
+		out += `Adult: ${listFormatter.format(guests)}`;
+	}
+	if (children.length) {
+		if (out) {
+			out += '. ';
+		}
+		out += `Children: ${listFormatter.format(children)}`;
+	}
+	return out.trim();
 }
 </script>
 

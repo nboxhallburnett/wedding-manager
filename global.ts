@@ -77,7 +77,9 @@ type MenuItem = {
 	/** Whether the menu item is vegetarian */
 	vegetarian: Boolean,
 	/** Whether the menu item is gluten free */
-	gluten_free: Boolean
+	gluten_free: Boolean,
+	/** Whether the menu item is hidden from manual selection */
+	hidden: Boolean
 }
 
 /** Calendar event definition */

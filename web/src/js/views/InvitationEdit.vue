@@ -252,19 +252,41 @@ function addSong() {
  *
  * @param {0|1|2} course Course of the menu items to return
  * @param {Boolean} child Whether to include items from the children's menu
+ * @param {Object} guest The guest or child to get menu options for
  */
-function getMenuOptions(course, child) {
+function getMenuOptions(course, child, guest) {
 	const items = [];
 	// Loop through the set of fetched menu items
 	for (const item of menu.value) {
-		// Unfortunately inly children can have items from the children's menu
+		// Unfortunately only children can have items from the children's menu
 		if (item.child && !child) {
 			continue;
 		}
-		// If the item is for the requested course, add it to the list
-		if (item.course === course) {
-			items.push({ value: item.id, text: item.title, item });
+		// Only children aged 12 and up can have junior portions of the adult menu options
+		if (child && !item.child && guest.age < 12) {
+			continue;
 		}
+		// If the item is for the requested course, add it to the list.
+		// Only include "hidden" items for admins or if the guest already has it selected
+		if (item.course === course && (session.value.admin || !item.hidden || guest[mealsMap[course]?.key] === item.id)) {
+			let text = item.title;
+			// Add signifier of junior portion to adult items displayed for children
+			if (child && !item.child && guest.age >= 12) {
+				text += ' (Junior Portion)';
+			}
+			items.push({ value: item.id, text, item });
+		}
+	}
+	// Sort the displayed children's menu items so the specific children's menu items are at the top
+	if (child && guest.age >= 12) {
+		items.sort((a, b) => {
+			if (a.item.child && !b.item.child) {
+				return -1;
+			} else if (b.item.child && !a.item.child) {
+				return 1;
+			}
+			return 0;
+		});
 	}
 	// Add the 'Other' option at the end of the list
 	items.push({
@@ -342,7 +364,7 @@ function getMenuOptions(course, child) {
 										v-model="guest[meal.key]"
 										:label="meal.text"
 										:name="`guest-${idx}-${meal.key}`"
-										:options="getMenuOptions(mealIdx, false)"
+										:options="getMenuOptions(mealIdx, false, guest)"
 									>
 										<template #after-each="{ item }">
 											<diet-indicator class="ms-2 align-top" :item />
@@ -422,7 +444,7 @@ function getMenuOptions(course, child) {
 								v-model="child[meal.key]"
 								:label="meal.text"
 								:name="`child-${idx}-${meal.key}`"
-								:options="getMenuOptions(mealIdx, child.age <= 12)"
+								:options="getMenuOptions(mealIdx, true, child)"
 							>
 								<template #after-each="{ item }">
 									<diet-indicator class="ms-2 align-top" :item />

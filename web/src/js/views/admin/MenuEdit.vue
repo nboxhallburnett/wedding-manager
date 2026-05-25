@@ -14,6 +14,7 @@ import FormSwitch from 'components/form/FormSwitch.vue';
 /** @type {AddToast} */
 const addToast = inject('addToast');
 
+/** @type {import('vue').ref<MenuItem>} */
 const item = ref({
 	child: false,
 	course: 0,
@@ -21,7 +22,8 @@ const item = ref({
 	description: '',
 	vegan: false,
 	vegetarian: false,
-	gluten_free: false
+	gluten_free: false,
+	hidden: false
 });
 
 // Define available course options
@@ -96,7 +98,13 @@ watch(() => item.value.vegan, value => {
 			/>
 			<form-switch v-model="item.vegan" name="vegan" label="Vegan" />
 			<form-switch v-model="item.vegetarian" name="vegetarian" label="Vegetarian" />
-			<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten Free" />
+			<form-switch v-model="item.gluten_free" name="gluten_free" label="Gluten-Free" />
+			<form-switch
+				v-model="item.hidden"
+				name="hidden"
+				label="Hidden"
+				hint="Whether the item is hidden from the default menu selection"
+			/>
 		</form>
 	</card-body>
 </template>

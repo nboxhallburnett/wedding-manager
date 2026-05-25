@@ -129,7 +129,12 @@ const tableOpts = {
 				<td v-text="courseText[item.course]" />
 				<td v-text="item.child ? 'Child' : 'Adult'" />
 				<td>
-					<diet-indicator :item />
+					<div class="d-inline-flex flex-wrap gap-1">
+						<diet-indicator :item />
+						<div v-if="item.hidden" class="badge bg-info text-decoration-none align-top">
+							Hidden
+						</div>
+					</div>
 				</td>
 				<td>
 					<template v-if="!item.child">

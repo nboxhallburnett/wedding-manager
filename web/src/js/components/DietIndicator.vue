@@ -11,7 +11,7 @@ const { item } = defineProps({
 <template>
 	<span v-bind="$attrs" class="d-inline-flex gap-1">
 		<a
-			v-if="item.vegan"
+			v-if="item?.vegan"
 			:ref="$el => $els.push($el)"
 			href="#"
 			class="badge bg-success text-decoration-none align-top"
@@ -21,7 +21,7 @@ const { item } = defineProps({
 		/>
 		<!-- All vegan meals are also vegetarian, so only show if not vegan -->
 		<a
-			v-else-if="item.vegetarian"
+			v-else-if="item?.vegetarian"
 			:ref="$el => $els.push($el)"
 			href="#"
 			class="badge bg-vegetarian text-decoration-none align-top"
@@ -30,11 +30,11 @@ const { item } = defineProps({
 			@click.prevent
 		/>
 		<a
-			v-if="item.glutenFree"
+			v-if="item?.gluten_free"
 			:ref="$el => $els.push($el)"
 			href="#"
 			class="badge bg-dark text-decoration-none align-top"
-			title="Gluten Free"
+			title="Gluten-Free"
 			v-text="'GF'"
 			@click.prevent
 		/>

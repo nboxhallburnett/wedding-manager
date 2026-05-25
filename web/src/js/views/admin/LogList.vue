@@ -1,8 +1,5 @@
 <script setup>
 import { ref, useTemplateRef } from 'vue';
-import { RouterLink } from 'vue-router';
-
-import { fromNow } from 'lib/formatter.js';
 
 import { useLoader } from 'composables/loader';
 
@@ -54,6 +51,11 @@ function createdDisplay(created) {
 	return date.toISOString().replace('T', ' ').slice(0, -5);
 }
 
+/**
+ * Sets a value as the search term on the table
+ *
+ * @param {String} value value to set as search term
+ */
 function setSearch(value) {
 	$table.value.searchTerm = value;
 }

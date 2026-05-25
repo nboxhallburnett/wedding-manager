@@ -20,7 +20,8 @@ export default {
 			description: req.body.description || '',
 			vegan: Boolean(req.body.vegan),
 			vegetarian: Boolean(req.body.vegan) || Boolean(req.body.vegetarian),
-			gluten_free: Boolean(req.body.gluten_free)
+			gluten_free: Boolean(req.body.gluten_free),
+			hidden: Boolean(req.body.hidden)
 		};
 
 		// Title is required for a menu item

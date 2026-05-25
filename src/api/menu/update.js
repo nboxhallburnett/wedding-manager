@@ -3,7 +3,7 @@ import { adminAuth } from '../auth.js';
 
 const propTypes = {
 	string: [ 'title', 'description' ],
-	boolean: [ 'child', 'vegan', 'vegetarian', 'gluten_free' ],
+	boolean: [ 'child', 'vegan', 'vegetarian', 'gluten_free', 'hidden' ],
 	number: [ 'course' ]
 };
 

@@ -49,13 +49,27 @@ function hintText(occupant) {
 		return 'Unassigned';
 	}
 
-	if (!Object.prototype.hasOwnProperty.call(occupant, 'status')) {
+	// Only show name if neither status nor menu data is available
+	if (!Object.prototype.hasOwnProperty.call(occupant, 'status') && !occupant.starter) {
 		return escapeHtml(occupant.name);
 	}
 
-	return `<b>Name</b>: ${escapeHtml(occupant.name)}
+	let out = `<b>Name</b>: ${escapeHtml(occupant.name)}
 		<br><b>ID</b>: <span class="font-monospace">${occupant.id}</span>
-		<br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
+		<br>`;
+
+	if (Object.prototype.hasOwnProperty.call(occupant, 'status')) {
+		out += `<br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
+	}
+
+	for (const course of [ 'Starter', 'Main', 'Dessert']) {
+		const key = course.toLowerCase();
+		if (occupant[key]) {
+			out += `<br><b>${course}</b>: ${escapeHtml(occupant[key])}`;
+		}
+	}
+
+	return out;
 }
 
 /**
@@ -300,12 +314,12 @@ $rotation: v-bind(rotationDeg);
 @keyframes rectangle-fade-slide-in {
 	0% {
 		opacity: 0;
-		transform: translate(0, 42%) translateY(calc($chair-offset * 1.33));
+		transform: translate(0, 66%) translateY(calc($chair-offset * 1.33));
 	}
 
 	100% {
 		opacity: 1;
-		transform: translate(0, 42%) translateY($chair-offset);
+		transform: translate(0, 66%) translateY($chair-offset);
 	}
 }
 
@@ -333,7 +347,7 @@ $rotation: v-bind(rotationDeg);
 	color: var(--bs-dark);
 
 	.rectangle & {
-		top: 80%;
+		top: 75%;
 	}
 }
 
@@ -555,7 +569,7 @@ $rotation: v-bind(rotationDeg);
 		border-radius: 50% / 100%;
 
 		.rectangle & {
-			top: calc(80% - calc($petal-height * 0.5));
+			top: calc(75% - calc($petal-height * 0.5));
 		}
 
 		// Position and rotate individual petals.
@@ -579,7 +593,7 @@ $rotation: v-bind(rotationDeg);
 		border-radius: 50%;
 
 		.rectangle & {
-			top: 80%;
+			top: 75%;
 		}
 	}
 }

@@ -21,8 +21,6 @@
 		"no-invalid-position-at-import-rule": null,
 		"number-max-precision": 3,
 		"scss/at-extend-no-missing-placeholder": null,
-		"scss/at-import-no-partial-leading-underscore": null,
-		"scss/at-import-partial-extension": null,
 		"scss/at-rule-no-unknown": true,
 		"scss/load-no-partial-leading-underscore": null,
 		"scss/no-global-function-names": null,

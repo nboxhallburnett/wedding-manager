@@ -40,7 +40,7 @@ useLoader([
 	guests.value = invitationResponse.result.data.reduce((arr, invitation) => {
 		for (const [ idx, guest ] of invitation.guests?.entries() || []) {
 			// Skip the guest if they are marked as not attending the ceremony
-			if (guest.status_ceremony === 3) {
+			if (guest.status_ceremony === 3 || guest.status_ceremony === 0) {
 				continue;
 			}
 			// Add their name to the search suggestion list
@@ -324,7 +324,7 @@ function onDropped(evt) {
 		<form class="card-text row" @submit.prevent.stop="onSubmit">
 			<input
 				v-model="searchTerm"
-				class="form-control mx-auto w-75"
+				class="form-control mx-auto w-75 z-2"
 				placeholder="Search"
 				:list="searchSuggestions.length && 'searchSuggestions' || undefined"
 				@keyup.escape="searchTerm = ''"
@@ -351,8 +351,9 @@ function onDropped(evt) {
 								v-for="(guest, guestIdx) in table.guests"
 								:key="guestIdx"
 								:class="{ 'fw-bold': hasSearchMatch(guest), 'text-muted': !guest?.name }"
+								@click="searchTerm = (searchTerm === guest.id ? '' : guest.id)"
 							>
-								<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true }">
+								<info-popover v-if="guest?.name" :hint="guest?.name && popoverHint(guest) || ''" :opts="{ html: true, trigger: 'hover' }">
 									{{ guest.name }}
 								</info-popover>
 								<template v-else>
@@ -421,7 +422,7 @@ function onDropped(evt) {
 				@drop.prevent.stop="onDropped"
 			>
 				<span class="fw-bold">
-					Unassigned Guests
+					Unassigned Guests ({{ unassignedGuests.length }})
 				</span>
 				<transition-group name="list" tag="ul" class="mb-2">
 					<li
@@ -435,8 +436,9 @@ function onDropped(evt) {
 						@dragstart="evt => onDragStart(evt, guest)"
 						@dragend="onDragEnd"
 						@drag="onDragging"
+						@click="searchTerm = (searchTerm === guest.id ? '' : guest.id)"
 					>
-						<info-popover :hint="popoverHint(guest)" :opts="{ html: true, placement: 'left' }">
+						<info-popover :hint="popoverHint(guest)" :opts="{ html: true, placement: 'left', trigger: 'hover' }">
 							{{ guest.name }}
 						</info-popover>
 					</li>
@@ -481,14 +483,6 @@ function onDropped(evt) {
 
 		&.tentative::marker {
 			color: var(--bs-warning-border-subtle);
-		}
-
-		&.pending::marker {
-			color: var(--bs-gray-400);
-		}
-
-		&.not-attending::marker {
-			color: var(--bs-danger-border-subtle);
 		}
 
 		&.child::marker {

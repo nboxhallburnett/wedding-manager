@@ -19,10 +19,10 @@ const emit = defineEmits([ 'setSeat' ]);
 
 // Calculate the relative table and chair sizing to pass to the CSS
 const tableSizeVMin = 20;
-const chairSizeVMin = tableSizeVMin * 0.25;
+const chairSizeVMin = tableSizeVMin * 0.225;
 const tableSize = ref(`${tableSizeVMin}vmin`);
 const chairSize = ref(`${chairSizeVMin}vmin`);
-const chairOffset = ref(`${(tableSizeVMin - (chairSizeVMin * 1.4)) * -1}vmin`);
+const chairOffset = ref(`${(tableSizeVMin - (chairSizeVMin * 1.6)) * -1}vmin`);
 const diameter = ref(`${tableSizeVMin + (3 * chairSizeVMin)}vmin`);
 const rotationDeg = computed(() => `${props.rotation || 0}deg`);
 
@@ -403,8 +403,8 @@ $rotation: v-bind(rotationDeg);
 		display: inline-flex;
 		top: initial;
 		left: initial;
-		margin-right: 0.75vmin;
-		transform: translate(0, 42%) translateY($chair-offset);
+		margin-right: 1vmin;
+		transform: translate(0, 66%) translateY($chair-offset);
 		animation: rectangle-fade-slide-in 0.35s;
 	}
 

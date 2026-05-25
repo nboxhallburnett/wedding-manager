@@ -27,6 +27,11 @@ const searchTerm = ref('');
 const searchSuggestions = ref([]);
 const maxGuestHeight = ref(`${window.innerHeight - (2 * headerHeight)}px`);
 
+const maxSeats = {
+	round: 12,
+	rectangle: 6
+};
+
 useLoader([
 	'invitation',
 	'seating'
@@ -359,7 +364,7 @@ function onDropped(evt) {
 							<button
 								type="button"
 								class="btn btn-sm btn-primary"
-								:disabled="table.guests.length >= (idx === 0 ? 6 : 8)"
+								:disabled="table.guests.length >= (idx === 0 ? maxSeats.rectangle : maxSeats.round)"
 								v-text="'Add Chair'"
 								@click="table.guests.push({})"
 							/>

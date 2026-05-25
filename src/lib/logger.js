@@ -1,14 +1,63 @@
+import { format, stripVTControlCharacters } from 'util';
+import { hostname } from 'os';
 import Debug from 'debug';
 
 import pkg from '../../package.json' with { type: 'json' };
 const { name } = pkg;
+
+const host = hostname();
+
+const logBuffer = [];
+let dbConnected = false;
+/** @type {import('mongodb').Collection<Log>} */
+let logDb;
+
+const defaultOut = Debug.log;
+Debug.log = function logHandler(msg, ...args) {
+	defaultOut(msg, ...args);
+
+	const ns = this.namespace;
+	// Cast `created` as a date so the expiry db index policy can be applied
+	const created = new Date(this.curr);
+
+	// Debug annoyingly has unconfigurable differentiated message formatting depending on whether stdout is TTY
+	if (process.stdout.isTTY) {
+		// Remove last argument from TTY output args (ms log diff)
+		args.pop();
+	} else {
+		// Remove the injected ISO string formatted date from the message.
+		// JS ISO strings are 24 chars long.
+		msg = msg.slice(24);
+	}
+	// Remove ANSI escape codes, the injected namespace, and surrounding whitespace from the message and apply argument formatting
+	const message = stripVTControlCharacters(format(msg.replace(ns, '').trim(), ...args));
+
+	/** @type {Log} */
+	const log = {
+		created,
+		host,
+		ns: ns.replace(`${name}:`, ''),
+		message
+	};
+
+	// If the db isn't connected yet, add it to the buffer
+	if (!dbConnected) {
+		return logBuffer.push(log);
+	}
+
+	// Attempt to insert the log record without await
+	logDb.insertOne(log).catch(err => {
+		// Deliberately not using debug to prevent recursive errors attempting to insertion error logs
+		console.error('Error inserting log record:', String(err));
+	});
+};
 
 /**
  * Returns a wrapper for `debug` which automatically prefixes logs with the request context ID if one exists
  *
  * @param {String} namespace Namespace of the custom debug instance
  */
-export default function logger(namespace) {
+export default function logger (namespace) {
 	return Debug(`${name}:${namespace}`);
 }
 
@@ -52,3 +101,18 @@ export function middleware (req, res, next) {
 
 	next();
 };
+
+/**
+ * Imports the log db into the lib, marks the db as connected, and inserts any
+ * pending logs into the collection.
+ *
+ * To be called after the db lib has been connected to prevent referencing the client
+ * before it has been initialised.
+ */
+export async function registerLogDb () {
+	logDb = (await import('./db/logs.js')).default;
+	dbConnected = true;
+	if (logBuffer.length) {
+		await logDb.insertMany(logBuffer);
+	}
+}

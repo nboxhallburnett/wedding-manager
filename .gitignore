@@ -10,7 +10,6 @@ web/public/manifest.json
 # https://github.com/github/gitignore/blob/310d5c4fa48aaa215c33642165fe8745e28c138b/Node.gitignore
 
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*

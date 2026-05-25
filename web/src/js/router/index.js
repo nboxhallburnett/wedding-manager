@@ -220,6 +220,11 @@ const router = createRouter({
 					path: 'telemetry',
 					name: 'Admin List Telemetry',
 					component: () => import('../views/admin/TelemetryList.vue')
+				},
+				{
+					path: 'logs',
+					name: 'Admin List Logs',
+					component: () => import('../views/admin/LogList.vue')
 				}
 			]
 		},

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, defineExpose, ref, watch } from 'vue';
 
 import Router from 'router';
 
@@ -21,6 +21,11 @@ const perPageOptions = [ 5, 10, 25, 50, 100 ];
 
 const searchTerm = ref(Router.currentRoute.value.query?.term || '');
 const currentSort = ref({ col: '', dir: 1, fn: null });
+
+// Expose search term to other components to allow them to programmatically set search value
+defineExpose({
+	searchTerm
+});
 
 // Clear any term that was supplied on load
 Router.replace({ query: { ...Router.currentRoute.value.query, term: undefined } });
@@ -140,6 +145,8 @@ function lastPage() {
 	displayedPage.value = pages.value - 1;
 }
 
+// Reset displayed page on search value change
+watch(searchTerm, () => displayedPage.value = 0);
 // Maintain the current page and per_page values as query params so it's persisted when navigating history
 watch(displayedPage, page => Router.replace({ query: { ...Router.currentRoute.value.query, page: page === 0 ? undefined : page + 1 } }));
 watch(perPage, per_page => {

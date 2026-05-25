@@ -19,7 +19,8 @@ const links = [
 	{ text: 'Feedback', to: { name: 'Admin List Feedback Items' } },
 	{ text: 'Administrators', to: { name: 'Admin View Administrators' } },
 	{ text: 'Auth Tokens', to: { name: 'Admin List Auth Tokens' } },
-	{ text: 'Telemetry', to: { name: 'Admin List Telemetry' } }
+	{ text: 'Telemetry', to: { name: 'Admin List Telemetry' } },
+	{ text: 'Server Logs', to: { name: 'Admin List Logs' } }
 ];
 // Only link to the colour palette view if there is a palette defined
 if (CONFIG.client.palette.primary.length) {

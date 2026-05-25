@@ -14,6 +14,11 @@ export default {
 		[ { id: 1 }, { name: 'invitation_id', unique: true } ],
 		[ { admin: 1 }, { name: 'is_admin' } ]
 	],
+	logs: [
+		[ { host: 1 }, { name: 'log_host' } ],
+		[ { created: -1 }, { name: 'log_created_sort' } ],
+		[ { created: 1 }, { name: 'log_retention', expireAfterSeconds: (60 * 60 * 24 * 90) } ] // Delete log records after 90 days
+	],
 	menu_items: [
 		[ { id: 1 }, { name: 'item_id', unique: true } ],
 		[ { child: 1, course: 1 }, { name: 'item_sort' } ]

@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import { rateLimit } from 'express-rate-limit';
 
 import * as DB from './lib/db/index.js';
-import Logger, { middleware as LoggerMiddleware } from './lib/logger.js';
+import Logger, { middleware as LoggerMiddleware, registerLogDb as RegisterLogDb } from './lib/logger.js';
 import * as API from './api/index.js';
 import { middleware as AdminMiddleware } from './lib/admin.js';
 
@@ -162,6 +162,7 @@ app.use('*splat', (req, res) => {
 
 // Ensure the database has connected and indexes are all up to date before the server starts listening
 await dbConnection;
+await RegisterLogDb();
 
 // And finally start listening on the configured port on the unspecified IPv4 address
 const server = app.listen(config.server.port, '0.0.0.0', function () {

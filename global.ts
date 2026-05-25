@@ -226,3 +226,14 @@ type Telemetry = {
 	/** Size of the browser that the event was triggered by */
 	viewport: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 }
+
+type Log = {
+	/** Date the item was created */
+	created: Date,
+	/** Hostname of the server that created the log */
+	host: String,
+	/** Namespace under which the log is created */
+	ns: String,
+	/** Log message */
+	message: String,
+}

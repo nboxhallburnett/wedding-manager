@@ -69,7 +69,7 @@
     "webpack-manifest-plugin": "6.0.1"
   },
   "engines": {
-    "node": ">=24.13.0",
-    "npm": ">=11.6.2"
+    "node": ">=24.16.0",
+    "npm": ">=11.13.0"
   }
 }

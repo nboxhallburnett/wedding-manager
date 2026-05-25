@@ -7,6 +7,7 @@ const props = defineProps({
 	label: { type: String, default: '' },
 	value: { type: [ String, Number, Array ], default: '' },
 	name: { type: String, required: true },
+	type: { type: String, default: '' },
 	textClass: { type: [ String, Object ], default: null }
 });
 
@@ -15,6 +16,9 @@ watchEffect(() => {
 	let text = model.value || props.value || '';
 	if (Array.isArray(text)) {
 		text = text.join('\n');
+	}
+	if (props.type === 'number') {
+		text = Number(text);
 	}
 	displayValue.value = text;
 });

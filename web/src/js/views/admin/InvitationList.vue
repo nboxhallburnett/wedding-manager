@@ -105,10 +105,12 @@ const tableOpts = {
 		if (!item.id) {
 			return [];
 		}
+		const params = { invitationId: item.id };
 		return [
-			{ text: 'View', to: { name: 'Admin View Invitation', params: { invitationId: item.id } } },
-			{ text: 'Edit', to: { name: 'Admin Edit Invitation', params: { invitationId: item.id } } },
-			{ text: 'Share', to: { name: 'Admin View Invitation Card', params: { invitationId: item.id } } },
+			{ text: 'View', to: { name: 'Admin View Invitation', params } },
+			{ text: 'Edit', to: { name: 'Admin Edit Invitation', params } },
+			{ text: 'Share', to: { name: 'Admin View Invitation Card', params } },
+			{ text: 'Place Cards', to: { name: 'Admin View Invitation Menu Card', params } },
 			{ divider: true },
 			{ text: 'Delete', onClick: () => deleteInvitation(item), class: 'text-danger' }
 		];

@@ -81,6 +81,9 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin View Invitation Card' }">
 					Share
 				</router-link>
+				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin View Invitation Menu Card' }">
+					Place Cards
+				</router-link>
 				<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Invitation' }">
 					Edit Invitation
 				</router-link>
@@ -173,6 +176,7 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 			<form-text
 				v-if="adminView"
 				v-model="invitation.login_count"
+				type="number"
 				label="Login Count"
 				name="login_count"
 			/>

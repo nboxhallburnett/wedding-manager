@@ -107,6 +107,11 @@ const router = createRouter({
 					component: () => import('../views/admin/InvitationCard.vue')
 				},
 				{
+					path: 'invitation/:invitationId/menu-card',
+					name: 'Admin View Invitation Menu Card',
+					component: () => import('../views/admin/InvitationMenuCard.vue')
+				},
+				{
 					path: 'invitation/new',
 					name: 'Admin Create Invitation',
 					component: () => import('../views/admin/InvitationCreate.vue')
@@ -139,7 +144,7 @@ const router = createRouter({
 				{
 					path: 'menu/card',
 					name: 'Admin View Menu Card',
-					component: () => import('../views/admin/MenuCard.vue')
+					component: () => import('../views/admin/MenuCards.vue')
 				},
 				{
 					path: 'menu/:menuItemId',

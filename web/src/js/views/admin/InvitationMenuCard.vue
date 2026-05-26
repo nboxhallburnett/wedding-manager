@@ -16,13 +16,23 @@ import MenuCard from 'components/MenuCard.vue';
 const menu = ref([]);
 /** @type {Ref<Invitation>} */
 const invitation = ref({});
-
+/** @type {Ref<DiningRoom>} */
+const seating = ref({});
+window.seating = seating;
 const cards = {
 	guests: [],
 	children: []
 };
 
-useLoader([ 'menu', `invitation/${Router.currentRoute.value.params.invitationId}` ], [ menu, invitation ]);
+useLoader([
+	'menu',
+	`invitation/${Router.currentRoute.value.params.invitationId}`,
+	'seating'
+], [
+	menu,
+	invitation,
+	seating
+]);
 
 /**
  * Trigger the download of the menu cards as PNGs
@@ -44,10 +54,22 @@ async function downloadImage() {
 
 function getMenu(guest) {
 	return [
-		[ menu.value.find(item => item.id === guest.starter_id) ],
-		[ menu.value.find(item => item.id === guest.main_id) ],
-		[ menu.value.find(item => item.id === guest.dessert_id) ]
+		[ menu.value.find(item => item.id === guest.starter_id) ].filter(Boolean),
+		[ menu.value.find(item => item.id === guest.main_id) ].filter(Boolean),
+		[ menu.value.find(item => item.id === guest.dessert_id) ].filter(Boolean)
 	];
+}
+
+function getTableNumber(guestIdx, isChild) {
+	const idx = seating.value.tables.findIndex(table => table.guests.some(tg => {
+		return tg.id === Router.currentRoute.value.params.invitationId
+			&& tg.idx === guestIdx
+			&& tg.child === isChild;
+	}));
+	if (idx !== -1) {
+		return String(idx + 1);
+	}
+	return 'Unassigned';
 }
 </script>
 
@@ -68,15 +90,16 @@ function getMenu(guest) {
 				:ref="$el => cards.guests[idx] = { $el, guest }"
 				:title="guest.name"
 				:menu="getMenu(guest)"
+				:table="getTableNumber(idx, false)"
 				offset-title
 			/>
 		</template>
 		<template v-for="(child, idx) in invitation.children" :key="idx">
 			<menu-card
-				v-if="child.starter_id || child.main_id || child.dessert_id"
 				:ref="$el => cards.children[idx] = { $el, guest: child }"
 				:title="child.name"
 				:menu="getMenu(child)"
+				:table="getTableNumber(idx, true)"
 				offset-title
 			/>
 		</template>

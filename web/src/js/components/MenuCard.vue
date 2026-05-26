@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, useTemplateRef, nextTick } from 'vue';
+import { computed, ref, onMounted, useTemplateRef, nextTick } from 'vue';
 import DietIndicator from 'components/DietIndicator.vue';
 
 const reStyleFill = /{fill:(#?\w+)}/;
@@ -8,6 +8,7 @@ const courseOptions = [ 'Starter', 'Main', 'Dessert' ];
 const props = defineProps({
 	menu: { type: Array, default: () => [] },
 	title: { type: String, default: '' },
+	table: { type: String, default: null },
 	offsetTitle: { type: Boolean, default: false },
 	offsetFooter: { type: Boolean, default: false },
 	disclaimer: { type: String, default: '' },
@@ -20,23 +21,43 @@ defineExpose({ $card });
 const cornerContent = ref('');
 const cornerDecorationSize = ref('0px');
 const $cornerDecoration = useTemplateRef('cornerDecoration');
+const dividerContent = ref('');
 
 onMounted(async () => {
 	// Fetch the themed colours to use for the border content
 	const primaryColour = getComputedStyle($card.value).getPropertyValue('--bs-primary');
 
 	// Fetch the ring and border svg content from the server
-	const cornerSvg = await fetch('/img/invitation/corner.svg');
-	// Get its text value
-	const cornerSvgContent = await cornerSvg.text();
+	const [
+		cornerSvg,
+		dividerSvg
+	] = await Promise.all([
+		fetch('/img/invitation/corner.svg'),
+		fetch('/img/invitation/divider.svg')
+	]);
+	// Get their text value
+	const [
+		cornerSvgContent,
+		dividerSvgContent
+	] = await Promise.all([
+		cornerSvg.text(),
+		dividerSvg.text()
+	]);
 
 	cornerContent.value = cornerSvgContent
 		// Replace the corner fill colour with the themed primary colour
+		.replace(reStyleFill, `{fill:${primaryColour}}`);
+	dividerContent.value = dividerSvgContent
+		// Replace the divider fill colour with the themed primary colour
 		.replace(reStyleFill, `{fill:${primaryColour}}`);
 
 	await nextTick();
 	const cornerWidth = $cornerDecoration.value.getBoundingClientRect().width;
 	cornerDecorationSize.value = `${cornerWidth}px`;
+});
+
+const hasMenu = computed(() => {
+	return Boolean(props.menu.flat().length);
 });
 </script>
 
@@ -48,23 +69,29 @@ onMounted(async () => {
 	>
 		<div class="card-body">
 			<div class="card-content">
-				<div class="card-text h-100">
-					<div id="menu-header" class="text-center">
-						<div id="title" class="font-script lh-1 text-body my-4" :class="{ offset: props.offsetTitle }" v-text="props.title" />
-					</div>
+				<div class="card-text h-100 my-4 mx-4">
 					<div
-						v-for="(course, courseIdx) in menu"
-						:key="courseIdx"
-						class="menu-content px-4"
-						:class="{ 'mt-3': courseIdx }"
+						id="menu-header"
+						class="text-center my-4"
+						:class="{ 'pb-3': table && hasMenu, offset: table && !hasMenu }"
 					>
-						<div class="font-script text-body h1 text-center mb-2 mt-4" v-text="courseOptions[courseIdx]" />
-						<template v-for="(item, itemIdx) in course" :key="`menu-${courseIdx}-${itemIdx}`">
-							<div class="d-inline" v-text="item?.title" />
-							<diet-indicator v-if="dietIndicators" class="ms-2 small align-middle" :item />
-							<small class="d-block text-muted mb-2" v-text="item?.description" />
-						</template>
+						<div id="title" class="font-script lh-1 text-body" v-text="props.title" />
+						<div v-if="table" class="text-muted" v-text="`Table ${table}`" />
 					</div>
+					<!-- eslint-disable-next-line vue/no-v-html -->
+					<div v-if="table && hasMenu" id="divider" class="text-center mb-5">
+						<div v-html="dividerContent" />
+					</div>
+					<template v-for="(course, courseIdx) in menu" :key="courseIdx">
+						<div v-if="course.length" class="menu-content" :class="{ 'mt-3': courseIdx }">
+							<div class="font-script text-body h1 text-center mb-2 mt-4" v-text="courseOptions[courseIdx]" />
+							<template v-for="(item, itemIdx) in course" :key="`menu-${courseIdx}-${itemIdx}`">
+								<div class="d-inline" v-text="item?.title" />
+								<diet-indicator v-if="dietIndicators" class="ms-2 small align-middle" :item />
+								<small class="d-block text-muted mb-2" v-text="item?.description" />
+							</template>
+						</div>
+					</template>
 					<div v-if="disclaimer" class="mt-4 text-muted text-center w-66 mx-auto" v-text="disclaimer" />
 					<div v-if="props.dietIndicators" id="menu-footer" class="mt-4 text-muted small text-center" :class="{ offset: props.offsetFooter }">
 						<template v-if="props.menu.flat().some(item => item?.vegan)">
@@ -85,9 +112,9 @@ onMounted(async () => {
 				</div>
 
 				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div id="decoration-top-left" ref="cornerDecoration" class="rotate-180" v-html="cornerContent" />
+				<div v-if="!table" id="decoration-top-left" class="rotate-180" v-html="cornerContent" />
 				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div id="decoration-bottom-right" v-html="cornerContent" />
+				<div id="decoration-bottom-right" ref="cornerDecoration" v-html="cornerContent" />
 			</div>
 		</div>
 	</div>
@@ -102,10 +129,6 @@ $corner-decoration-offset: calc(calc($corner-decoration-size + $corner-decoratio
 
 #menu-header #title {
 	font-size: 3.3rem;
-
-	&.offset {
-		margin-left: $corner-decoration-offset;
-	}
 }
 
 .menu-card {
@@ -132,9 +155,18 @@ $corner-decoration-offset: calc(calc($corner-decoration-size + $corner-decoratio
 	.card-text {
 		font-size: medium;
 	}
+}
 
-	#menu-footer.offset {
-		margin-right: $corner-decoration-offset;
+.offset {
+	margin-right: $corner-decoration-offset;
+}
+
+#divider {
+	height: 0;
+	transform: rotate(90deg) scale(0.9);
+
+	> div {
+		transform: translateY(-50%);
 	}
 }
 

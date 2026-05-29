@@ -27,6 +27,9 @@ const session = inject('invitation');
 /** @type {Ref<Invitation>} */
 const invitation = ref({});
 
+// Users can only edit RSVP's before the deadline
+const canEditRsvp = Date.now() < CONFIG.rsvp_deadline;
+
 const menuItems = ref([]);
 
 // If this is the admin view, fetch the invitation from the API, otherwise we can use the session
@@ -88,7 +91,7 @@ useLoader(adminView ? `invitation/${Router.currentRoute.value.params.invitationI
 					Edit Invitation
 				</router-link>
 			</div>
-			<router-link v-else-if="!invitation.admin" class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
+			<router-link v-else-if="!invitation.admin && canEditRsvp" class="btn btn-primary btn-sm" :to="{ name: 'Edit Invitation' }">
 				Manage RSVP
 			</router-link>
 		</card-header>

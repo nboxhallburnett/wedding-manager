@@ -257,6 +257,10 @@ router.beforeEach(to => {
 	if (to.meta?.admin && !invitation.value?.admin) {
 		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
 	}
+	// Disallow non-admin access to invitation edit page after rsvp deadline date
+	if (to.name === 'Edit Invitation' && !invitation.value?.admin && Date.now() > CONFIG.rsvp_deadline) {
+		return { name: '404', params: { pathMatch: to.path.split('/').slice(1) } };
+	}
 });
 
 router.afterEach(to => {

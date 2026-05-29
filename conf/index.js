@@ -11,6 +11,7 @@ const config = {
 	groom_short: process.env.GROOM_SHORT,
 	date: new Date(process.env.DATE).valueOf(),
 	time: process.env.TIME || '',
+	rsvp_deadline: new Date(process.env.RSVP_DEADLINE).valueOf(),
 	timezone: process.env.TIMEZONE || 'UTC',
 	registry_url: process.env.REGISTRY_URL,
 
@@ -56,6 +57,7 @@ const required = [
 	'GROOM',
 	'GROOM_SHORT',
 	'DATE',
+	'RSVP_DEADLINE',
 	'SERVER_PORT',
 	'SERVER_DB_HOST',
 	'SERVER_DB_DB',
@@ -117,7 +119,7 @@ if (process.env.CLIENT_THEME) {
 
 // If there are any errors, log them and exit
 if (errors.length) {
-	console.error('Error: Missing required configuration item(s):', required);
+	console.error('Error: Missing required configuration item(s):', errors);
 	process.exit(1);
 }
 
@@ -138,6 +140,7 @@ export default Object.freeze(config);
  * @property {String} groom_short First name, nickname, or shortened name of the groom.
  * @property {Date} date Date of the wedding.
  * @property {String} time Time of the start of the wedding.
+ * @property {Date} rsvp_deadline Date that RSVP's can be updated until.
  * @property {String} timezone time zone identifier the wedding is being held in uses. Defaults to `'UTC'`.
  * @property {String} registry_url URL of an externally hosted wedding registry.
  * @property {Object} oauth Configuration for the OAuth 2.0 client to use for external admin access.

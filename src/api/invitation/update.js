@@ -1,3 +1,4 @@
+import conf from '../../../conf/index.js';
 import invitationDb from '../../lib/db/invitations.js';
 import menuItemDb from '../../lib/db/menu-items.js';
 import { selfAuth } from '../auth.js';
@@ -11,6 +12,12 @@ export default {
 	auth: selfAuth,
 	action: async (req, res) => {
 		const existingInvitation = await invitationDb.findOne({ id: req.params.invitationId });
+
+		// Disallow non-admin users from updating RSVP's after the configured deadline
+		if (!req.session.admin && Date.now() > conf.rsvp_deadline) {
+			res.status(400);
+			throw new Error(`RSVP's cannot be modified after ${new Date(conf.rsvp_deadline).toDateString()}`);
+		}
 
 		const update = { $set: {} };
 

@@ -70,12 +70,12 @@ const tableOpts = {
 		{ id: 'created', text: 'Created', sort(a, b, dir) {
 			const _a = new Date(a.created);
 			const _b = new Date(b.created);
-			return (_a - _b) * dir * -1;
+			return (_a - _b) * dir;
 		} },
 		{ id: 'updated', text: 'Updated', sort(a, b, dir) {
-			const _a = new Date(a.created);
-			const _b = new Date(b.created);
-			return (_a - _b) * dir * -1;
+			const _a = new Date(a.updated);
+			const _b = new Date(b.updated);
+			return (_a - _b) * dir;
 		} },
 		{ id: 'status', text: 'Status' }
 	],
@@ -147,8 +147,8 @@ function invitationStatus(invitation) {
 		class: ''
 	};
 	// Track the displayed status for each part of the event to use for the indicator badge classes
-	let ceremonyStatus = 0;
-	let receptionStatus = 0;
+	let ceremonyStatus = 4;
+	let receptionStatus = 4;
 
 	// Loop through each potential status value
 	for (let i = 0; i <= 3; i++) {
@@ -186,7 +186,7 @@ function invitationStatus(invitation) {
 			}
 		}
 	}
-	out.message ||= `Ceremony:<br>${messages.ceremony.join('<br>')}<br><br>Reception:<br>${messages.reception.join('<br>')}`;
+	out.message ||= `<b>Ceremony:</b><br>${messages.ceremony.join('<br>')}<br><br><b>Reception:</b><br>${messages.reception.join('<br>')}`;
 
 	return out;
 }
@@ -219,7 +219,7 @@ function guestCount(item) {
 				<td v-text="new Date(item.created).toLocaleDateString()" />
 				<td v-text="new Date(item.updated).toLocaleDateString()" />
 				<td class="text-center" :class="invitationStatus(item).class">
-					<info-popover title="Invitation Status" :hint="invitationStatus(item).message" :opts="{ html: true }">
+					<info-popover :hint="invitationStatus(item).message" :opts="{ html: true }">
 						<div class="align-text-top d-inline-flex bg-split-status px-3 py-2 rounded-5" />
 					</info-popover>
 				</td>
@@ -230,6 +230,7 @@ function guestCount(item) {
 
 <style lang="scss" scoped>
 td {
+	// Pending
 	&.start-0 {
 		--start-bg: var(--bs-gray-500);
 	}
@@ -238,6 +239,7 @@ td {
 		--end-bg: var(--bs-gray-500);
 	}
 
+	// Accepted
 	&.start-1 {
 		--start-bg: var(--bs-success);
 	}
@@ -246,6 +248,7 @@ td {
 		--end-bg: var(--bs-success);
 	}
 
+	// Tentative
 	&.start-2 {
 		--start-bg: var(--bs-info);
 	}
@@ -254,12 +257,22 @@ td {
 		--end-bg: var(--bs-info);
 	}
 
+	// Not Attending
 	&.start-3 {
 		--start-bg: var(--bs-danger);
 	}
 
 	&.end-3 {
 		--end-bg: var(--bs-danger);
+	}
+
+	// Mix of status
+	&.start-4 {
+		--start-bg: var(--bs-warning);
+	}
+
+	&.end-4 {
+		--end-bg: var(--bs-warning);
 	}
 
 	.bg-split-status {

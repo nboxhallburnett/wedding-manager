@@ -250,7 +250,7 @@ function onDropped(evt) {
 				>
 					<dining-table
 						:id="String(idx + 1)"
-						class="d-inline-block layout-table"
+						class="d-inline-flex justify-content-center layout-table"
 						:occupants="table.guests"
 						:search-term
 						:style="idx === 0 ? 'rectangle' : undefined"

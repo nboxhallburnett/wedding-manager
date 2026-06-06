@@ -133,7 +133,7 @@ async function onSearch(term) {
 				>
 					<dining-table
 						:id="String(idx + 1)"
-						class="d-inline-block"
+						class="d-inline-flex justify-content-center"
 						:occupants="table.guests"
 						:search-term
 						:style="idx === 0 ? 'rectangle' : undefined"

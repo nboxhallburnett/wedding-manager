@@ -25,6 +25,7 @@ const chairSize = ref(`${chairSizeVMin}vmin`);
 const chairOffset = ref(`${(tableSizeVMin - (chairSizeVMin * 1.6)) * -1}vmin`);
 const diameter = ref(`${tableSizeVMin + (3 * chairSizeVMin)}vmin`);
 const rotationDeg = computed(() => `${props.rotation || 0}deg`);
+const chairCount = computed(() => props.occupants.length);
 
 /**
  * Calculates the appropriate transform for a chair around the table at a given index
@@ -296,6 +297,7 @@ $chair-size: v-bind(chairSize);
 $chair-offset: v-bind(chairOffset);
 $diameter: v-bind(diameter);
 $rotation: v-bind(rotationDeg);
+$chair-count: v-bind(chairCount);
 
 // Custom animation to fade the chair in on load, and to slide it in towards the table relative to its position
 @keyframes fade-slide-in {
@@ -370,7 +372,7 @@ $rotation: v-bind(rotationDeg);
 
 	.rectangle & {
 		height: calc($table-size * 0.5);
-		width: v-bind(diameter);
+		width: calc(calc($chair-count * calc($chair-size * 1.2)) + 2vmin);
 		border-radius: 0.4vmin;
 		text-align: center;
 		margin-top: calc($table-size * 0.25);

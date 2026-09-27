@@ -246,7 +246,7 @@ function onDropped(evt, chairIdx) {
 				<div v-for="i in 5" :key="i" class="petal" />
 				<div class="pistil" />
 			</div>
-			<div class="table-id fw-bold" v-text="id" />
+			<div class="table-id fw-bold" v-text="id === '1' ? '' : id - 1" />
 			<template v-for="(occupant, idx) in occupants" :key="idx">
 				<info-popover
 					:hint="hintText(occupant)"

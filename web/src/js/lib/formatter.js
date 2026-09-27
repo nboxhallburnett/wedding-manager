@@ -63,10 +63,12 @@ export function formatGuestNames(invitation) {
 	}
 	// Get the set of defined names from the invitation
 	const names = invitation.guests?.map(guest => guest.name).filter(Boolean);
+	// Only append with unused plus-ones if no-one in the invitation has RSVP'd
+	const hasAttendee = invitation.guests?.some(guest => guest.status_ceremony || guest.status_reception);
 	// Check how many additional guests are part of the invitation without a name defined
 	const additionalGuests = invitation.guests.length - names.length;
 	// If there are any unnamed guests, add a final section just as that count
-	if (additionalGuests) {
+	if (!hasAttendee && additionalGuests) {
 		names.push(`${additionalGuests} Guest${additionalGuests > 1 ? 's' : ''}`);
 	}
 	// And output the formatted list string

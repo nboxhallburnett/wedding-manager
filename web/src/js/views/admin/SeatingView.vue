@@ -106,10 +106,10 @@ async function onSearch(term) {
 				Back
 			</router-link>
 			<router-link class="btn btn-primary btn-sm me-2" :to="{ name: 'Admin Edit Seating Plan' }">
-				Edit Seating Plan
+				Edit Assignments
 			</router-link>
 			<router-link class="btn btn-primary btn-sm" :to="{ name: 'Admin Edit Seating Layout' }">
-				Edit Seating Layout
+				Edit Layout
 			</router-link>
 		</card-header>
 		<div class="card-text">
@@ -144,7 +144,8 @@ async function onSearch(term) {
 			<custom-h-r />
 			<div class="row">
 				<div v-for="(table, idx) in seating.tables" :key="table.id" class="col-6 col-md-4 col-lg-3">
-					<b class="d-block">Table {{ idx + 1 }}</b>
+					<b v-if="idx" class="d-block">Table {{ idx }}</b>
+					<b v-else class="d-block">Sweetheart Table</b>
 					<ol class="d-inline-block">
 						<li
 							v-for="(guest, guestIdx) in table.guests"

@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 
-import config from '../../../conf/index.js';
-import invitationDb from '../../lib/db/invitations.js';
+import config from '#conf';
+import invitationDb from '#lib/db/invitations';
 
 const client = new OAuth2Client();
 
@@ -42,7 +42,7 @@ export default {
 		} catch (err) {
 			res.status(400);
 			req.ctx.log('Error parsing provided token: %o', err);
-			throw new Error('"credential" contained an invalid value');
+			throw new Error('"credential" contained an invalid value', { cause: err });
 		}
 
 		// Fetch the invitation record and increment the login count

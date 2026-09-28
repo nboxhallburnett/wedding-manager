@@ -1,10 +1,11 @@
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 import { STATUS_CODES } from 'http';
 
 import sharp from 'sharp';
 
-import { sessionAuth } from '../auth.js';
+import { sessionAuth } from '#api/auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,6 +34,12 @@ export default {
 
 		const path = req.params.item_path.join('/');
 		const filePath = resolve(__dirname, '../../../web/public/', path);
+
+		if (!existsSync(filePath)) {
+			res.status(404);
+			req.ctx.log('Gallery image not found: %s', filePath);
+			throw STATUS_CODES[404];
+		}
 
 		// If we don't already have a cached copy of the requested file, create one and store it cached in memory
 		if (!imgCache[path]?.[type]) {

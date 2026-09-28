@@ -1,5 +1,5 @@
-import storyDb from '../../lib/db/story.js';
-import { sessionAuth } from '../auth.js';
+import storyDb from '#lib/db/story';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

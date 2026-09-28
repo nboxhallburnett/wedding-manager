@@ -1,5 +1,5 @@
-import questionsDb from '../../lib/db/questions.js';
-import { adminAuth } from '../auth.js';
+import questionsDb from '#lib/db/questions';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, { items: Question[] }>} */
 export default {

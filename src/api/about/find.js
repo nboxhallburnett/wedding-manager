@@ -1,5 +1,5 @@
-import aboutDb from '../../lib/db/about.js';
-import { sessionAuth } from '../auth.js';
+import aboutDb from '#lib/db/about';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

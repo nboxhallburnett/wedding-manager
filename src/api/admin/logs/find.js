@@ -1,7 +1,7 @@
 import { hostname } from 'os';
 
-import logDb from '../../../lib/db/logs.js';
-import { adminAuth } from '../../auth.js';
+import logDb from '#lib/db/logs';
+import { adminAuth } from '#api/auth';
 
 const host = hostname();
 

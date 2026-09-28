@@ -1,5 +1,5 @@
-import invitationDb from '../../lib/db/invitations.js';
-import { adminAuth } from '../auth.js';
+import invitationDb from '#lib/db/invitations';
+import { adminAuth } from '#api/auth';
 
 // An extremely basic email regex.
 const reEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

@@ -17,6 +17,7 @@
   - [Running the Server](#running-the-server)
   - [First Use](#first-use)
   - [External Administrative Access](#external-administrative-access)
+  - [Testing](#testing)
 - [Deployment](#deployment)
   - [Build](#build)
   - [Running the Service](#running-the-service)
@@ -217,6 +218,44 @@ db.invitations.insertOne({ id: '<your_google_email>', admin: true, email: true }
 ```
 
 External OAuth administrators can also be created via the Administrators administrative view on the running service once the Client ID has been configured.
+
+### Testing
+
+If you're making changes and want to make sure everything is functioning as expected, the project includes automated tests covering the backend API, database collection, authentication logic, and server middleware.
+
+The tests run using Node's native test runner (`node:test`) and assertions library (`node:assert`). You don't need to have a running MongoDB instance available just to execute the tests, the [test runner](test/runner.js) runs an in-memory MongoDB instance for the duration of the run and isolates each test worker with its own database so nothing clashes.
+
+To run the entire test suite (which will run the code style and lint checks first):
+
+```console
+npm test
+```
+
+If you just want to run the tests directly without running the linters beforehand:
+
+```console
+npm run test:unit
+```
+
+If you're actively working on or debugging a specific feature and don't want to run the entire suite every time, you can also pass a specific test file (or glob pattern) directly to the command:
+
+```console
+# Run an individual test file
+npm run test:unit test/api/seating/find.test.js
+
+# Or a collection of related tests
+npm run test:unit test/api/menu/*.test.js
+```
+
+And if you want to inspect code coverage to see which lines and branches are being exercised across the server codebase, you can run:
+
+```console
+# Full test coverage report
+npm run test:coverage
+
+# Coverage from a specific test file
+npm run test:coverage test/api/calendar/update.test.js
+```
 
 ## Deployment
 

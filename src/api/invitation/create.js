@@ -1,7 +1,7 @@
 import { customAlphabet } from 'nanoid';
 
-import invitationDb from '../../lib/db/invitations.js';
-import { adminAuth } from '../auth.js';
+import invitationDb from '#lib/db/invitations';
+import { adminAuth } from '#api/auth';
 
 // Use a custom alphabet and size to make the generated identifiers more user friendly.
 // This lowers the entropy a fair bit, but should still be acceptible for its use case.

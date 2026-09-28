@@ -1,5 +1,5 @@
-import storyDb from '../../lib/db/story.js';
-import { adminAuth } from '../auth.js';
+import storyDb from '#lib/db/story';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, { items: StoryItem[] }>} */
 export default {

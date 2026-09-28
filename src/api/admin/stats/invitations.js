@@ -1,6 +1,6 @@
-import invitationDb from '../../../lib/db/invitations.js';
-import telemetryDb from '../../../lib/db/telemetry.js';
-import { adminAuth } from '../../auth.js';
+import invitationDb from '#lib/db/invitations';
+import telemetryDb from '#lib/db/telemetry';
+import { adminAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

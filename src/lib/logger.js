@@ -30,7 +30,7 @@ Debug.log = function logHandler(msg, ...args) {
 		msg = msg.slice(24);
 	}
 	// Remove ANSI escape codes, the injected namespace, and surrounding whitespace from the message and apply argument formatting
-	const message = stripVTControlCharacters(format(msg.replace(ns, '').trim(), ...args));
+	const message = stripVTControlCharacters(format(msg.replace(ns, ''), ...args)).trim();
 
 	/** @type {Log} */
 	const log = {

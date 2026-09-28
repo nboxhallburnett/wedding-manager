@@ -63,7 +63,7 @@ function hintText(occupant) {
 		out += `<br>${occupant.child ? 'Child' : `<b>Status</b>: ${occupant.status}`}`;
 	}
 
-	for (const course of [ 'Starter', 'Main', 'Dessert']) {
+	for (const course of [ 'Starter', 'Main', 'Dessert' ]) {
 		const key = course.toLowerCase();
 		if (occupant[key]) {
 			out += `<br><b>${course}</b>: ${escapeHtml(occupant[key])}`;

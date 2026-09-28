@@ -1,5 +1,5 @@
-import aboutDb from '../../lib/db/about.js';
-import { adminAuth } from '../auth.js';
+import aboutDb from '#lib/db/about';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, { content: String }>} */
 export default {

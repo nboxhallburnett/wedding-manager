@@ -1,7 +1,7 @@
 import { STATUS_CODES } from 'http';
 
-import menuItemDb from '../../lib/db/menu-items.js';
-import { sessionAuth } from '../auth.js';
+import menuItemDb from '#lib/db/menu-items';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API<MenuItemPath>} */
 export default {

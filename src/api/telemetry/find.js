@@ -1,5 +1,5 @@
-import telemetryDb from '../../lib/db/telemetry.js';
-import { adminAuth } from '../auth.js';
+import telemetryDb from '#lib/db/telemetry';
+import { adminAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

@@ -1,4 +1,4 @@
-import config from '../../../conf/index.js';
+import config from '#conf';
 
 /** @type {API} */
 export default {

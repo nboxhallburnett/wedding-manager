@@ -1,5 +1,7 @@
-import menuItemDb from '../../lib/db/menu-items.js';
-import { adminAuth } from '../auth.js';
+import { STATUS_CODES } from 'http';
+
+import menuItemDb from '#lib/db/menu-items';
+import { adminAuth } from '#api/auth';
 
 const propTypes = {
 	string: [ 'title', 'description' ],
@@ -14,6 +16,10 @@ export default {
 	auth: adminAuth,
 	action: async (req, res) => {
 		const existingItem = await menuItemDb.findOne({ id: req.params.menuItemId });
+		if (!existingItem) {
+			res.status(404);
+			throw STATUS_CODES[404];
+		}
 
 		const update = { $set: {} };
 

@@ -1,8 +1,8 @@
 import MongoDB from 'mongodb';
 
 import indexDefinitions from './indexes.js';
-import config from '../../../conf/index.js';
-import Logger from '../../lib/logger.js';
+import config from '#conf';
+import Logger from '#lib/logger';
 const log = Logger('db');
 
 // Instance the mongo client

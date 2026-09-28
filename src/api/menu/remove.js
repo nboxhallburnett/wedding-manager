@@ -1,6 +1,6 @@
-import invitationDb from '../../lib/db/invitations.js';
-import menuItemDb from '../../lib/db/menu-items.js';
-import { adminAuth } from '../auth.js';
+import invitationDb from '#lib/db/invitations';
+import menuItemDb from '#lib/db/menu-items';
+import { adminAuth } from '#api/auth';
 
 const fieldMap = [
 	'starter_id',

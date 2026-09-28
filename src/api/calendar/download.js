@@ -1,8 +1,8 @@
 import ical from 'ical-generator';
 
-import calendarEventsDb from '../../lib/db/calendar-events.js';
+import calendarEventsDb from '#lib/db/calendar-events';
 
-import config from '../../../conf/index.js';
+import config from '#conf';
 import pkg from '../../../package.json' with { type: 'json' };
 
 const calendarData = {

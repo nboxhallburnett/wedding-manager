@@ -1,9 +1,9 @@
 import { nanoid } from 'nanoid';
 
-import invitationDb from '../../lib/db/invitations.js';
-import { isPrivateIp } from '../../lib/admin.js';
+import invitationDb from '#lib/db/invitations';
+import { isPrivateIp } from '#lib/admin';
 
-import config from '../../../conf/index.js';
+import config from '#conf';
 
 /** @type {API} */
 export default {

@@ -1,7 +1,9 @@
-import conf from '../../../conf/index.js';
-import invitationDb from '../../lib/db/invitations.js';
-import menuItemDb from '../../lib/db/menu-items.js';
-import { selfAuth } from '../auth.js';
+import { STATUS_CODES } from 'http';
+
+import conf from '#conf';
+import invitationDb from '#lib/db/invitations';
+import menuItemDb from '#lib/db/menu-items';
+import { selfAuth } from '#api/auth';
 
 const menuItemProps = [ 'starter_id', 'main_id', 'dessert_id' ];
 
@@ -12,6 +14,10 @@ export default {
 	auth: selfAuth,
 	action: async (req, res) => {
 		const existingInvitation = await invitationDb.findOne({ id: req.params.invitationId });
+		if (!existingInvitation) {
+			res.status(404);
+			throw STATUS_CODES[404];
+		}
 
 		// Disallow non-admin users from updating RSVP's after the configured deadline
 		if (!req.session.admin && Date.now() > conf.rsvp_deadline) {

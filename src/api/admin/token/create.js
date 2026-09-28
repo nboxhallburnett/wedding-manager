@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
-import tokenDb from '../../../lib/db/tokens.js';
-import { adminAuth } from '../../auth.js';
+import tokenDb from '#lib/db/tokens';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, Token} */
 export default {

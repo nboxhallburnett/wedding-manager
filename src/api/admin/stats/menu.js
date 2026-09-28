@@ -1,5 +1,5 @@
-import invitationDb from '../../../lib/db/invitations.js';
-import { adminAuth } from '../../auth.js';
+import invitationDb from '#lib/db/invitations';
+import { adminAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

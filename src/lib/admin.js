@@ -1,9 +1,9 @@
 import dns from 'dns';
 import { BlockList } from 'net';
 
-import config from '../../conf/index.js';
-import Logger from '../lib/logger.js';
-import tokenDb from './db/tokens.js';
+import config from '#conf';
+import Logger from '#lib/logger';
+import tokenDb from '#lib/db/tokens';
 
 const log = Logger('admin');
 

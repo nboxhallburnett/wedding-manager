@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { STATUS_CODES } from 'node:http';
 
 import Compression from 'compression';
@@ -9,15 +10,15 @@ import Session from 'express-session';
 import { nanoid } from 'nanoid';
 import { rateLimit } from 'express-rate-limit';
 
-import * as DB from './lib/db/index.js';
-import Logger, { middleware as LoggerMiddleware, registerLogDb as RegisterLogDb } from './lib/logger.js';
-import * as API from './api/index.js';
-import { middleware as AdminMiddleware } from './lib/admin.js';
+import * as DB from '#lib/db/index';
+import Logger, { middleware as LoggerMiddleware, registerLogDb as RegisterLogDb } from '#lib/logger';
+import * as API from '#api/index';
+import { middleware as AdminMiddleware } from '#lib/admin';
 
 import IndexRoute from './routes/index.js';
 
 import pkg from '../package.json' with { type: 'json' };
-import config from '../conf/index.js';
+import config from '#conf';
 
 const log = Logger('index');
 
@@ -164,20 +165,49 @@ app.use('*splat', (req, res) => {
 await dbConnection;
 await RegisterLogDb();
 
-// And finally start listening on the configured port on the unspecified IPv4 address
-const server = app.listen(config.server.port, '0.0.0.0', function () {
-	log('Server listening on :%d. Accessible at http%s://%s%s', config.server.port, config.server.external_port === 443 ? 's' : '', config.host, config.server.external_port !== 443 ? ':' + config.server.external_port : '');
-});
+let server;
+
+/**
+ * Start the HTTP server.
+ *
+ * @param {number} [port] Port to listen on (defaults to config.server.port)
+ * @returns {Promise<import('http').Server>}
+ */
+export async function start(port = config.server.port) {
+	return new Promise(resolve => {
+		server = app.listen(port, '0.0.0.0', function () {
+			log('Server listening on :%d. Accessible at http%s://%s%s', port, config.server.external_port === 443 ? 's' : '', config.host, config.server.external_port !== 443 ? ':' + config.server.external_port : '');
+			resolve(server);
+		});
+	});
+}
+
+/**
+ * Stop the HTTP server.
+ *
+ * @returns {Promise<void>}
+ */
+export async function stop() {
+	if (server) {
+		await new Promise(resolve => {
+			server.close(() => {
+				log('HTTP server closed');
+				resolve();
+			});
+		});
+	}
+}
 
 // Listen for SIGTERM events to gracefully close the server
 process.on('SIGTERM', async () => {
 	log('SIGTERM signal received, shutting down server');
-	await new Promise(resolve => {
-		server.close(() => {
-			log('HTTP server closed');
-			resolve();
-		});
-	});
+	await stop();
 	// Wait for the http server to stop accepting new connections before closing the db connection
 	await DB.close();
 });
+
+export { app };
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+	start();
+}

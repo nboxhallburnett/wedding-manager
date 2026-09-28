@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, useTemplateRef } from 'vue';
+import { ref } from 'vue';
 import Router from 'router';
 // TODO: Replace this back once (if) html-to-image is updated with this merged:
 // https://github.com/bubkoo/html-to-image/pull/547

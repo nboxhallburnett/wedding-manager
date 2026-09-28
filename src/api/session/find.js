@@ -1,4 +1,4 @@
-import invitationDb from '../../lib/db/invitations.js';
+import invitationDb from '#lib/db/invitations';
 
 /** @type {API} */
 export default {

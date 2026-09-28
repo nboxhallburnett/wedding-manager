@@ -1,7 +1,7 @@
-import invitationDb from '../../lib/db/invitations.js';
-import menuItemDb from '../../lib/db/menu-items.js';
-import seatingDb from '../../lib/db/seating.js';
-import { adminAuth } from '../auth.js';
+import invitationDb from '#lib/db/invitations';
+import menuItemDb from '#lib/db/menu-items';
+import seatingDb from '#lib/db/seating';
+import { adminAuth } from '#api/auth';
 
 /** @type {API} */
 export default {
@@ -145,7 +145,7 @@ export default {
 				out.push([
 					item.count,
 					item.title,
-					[ item.child ? 'Children\'s menu' : '', item.hidden ? 'Dietary Selection' : ''].filter(Boolean).join(' ')
+					[ item.child ? 'Children\'s menu' : '', item.hidden ? 'Dietary Selection' : '' ].filter(Boolean).join(' ')
 				].join('\t'));
 			}
 		}

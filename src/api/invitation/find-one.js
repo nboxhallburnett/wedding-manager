@@ -1,7 +1,7 @@
 import { STATUS_CODES } from 'http';
 
-import invitationDb from '../../lib/db/invitations.js';
-import { selfAuth } from '../auth.js';
+import invitationDb from '#lib/db/invitations';
+import { selfAuth } from '#api/auth';
 
 /** @type {API<InvitationPath>} */
 export default {

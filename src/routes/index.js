@@ -4,8 +4,8 @@ import { readFileSync } from 'fs';
 
 import { nanoid } from 'nanoid';
 
-import config from '../../conf/index.js';
-import Logger from '../lib/logger.js';
+import config from '#conf';
+import Logger from '#lib/logger';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

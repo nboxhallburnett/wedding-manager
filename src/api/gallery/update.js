@@ -1,5 +1,5 @@
-import galleryDb from '../../lib/db/gallery.js';
-import { adminAuth } from '../auth.js';
+import galleryDb from '#lib/db/gallery';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, { items: Image[] }>} */
 export default {

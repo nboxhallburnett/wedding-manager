@@ -1,5 +1,5 @@
-import calendarEventsDb from '../../lib/db/calendar-events.js';
-import { adminAuth } from '../auth.js';
+import calendarEventsDb from '#lib/db/calendar-events';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<CalendarEventPath} */
 export default {

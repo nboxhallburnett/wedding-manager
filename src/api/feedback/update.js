@@ -1,5 +1,5 @@
-import feedbackDb from '../../lib/db/feedback.js';
-import { adminAuth } from '../auth.js';
+import feedbackDb from '#lib/db/feedback';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<FeedbackPath, { read: FeedbackItem['read'] }} */
 export default {

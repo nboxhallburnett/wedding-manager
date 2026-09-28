@@ -1,6 +1,6 @@
-import seatingDb from '../../lib/db/seating.js';
-import invitationDb from '../../lib/db/invitations.js';
-import { sessionAuth } from '../auth.js';
+import seatingDb from '#lib/db/seating';
+import invitationDb from '#lib/db/invitations';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API} */
 export default {
@@ -37,7 +37,7 @@ export default {
 
 		if (String(req.query.enrich) === 'true') {
 			// If we're enriching the response, loop over each table
-			for (const table of data.tables) {
+			for (const table of data?.tables || []) {
 				// And each set of that table
 				for (const seat of table.guests) {
 					// And add the occupants name from the associated record of the stored invitation ID

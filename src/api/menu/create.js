@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
-import menuItemDb from '../../lib/db/menu-items.js';
-import { adminAuth } from '../auth.js';
+import menuItemDb from '#lib/db/menu-items';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, MenuItem} */
 export default {

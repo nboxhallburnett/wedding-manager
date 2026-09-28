@@ -1,5 +1,5 @@
-import seatingDb from '../../lib/db/seating.js';
-import { adminAuth } from '../auth.js';
+import seatingDb from '#lib/db/seating';
+import { adminAuth } from '#api/auth';
 
 /** @type {API<{}, DiningRoom>} */
 export default {
@@ -17,15 +17,15 @@ export default {
 				res.status(400);
 				throw new Error(`"tables[${idx}].id" contained an invalid value: Tables must contain an ID`);
 			}
-			if (Object.prototype.hasOwnProperty.call(table, 'x') && typeof table.x !== 'number' && table.x < 0) {
+			if (Object.prototype.hasOwnProperty.call(table, 'x') && (typeof table.x !== 'number' || table.x < 0)) {
 				res.status(400);
 				throw new Error(`"tables[${idx}].x" contained an invalid value: Unsupported value "${table.x}"`);
 			}
-			if (Object.prototype.hasOwnProperty.call(table, 'y') && typeof table.y !== 'number' && table.y < 0) {
+			if (Object.prototype.hasOwnProperty.call(table, 'y') && (typeof table.y !== 'number' || table.y < 0)) {
 				res.status(400);
 				throw new Error(`"tables[${idx}].y" contained an invalid value: Unsupported value "${table.y}"`);
 			}
-			if (Object.prototype.hasOwnProperty.call(table, 'rotation') && typeof table.rotation !== 'number' && (table.rotation < 0 || table.rotation > 360)) {
+			if (Object.prototype.hasOwnProperty.call(table, 'rotation') && (typeof table.rotation !== 'number' || table.rotation < 0 || table.rotation > 360)) {
 				res.status(400);
 				throw new Error(`"tables[${idx}].rotation" contained an invalid value: Unsupported value "${table.rotation}"`);
 			}
@@ -40,7 +40,7 @@ export default {
 					throw new Error(`"tables[${idx}].guests[${chairIdx}].id" contained an invalid value: Unsupported value: "${occupant.id}"`);
 				}
 				// Verify the idx contains a valid number
-				if (Object.prototype.hasOwnProperty.call(occupant, 'idx') && typeof occupant.idx !== 'number' || occupant.idx < 0) {
+				if (Object.prototype.hasOwnProperty.call(occupant, 'idx') && (typeof occupant.idx !== 'number' || occupant.idx < 0)) {
 					res.status(400);
 					throw new Error(`"tables[${idx}].guests[${chairIdx}].idx" contained an invalid value: Unsupported value: "${occupant.idx}"`);
 				}

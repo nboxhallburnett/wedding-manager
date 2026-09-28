@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import telemetryDb from '../../lib/db/telemetry.js';
+import telemetryDb from '#lib/db/telemetry';
 
 const viewportSizes = [
 	'xs',

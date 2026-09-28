@@ -1,5 +1,5 @@
-import galleryDb from '../../lib/db/gallery.js';
-import { sessionAuth } from '../auth.js';
+import galleryDb from '#lib/db/gallery';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

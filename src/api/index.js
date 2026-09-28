@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { readdir } from 'fs/promises';
 
-import Logger from '../lib/logger.js';
+import Logger from '#lib/logger';
 const log = Logger('api');
 
 const __filename = fileURLToPath(import.meta.url);

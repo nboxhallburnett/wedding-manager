@@ -1,7 +1,8 @@
+import { STATUS_CODES } from 'http';
 import ical from 'ical-generator';
 
-import calendarEventsDb from '../../lib/db/calendar-events.js';
-import { adminAuth } from '../auth.js';
+import calendarEventsDb from '#lib/db/calendar-events';
+import { adminAuth } from '#api/auth';
 
 const propTypes = {
 	string: [ 'summary', 'description', 'timezone' ],
@@ -15,6 +16,10 @@ export default {
 	auth: adminAuth,
 	action: async (req, res) => {
 		const existingEvent = await calendarEventsDb.findOne({ id: req.params.calendarEventId });
+		if (!existingEvent) {
+			res.status(404);
+			throw STATUS_CODES[404];
+		}
 
 		const update = { $set: {} };
 
@@ -70,12 +75,12 @@ export default {
 			}
 			if (Object.prototype.hasOwnProperty.call(req.body.location, 'geo')) {
 				if (typeof req.body.location.geo.lat !== 'number'
-					&& (req.body.location.geo.lat < -90 || req.body.location.geo.lat > 90)) {
+					|| (req.body.location.geo.lat < -90 || req.body.location.geo.lat > 90)) {
 					res.status(400);
 					throw new Error('"location.geo.lat" must be a Number between -90 and 90.');
 				}
 				if (typeof req.body.location.geo.lon !== 'number'
-					&& (req.body.location.geo.lon < -180 || req.body.location.geo.lon > 180)) {
+					|| (req.body.location.geo.lon < -180 || req.body.location.geo.lon > 180)) {
 					res.status(400);
 					throw new Error('"location.geo.lon" must be a Number between -180 and 180.');
 				}

@@ -1,5 +1,5 @@
-import questionsDb from '../../lib/db/questions.js';
-import { sessionAuth } from '../auth.js';
+import questionsDb from '#lib/db/questions';
+import { sessionAuth } from '#api/auth';
 
 /** @type {API} */
 export default {

@@ -1,0 +1,29 @@
+services:
+  wedding-manager:
+    container_name: wedding-manager
+    image: wedding-manager:latest
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-27626}:27626"
+    env_file:
+      - .env
+    environment:
+      - SERVER_DB_HOST=mongodb
+    depends_on:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:8.0-noble
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${SERVER_DB_USERNAME:-application}
+      - MONGO_INITDB_ROOT_PASSWORD=${SERVER_DB_PASSWORD:-weddingmanager}
+      - MONGO_INITDB_DATABASE=${SERVER_DB_DB:-wedding-manager}
+    ports:
+      - "${SERVER_DB_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

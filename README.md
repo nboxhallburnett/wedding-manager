@@ -136,39 +136,16 @@ Name | Description | Type | Default
 `CLIENT_THEME_*` | Value of the scss variable defined in `CLIENT_THEME`, where `*` is an all-caps equivalent of the variable name | Valid scss variable value | N/A
 
 > [!NOTE]
-> It is not used directly used by the application, but be sure to set `NODE_ENV` to `production` when building the application for production use. This will ensure reduced built front-end asset size and more optimal performance by the running server.
+> It is not used directly used by the application, but be sure to set `NODE_ENV` to `production` when building the application for production use. This will ensure reduced built front-end asset size and more optimal performance by the running server. If using `npm run build` for asset builds then NODE_ENV=production is injected for you.
 
-These environment variables can either be set manually when running the various commands, or (more conveniently) in a `.env` file in the projects root directory, such as the following example for running a local development server:
+These environment variables can either be set manually when running the various commands, or (more conveniently) in a `.env` file in the projects root directory. An example `.env` file has been included as reference and can be used as the base for your own configuration, simply make a copy of it as `.env`, open it in your editor of choice, and modify it as you need:
 
-```bash
-# ./.env
-HOT=true
-DATE=2025/12/31
-TIME="1:37 PM"
-HOST=127.0.0.1
+```console
+# Copy the example for use in the running application
+cp .env.example .env
 
-BRIDE="Jane Doe"
-GROOM="Joe Bloggs"
-BRIDE_SHORT=Janey
-GROOM_SHORT=Joe
-
-SERVER_PORT=8080
-SERVER_EXTERNALPORT=8443
-SERVER_DB_HOST=127.0.0.1
-SERVER_DB_DB=wedding-manager
-SERVER_DB_USERNAME=dbuser
-SERVER_DB_PASSWORD=hunter2
-SERVER_SESSION_SECRET=sOm35ECretV4lUE
-
-CLIENT_FOOTER="[Example Venue](https://venue.example.com/)"
-CLIENT_PALETTE_PRIMARY="Blue,#0000ff|White,#ffffff"
-CLIENT_PALETTE_SECONDARY="Red,#ff0000"
-CLIENT_PALETTE_TERTIARY="Green,#00ff00"
-CLIENT_PALETTE_ACCENT="Gold,#ffd700"
-CLIENT_THEME=primary,secondary,border-color
-CLIENT_THEME_PRIMARY=#4f7942
-CLIENT_THEME_SECONDARY=darkslateblue
-CLIENT_THEME_BORDERCOLOR='$secondary'
+# And open it in your editor of choice. Replace `vi` as necessary
+vi .env
 ```
 
 ### Building Assets
@@ -192,7 +169,12 @@ npm run watch
 
 ### First Use
 
-The only data that needs to be created in the database manually before it can be used is an initial admin user. To create this user, access the mongo shell to your configured database host and db and run the following command (where `<your_id>` is whatever id it is you want to use to access the system):
+The only data that needs to be created in the database manually before it can be used is an initial admin user.
+
+> [!NOTE]
+> If you are using Docker Compose to run the stack, an initial administrator is automatically provisioned when the database container volume is first created. By default this creates an admin user with `id: 'admin'`, which can be customized prior to first startup by setting `INITIAL_ADMIN_ID=<your_id>` in your `.env` file.
+
+To create this user manually, access the mongo shell to your configured database host and db and run the following command (where `<your_id>` is whatever `id` it is you want to use to access the system):
 
 ```javascript
 db.invitations.insertOne({ id: '<your_id>', admin: true })
@@ -284,7 +266,10 @@ docker buildx build --network=host -t wedding-manager:latest .
 Once you have a built docker image, you can run it on your target host like any other docker image, just be sure to supply the necessary env vars defined and passed through to the run command in your method of choice:
 
 ```console
-# Using a .env file
+# Using Docker Compose (runs wedding-manager and mongodb, automatically uses the .env file)
+docker compose up -d
+
+# Using a .env file directly with docker run
 docker run --env-file /path/to/.env -d --network=host --name=wedding-manager --restart unless-stopped wedding-manager:latest
 
 # Or using direct environment variables (not recommended)

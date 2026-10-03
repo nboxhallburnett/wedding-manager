@@ -15,7 +15,7 @@ services:
 
   mongodb:
     container_name: mongodb
-    image: mongo:8.0-noble
+    image: mongo:9.0-noble
     restart: unless-stopped
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${SERVER_DB_USERNAME:-application}

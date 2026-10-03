@@ -11,15 +11,23 @@ services:
       - NODE_ENV=production
       - SERVER_DB_HOST=mongodb
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:${SERVER_PORT:-27626}/status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   mongodb:
     container_name: mongodb
     image: mongo:9.0-noble
     restart: unless-stopped
+    env_file:
+      - path: .env.db
+        required: false
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${SERVER_DB_USERNAME:-application}
-      - MONGO_INITDB_ROOT_PASSWORD=${SERVER_DB_PASSWORD:-weddingmanager}
       - MONGO_INITDB_DATABASE=${SERVER_DB_DB:-wedding-manager}
     ports:
       - "${SERVER_DB_PORT:-27017}:27017"
@@ -28,13 +36,29 @@ services:
     configs:
       - source: mongo-seed
         target: /docker-entrypoint-initdb.d/seed.js
+    healthcheck:
+      test: [ "CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 configs:
   mongo-seed:
     content: |
-      // Seed an initial admin user
+      // Create application user scoped only to the wedding-manager database
+      db.createUser({
+        user: '${SERVER_DB_USERNAME:-application}',
+        pwd: '${SERVER_DB_PASSWORD:-weddingmanager}',
+        roles: [
+          { role: 'readWrite', db: '${SERVER_DB_DB:-wedding-manager}' },
+          { role: 'dbAdmin', db: '${SERVER_DB_DB:-wedding-manager}' }
+        ]
+      });
+
+      // Seed an initial wedding-manager admin user
       db.invitations.insertOne({
-        id: '${INITIAL_ADMIN_ID:-admin}',
+        id: process.env.INITIAL_ADMIN_ID || 'admin',
         admin: true
       });
 

@@ -144,6 +144,9 @@ These environment variables can either be set manually when running the various 
 # Copy the example for use in the running application
 cp .env.example .env
 
+# (Optional) If using Docker Compose and you wish to customize the db's root credentials and application default user id:
+# cp .env.db.example .env.db
+
 # And open it in your editor of choice. Replace `vi` as necessary
 vi .env
 ```
@@ -172,7 +175,7 @@ npm run watch
 The only data that needs to be created in the database manually before it can be used is an initial admin user.
 
 > [!NOTE]
-> If you are using Docker Compose to run the stack, an initial administrator is automatically provisioned when the database container volume is first created. By default this creates an admin user with `id: 'admin'`, which can be customized prior to first startup by setting `INITIAL_ADMIN_ID=<your_id>` in your `.env` file.
+> If you are using Docker Compose to run the stack, the application database user (`SERVER_DB_USERNAME`) is provisioned with scoped access to `SERVER_DB_DB`, and an initial administrator invitation is automatically provisioned when the database container volume is first created. By default this creates the admin user with `id: 'admin'`, which can be customized prior to first startup by setting `INITIAL_ADMIN_ID=<your_id>` in your `.env.db` file.
 
 To create this user manually, access the mongo shell to your configured database host and db and run the following command (where `<your_id>` is whatever `id` it is you want to use to access the system):
 

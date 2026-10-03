@@ -37,13 +37,13 @@
     "debug": "4.4.3",
     "ejs": "5.0.2",
     "express": "5.2.1",
-    "express-rate-limit": "8.5.2",
+    "express-rate-limit": "8.7.0",
     "express-session": "1.19.0",
-    "google-auth-library": "10.6.2",
-    "ical-generator": "10.2.0",
-    "mongodb": "7.2.0",
+    "google-auth-library": "11.1.0",
+    "ical-generator": "11.1.2",
+    "mongodb": "7.7.0",
     "nanoid": "5.1.11",
-    "sharp": "0.34.5"
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@jpinsonneau/html-to-image": "1.11.13",
